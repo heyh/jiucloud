@@ -1,0 +1,131 @@
+@charset "utf-8";
+/* CSS Document */
+.contrast-background {
+  background-color: #3498DB !important; 
+}
+body.sign-in {
+	padding-top: 100px;
+  	height: auto;
+  	position: relative; }
+	@media screen and (max-width: 979px) {body.sign-in {padding-top: 50px; } }
+body.sign-in #wrapper {
+    width: 100%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto; }
+body.sign-in #wrapper .application {
+    color: white;
+    width: 100%;
+    font-size: 32px;
+    text-align: center;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3);
+    margin-bottom: 30px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto; 
+}
+
+body.sign-in #wrapper .application .application-content span {
+     display: block;
+     margin-top: 10px;
+     font-family:'黑体'; 
+	 color: white;
+    text-decoration: none;
+}
+body.sign-in #wrapper .controls {
+	width: 100%;
+    position: relative;
+    background-color: white;
+    -webkit-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+body.sign-in #wrapper .controls .caret {
+    position: absolute;
+    margin-left: -10px;
+    left: 50%;
+    top: -10px;
+    border-bottom: 10px solid white;
+    border-top: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent; }
+body.sign-in #wrapper .controls .form-wrapper {
+    width: 280px;
+    padding: 40px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+	color:#222;
+	font-family:'黑体'; }
+    @media screen and (min-width: 768px) { body.sign-in #wrapper .controls .form-wrapper {width: 380px; } }
+body.sign-in #wrapper .controls .form-wrapper h1{
+    margin: 0;
+    margin-bottom: 20px; 
+}
+body.sign-in #wrapper .controls .form-wrapper .icon-over-input{
+    position: relative; 
+}
+body.sign-in #wrapper .controls .form-wrapper .icon-over-input [class^="icon-"] {
+    position: absolute;
+    right: 10px;
+    top: 8px;
+}
+body.sign-in #wrapper .controls .form-wrapper .icon-over-input input[type="text"], body.sign-in #wrapper .controls .form-wrapper .icon-over-input input[type="password"]{
+	padding-right: 28px; 
+}
+body.sign-in #wrapper .controls .form-wrapper button {
+    margin-top:15px; 
+}
+body.sign-in .login-action {
+    padding: 20px 0; 
+}
+body.sign-in .login-action a{
+    padding: 10px 0;
+    color: white;
+    text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.3); 
+}
+.row-fluid {
+    width: 100%;
+    *zoom: 1;
+	padding-bottom:20px;
+}
+.row-fluid:before,
+.row-fluid:after {
+    display: table;
+    line-height: 0;
+    content: "";
+}
+.row-fluid:after {
+    clear: both;
+}
+.row-fluid [class*="span"]:first-child {
+	margin-left: 0;
+}
+.row-fluid input[class*="span"]{
+    float: none;
+    margin-left: 0;
+	display: inline-block
+}
+.row-fluid [class*="span"] {
+    display: block;
+    float: left;
+    width: 100%;
+    min-height: 36px;
+    margin-left: 2.127659574468085%;
+    *margin-left: 2.074468085106383%;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+.row-fluid [class*="span"]:first-child {
+    margin-left: 0;
+}
+
+.row-fluid .controls-row [class*="span"] + [class*="span"] {
+    margin-left: 2.127659574468085%;
+}
+
+input.span12 {
+    width: 380px;
+}

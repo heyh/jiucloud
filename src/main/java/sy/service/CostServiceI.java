@@ -1,0 +1,103 @@
+package sy.service;
+
+import java.util.List;
+
+import sy.model.po.Cost;
+import sy.model.po.Department_Cost;
+import sy.pageModel.DataGrid;
+import sy.pageModel.PageHelper;
+
+public interface CostServiceI {
+	/**
+	 * 
+	 * 获得列表
+	 */
+	DataGrid dataGrid(int department, String cid, String source);
+
+	/**
+	 * 
+	 * 删除
+	 * 
+	 * @param id
+	 *            void
+	 */
+
+	/**
+	 * 根据Id查询
+	 * 
+	 * @return
+	 */
+	public Cost findById(String id);
+
+	/**
+	 * 添加
+	 */
+	public void add(Cost info);
+
+	/**
+	 * 修改
+	 */
+	public void update(Cost info);
+
+	public int getMaxSortByPid(String pid, String cid);
+
+	// /**
+	// * 获取同pid下sort值仅次于传入sort的一条纪录，两条记录sort互换
+	// */
+	// boolean upSort(String id);
+	//
+	// /**
+	// * 同上,反
+	// */
+	// boolean downSort(String id);
+
+	/**
+	 * 如果当前公司是第一次进入费用模块，则导入蓝本
+	 */
+	public void init(String cid);
+
+	public DataGrid dataGrid(String title, String code, PageHelper ph,
+                             String cid);
+
+	public List<Cost> getFamily(String nid, String cid);
+
+	public String getMaxNidByCid(String cid);
+
+	public List<Cost> getprices(String cid);
+
+	Cost findOneView(String nid, String cid);
+
+	public void treedelete(Cost cost);
+
+	void delete(Cost cost);
+
+	DataGrid dataGridWithPrice(String title, String code, PageHelper ph,
+                               String cid, int price_id);
+
+	DataGrid dataGridInPrice(String title, String code, PageHelper ph,
+                             String cid, int price_id);
+
+	public List<Cost> getEndCosts(String title, String code, PageHelper ph,
+                                  String cid);
+
+	public Cost getParentByCode(String itemCode, String cid);
+
+	Cost getCostByCode(String itemCode, String cid);
+
+	List<Cost> getLikeCostByCode(String itemCode, String cid);
+
+	public DataGrid departmentGrid(String cid);
+
+	void add2(Department_Cost tem);
+
+	void delete2(Department_Cost tem);
+
+	Department_Cost findoneview2(int cost_id, int department_id);
+
+	DataGrid dataGridWithDepartment(String title, String code, PageHelper ph,
+                                    String cid, int department_id);
+
+	DataGrid dataGridInDepartment(String title, String code, PageHelper ph,
+                                  String cid, int price_id);
+
+}
