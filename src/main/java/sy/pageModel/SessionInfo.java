@@ -35,6 +35,15 @@ public class SessionInfo implements java.io.Serializable {
     // add by heyh
     private int parentId;
 
+    public String getProjectInfos() {
+        return projectInfos;
+    }
+
+    public void setProjectInfos(String projectInfos) {
+        this.projectInfos = projectInfos;
+    }
+
+    private String projectInfos;
     // add by heyh
     private String username;
 

@@ -1,5 +1,6 @@
 package sy.service.impl;
 
+import com.alibaba.fastjson.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sy.dao.ProjectDaoI;
@@ -9,6 +10,7 @@ import sy.pageModel.PageHelper;
 import sy.pageModel.ProjectSearch;
 import sy.service.ProjectServiceI;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -166,6 +168,24 @@ public class ProjectServiceImpl implements ProjectServiceI {
 		List<Project> l = projectDao.find(hql, params);
 		return l;
 	}
+
+    @Override
+    public String getProjectInfos(String cid) {
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("cid", cid);
+        String hql = " from Project where isdel=0 and compId=:cid";
+        List<Project> proList = projectDao.find(hql, params);
+        List<Map<String, Object>> tmpList = new ArrayList<Map<String, Object>>();
+        Map<String, Object> tmpMap = new HashMap<String, Object>();
+        for (Project pro : proList) {
+            tmpMap = new HashMap<String, Object>();
+//            tmpMap.put("id", pro.getProjectId());
+            tmpMap.put("id", pro.getProName());
+            tmpMap.put("text", pro.getProName());
+            tmpList.add(tmpMap);
+        }
+        return JSON.toJSONString(tmpList);
+    }
 
     // add by heyh
     @Override

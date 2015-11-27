@@ -2,6 +2,7 @@ package sy.service;
 
 import java.util.List;
 
+import com.alibaba.fastjson.JSONArray;
 import org.springframework.stereotype.Repository;
 
 import sy.model.po.Project;
@@ -63,4 +64,6 @@ public interface ProjectServiceI {
 	List<Project> getProjectsAfterNow(String cid);
 
 	List<Project> getProjects(List<Integer> ugroup);
+
+    public String getProjectInfos(String cid);
 }

@@ -55,6 +55,9 @@ public class UserController extends BaseController {
 	@Autowired
 	private DepartmentServiceI departmentService;
 
+    @Autowired
+    private ProjectServiceI projectService;
+
 	// 获得token 同步操作
 	private final String token = SynchronizationController.getToken();
 
@@ -92,26 +95,18 @@ public class UserController extends BaseController {
 	@RequestMapping("/login")
 	public Json login(HttpSession session, HttpServletRequest request) {
 		Json j = new Json();
-		System.out.println(request.getParameter("name"));
-		System.out.println(request.getParameter("pwd"));
-		System.out.println(request.getParameter("id"));
-		System.out.println(request.getParameter("cid"));
 		User u = null;
 		String cid = null;
 		try {
-			if (request.getParameter("id") != null
-					&& !("null".equals(request.getParameter("id")))) {
+			if (request.getParameter("id") != null && !("null".equals(request.getParameter("id")))) {
 				u = userService.getUser(request.getParameter("id"));
 				System.out.println(111);
 			} else {
-				u = userService.login(request.getParameter("name"),
-						request.getParameter("pwd"));
+				u = userService.login(request.getParameter("name"), request.getParameter("pwd"));
 			}
-			if(request.getParameter("cid")!= null
-					&& !("null".equals(request.getParameter("cid")))){
+			if(request.getParameter("cid")!= null && !("null".equals(request.getParameter("cid")))){
 				cid = request.getParameter("cid");
 			}
-			System.out.println("User:" + u);
 			List<Integer> dgroup = null;
 			List<Integer> ugroup = null;
 			if (u != null) {
@@ -126,9 +121,7 @@ public class UserController extends BaseController {
 					return j;
 				}
 				//根据用户id查询部门id和名称,超管不属于任何部门所以是null
-				S_department s = departmentService
-						.getDepartmentByUid(u.getId(),cid);
-				System.out.println(s);
+				S_department s = departmentService.getDepartmentByUid(u.getId(), cid);
 				//根据用户id查询所有职位信息
 				Department d = departmentService.findOneView(u.getId(),cid);
 				System.out.println("Department:" + d);
@@ -142,8 +135,7 @@ public class UserController extends BaseController {
                 sessionInfo.setUsername(u.getUsername());
 				sessionInfo.setName(u.getRealname());
 				sessionInfo.setId(u.getId());
-				sessionInfo.setResourceList(userService.resourceList(
-						String.valueOf(u.getId()), sessionInfo.getIsadmin()));
+				sessionInfo.setResourceList(userService.resourceList(String.valueOf(u.getId()), sessionInfo.getIsadmin()));
 				sessionInfo.setCompid(String.valueOf(c.getId()));
 				sessionInfo.setCompName(c.getName());
 				if(d!=null){
@@ -158,8 +150,9 @@ public class UserController extends BaseController {
 				sessionInfo.setDepartment_name(s.getName());
 				sessionInfo.setDgroup(dgroup);
 				sessionInfo.setUgroup(ugroup);
-				session.setAttribute(ConfigUtil.getSessionInfoName(),
-						sessionInfo);
+                sessionInfo.setProjectInfos(projectService.getProjectInfos(String.valueOf(c.getId())));
+				session.setAttribute(ConfigUtil.getSessionInfoName(), sessionInfo);
+
 				System.out.println(sessionInfo);
 				j.setObj(sessionInfo);
 			} else if (u == null) {
