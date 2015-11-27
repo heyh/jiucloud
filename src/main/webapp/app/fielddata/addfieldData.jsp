@@ -428,7 +428,8 @@
 			</label> <label class="will_hide"> <span>规格型号:</span> <input
 				name="specifications" id="specifications" type="text"
 				style="width: 250px;" placeholder="规格型号"
-				class="easyui-validatebox span2" data-options="required:true"
+				class="easyui-validatebox span2"
+                <%--data-options="required:true"--%>
 				value="">
 			</label> <label class="ty-summary"> <span>备注说明 :</span> <textarea
 					id="remark" name="remark" placeholder="请在这里填写备注信息"></textarea>
