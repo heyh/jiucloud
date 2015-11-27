@@ -356,7 +356,7 @@
     $(document).ready(function() { $("#projectName").select2({
         placeholder: "可以模糊查询",
         allowClear: true,
-        theme: "classic",
+//        theme: "classic",
         data:<%=projectInfos%>
     }); });
 
@@ -374,7 +374,7 @@
 							placeholder="可以模糊查询" class="span2" /></td>
 						<td>工程名称:&nbsp;
                             <%--<input name="projectName" id="projectName" placeholder="可以模糊查询" class="span2" />--%>
-                            <select  name="projectName" id="projectName">
+                            <select  style="width: 134px" name="projectName" id="projectName">
                                 <option ></option>
 
                             </select>
