@@ -409,29 +409,30 @@
 				id="dataName" type="text" style="width: 250px;" placeholder="名称"
 				class="easyui-validatebox span2" data-options="required:true"
 				value="">
-			</label> <label class="will_hide"> <span>单位:</span> <input
-				name="unit" id="unit" type="text" style="width: 250px;"
-				placeholder="单位" class="easyui-validatebox span2"
-				data-options="required:true">
-			</label> <label class="will_hide"> <span>单价:</span><input
-				name="price" id="price" type="text" style="width: 250px;"
-				placeholder="单价" class="easyui-validatebox span2"
-				data-options="required:true" onblur="cal()" value="">
-			</label> <label class="will_hide"> <span>数量:</span> <input
-				name="count" id="count" type="text" style="width: 250px;"
-				placeholder="数量" class="easyui-validatebox span2"
-				data-options="required:true" onblur="cal()" value="">
-			</label> <label class="will_hide"> <span>金额:</span> <input
-				id="sumprice" type="text" style="width: 250px;" placeholder="0"
-				class="easyui-validatebox span2" data-options="required:true"
-				value="" readonly>
-			</label> <label class="will_hide"> <span>规格型号:</span> <input
-				name="specifications" id="specifications" type="text"
-				style="width: 250px;" placeholder="规格型号"
-				class="easyui-validatebox span2" data-options="required:true"
-				value="">
-			</label> <label class="ty-summary"> <span>备注说明 :</span> <textarea
-					id="remark" name="remark" placeholder="请在这里填写备注信息"></textarea>
+			</label>
+            <label class="will_hide">
+                <span>单位:</span>
+                <input name="unit" id="unit" type="text" style="width: 250px;" placeholder="单位" class="easyui-validatebox span2">
+			</label>
+            <label class="will_hide">
+                <span>单价:</span>
+                <input name="price" id="price" type="text" style="width: 250px;" placeholder="单价" class="easyui-validatebox span2" onblur="cal()" value="">
+			</label>
+            <label class="will_hide">
+                <span>数量:</span>
+                <input name="count" id="count" type="text" style="width: 250px;" placeholder="数量" class="easyui-validatebox span2" onblur="cal()" value="">
+			</label>
+            <label class="will_hide">
+                <span>金额:</span>
+                <input id="sumprice" type="text" style="width: 250px;" placeholder="0" class="easyui-validatebox span2"  value="" readonly>
+			</label>
+            <label class="will_hide">
+                <span>规格型号:</span>
+                <input name="specifications" id="specifications" type="text" style="width: 250px;" placeholder="规格型号" class="easyui-validatebox span2"  value="">
+			</label>
+            <label class="ty-summary">
+                <span>备注说明 :</span>
+                <textarea id="remark" name="remark" placeholder="请在这里填写备注信息"></textarea>
 			</label>
             <div class="ty-summary">
                 <div style="width:10%;float:left;padding-right:10px;text-align:right">上传附件 :</div>
