@@ -515,16 +515,21 @@ public class FieldDataController extends BaseController {
 		List<Integer> ugroup = sessionInfo.getUgroup();
 		ph.setRows(999999999);
 
-		try {
-			fieldData.setUname(new String(request.getParameter("uname")
-					.getBytes("iso-8859-1"), "utf-8"));
-			fieldData.setProjectName(new String(request.getParameter(
-					"projectName").getBytes("iso-8859-1"), "utf-8"));
-			fieldData.setCostType(new String(request.getParameter("costType")
-					.getBytes("iso-8859-1"), "utf-8"));
-		} catch (UnsupportedEncodingException e1) {
-			e1.printStackTrace();
-		}
+//		try {
+//			fieldData.setUname(new String(request.getParameter("uname")
+//					.getBytes("iso-8859-1"), "utf-8"));
+//			fieldData.setProjectName(new String(request.getParameter(
+//					"projectName").getBytes("iso-8859-1"), "utf-8"));
+//			fieldData.setCostType(new String(request.getParameter("costType")
+//					.getBytes("iso-8859-1"), "utf-8"));
+//		} catch (UnsupportedEncodingException e1) {
+//			e1.printStackTrace();
+//		}
+
+        fieldData.setUname(request.getParameter("uname"));
+        fieldData.setProjectName(request.getParameter("projectName"));
+        fieldData.setCostType(request.getParameter("costType"));
+
 		List<FieldData> datas = fieldDataServiceI.dataGrid(fieldData, ph,
 				ugroup,source).getRows();
 

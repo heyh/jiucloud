@@ -57,11 +57,11 @@ public class ProjectController extends BaseController {
 	@ResponseBody
 	public List<S_city> getCities(HttpServletRequest reqs) {
 		String pidVar = reqs.getParameter("provincename");
-		try {
-			pidVar = new String(pidVar.getBytes("ISO-8859-1"), "utf-8");
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
+//		try {
+//			pidVar = new String(pidVar.getBytes("ISO-8859-1"), "utf-8");
+//		} catch (UnsupportedEncodingException e) {
+//			e.printStackTrace();
+//		}
 		S_province tem = provinceService.getProvinceByName(pidVar);
 		List<S_city> list = cityService.getCities(tem.getProvinceid());
 		return list;

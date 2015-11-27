@@ -374,7 +374,7 @@
 							placeholder="可以模糊查询" class="span2" /></td>
 						<td>工程名称:&nbsp;
                             <%--<input name="projectName" id="projectName" placeholder="可以模糊查询" class="span2" />--%>
-                            <select style="width: 134px" name="projectName" id="projectName">
+                            <select  name="projectName" id="projectName">
                                 <option ></option>
 
                             </select>
