@@ -10,6 +10,8 @@
 <head>
 <title>氿上网数据统计</title>
 <jsp:include page="../../inc.jsp"></jsp:include>
+    <link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1-rc.1/css/select2.min.css" rel="stylesheet" />
+    <script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1-rc.1/js/select2.min.js"></script>
 <link rel="stylesheet" type="text/css" media="screen"
 	href="${pageContext.request.contextPath}/app/analysis/css-table.css" />
 <script type="text/javascript"
@@ -63,11 +65,15 @@
 							document.getElementById("projectName").value = id;
 							document.getElementById("pName").value = name;
 							parent.$.modalDialog.handler.dialog('close');
-						},
-					} ],
+						}
+                    } ]
 
-				});
+                });
 	}
+    $(document).ready(function() { $("#price_id").select2({
+        placeholder: "可以模糊查询",
+        allowClear: true
+    }); });
 </script>
 
 
@@ -106,12 +112,15 @@
 							alt="选择工程"
 							src="${pageContext.request.contextPath}/style/images/extjs_icons/pencil.png"
 							style="cursor: pointer;" onclick="selectp()"></td>
-						<td style="background: #ffffff">价目类型:&nbsp;<select
-							id="price_id" name="price_id">
+						<td style="background: #ffffff">价目类型:&nbsp;
+                            <select id="price_id" name="price_id">
+                                <option/>
 								<c:forEach items="${prices}" var="tem">
 									<option value="${tem.id}">${tem.name}</option>
 								</c:forEach>
-						</select><input type="hidden" id="pcid" value='${price.id }' /></td>
+						    </select>
+                            <input type="hidden" id="pcid" value='${price.id }' />
+                        </td>
 
 					</tr>
 					<tr>
