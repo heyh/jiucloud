@@ -7,12 +7,13 @@
 
 <%
     Integer parentId = 1;
-    SessionInfo sessionInfo = (SessionInfo) session
-            .getAttribute(ConfigUtil.getSessionInfoName());
+    String projectInfos = null;
+    SessionInfo sessionInfo = (SessionInfo) session.getAttribute(ConfigUtil.getSessionInfoName());
     if (sessionInfo == null) {
         response.sendRedirect(request.getContextPath());
     } else {
         parentId = sessionInfo.getParentId();
+        projectInfos = sessionInfo.getProjectInfos();
     }
 
 %>
@@ -21,7 +22,8 @@
 <head>
 <title>工程名称管理</title>
 <jsp:include page="../../inc.jsp"></jsp:include>
-
+    <link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1-rc.1/css/select2.min.css" rel="stylesheet" />
+    <script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1-rc.1/js/select2.min.js"></script>
 <script type="text/javascript">
 
 	var dataGrid;
@@ -327,6 +329,19 @@
 		dataGrid.datagrid('load', {});
 	};
 
+    $(document).ready(function() {
+        $("#proName").select2({
+            placeholder: "可以模糊查询",
+            allowClear: true,
+            data:<%=projectInfos%>
+        });
+
+        $("#gczt").select2({
+            placeholder: "可以模糊查询",
+            allowClear: true,
+        });
+    });
+
 </script>
 
 
@@ -340,11 +355,17 @@
 				<table class="table table-hover table-condensed"
 					style="display: none;">
 					<tr>
-						<td>项目名称:&nbsp;<input name="proName" placeholder="可以模糊查询"
-							class="span2" style="width: 200px" /></td>
-						<td>施工项目经理:&nbsp;<input name="manager" placeholder="可以模糊查询"
-							class="span2" /></td>
-						<td valign="middle">工程状态:&nbsp;<select name="gczt">
+						<td>项目名称:&nbsp;
+                            <%--<input name="proName" placeholder="可以模糊查询" class="span2" style="width: 200px" />--%>
+                            <select  style="width: 136px" name="proName" id="proName">
+                                <option ></option>
+                            </select>
+                        </td>
+						<td >施工项目经理:&nbsp;
+                            <input style="width: 136px" name="manager" placeholder="可以模糊查询" class="span2" />
+                        </td>
+						<td valign="middle">工程状态:&nbsp;
+                            <select style="width: 136px" name="gczt" id="gczt">
 								<option></option>
 								<option>在建工程</option>
 								<option>未开工工程</option>
@@ -356,15 +377,13 @@
 								<option>养护结束工程</option>
 								<option>尾款已付清工程</option>
 								<option>其他工程</option>
-						</select></td>
-						<td>开工起止日期:<input class="span2" name="kgrq" id="kgrq"
-							placeholder="点击选择时间"
-							onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})"
-							readonly="readonly" value="${first }" />&nbsp;&nbsp; —
-							&nbsp;&nbsp;<input class="span2" name="jgrq" id="jgrq"
-							placeholder="点击选择时间"
-							onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})"
-							readonly="readonly" value="${last }" /></td>
+						    </select>
+                        </td>
+						<td>开工起止日期:
+                            <input class="span2" name="kgrq" id="kgrq" placeholder="点击选择时间" onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" readonly="readonly" value="${first }" />&nbsp;&nbsp; —
+							&nbsp;&nbsp;
+                            <input class="span2" name="jgrq" id="jgrq" placeholder="点击选择时间" onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" readonly="readonly" value="${last }" />
+                        </td>
 					</tr>
 				</table>
 			</form>
