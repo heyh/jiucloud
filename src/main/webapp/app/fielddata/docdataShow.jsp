@@ -7,12 +7,13 @@
 
 <%
     String userId = null;
-    SessionInfo sessionInfo = (SessionInfo) session
-            .getAttribute(ConfigUtil.getSessionInfoName());
+    String projectInfos = null;
+    SessionInfo sessionInfo = (SessionInfo) session.getAttribute(ConfigUtil.getSessionInfoName());
     if (sessionInfo == null) {
         response.sendRedirect(request.getContextPath());
     } else {
         userId = sessionInfo.getId();
+        projectInfos = sessionInfo.getProjectInfos();
     }
 
 %>
@@ -22,6 +23,8 @@
 <head>
 <title>服务号管理</title>
 <jsp:include page="../../inc.jsp"></jsp:include>
+    <link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1-rc.1/css/select2.min.css" rel="stylesheet" />
+    <script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1-rc.1/js/select2.min.js"></script>
 <script type="text/javascript">
 	var dataGrid;
 	$(function() {
@@ -349,6 +352,12 @@
         return new Date(dateA.replace(/-/g, "/")) - new Date(dateB.replace(/-/g, "/"));
     }
 
+    $(document).ready(function() { $("#projectName").select2({
+        placeholder: "可以模糊查询",
+        allowClear: true,
+        data:<%=projectInfos%>
+    }); });
+
 </script>
 </head>
 <body>
@@ -361,8 +370,12 @@
 					<tr>
 						<td>操作人:&nbsp;<input name="uname" id='uname'
 							placeholder="可以模糊查询" class="span2" /></td>
-						<td>工程名称:&nbsp;<input name="projectName" id="projectName"
-							placeholder="可以模糊查询" class="span2" /></td>
+						<td>工程名称:&nbsp;
+                            <%--<input name="projectName" id="projectName" placeholder="可以模糊查询" class="span2" />--%>
+                            <select  style="width: 136px" name="projectName" id="projectName">
+                                <option ></option>
+                            </select>
+                        </td>
 						<td>费用类型:&nbsp;<input name="costType" id='costType'
 							placeholder="可以模糊查询" class="span2" /></td>
 						<td>起止时间:&nbsp;<input class="span2" name="startTime"
