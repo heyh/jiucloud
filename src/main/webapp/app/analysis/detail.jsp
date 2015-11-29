@@ -114,7 +114,6 @@
 							style="cursor: pointer;" onclick="selectp()"></td>
 						<td style="background: #ffffff">价目类型:&nbsp;
                             <select id="price_id" name="price_id">
-                                <option/>
 								<c:forEach items="${prices}" var="tem">
 									<option value="${tem.id}">${tem.name}</option>
 								</c:forEach>
