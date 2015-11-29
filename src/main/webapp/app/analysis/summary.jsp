@@ -43,10 +43,10 @@
 							document.getElementById("project_id").value = id;
 							document.getElementById("pName").value = name;
 							parent.$.modalDialog.handler.dialog('close');
-						},
-					} ],
+						}
+                    } ]
 
-				});
+                });
 	}
 
 	function selectc() {
@@ -191,8 +191,8 @@
 						<tr>
 							<th scope="row" style="text-align: center">${tem.project_name}</th>
 							<c:forEach items="${tem.moneys}" var="money">
-								<td style="text-align: right"><fmt:formatNumber
-										value="${money}" pattern="#.##" minFractionDigits="2"></fmt:formatNumber>
+								<td style="text-align: right">
+                                    <fmt:formatNumber value="${money==0 ? '' : money}" pattern="#.##" minFractionDigits="2"></fmt:formatNumber>
 								</td>
 							</c:forEach>
 						</tr>
@@ -201,8 +201,8 @@
 					<tr>
 						<th scope="row">合计</th>
 						<c:forEach items="${totals}" var="tem">
-							<td style="text-align: right"><fmt:formatNumber
-									value="${tem}" pattern="#.##" minFractionDigits="2"></fmt:formatNumber>
+							<td style="text-align: right">
+                                <fmt:formatNumber value="${tem==0 ? '' : tem}" pattern="#.##" minFractionDigits="2"></fmt:formatNumber>
 							</td>
 						</c:forEach>
 					</tr>
