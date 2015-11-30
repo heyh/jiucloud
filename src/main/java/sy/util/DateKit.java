@@ -1,5 +1,6 @@
 package sy.util;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -126,6 +127,36 @@ public class DateKit {
         return sdf.format(new Date());
     }
 
+    public static Date strToDateOrTime(String str) {
+        int strLength = str.trim().length();
+        SimpleDateFormat strSdf = null;
+        switch (strLength) {
+            case 8:
+                strSdf = new SimpleDateFormat("yyyyMMdd");
+                break;
+            case 10:
+                strSdf = new SimpleDateFormat("yyyy-MM-dd");
+                break;
+            case 14:
+                strSdf = new SimpleDateFormat("yyyyMMddHHmmss");
+                break;
+            case 19:
+                strSdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                break;
+            default:
+                try {
+                    throw new Exception("时间字符串错误：" + str);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+        }
+        try {
+            return strSdf.parse(str.trim());
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 	public static void main(String[] args) {
 		System.err.println(friendlyFormat("2013-09-16 11:27:19"));
 	}
