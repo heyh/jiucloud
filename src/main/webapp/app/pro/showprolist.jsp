@@ -315,10 +315,12 @@
 	//过滤条件查询
 	function searchFun() {
 		if ($('#kgrq').val() != '') {
-			$('#kgrq').val($('#kgrq').val() + ' 00:00:00');
+//			$('#kgrq').val($('#kgrq').val() + ' 00:00:00');
+			$('#kgrq').val($('#kgrq').val().substring(0, 10) + ' 00:00:00');
 		}
 		if ($('#jgrq').val() != '') {
-			$('#jgrq').val($('#jgrq').val() + ' 00:00:00');
+//			$('#jgrq').val($('#jgrq').val() + ' 00:00:00');
+			$('#jgrq').val($('#jgrq').val().substring(0, 10) + ' 23:59:59');
 		}
 		dataGrid.datagrid('load', $.serializeObject($('#searchForm')));
 	};
