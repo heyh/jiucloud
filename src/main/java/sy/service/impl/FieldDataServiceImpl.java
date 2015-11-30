@@ -128,13 +128,13 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
                 hql += " and t.creatTime >= :startTime";
                 // modify by heyh
 //                params.put("startTime", this.string2date(cmodel.getStartTime()));
-                params.put("startTime", DateKit.strToDate(cmodel.getStartTime()));
+                params.put("startTime", DateKit.strToDateOrTime(cmodel.getStartTime()));
             }
             if (cmodel.getEndTime() != null && cmodel.getEndTime().length() > 0) {
                 hql += " and t.creatTime <= :endTime";
                 // modify by heyh
 //                params.put("endTime", this.string2date(cmodel.getEndTime()));
-                params.put("endTime", DateKit.strToDate(cmodel.getEndTime()));
+                params.put("endTime", DateKit.strToDateOrTime(cmodel.getEndTime()));
             }
         }
         if (ugroup != null && ugroup.size() > 0) {
