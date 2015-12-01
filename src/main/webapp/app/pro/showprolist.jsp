@@ -340,7 +340,7 @@
 
         $("#gczt").select2({
             placeholder: "可以模糊查询",
-            allowClear: true,
+            allowClear: true
         });
     });
 
