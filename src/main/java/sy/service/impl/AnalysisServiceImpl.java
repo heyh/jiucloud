@@ -1,21 +1,23 @@
 package sy.service.impl;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import sy.dao.AnalysisDaoI;
 import sy.dao.CostDaoI;
+import sy.dao.FieldDataDaoI;
 import sy.model.po.Cost;
 import sy.model.po.Price;
 import sy.model.po.Project;
 import sy.pageModel.AnalysisData;
 import sy.pageModel.AnalysisSearch;
 import sy.service.AnalysisServiceI;
+import sy.service.CostServiceI;
+
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * **************************************************************** 文件名称 :
@@ -32,6 +34,12 @@ public class AnalysisServiceImpl implements AnalysisServiceI {
 
 	@Autowired
 	private CostDaoI costDaoI;
+
+    @Autowired
+    private CostServiceI costServiceI;
+
+    @Autowired
+    private FieldDataDaoI fieldDataDaoI;
 
 	@Override
 	public List<AnalysisData> getList(String date, String date2, int price_id,
@@ -241,4 +249,48 @@ public class AnalysisServiceImpl implements AnalysisServiceI {
 		}
 		return result;
 	}
+
+    @Override
+    public String getFeeStatList(int projectId, String cid,  List<Integer> ugroup) {
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("projectName", projectId);
+
+        String hql = "select f.count*f.price,f.unit,f.price,f.count, f.itemcode " +
+                "from TFieldData f where" +
+                "(f.itemcode is null or f.itemcode='' or substring(f.itemcode,1,3)!='000' and substring(f.itemcode,1,3)<=900) " +
+                "and f.projectName=:projectName  and f.isDelete=0";
+        if (ugroup != null && ugroup.size() > 0) {
+            hql += " and f.uid in (0";
+            for (int i = 0; i < ugroup.size(); i++) {
+                hql += "," + ugroup.get(i).toString();
+            }
+            hql += ") ";
+        }
+        List<Object[]> list = analysisDao.findBySql(hql, params);
+        Map<String, Object> rtn = new HashMap<String, Object>();
+        Map<String, Double> cata = new HashMap<String, Double>();
+        DecimalFormat decimalFormat=new DecimalFormat(".00");//构造方法的字符格式这里如果小数不足2位,会以0补足.
+        Double totalMoney = 0.00;
+        for (Object[] field : list) {
+            String tmpItemCode = String.valueOf(field[4]);
+            String tmpRoot = tmpItemCode.substring(0, 3);
+            String money = decimalFormat.format(field[0]);
+            totalMoney += Double.parseDouble(money); // 总额
+            if (cata.containsKey(tmpRoot) ) {
+                cata.put(tmpRoot, cata.get(tmpRoot) + Double.parseDouble(money));
+            } else {
+                cata.put(tmpRoot, Double.parseDouble(money));
+            }
+        }
+        Map<String, Double> realCata = new HashMap<String, Double>();
+        for (String tmpKey : cata.keySet()) {
+            Cost cost = costServiceI.getCostByCode(tmpKey, cid);
+            String key = cost.getCostType();
+            Double value = cata.get(tmpKey);
+            realCata.put(key, value);
+        }
+        rtn.put("totalMoney", totalMoney);
+        rtn.put("cata", realCata);
+        return com.alibaba.fastjson.JSONObject.toJSONString(rtn);
+    }
 }
