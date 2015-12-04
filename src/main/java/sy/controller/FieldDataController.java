@@ -75,10 +75,15 @@ public class FieldDataController extends BaseController {
 				.getSessionInfoName());
 		List<Integer> ugroup = sessionInfo.getUgroup();
 		String source = request.getParameter("source");
+        if (request.getParameter("id") != null) {
+            Integer id = Integer.parseInt(request.getParameter("id"));
+            fieldData.setId(id);
+        }
 		if(null==fieldData.getStartTime()&&null==fieldData.getEndTime()){
 			fieldData.setStartTime(UtilDate.getshortFirst()+" 00:00:00");
 			fieldData.setEndTime(UtilDate.getshortLast()+" 23:59:59");
 		}
+
 		DataGrid dataGrid = fieldDataServiceI.dataGrid(fieldData, ph, ugroup,source);
 		session.setAttribute("analusisInfo", fieldData);
 		return dataGrid;
