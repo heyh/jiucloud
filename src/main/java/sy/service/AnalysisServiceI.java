@@ -1,13 +1,12 @@
 package sy.service;
 
-import java.util.List;
-
 import org.springframework.stereotype.Repository;
-
 import sy.model.po.Price;
 import sy.model.po.Project;
 import sy.pageModel.AnalysisData;
 import sy.pageModel.AnalysisSearch;
+
+import java.util.List;
 
 /**
  * **************************************************************** 文件名称 :
@@ -26,4 +25,6 @@ public interface AnalysisServiceI {
 
 	public List<AnalysisData> getList(String date, String date2, String price_id,
 			String project_id, List<Integer> ugroup,String cid);
+
+    public String getFeeStatList(int projectId, String cid, List<Integer> ugroup);
 }
