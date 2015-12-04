@@ -47,16 +47,19 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
         String hql="";
         if (source.equals("data"))
         {
-            hql = " from TFieldData t  where isDelete=0 and (itemcode is null or itemcode='' or substring(itemcode,1,3)!='000' and substring(itemcode,1,3)<=900) "+whereHql(fieldData, params, ugroup);
+            hql = " from TFieldData t  where isDelete=0 and (itemcode is null or itemcode='' or substring(itemcode,1,3)!='000' and substring(itemcode,1,3)<=900) ";
         }
         else if(source.equals("doc"))
         {
-            hql = " from TFieldData t  where isDelete=0 and itemcode is not null and itemcode!='' and  (substring(itemcode,1,3)='000' or substring(itemcode,1,3)>900) "+whereHql(fieldData, params, ugroup);
+            hql = " from TFieldData t  where isDelete=0 and itemcode is not null and itemcode!='' and  (substring(itemcode,1,3)='000' or substring(itemcode,1,3)>900) ";
         }
         else
         {
-            hql = " from TFieldData t  where isDelete=0  "+whereHql(fieldData, params, ugroup);
+            hql = " from TFieldData t  where isDelete=0  ";
         }
+
+        hql += whereHql(fieldData, params, ugroup);
+
         List<TFieldData> l = fieldDataDaoI.find(hql, params, ph.getPage(), ph.getRows());
         dg.setTotal(fieldDataDaoI.count("select count(*) " + hql, params));
         List<FieldData> list = new ArrayList<FieldData>();
@@ -143,6 +146,10 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
                 hql += "," + ugroup.get(i).toString();
             }
             hql += ") ";
+        }
+        if ( cmodel.getId() != 0) {
+            hql += " and projectName = :id ";
+            params.put("id", String.valueOf(cmodel.getId()));
         }
         hql += " order by t.id desc";
         return hql;
