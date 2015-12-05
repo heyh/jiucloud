@@ -38,7 +38,27 @@ public class FieldData {
 	private String startTime;
 	private String endTime;
 
-	public int getId() {
+    private Double money;
+
+    private boolean action;
+
+    public boolean isAction() {
+        return action;
+    }
+
+    public void setAction(boolean action) {
+        this.action = action;
+    }
+
+    public Double getMoney() {
+        return money;
+    }
+
+    public void setMoney(Double money) {
+        this.money = money;
+    }
+
+    public int getId() {
 		return id;
 	}
 

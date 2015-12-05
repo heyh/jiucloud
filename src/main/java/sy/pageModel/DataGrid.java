@@ -13,6 +13,7 @@ public class DataGrid implements java.io.Serializable {
 
 	private Long total = 0L;
 	private List rows = new ArrayList();
+    private List<FieldData> footer = new ArrayList<FieldData>();
 
 	public Long getTotal() {
 		return total;
@@ -30,7 +31,15 @@ public class DataGrid implements java.io.Serializable {
 		this.rows = rows;
 	}
 
-	@Override
+    public List<FieldData> getFooter() {
+        return footer;
+    }
+
+    public void setFooter(List<FieldData> footer) {
+        this.footer = footer;
+    }
+
+    @Override
 	public String toString() {
 		return "DataGrid [total=" + total + ", rows=" + rows + "]";
 	}

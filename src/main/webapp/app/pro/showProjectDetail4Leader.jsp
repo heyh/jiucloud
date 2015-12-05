@@ -333,10 +333,13 @@
                             width : 100
                         },
                         {
-                            field : 'moeny',
+                            field : 'money',
                             title : '金额',
                             width : 100,
                             formatter : function(value, row, index) {
+                                if(value != undefined) {
+                                    return value.toFixed(2);
+                                }
                                 return (row.count * row.price)
                                         .toFixed(2);
                             }
@@ -364,6 +367,9 @@
                             width : 53,
                             formatter : function(value, row, index) {
                                 var str = '';
+                                if(value != undefined && value == true) { // footer 不需要操作
+                                    return str;
+                                }
                                 str += $
                                         .formatString(
                                         ' <img onclick="FileFun(\'{0}\');" src="{1}" title="附件管理"/>',
@@ -445,7 +451,6 @@
                     ] ],
                     toolbar : '#toolbarDoc',
                     onLoadSuccess : function() {
-//                        $('#searchForm table').show();
                         parent.$.messager.progress('close');
 //                        $(this).datagrid('tooltip');
                     }
@@ -532,7 +537,7 @@
                 },
                 //当鼠标经过时的提示设置
                 tooltip: {
-                    pointFormat: '{series.name}: <b>{point.percentage:.2f}%</b>'
+                    pointFormat: 'series.name}: <b>{point.percentage:.2f}%</b>'
                 },
                 //每种图表类型属性设置
                 plotOptions: {
@@ -545,8 +550,7 @@
                             color: '#000000',
                             connectorColor: '#000000',
                             formatter : function () {
-//                                return '<b>'+ this.point.name +'</b>: '+ Highcharts.numberFormat(this.y, 0, ',');
-                                return '<b>'+ this.point.name +'</b>: '+ this.y;
+                                return '<b>'+ this.point.name +'</b>: '+ Highcharts.numberFormat(this.y, 2, ".", ",")
                             }
                         }
                     }
