@@ -97,14 +97,15 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
         }
 
         // footer
+        String totalMoney = String.valueOf(fieldDataDaoI.findBySql("select sum(price*count) " + hql, params).get(0));
         List<FieldData> footerList = new ArrayList<FieldData>();
         FieldData fFooter = new FieldData();
-        String totalMoney = String.valueOf(fieldDataDaoI.findBySql("select sum(price*count) " + hql, params).get(0));
-        fFooter.setMoney(Double.parseDouble(totalMoney));
+        fFooter.setMoney( totalMoney == null || totalMoney.equals("") ? 0.00 :Double.parseDouble(totalMoney) );
         fFooter.setCount("合计:");
         fFooter.setAction(true);
         footerList.add(fFooter);
         dg.setFooter(footerList);
+
         dg.setRows(list);
         return dg;
     }
