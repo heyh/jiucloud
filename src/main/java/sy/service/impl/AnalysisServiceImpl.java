@@ -285,9 +285,10 @@ public class AnalysisServiceImpl implements AnalysisServiceI {
         Map<String, Double> realCata = new HashMap<String, Double>();
         for (String tmpKey : cata.keySet()) {
             Cost cost = costServiceI.getCostByCode(tmpKey, cid);
-            String key = cost.getCostType();
+            String key = cost == null ? "" : cost.getCostType();
             Double value = cata.get(tmpKey);
             realCata.put(key, value);
+
         }
         rtn.put("totalMoney", totalMoney);
         rtn.put("cata", realCata);
