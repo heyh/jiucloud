@@ -125,7 +125,8 @@ public class UserController extends BaseController {
 				//根据用户id查询所有职位信息
 				Department d = departmentService.findOneView(u.getId(),cid);
 				System.out.println("Department:" + d);
-				ugroup = departmentService.getUserGroup(d, u.getId(),cid);
+//				ugroup = departmentService.getUserGroup(d, u.getId(),cid);
+                ugroup = departmentService.getUsers(cid, Integer.parseInt(u.getId()));
 				System.out.println(ugroup);
 				SessionInfo sessionInfo = new SessionInfo();
 				if (u.getId().equals(u.getCorporation_creater())) {

@@ -6,11 +6,10 @@ import sy.dao.DepartmentDaoI;
 import sy.model.S_department;
 import sy.model.po.Department;
 import sy.service.DepartmentServiceI;
+import sy.util.Node;
+import sy.util.NodeUtil;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class DepartmentServiceImpl implements DepartmentServiceI {
@@ -24,30 +23,31 @@ public class DepartmentServiceImpl implements DepartmentServiceI {
 		List<Object[]> objects = null;
 		List<Object[]> objectByid = null;
 		if(cid!=null){
-			objects = departmentDaoI
-					.findBySql("select job_id from jsw_corporation_department where user_id="
-							+ uid +" and company_id = "+cid);
+//			objects = departmentDaoI
+//					.findBySql("select job_id from jsw_corporation_department where user_id="
+//							+ uid +" and company_id = "+cid);
+            objects = departmentDaoI
+                    .findBySql("select job_id from jsw_corporation_department where FIND_IN_SET(" + uid + ", user_id) and company_id = "+cid);
 		}else{
-			objects = departmentDaoI
-					.findBySql("select job_id from jsw_corporation_department where user_id="
-							+ uid );
+//			objects = departmentDaoI
+//					.findBySql("select job_id from jsw_corporation_department where user_id=" + uid );
+            objects = departmentDaoI
+                    .findBySql("select job_id from jsw_corporation_department where FIND_IN_SET(" + uid + ", user_id)");
 		}
 		
 		params.put("id", objects.get(0));
-		Department department = departmentDaoI.get(
-				"from Department where id=:id", params);
+		Department department = departmentDaoI.get("from Department where id=:id", params);
 		//查询超级管理员
 		if(cid!=null){
-			objectByid = departmentDaoI
-					.findBySql("select user_id from jsw_corporation_department where user_id <> 0 and parent_id=0 and company_id="+cid);
+			objectByid = departmentDaoI.findBySql("select user_id from jsw_corporation_department where user_id <> 0 and parent_id=0 and company_id=" + cid);
 		}else{
-			objectByid = departmentDaoI
-					.findBySql("select user_id from jsw_corporation_department where user_id <> 0 and parent_id=0 ");
+			objectByid = departmentDaoI.findBySql("select user_id from jsw_corporation_department where user_id <> 0 and parent_id=0 ");
 		}
 		//遍历超级管理员
 		for(int i=0;i<objectByid.size();i++){
 			//如果是超级原理员设置parent_id=0
-			if(uid.equals(String.valueOf(objectByid.get(i)))){
+//			if(uid.equals(String.valueOf(objectByid.get(i)))){
+            if(String.valueOf(objectByid.get(i)).contains(uid)) {
 				department  = new Department();
 				department.setParent_id(0);
 			}
@@ -86,21 +86,30 @@ public class DepartmentServiceImpl implements DepartmentServiceI {
 	public List<Integer> getUserGroup(Department d, String uid,String cid) {
 		List<Object[]> objects = null;
 		if(cid!=null){
-			objects = departmentDaoI
-					.findBySql("select parent_id from jsw_corporation_department where user_id="
-							+ uid +" and company_id= " +cid);
-		}else{
-			objects = departmentDaoI
-					.findBySql("select parent_id from jsw_corporation_department where user_id="
-							+ uid );
+//			objects = departmentDaoI.findBySql("select parent_id from jsw_corporation_department where user_id=" + uid +" and company_id= " +cid);
+            objects = departmentDaoI.findBySql("select parent_id from jsw_corporation_department where FIND_IN_SET(" + uid + ", user_id) and company_id= " +cid);
+        }else{
+//			objects = departmentDaoI.findBySql("select parent_id from jsw_corporation_department where user_id=" + uid );
+            objects = departmentDaoI.findBySql("select parent_id from jsw_corporation_department where  FIND_IN_SET(" + uid + ", user_id)" );
 		}
 		
-		List<Integer> list = null;
+		List<Integer> list = new ArrayList<Integer>();
 		if(d!=null){
-			if (d.getParent_id() == 0&&"0".equals(String.valueOf(objects.get(0)))) {
-				list = (List<Integer>) departmentDaoI
-						.getList("select distinct(user_id) from jsw_corporation_department where company_id="
-								+ cid + " order by user_id desc");
+			if (d.getParent_id() == 0 && "0".equals(String.valueOf(objects.get(0)))) {
+//                list = (List<Integer>) departmentDaoI
+//                        .getList("select distinct(user_id) from jsw_corporation_department where company_id="
+//								+ cid + " order by user_id desc");
+                List<String> tmpList = new ArrayList<String>();
+                tmpList = (List<String>) departmentDaoI
+                        .getList("select distinct(user_id) from jsw_corporation_department where company_id="
+                                + cid + " order by user_id desc");
+                for (String o : tmpList) {
+                    String [] arr = o.split(",");
+                    for (String str : arr) {
+                        list.add(Integer.parseInt(str));
+                    }
+                }
+
 				return list;
 			}
 		}
@@ -130,8 +139,7 @@ public class DepartmentServiceImpl implements DepartmentServiceI {
 		}
 		System.out.println(did);
 		StringBuffer sql = new StringBuffer();
-		sql.append("select distinct(user_id) from jsw_corporation_department where parent_id="
-				+ did );
+		sql.append("select distinct(user_id) from jsw_corporation_department where parent_id=" + did );
 		if(dgroup!=null&&dgroup.size()>0){
 			sql.append(" and job_id in(2,");
 			sql.append(dgroup.get(0).toString());
@@ -179,4 +187,43 @@ public class DepartmentServiceImpl implements DepartmentServiceI {
 		
 		return department;
 	}
+
+
+    @Override
+    public List<Integer> getUsers(String cid, int uid) {
+        List<Integer> uids = new ArrayList<Integer>();
+        List<Object[]> objects = null;
+        int id = -1;
+        objects = departmentDaoI.findBySql("select id, parent_id, user_id, company_id from jsw_corporation_department where company_id= " +cid);
+        List<Node> departments = new ArrayList<Node>();
+        for (Object[] object : objects) {
+            List<String> tmpUid = Arrays.asList(String.valueOf(object[2]).split(","));
+            for (String tmp : tmpUid) {
+                Node department = new Node();
+                department.setId(Integer.parseInt(String.valueOf(object[0])));
+                department.setParentId(Integer.parseInt(String.valueOf(object[1])));
+                department.setUserId(Integer.parseInt(tmp));
+//                department.setCompanyId(Integer.parseInt(String.valueOf(object[3])));
+                if (uid == Integer.parseInt(tmp)) {
+                    id = Integer.parseInt(String.valueOf(object[0]));
+                }
+                departments.add(department);
+            }
+
+        }
+        if (id != -1) {
+//            String strUids = getChildNodes(id, departments);
+            uids = NodeUtil.getChildNodes(departments, id);
+//            if (strUids != null && !strUids.equals("")) {
+//                CollectionUtils.collect(Arrays.asList(strUids.split(",")),
+//                        new Transformer() {
+//                            public java.lang.Object transform(java.lang.Object input) {
+//                                return new Integer((String) input);
+//                            }
+//                        }, uids);
+//            }
+        }
+
+        return uids;
+    }
 }
