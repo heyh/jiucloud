@@ -100,7 +100,7 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
         String totalMoney = String.valueOf(fieldDataDaoI.findBySql("select sum(price*count) " + hql, params).get(0));
         List<FieldData> footerList = new ArrayList<FieldData>();
         FieldData fFooter = new FieldData();
-        fFooter.setMoney( totalMoney == null || totalMoney.equals("") ? 0.00 :Double.parseDouble(totalMoney) );
+        fFooter.setMoney( totalMoney == null || totalMoney.equals("") || totalMoney.equals("null") ? 0.00 : Double.parseDouble(totalMoney) );
         fFooter.setCount("合计:");
         fFooter.setAction(true);
         footerList.add(fFooter);
