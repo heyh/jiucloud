@@ -7,9 +7,9 @@ import java.util.*;
  */
 public class NodeUtil {
 
-    private static List<Integer> returnList = new ArrayList<Integer>();
+    private List<Integer> returnList = new ArrayList<Integer>();
 
-    public static List<Integer> getChildNodes(List<Node> list, int id) {
+    public List<Integer> getChildNodes(List<Node> list, int id) {
         if(list == null) return null;
         for (Iterator<Node> iterator = list.iterator(); iterator.hasNext();) {
             Node node = iterator.next();
@@ -25,7 +25,7 @@ public class NodeUtil {
         return returnList;
     }
 
-    private static void recursionFn(List<Node> list, Node node) {
+    private void recursionFn(List<Node> list, Node node) {
         List<Node> childList = getChildList(list, node);// 得到子节点列表
         if (!returnList.contains(node.getUserId())) {
             returnList.add(node.getUserId());

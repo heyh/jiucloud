@@ -213,7 +213,8 @@ public class DepartmentServiceImpl implements DepartmentServiceI {
         }
         if (id != -1) {
 //            String strUids = getChildNodes(id, departments);
-            uids = NodeUtil.getChildNodes(departments, id);
+            NodeUtil nodeUtil = new NodeUtil();
+            uids = nodeUtil.getChildNodes(departments, id);
 //            if (strUids != null && !strUids.equals("")) {
 //                CollectionUtils.collect(Arrays.asList(strUids.split(",")),
 //                        new Transformer() {
