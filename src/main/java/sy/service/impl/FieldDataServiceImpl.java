@@ -14,6 +14,7 @@ import sy.pageModel.FieldData;
 import sy.pageModel.PageHelper;
 import sy.service.FieldDataServiceI;
 import sy.util.DateKit;
+import sy.util.StringUtil;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -97,14 +98,23 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
         }
 
         // footer
-        String totalMoney = String.valueOf(fieldDataDaoI.findBySql("select sum(price*count) " + hql, params).get(0));
-        List<FieldData> footerList = new ArrayList<FieldData>();
-        FieldData fFooter = new FieldData();
-        fFooter.setMoney( totalMoney == null || totalMoney.equals("") || totalMoney.equals("null") ? 0.00 : Double.parseDouble(totalMoney) );
-        fFooter.setCount("合计:");
-        fFooter.setAction(true);
-        footerList.add(fFooter);
-        dg.setFooter(footerList);
+        if (source.equals("data")) {
+            List<TFieldData> fields = fieldDataDaoI.find(hql, params);
+            Double totalMoney = new Double(0.00);
+            for (TFieldData tmpField : fields) {
+                if (tmpField.getCount() != null && !tmpField.getCount().equals("") && StringUtil.isNum(tmpField.getCount()) &&
+                        tmpField.getPrice() != null && !tmpField.getPrice().equals("") && StringUtil.isNum(tmpField.getPrice())) {
+                    totalMoney += Double.parseDouble(tmpField.getCount()) * Double.parseDouble(tmpField.getPrice());
+                }
+            }
+            List<FieldData> footerList = new ArrayList<FieldData>();
+            FieldData fFooter = new FieldData();
+            fFooter.setMoney(totalMoney == null ? 0.00 : totalMoney);
+            fFooter.setCount("合计:");
+            fFooter.setAction(true);
+            footerList.add(fFooter);
+            dg.setFooter(footerList);
+        }
 
         dg.setRows(list);
         return dg;
