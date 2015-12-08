@@ -135,7 +135,7 @@ public class CostController extends BaseController {
 
 		int department_id = 0;
 		if (title != null) {
-			department_id = title.equals("1") ? Integer.parseInt(did) : 0;
+//			department_id = title.equals("1") ? Integer.parseInt(did) : 0; // 暂时把部门费用限制去掉
 		}
 
 		JSONArray json = new JSONArray();

@@ -121,7 +121,7 @@ public class UserController extends BaseController {
 					return j;
 				}
 				//根据用户id查询部门id和名称,超管不属于任何部门所以是null
-				S_department s = departmentService.getDepartmentByUid(u.getId(), cid);
+//				S_department s = departmentService.getDepartmentByUid(u.getId(), cid);
 				//根据用户id查询所有职位信息
 				Department d = departmentService.findOneView(u.getId(),cid);
 				System.out.println("Department:" + d);
@@ -147,8 +147,8 @@ public class UserController extends BaseController {
 					sessionInfo.setDepid(null);
 					sessionInfo.setDepName(null);
 				}
-				sessionInfo.setDepartment_id(String.valueOf(s.getId()));
-				sessionInfo.setDepartment_name(s.getName());
+//				sessionInfo.setDepartment_id(String.valueOf(s.getId()));
+//				sessionInfo.setDepartment_name(s.getName());
 				sessionInfo.setDgroup(dgroup);
 				sessionInfo.setUgroup(ugroup);
                 sessionInfo.setProjectInfos(projectService.getProjectInfos(String.valueOf(c.getId())));
