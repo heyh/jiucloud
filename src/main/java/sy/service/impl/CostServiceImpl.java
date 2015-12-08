@@ -374,8 +374,8 @@ public class CostServiceImpl implements CostServiceI {
 	@Override
 	public DataGrid departmentGrid(String cid) {
 		DataGrid dg = new DataGrid();
-		String sql = "select id,name from jsw_corporation_department where user_id=0 and endnode=0 and company_id="
-				+ cid;
+//		String sql = "select id,name from jsw_corporation_department where user_id=0 and endnode=0 and company_id=" + cid;
+        String sql = "select id,name from jsw_corporation_department where endnode=0 and company_id=" + cid;
 		List<Object[]> result = costDaoI.findBySql(sql);
 		List<S_department> departments = new ArrayList<S_department>();
 		for (Object[] tem : result) {
