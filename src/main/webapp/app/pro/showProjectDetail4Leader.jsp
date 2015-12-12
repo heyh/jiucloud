@@ -537,7 +537,7 @@
                 },
                 //当鼠标经过时的提示设置
                 tooltip: {
-                    pointFormat: 'series.name}: <b>{point.percentage:.2f}%</b>'
+                    pointFormat: '{series.name}: <b>{point.percentage:.2f}%</b>'
                 },
                 //每种图表类型属性设置
                 plotOptions: {
