@@ -21,6 +21,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -57,6 +58,9 @@ public class UserController extends BaseController {
 
     @Autowired
     private ProjectServiceI projectService;
+
+    @Autowired
+    private CostServiceI costService;
 
 	// 获得token 同步操作
 	private final String token = SynchronizationController.getToken();
@@ -154,6 +158,13 @@ public class UserController extends BaseController {
 				sessionInfo.setDgroup(dgroup);
 				sessionInfo.setUgroup(ugroup);
                 sessionInfo.setProjectInfos(projectService.getProjectInfos(String.valueOf(c.getId())));
+                List<Integer> departmentIds = new ArrayList<Integer>();
+                if (s != null && s.size() > 0) {
+                    for (S_department department : s) {
+                        departmentIds.add(department.getId());
+                    }
+                }
+                sessionInfo.setCostTypeInfos(costService.getCostTypeInfos(departmentIds, cid));
 				session.setAttribute(ConfigUtil.getSessionInfoName(), sessionInfo);
 
 				System.out.println(sessionInfo);

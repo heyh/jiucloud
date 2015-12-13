@@ -1,20 +1,26 @@
 <%@ page import="sy.pageModel.SessionInfo" %>
 <%@ page import="sy.util.ConfigUtil" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="java.util.List" %>
+<%@ page import="java.util.Map" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="s" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <%
     String userId = null;
     String projectInfos = null;
+    List<Map<String, Object>> dataCostInfos = new ArrayList<Map<String, Object>>();
+    
     SessionInfo sessionInfo = (SessionInfo) session.getAttribute(ConfigUtil.getSessionInfoName());
     if (sessionInfo == null) {
         response.sendRedirect(request.getContextPath());
     } else {
         userId = sessionInfo.getId();
         projectInfos = sessionInfo.getProjectInfos();
-
+        dataCostInfos = sessionInfo.getCostTypeInfos().get("dataCostInfos");
     }
 
 %>
@@ -355,11 +361,19 @@
         return new Date(dateA.replace(/-/g, "/")) - new Date(dateB.replace(/-/g, "/"));
     }
 
-    $(document).ready(function() { $("#projectName").select2({
-        placeholder: "可以模糊查询",
-        allowClear: true,
-        data:<%=projectInfos%>
-    }); });
+    $(document).ready(function() {
+        $("#projectName").select2({
+            placeholder: "可以模糊查询",
+            allowClear: true,
+            data:<%=projectInfos%>
+        });
+        $("#costType").select2({
+            tags: "true",
+            placeholder: "可以模糊查询",
+            allowClear: true,
+            <%--data:<%=costTypeInfos%>--%>
+        });
+    });
 
 </script>
 </head>
@@ -380,8 +394,20 @@
 
                             </select>
                         </td>
-						<td>费用类型:&nbsp;<input name="costType" id='costType'
-							placeholder="可以模糊查询" class="span2" /></td>
+						<td>费用类型:&nbsp;
+                            <%--<input name="costType" id='costType' placeholder="可以模糊查询" class="span2" />--%>
+                            <select style="width: 136px" name="costType" id="costType">
+                                <option></option>
+                                <c:forEach var="costTypeInfo" items="<%= dataCostInfos %>" varStatus="index">
+                                    <c:if test="${costTypeInfo.isSend == '0'}">
+                                        <optgroup label="${costTypeInfo.costType}"> " " </optgroup>
+                                    </c:if>
+                                    <c:if test="${costTypeInfo.isSend == '1'}">
+                                        <option value="${costTypeInfo.costType}">&nbsp;&nbsp;&nbsp;&nbsp;${costTypeInfo.costType}</option>
+                                    </c:if>
+                                </c:forEach>
+                            </select>
+                        </td>
 						<td>起止时间:&nbsp;<input class="span2" name="startTime"
 							id='startTime' placeholder="点击选择时间"
 							onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})"

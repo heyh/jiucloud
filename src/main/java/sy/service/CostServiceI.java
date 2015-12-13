@@ -6,6 +6,7 @@ import sy.pageModel.DataGrid;
 import sy.pageModel.PageHelper;
 
 import java.util.List;
+import java.util.Map;
 
 public interface CostServiceI {
 	/**
@@ -99,5 +100,6 @@ public interface CostServiceI {
 
 	DataGrid dataGridInDepartment(String title, String code, PageHelper ph,
                                   String cid, int price_id);
+    public Map<String, List<Map<String, Object>>> getCostTypeInfos(List<Integer> departmentIds, String cid);
 
 }

@@ -3,6 +3,7 @@ package sy.pageModel;
 import sy.model.S_department;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * session信息模型
@@ -56,6 +57,16 @@ public class SessionInfo implements java.io.Serializable {
     }
 
     private String projectInfos;
+    private Map<String, List<Map<String, Object>>> costTypeInfos;
+
+    public Map<String, List<Map<String, Object>>> getCostTypeInfos() {
+        return costTypeInfos;
+    }
+
+    public void setCostTypeInfos(Map<String, List<Map<String, Object>>> costTypeInfos) {
+        this.costTypeInfos = costTypeInfos;
+    }
+
     // add by heyh
     private String username;
 
