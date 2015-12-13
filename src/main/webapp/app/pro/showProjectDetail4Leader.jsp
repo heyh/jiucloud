@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -105,7 +106,7 @@
 <body>
 <ul id="nav">
     <li class="current"><a href="#projectInfo">项目详情</a></li>
-    <li><a href="#costStat">费用分布</a></li>
+    <li><a href="#costStat">费用汇总</a></li>
     <li><a href="#costDetail">费用明细</a></li>
     <li><a href="#docDetail">资料明细</a></li>
 </ul>
@@ -127,7 +128,8 @@
                 <td><span class="td_title">工程简称</span></td>
                 <td>${pro.shortname}</td>
                 <td><span class="td_title">中标通知书日期</span></td>
-                <td>${pro.zbtzsrq}</td>
+                <%--<td>${pro.zbtzsrq}</td>--%>
+                <td><fmt:formatDate value="${pro.zbtzsrq}" pattern="yyyy年MM月dd日" /></td>
             </tr>
             <tr>
                 <td><span class="td_title">工程合同价</span></td>
@@ -149,9 +151,11 @@
             </tr>
             <tr>
                 <td><span class="td_title">开工日期</span></td>
-                <td>${pro.kgrq}</td>
+                <%--<td>${pro.kgrq}</td>--%>
+                <td><fmt:formatDate value="${pro.kgrq}" pattern="yyyy年MM月dd日" /></td>
                 <td><span class="td_title">竣工日期</span></td>
-                <td>${pro.jgrq}</td>
+                <%--<td>${pro.jgrq}</td>--%>
+                <td><fmt:formatDate value="${pro.jgrq}" pattern="yyyy年MM月dd日" /></td>
             </tr>
             <tr>
                 <td><span class="td_title">造价类型</span></td>
@@ -174,9 +178,11 @@
             </tr>
             <tr>
                 <td><span class="td_title">工程正式开工日期</span></td>
-                <td>${pro.gckgrq}</td>
+                <%--<td>${pro.gckgrq}</td>--%>
+                <td><fmt:formatDate value="${pro.gckgrq}" pattern="yyyy年MM月dd日" /></td>
                 <td><span class="td_title">工程正式竣工日期</span></td>
-                <td>${pro.gcjgrq}</td>
+                <%--<td>${pro.gcjgrq}</td>--%>
+                <td><fmt:formatDate value="${pro.gcjgrq}" pattern="yyyy年MM月dd日" /></td>
             </tr>
             <tr>
                 <td><span class="td_title">工程到期移交情况</span></td>
@@ -211,15 +217,19 @@
             </tr>
             <tr>
                 <td><span class="td_title">内部维(养)护开始时间</span></td>
-                <td>${pro.whkssj}</td>
+                <%--<td>${pro.whkssj}</td>--%>
+                <td><fmt:formatDate value="${pro.whkssj}" pattern="yyyy年MM月dd日" /></td>
                 <td><span class="td_title">内部维(养)护结束时间</span></td>
-                <td>${pro.whjssj}</td>
+                <%--<td>${pro.whjssj}</td>--%>
+                <td><fmt:formatDate value="${pro.whjssj}" pattern="yyyy年MM月dd日" /></td>
             </tr>
             <tr>
                 <td><span class="td_title">合同维(养)护截止日</span></td>
-                <td>${pro.htwhjzr}</td>
+                <%--<td>${pro.htwhjzr}</td>--%>
+                <td><fmt:formatDate value="${pro.htwhjzr}" pattern="yyyy年MM月dd日" /></td>
                 <td><span class="td_title">工程移交日期</span></td>
-                <td>${pro.gcyjrq}</td>
+                <%--<td>${pro.gcyjrq}</td>--%>
+                <td><fmt:formatDate value="${pro.gcyjrq}" pattern="yyyy年MM月dd日" /></td>
             </tr>
             <tr>
                 <td><span class="td_title">工程维(养)护期</span></td>
@@ -231,7 +241,7 @@
     </div>
 
     <div class="section" id="costStat">
-        <h3>费用分布</h3>
+        <h3>费用汇总</h3>
         <div id="feeChart"></div>
 
     </div>
