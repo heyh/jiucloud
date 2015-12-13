@@ -497,7 +497,7 @@ public class CostServiceImpl implements CostServiceI {
             tmp.put("isSend", cost.getIsend());
             if (!itemCode.substring(0, 3).equals("000") && Integer.parseInt(itemCode.substring(0, 3)) <= 900) {
                 dataCostInfos.add(tmp);
-            } else if (itemCode.substring(0, 3).equals("000") && Integer.parseInt(itemCode.substring(0, 3)) > 900){
+            } else if (itemCode.substring(0, 3).equals("000") || Integer.parseInt(itemCode.substring(0, 3)) > 900){
                 docCostInfos.add(tmp);
             }
         }
