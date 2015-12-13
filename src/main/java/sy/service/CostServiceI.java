@@ -1,19 +1,19 @@
 package sy.service;
 
-import java.util.List;
-
 import sy.model.po.Cost;
 import sy.model.po.Department_Cost;
 import sy.pageModel.DataGrid;
 import sy.pageModel.PageHelper;
+
+import java.util.List;
 
 public interface CostServiceI {
 	/**
 	 * 
 	 * 获得列表
 	 */
-	DataGrid dataGrid(int department, String cid, String source);
-
+//	DataGrid dataGrid(int department, String cid, String source);
+    public DataGrid dataGrid(List<Integer> departmentIds, String cid,String source); // 多部门
 	/**
 	 * 
 	 * 删除

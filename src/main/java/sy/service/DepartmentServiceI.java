@@ -41,6 +41,8 @@ public interface DepartmentServiceI {
 
 	S_department getDepartmentByUid(String uid,String cid);
 
+    public List<S_department> getDepartmentsByUid(String uid,String cid);
+
     public List<Integer> getUsers(String cid, int uid);
 
 }

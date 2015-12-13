@@ -30,6 +30,7 @@ import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -128,18 +129,24 @@ public class CostController extends BaseController {
 				.getAttribute(ConfigUtil.getSessionInfoName());
 		String cid = sessionInfo.getCompid();
 		String did = sessionInfo.getDepartment_id();
+        List<S_department> departments = sessionInfo.getDepartmentIds();
 		String title = request.getParameter("title");
 		String source = request.getParameter("source");
 
 		System.out.println(title);
 
 		int department_id = 0;
+        List<Integer> departmentIds = new ArrayList<Integer>();
 		if (title != null) {
 //			department_id = title.equals("1") ? Integer.parseInt(did) : 0; // 暂时把部门费用限制去掉
+            for (S_department department : departments) {
+                departmentIds.add(department.getId());
+            }
 		}
 
 		JSONArray json = new JSONArray();
-		List<Cost> list = (List<Cost>) costService.dataGrid(department_id, cid,source).getRows();
+//		List<Cost> list = (List<Cost>) costService.dataGrid(department_id, cid,source).getRows();
+        List<Cost> list = (List<Cost>) costService.dataGrid(departmentIds, cid,source).getRows();
 		for (Cost cost : list) {
 //			String costType=cost.getCostType();
 //			if (source.equals("doc"))

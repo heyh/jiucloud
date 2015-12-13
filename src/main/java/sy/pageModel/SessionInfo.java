@@ -1,5 +1,7 @@
 package sy.pageModel;
 
+import sy.model.S_department;
+
 import java.util.List;
 
 /**
@@ -34,6 +36,16 @@ public class SessionInfo implements java.io.Serializable {
 
     // add by heyh
     private int parentId;
+
+    private List<S_department> departmentIds;
+
+    public List<S_department> getDepartmentIds() {
+        return departmentIds;
+    }
+
+    public void setDepartmentIds(List<S_department> departmentIds) {
+        this.departmentIds = departmentIds;
+    }
 
     public String getProjectInfos() {
         return projectInfos;

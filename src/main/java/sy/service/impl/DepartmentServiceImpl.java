@@ -170,10 +170,10 @@ public class DepartmentServiceImpl implements DepartmentServiceI {
 		Integer id = null;
 		if(cid!=null){
 			id = (Integer) departmentDaoI
-					.getObject("select parent_id from S_department where user_id=" + uid + " and company_id = "+cid);
+					.getObject("select parent_id from S_department where user_id=" + uid + " and company_id = " + cid);
 		}else{
 			id = (Integer) departmentDaoI
-					.getObject("select parent_id from S_department where user_id=" + uid );
+					.getObject("select parent_id from S_department where user_id=" + uid);
 		}
 		S_department department = new S_department();
 			//部门信息也是查询jsw_corporation_department,先通过用户id和公司id查询部门id,用部门id(parent_id)查询jsw_corporation_department,通过id查询部门信息
@@ -226,5 +226,29 @@ public class DepartmentServiceImpl implements DepartmentServiceI {
         }
 
         return uids;
+    }
+
+    @Override
+    public List<S_department> getDepartmentsByUid(String uid,String cid) {
+        List<Integer> ids = null;
+        if(cid!=null){
+            ids= (List<Integer>) departmentDaoI.getList("select parent_id from jsw_corporation_department where user_id=" + uid + " and company_id = " + cid);
+        }else{
+            ids = (List<Integer>) departmentDaoI.getList("select parent_id from jsw_corporation_department where user_id=" + uid);
+        }
+        List<S_department> departments = new ArrayList<S_department>();
+        for (Integer id : ids) {
+            S_department department = new S_department();
+            //部门信息也是查询jsw_corporation_department,先通过用户id和公司id查询部门id,用部门id(parent_id)查询jsw_corporation_department,通过id查询部门信息
+            String sql = "select id,name from jsw_corporation_department where id=" + id;
+            List<Object[]> deps = departmentDaoI.findBySql(sql);
+            for (Object[] tem : deps) {
+                department.setId((Integer) tem[0]);
+                department.setName((String) tem[1]);
+            }
+            departments.add(department);
+        }
+
+        return departments;
     }
 }

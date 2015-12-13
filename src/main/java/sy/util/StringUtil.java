@@ -3,6 +3,7 @@ package sy.util;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.util.List;
 
 public class StringUtil {
 	/**
@@ -180,5 +181,19 @@ public class StringUtil {
 
     public static boolean isNum(String str){
         return str.matches("^[-+]?(([0-9]+)([.]([0-9]+))?|([.]([0-9]+))?)$");
+    }
+
+    public static String listToString(List list) {
+        StringBuilder sb = new StringBuilder();
+        if (list != null && list.size() > 0) {
+            for (int i = 0; i < list.size(); i++) {
+                if (i < list.size() - 1) {
+                    sb.append(list.get(i) + ",");
+                } else {
+                    sb.append(list.get(i));
+                }
+            }
+        }
+        return sb.toString();
     }
 }

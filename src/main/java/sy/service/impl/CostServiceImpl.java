@@ -13,6 +13,7 @@ import sy.model.po.Department_Cost;
 import sy.pageModel.DataGrid;
 import sy.pageModel.PageHelper;
 import sy.service.CostServiceI;
+import sy.util.StringUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -32,7 +33,7 @@ public class CostServiceImpl implements CostServiceI {
 	private Department_CostDaoI department_CostDao;
 
 	@Override
-	public DataGrid dataGrid(int department_id, String cid,String source) {
+	public DataGrid dataGrid(List<Integer> departmentIds, String cid,String source) {
 		DataGrid dg = new DataGrid();
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("cid", cid);
@@ -45,9 +46,21 @@ public class CostServiceImpl implements CostServiceI {
 		} else {
             hql = " from Cost t  where cid=:cid and isdelete=0";
         }
-		if (department_id != 0) {
-			params.put("department_id", department_id);
-			hql += " and id in (select cost_id from Department_Cost where department_id=:department_id)";
+//		if (department_id != 0) {
+//			params.put("department_id", department_id);
+//			hql += " and id in (select cost_id from Department_Cost where department_id=:department_id)";
+//		}
+        if (departmentIds != null) {
+//			params.put("department_id", StringUtil.listToString(departmentIds));
+//			hql += " and id in (select cost_id from Department_Cost where department_id in (:department_id))";
+            hql += " and id in (select cost_id from Department_Cost where department_id in (";
+            for (int i=0; i<departmentIds.size(); i++) {
+                if (i < departmentIds.size() - 1) {
+                    hql += departmentIds.get(i) + ",";
+                } else {
+                    hql += departmentIds.get(i) + "))";
+                }
+            }
 		}
 		hql += " order by t.sort,t.itemCode asc ";
 		List<Cost> l = costDaoI.find(hql, params);
