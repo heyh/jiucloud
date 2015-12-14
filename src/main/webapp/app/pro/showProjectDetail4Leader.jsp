@@ -1,7 +1,25 @@
+<%@ page import="sy.pageModel.SessionInfo" %>
+<%@ page import="sy.util.ConfigUtil" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="java.util.List" %>
+<%@ page import="java.util.Map" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<%
+    List<Map<String, Object>> dataCostInfos = new ArrayList<Map<String, Object>>();
+    List<Map<String, Object>> docCostInfos = new ArrayList<Map<String, Object>>();
+
+    SessionInfo sessionInfo = (SessionInfo) session.getAttribute(ConfigUtil.getSessionInfoName());
+    if (sessionInfo == null) {
+        response.sendRedirect(request.getContextPath());
+    } else {
+        dataCostInfos = sessionInfo.getCostTypeInfos().get("dataCostInfos");
+        docCostInfos = sessionInfo.getCostTypeInfos().get("docCostInfos");
+    }
+
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -28,9 +46,14 @@
             src="${pageContext.request.contextPath}/jslib/extJquery.js?v=201305301341"
             charset="utf-8"></script>
     <!-- 引入Highcharts -->
-    <script type="text/javascript" src="http://cdn.hcharts.cn/highcharts/highcharts.js"></script>
-    <script type="text/javascript" src="http://cdn.hcharts.cn/highcharts/exporting.js"></script>
+    <%--<script type="text/javascript" src="http://cdn.hcharts.cn/highcharts/highcharts.js"></script>--%>
+    <%--<script type="text/javascript" src="http://cdn.hcharts.cn/highcharts/exporting.js"></script>--%>
+    <script src="https://cdn.bootcss.com/highcharts/4.1.10/highcharts.js"></script>
+    <script src="https://cdn.bootcss.com/highcharts/4.1.10/modules/exporting.js"></script>
 
+
+    <link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1-rc.1/css/select2.min.css" rel="stylesheet" />
+    <script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1-rc.1/js/select2.min.js"></script>
 
     <style>
 
@@ -56,7 +79,7 @@
         }
 
         #nav li {
-            margin-bottom: 2px;
+                margin-bottom: 2px;
         }
 
         #nav a {
@@ -242,8 +265,25 @@
 
     <div class="section" id="costStat">
         <h3>费用汇总</h3>
-        <div id="feeChart"></div>
-
+        <div style="display: table" >
+            <div id="feeChart" style="float:left; "></div>
+            <div style="float:left;" id="feeDiv">
+                <table id="feeTable" class="table_style" style="font-size: 12px; display: none; " cellpadding="0" cellspacing="0"  >
+                    <thead>
+                        <tr>
+                            <th>费用类型</th>
+                            <th>费用</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr id="cloneTr">
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 
     <div class="section" id="costDetail" style="padding-bottom:20px;">
@@ -252,10 +292,23 @@
         </table>
         <div id="toolbar" class="fee_detail" style="display: none;">
             <span>操作人:</span><input class="easyui-textbox"  type="text" name="uname" id="uname" data-options=""/>
-            <span>费用类型:</span><input class="easyui-textbox"  type="text" name="costType" id="costType" data-options=""/>
+            <span>费用类型:</span>
+            <%--<input class="easyui-textbox"  type="text" name="costType" id="costType" data-options=""/>--%>
+            <select style="width: 136px" name="dataCostType" id="dataCostType" >
+                <option></option>
+                <c:forEach var="costTypeInfo" items="<%= dataCostInfos %>" varStatus="index">
+                    <c:if test="${costTypeInfo.isSend == '0'}">
+                        <optgroup label="${costTypeInfo.costType}"> " " </optgroup>
+                    </c:if>
+                    <c:if test="${costTypeInfo.isSend == '1'}">
+                        <option value="${costTypeInfo.costType}">&nbsp;&nbsp;&nbsp;&nbsp;${costTypeInfo.costType}</option>
+                    </c:if>
+                </c:forEach>
+            </select>
+
             <span>起止时间:</span>
-                <input class="easyui-datebox" name="startTime" id='startTime' placeholder="点击选择时间"  value='${first }' />
-                - <input class="easyui-datebox"  name="endTime" id='endTime' placeholder="点击选择时间"  value='${last }' />
+                <input class="easyui-datebox" name="startTime" id='startTime' editable="false" placeholder="点击选择时间"  value='${first }' />
+                - <input class="easyui-datebox"  name="endTime" id='endTime'  editable="false" placeholder="点击选择时间"  value='${last }' />
 
             <a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'brick_add',plain:true" onclick="searchFun();">过滤条件</a>
             <a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'brick_delete',plain:true" onclick="cleanFun();">清空条件</a>
@@ -270,10 +323,23 @@
         </table>
         <div id="toolbarDoc" class="fee_detail" style="display: none;">
             <span>操作人:</span><input class="easyui-textbox"  type="text" name="unameDoc" id="unameDoc" data-options=""/>
-            <span>费用类型:</span><input class="easyui-textbox"  type="text" name="costTypeDoc" id="costTypeDoc" data-options=""/>
+            <span>资料类型:</span>
+            <%--<input class="easyui-textbox"  type="text" name="costTypeDoc" id="costTypeDoc" data-options=""/>--%>
+            <select style="width: 136px" name="docCostType" id="docCostType">
+                <option></option>
+                <c:forEach var="costTypeInfo" items="<%= docCostInfos %>" varStatus="index">
+                    <c:if test="${costTypeInfo.isSend == '0'}">
+                        <optgroup label="${costTypeInfo.costType}"> " " </optgroup>
+                    </c:if>
+                    <c:if test="${costTypeInfo.isSend == '1'}">
+                        <option value="${costTypeInfo.costType}">&nbsp;&nbsp;&nbsp;&nbsp;${costTypeInfo.costType}</option>
+                    </c:if>
+                </c:forEach>
+            </select>
+
             <span>起止时间:</span>
-            <input class="easyui-datebox" name="startTimeDoc" id='startTimeDoc' placeholder="点击选择时间"  value='${first }' />
-            - <input class="easyui-datebox"  name="endTimeDoc" id='endTimeDoc' placeholder="点击选择时间"  value='${last }' />
+            <input class="easyui-datebox" name="startTimeDoc" id='startTimeDoc' editable="false" placeholder="点击选择时间"  value='${first }' />
+            - <input class="easyui-datebox"  name="endTimeDoc" id='endTimeDoc' editable="false" placeholder="点击选择时间"  value='${last }' />
 
             <a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'brick_add',plain:true" onclick="searchFunDoc();">过滤条件</a>
             <a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'brick_delete',plain:true" onclick="cleanFunDoc();">清空条件</a>
@@ -291,6 +357,26 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/jslib/jquery.nav.js"></script>
 
 <script>
+    formatterFirstDate = function(date) {
+        var day = date.getDate() > 9 ? date.getDate() : "0" + date.getDate();
+        var month = (date.getMonth() + 1) > 9 ? (date.getMonth() + 1) : "0"
+        + (date.getMonth() + 1);
+        return date.getFullYear() + '-' + month + '-' + '01';
+    };
+    formatterCurrentDate = function(date) {
+        var day = date.getDate() > 9 ? date.getDate() : "0" + date.getDate();
+        var month = (date.getMonth() + 1) > 9 ? (date.getMonth() + 1) : "0"
+        + (date.getMonth() + 1);
+        return date.getFullYear() + '-' + month + '-' + day;
+    };
+
+    window.onload = function () {
+        $('#startTime').datebox('setValue', formatterFirstDate(new Date()));
+        $('#endTime').datebox('setValue', formatterCurrentDate(new Date()));
+        $('#startTimeDoc').datebox('setValue', formatterFirstDate(new Date()));
+        $('#endTimeDoc').datebox('setValue', formatterCurrentDate(new Date()));
+    }
+
     $(function() {
         $('#dataGridCost')
                 .datagrid(
@@ -482,7 +568,20 @@
             });
         }
 
-        tableStyle('.table_style')
+        tableStyle('.table_style');
+
+        $("#dataCostType").select2({
+            tags: "true",
+            placeholder: "可以模糊查询",
+            allowClear: true,
+            <%--data:<%=dataTypeInfos%>--%>
+        });
+        $("#docCostType").select2({
+            tags: "true",
+            placeholder: "可以模糊查询",
+            allowClear: true,
+            <%--data:<%=docTypeInfos%>--%>
+        });
 
     });
 
@@ -490,8 +589,10 @@
     function searchFun() {
         $('#startTime').val($('#startTime').val().substring(0, 10) + ' 00:00:00');
         $('#endTime').val($('#endTime').val().substring(0, 10) + ' 23:59:59');
-        $('#dataGridCost').datagrid('reload',{uname:$('#uname').val(),costType:$('#costType').val(),
-                                              startTime:$('#startTime').datebox('getValue'),endTime:$('#endTime').datebox('getValue')});
+//        $('#dataGridCost').datagrid('reload',{uname:$('#uname').val(),costType:$('#costType').val(),
+//                                              startTime:$('#startTime').datebox('getValue'),endTime:$('#endTime').datebox('getValue')});
+        $('#dataGridCost').datagrid('reload',{uname:$('#uname').val(),costType:$('#dataCostType').val(),
+                                             startTime:$('#startTime').datebox('getValue'),endTime:$('#endTime').datebox('getValue')});
     }
     //清除条件
     function cleanFun() {
@@ -503,7 +604,7 @@
     function searchFunDoc() {
         $('#startTimeDoc').val($('#startTimeDoc').val().substring(0, 10) + ' 00:00:00');
         $('#endTimeDoc').val($('#endTimeDoc').val().substring(0, 10) + ' 23:59:59');
-        $('#dataGridDoc').datagrid('reload',{uname:$('#unameDoc').val(),costType:$('#costTypeDoc').val(),
+        $('#dataGridDoc').datagrid('reload',{uname:$('#unameDoc').val(),costType:$('#docCostType').val(),
             startTime:$('#startTimeDoc').datebox('getValue'),endTime:$('#endTimeDoc').datebox('getValue')});
     }
     //清除条件
@@ -585,6 +686,48 @@
                 });
                 //设置数据
                 chart.series[0].setData(browsers);
+
+                // table begin
+                var tr = $("#cloneTr");
+
+                var clonedTr = tr.clone();
+                clonedTr.children("td").each(function(inner_index) {
+                    switch (inner_index) {
+                        case(0):
+                            $(this).html("合计:");
+                            break;
+                        case(1):
+                            $(this).html(jQuery.parseJSON(eval(data)).totalMoney);
+                            break;
+                    }
+                });
+                clonedTr.insertAfter(tr);
+
+                $.each(jQuery.parseJSON(eval(data)).cata, function(key, value){
+                    //克隆tr，每次遍历都可以产生新的tr
+                    var clonedTr = tr.clone();
+
+                    //循环遍历cloneTr的每一个td元素，并赋值
+                    clonedTr.children("td").each(function(inner_index){
+
+                        //根据索引为每一个td赋值
+                        switch(inner_index){
+                            case(0):
+                                $(this).html(key);
+                                break;
+                            case(1):
+                                $(this).html(value.toFixed(2));
+                                break;
+                        }//end switch
+                    });//end children.each
+                    //把克隆好的tr追加原来的tr后面
+                    clonedTr.insertAfter(tr);
+                });//end $each
+
+                $("#cloneTr").hide();//隐藏id=clone的tr，因为该tr中的td没有数据，不隐藏起来会在生成的table第一行显示一个空行
+                $("#feeTable").show();
+
+                // table end
             },
             error:function(e){
                 alert(e);
