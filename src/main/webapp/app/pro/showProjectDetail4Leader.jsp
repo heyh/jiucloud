@@ -325,7 +325,7 @@
             <span>操作人:</span><input class="easyui-textbox"  type="text" name="unameDoc" id="unameDoc" data-options=""/>
             <span>资料类型:</span>
             <%--<input class="easyui-textbox"  type="text" name="costTypeDoc" id="costTypeDoc" data-options=""/>--%>
-            <select style="width: 136px" name="docCostType" id="docCostType">
+            <select style="width:119px;font-size:4px;"  name="docCostType" id="docCostType">
                 <option></option>
                 <c:forEach var="costTypeInfo" items="<%= docCostInfos %>" varStatus="index">
                     <c:if test="${costTypeInfo.isSend == '0'}">
@@ -694,10 +694,10 @@
                 clonedTr.children("td").each(function(inner_index) {
                     switch (inner_index) {
                         case(0):
-                            $(this).html("合计:");
+                            $(this).html("<b>合计:</b>");
                             break;
                         case(1):
-                            $(this).html(jQuery.parseJSON(eval(data)).totalMoney);
+                            $(this).html("<b>"+jQuery.parseJSON(eval(data)).totalMoney + "</b>");
                             break;
                     }
                 });
