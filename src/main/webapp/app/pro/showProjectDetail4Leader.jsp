@@ -25,6 +25,7 @@
 <head>
     <title>项目详情</title>
     <%--<jsp:include page="../../inc2.jsp"></jsp:include>--%>
+    <link href="${pageContext.request.contextPath}/jslib/bootstrap-2.3.1/css/bootstrap.min.css" rel="stylesheet" media="screen">
     <!-- 引入jQuery -->
     <script src="${pageContext.request.contextPath}/jslib/jquery-1.8.3.js"
             type="text/javascript" charset="utf-8"></script>
@@ -291,10 +292,12 @@
         <table id="dataGridCost" class="easyui-datagrid" width="100%">
         </table>
         <div id="toolbar" class="fee_detail" style="display: none;">
-            <span>操作人:</span><input class="easyui-textbox"  type="text" name="uname" id="uname" data-options=""/>
+            <span>操作人:</span>
+            <input class="easyui-textbox"  style="margin-top:9px; width: 150px;height: 17px;" type="text" name="uname" id="uname"/>
+            &nbsp;&nbsp;&nbsp;&nbsp;
             <span>费用类型:</span>
             <%--<input class="easyui-textbox"  type="text" name="costType" id="costType" data-options=""/>--%>
-            <select style="width: 136px" name="dataCostType" id="dataCostType" >
+            <select style="width: 150px" name="dataCostType" id="dataCostType" >
                 <option></option>
                 <c:forEach var="costTypeInfo" items="<%= dataCostInfos %>" varStatus="index">
                     <c:if test="${costTypeInfo.isSend == '0'}">
@@ -305,10 +308,11 @@
                     </c:if>
                 </c:forEach>
             </select>
+            &nbsp;&nbsp;&nbsp;&nbsp;
 
             <span>起止时间:</span>
-                <input class="easyui-datebox" name="startTime" id='startTime' editable="false" placeholder="点击选择时间"  value='${first }' />
-                - <input class="easyui-datebox"  name="endTime" id='endTime'  editable="false" placeholder="点击选择时间"  value='${last }' />
+                <input style="width: 150px" class="easyui-datebox" name="startTime" id='startTime' editable="false" placeholder="点击选择时间"  value='${first }' />
+                - <input style="width: 150px" class="easyui-datebox"  name="endTime" id='endTime'  editable="false" placeholder="点击选择时间"  value='${last }' />
 
             <a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'brick_add',plain:true" onclick="searchFun();">过滤条件</a>
             <a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'brick_delete',plain:true" onclick="cleanFun();">清空条件</a>
@@ -322,10 +326,10 @@
         <table id="dataGridDoc" class="easyui-datagrid" width="100%">
         </table>
         <div id="toolbarDoc" class="fee_detail" style="display: none;">
-            <span>操作人:</span><input class="easyui-textbox"  type="text" name="unameDoc" id="unameDoc" data-options=""/>
+            <span>操作人:</span><input style="margin-top:9px; width: 150px;height: 17px;" class="easyui-textbox"  type="text" name="unameDoc" id="unameDoc" data-options=""/>
             <span>资料类型:</span>
             <%--<input class="easyui-textbox"  type="text" name="costTypeDoc" id="costTypeDoc" data-options=""/>--%>
-            <select style="width:119px;font-size:4px;"  name="docCostType" id="docCostType">
+            <select style="width: 150px"  name="docCostType" id="docCostType">
                 <option></option>
                 <c:forEach var="costTypeInfo" items="<%= docCostInfos %>" varStatus="index">
                     <c:if test="${costTypeInfo.isSend == '0'}">
@@ -338,8 +342,8 @@
             </select>
 
             <span>起止时间:</span>
-            <input class="easyui-datebox" name="startTimeDoc" id='startTimeDoc' editable="false" placeholder="点击选择时间"  value='${first }' />
-            - <input class="easyui-datebox"  name="endTimeDoc" id='endTimeDoc' editable="false" placeholder="点击选择时间"  value='${last }' />
+            <input style="width: 150px" class="easyui-datebox" name="startTimeDoc" id='startTimeDoc' editable="false" placeholder="点击选择时间"  value='${first }' />
+            - <input style="width: 150px" class="easyui-datebox"  name="endTimeDoc" id='endTimeDoc' editable="false" placeholder="点击选择时间"  value='${last }' />
 
             <a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'brick_add',plain:true" onclick="searchFunDoc();">过滤条件</a>
             <a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'brick_delete',plain:true" onclick="cleanFunDoc();">清空条件</a>
