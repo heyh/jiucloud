@@ -138,7 +138,7 @@
 
     <div class="section" id="projectInfo">
 
-        <h3>项目详情</h3>
+        <h4>项目详情</h4>
         <input name="id" type="hidden" class="span2" value="${pro.id}" readonly="readonly">
         <table class="table_style" style="font-size: 12px;" cellpadding="0" cellspacing="0">
             <tr>
@@ -264,7 +264,7 @@
     </div>
 
     <div class="section" id="costStat">
-        <h3>费用汇总</h3>
+        <h4>费用汇总</h4>
         <div style="display: table" >
             <div id="feeChart" style="float:left; "></div>
             <div style="float:left;" id="feeDiv">
@@ -287,7 +287,7 @@
     </div>
 
     <div class="section" id="costDetail" style="padding-bottom:20px;">
-        <h3>费用明细</h3>
+        <h4>费用明细</h4>
         <table id="dataGridCost" class="easyui-datagrid" width="100%">
         </table>
         <div id="toolbar" class="fee_detail" style="display: none;">
@@ -318,7 +318,7 @@
     </div>
 
     <div class="section" id="docDetail" style="padding-bottom:20px;">
-        <h3>资料明细</h3>
+        <h4>资料明细</h4>
         <table id="dataGridDoc" class="easyui-datagrid" width="100%">
         </table>
         <div id="toolbarDoc" class="fee_detail" style="display: none;">
