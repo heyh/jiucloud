@@ -268,8 +268,8 @@
         <h4>费用汇总</h4>
         <div style="display: table" >
             <div id="feeChart" style="float:left; "></div>
-            <div style="float:left;" id="feeDiv">
-                <table id="feeTable" class="table_style" style="font-size: 12px; display: none; " cellpadding="0" cellspacing="0"  >
+            <div style="float:left; " id="feeDiv">
+                <table id="feeTable" class="table_style" style="margin-top: 15px; font-size: 12px; display: none; " cellpadding="0" cellspacing="0"  >
                     <thead>
                         <tr>
                             <th>费用类型</th>
