@@ -314,8 +314,9 @@
                 <input style="width: 150px" class="easyui-datebox" name="startTime" id='startTime' editable="false" placeholder="点击选择时间"  value='${first }' />
                 - <input style="width: 150px" class="easyui-datebox"  name="endTime" id='endTime'  editable="false" placeholder="点击选择时间"  value='${last }' />
 
-            <a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'brick_add',plain:true" onclick="searchFun();">过滤条件</a>
-            <a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'brick_delete',plain:true" onclick="cleanFun();">清空条件</a>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="javascript:void(0);" class="easyui-button" data-options="plain:true" onclick="searchFun();">过滤条件</a>
+            <a href="javascript:void(0);" class="easyui-button" data-options="plain:true" onclick="cleanFun();">清空条件</a>
 
         </div>
 
@@ -346,9 +347,9 @@
             <span>起止时间:</span>
             <input style="width: 150px" class="easyui-datebox" name="startTimeDoc" id='startTimeDoc' editable="false" placeholder="点击选择时间"  value='${first }' />
             - <input style="width: 150px" class="easyui-datebox"  name="endTimeDoc" id='endTimeDoc' editable="false" placeholder="点击选择时间"  value='${last }' />
-
-            <a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'brick_add',plain:true" onclick="searchFunDoc();">过滤条件</a>
-            <a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'brick_delete',plain:true" onclick="cleanFunDoc();">清空条件</a>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="javascript:void(0);" class="easyui-button" data-options="plain:true" onclick="searchFunDoc();">过滤条件</a>
+            <a href="javascript:void(0);" class="easyui-button" data-options="plain:true" onclick="cleanFunDoc();">清空条件</a>
 
         </div>
 

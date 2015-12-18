@@ -329,8 +329,11 @@
 	function searchFun() {
 //		$('#startTime').val($('#startTime').val() + ' 00:00:00');
 //		$('#endTime').val($('#endTime').val() + ' 00:00:00');
-        $('#startTime').val($('#startTime').val().substring(0, 10) + ' 00:00:00');
-        $('#endTime').val($('#endTime').val().substring(0, 10) + ' 23:59:59');
+        if($('#startTime').val() != '' && $('#endTime').val() != '') {
+            $('#startTime').val($('#startTime').val().substring(0, 10) + ' 00:00:00');
+            $('#endTime').val($('#endTime').val().substring(0, 10) + ' 23:59:59');
+        }
+
 		dataGrid.datagrid('load', $.serializeObject($('#searchForm')));
 	}
 	//清除条件

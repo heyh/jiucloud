@@ -49,7 +49,7 @@ public class CostServiceImpl implements CostServiceI {
 //			params.put("department_id", department_id);
 //			hql += " and id in (select cost_id from Department_Cost where department_id=:department_id)";
 //		}
-        if (departmentIds != null) {
+        if (departmentIds != null && departmentIds.size()>0) {
 //			params.put("department_id", StringUtil.listToString(departmentIds));
 //			hql += " and id in (select cost_id from Department_Cost where department_id in (:department_id))";
             hql += " and id in (select cost_id from Department_Cost where department_id in (";
