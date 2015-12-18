@@ -451,12 +451,12 @@
                         {
                             field : 'specifications',
                             title : '规格类型',
-                            width : 50
+                            width : 100
                         },
                         {
                             field : 'uname',
                             title : '操作人',
-                            width : 50
+                            width : 100
                         },
                         {
                             field : 'creatTime',
