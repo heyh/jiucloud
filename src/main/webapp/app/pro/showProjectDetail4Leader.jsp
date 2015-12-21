@@ -269,15 +269,17 @@
         <div style="display: table" >
             <div id="feeChart" style="float:left; "></div>
             <div style="float:left; " id="feeDiv">
-                <table id="feeTable" class="table_style" style="margin-top: 15px; font-size: 12px; display: none; " cellpadding="0" cellspacing="0"  >
+                <table id="feeTable" class="table_style" style="width:400px; font-size: 10px; display: none; " cellpadding="0" cellspacing="0"  >
                     <thead>
                         <tr>
+                            <th>序号</th>
                             <th>费用类型</th>
-                            <th>费用</th>
+                            <th>费用(元)</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr id="cloneTr">
+                            <td table_style tbody tr.hover td></td>
                             <td></td>
                             <td></td>
                         </tr>
@@ -688,8 +690,10 @@
             success:function(data){
                 //定义一个数组
                 browsers = [];
+                var order = 0; //提供给表格序号
                 $.each(jQuery.parseJSON(eval(data)).cata,function(key,value){
                     browsers.push([key,value]);
+                    order++;
                 });
                 //设置数据
                 chart.series[0].setData(browsers);
@@ -700,11 +704,11 @@
                 var clonedTr = tr.clone();
                 clonedTr.children("td").each(function(inner_index) {
                     switch (inner_index) {
-                        case(0):
+                        case(1):
                             $(this).html("<b>合计:</b>");
                             break;
-                        case(1):
-                            $(this).html("<b>"+jQuery.parseJSON(eval(data)).totalMoney + "</b>");
+                        case(2):
+                            $(this).html("<b>"+jQuery.parseJSON(eval(data)).totalMoney.toFixed(2) + "</b>");
                             break;
                     }
                 });
@@ -720,9 +724,12 @@
                         //根据索引为每一个td赋值
                         switch(inner_index){
                             case(0):
-                                $(this).html(key);
+                                $(this).html(order--);
                                 break;
                             case(1):
+                                $(this).html(key);
+                                break;
+                            case(2):
                                 $(this).html(value.toFixed(2));
                                 break;
                         }//end switch
