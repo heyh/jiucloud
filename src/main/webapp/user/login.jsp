@@ -69,7 +69,7 @@
 									var params = {
 										url : url,
 										title : text,
-										iconCls : 'wrench'
+										iconCls : 'prodatamng'
 									}
 									window.parent.ac(params);
 									parent.$.modalDialog.handler
