@@ -12,12 +12,8 @@
                 .getAttribute(ConfigUtil.getSessionInfoName());
         if (sessionInfo == null) {
             response.sendRedirect(request.getContextPath());
-        } else {
-            uid=sessionInfo.getId();
-            cid=sessionInfo.getCompid();
         }
     }
-    String loginUrl="user/login.jsp?uid="+uid+"&cid="+cid;
 %>
 <html>
 <head>
@@ -184,7 +180,7 @@
                 if (b) {
                     location.replace('${pageContext.request.contextPath}/');
                 } else {
-                    window.location.href = '';
+                    window.location.href = '${pageContext.request.contextPath}/';
                 }
             });
         }
@@ -199,7 +195,7 @@
 </head>
 <body>
 
-<jsp:include page="<%=loginUrl%>"></jsp:include>
+<jsp:include page="user/login.jsp?uid=<%=uid%>&cid=<%=cid%>"></jsp:include>
 
 <div id="index_layout">
     <!-- class="logo" -->
