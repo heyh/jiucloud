@@ -11,6 +11,7 @@
 
 <%
     String userId = null;
+    String underlingUsers = null;
     String projectInfos = null;
     List<Map<String, Object>> dataCostInfos = new ArrayList<Map<String, Object>>();
     
@@ -19,6 +20,7 @@
         response.sendRedirect(request.getContextPath());
     } else {
         userId = sessionInfo.getId();
+        underlingUsers = sessionInfo.getUnderlingUsers();
         projectInfos = sessionInfo.getProjectInfos();
         dataCostInfos = sessionInfo.getCostTypeInfos().get("dataCostInfos");
     }
@@ -365,6 +367,11 @@
     }
 
     $(document).ready(function() {
+        $("#uname").select2({
+            placeholder: "可以模糊查询",
+            allowClear: true,
+            data:<%=underlingUsers%>
+        });
         $("#projectName").select2({
             placeholder: "可以模糊查询",
             allowClear: true,
@@ -388,8 +395,13 @@
 				<table class="table table-hover table-condensed"
 					style="display: none;">
 					<tr>
-						<td>操作人:&nbsp;<input name="uname" id='uname'
-							placeholder="可以模糊查询" class="span2" /></td>
+						<td>操作人:&nbsp;
+                            <%--<input name="uname" id='uname' placeholder="可以模糊查询" class="span2" />--%>
+                            <select  style="width: 136px" name="uname" id="uname">
+                                <option ></option>
+
+                            </select>
+                        </td>
 						<td>工程名称:&nbsp;
                             <%--<input name="projectName" id="projectName" placeholder="可以模糊查询" class="span2" />--%>
                             <select  style="width: 136px" name="projectName" id="projectName">

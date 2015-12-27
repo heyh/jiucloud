@@ -44,4 +44,6 @@ public interface UserServiceI {
 
 	public List<User> findallUser(String uid, String cid);
 
+    public String findUnderlingUsers(List<Integer> uids);
+
 }

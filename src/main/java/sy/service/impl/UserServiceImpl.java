@@ -1,14 +1,10 @@
 package sy.service.impl;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
+import com.alibaba.fastjson.JSON;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import sy.dao.ResourceDaoI;
 import sy.dao.RoleDaoI;
 import sy.dao.UserDaoI;
@@ -16,6 +12,11 @@ import sy.model.Tresource;
 import sy.model.Tuser;
 import sy.pageModel.User;
 import sy.service.UserServiceI;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 public class UserServiceImpl implements UserServiceI {
@@ -132,4 +133,28 @@ public class UserServiceImpl implements UserServiceI {
 		}
 		return ul;
 	}
+
+    public String findUnderlingUsers(List<Integer> uids) {
+        StringBuffer hql = new StringBuffer();
+        if (uids!=null && uids.size()>0) {
+            hql.append("from Tuser where id in (");
+            hql.append(StringUtils.join(uids, ","));
+            hql.append(")");
+        } else {
+            return "";
+        }
+        List<Tuser> users = userDao.find(hql.toString());
+        List<Map<String, Object>> tmpList = new ArrayList<Map<String, Object>>();
+        Map<String, Object> tmpMap = new HashMap<String, Object>();
+        if (users != null && users.size() >0) {
+            for (Tuser user : users) {
+                tmpMap = new HashMap<String, Object>();
+                String name = user.getRealname()!=null && !user.getRealname().equals("") ? user.getRealname() : user.getUsername();
+                tmpMap.put("id", name);
+                tmpMap.put("text", name);
+                tmpList.add(tmpMap);
+            }
+        }
+        return JSON.toJSONString(tmpList);
+    }
 }

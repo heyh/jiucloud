@@ -165,6 +165,7 @@ public class UserController extends BaseController {
                     }
                 }
                 sessionInfo.setCostTypeInfos(costService.getCostTypeInfos(departmentIds, cid));
+                sessionInfo.setUnderlingUsers(userService.findUnderlingUsers(ugroup));
 				session.setAttribute(ConfigUtil.getSessionInfoName(), sessionInfo);
 
 				System.out.println(sessionInfo);

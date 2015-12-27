@@ -57,6 +57,16 @@ public class SessionInfo implements java.io.Serializable {
     }
 
     private String projectInfos;
+    private String underlingUsers;
+
+    public String getUnderlingUsers() {
+        return underlingUsers;
+    }
+
+    public void setUnderlingUsers(String underlingUsers) {
+        this.underlingUsers = underlingUsers;
+    }
+
     private Map<String, List<Map<String, Object>>> costTypeInfos;
 
     public Map<String, List<Map<String, Object>>> getCostTypeInfos() {
