@@ -8,6 +8,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%
+    String underlingUsers = null;
     List<Map<String, Object>> dataCostInfos = new ArrayList<Map<String, Object>>();
     List<Map<String, Object>> docCostInfos = new ArrayList<Map<String, Object>>();
 
@@ -15,6 +16,7 @@
     if (sessionInfo == null) {
         response.sendRedirect(request.getContextPath());
     } else {
+        underlingUsers = sessionInfo.getUnderlingUsers();
         dataCostInfos = sessionInfo.getCostTypeInfos().get("dataCostInfos");
         docCostInfos = sessionInfo.getCostTypeInfos().get("docCostInfos");
     }
@@ -301,7 +303,11 @@
         </table>
         <div id="toolbar" class="fee_detail" style="display: none;">
             <span>操作人:</span>
-            <input class="easyui-textbox"  style="margin-top:9px; width: 150px;height: 17px;" type="text" name="uname" id="uname" data-options=""/>
+            <%--<input class="easyui-textbox"  style="margin-top:9px; width: 150px;height: 17px;" type="text" name="uname" id="uname" data-options=""/>--%>
+            <select  style="width: 150px" name="uname" id="uname">
+                <option ></option>
+
+            </select>
             &nbsp;&nbsp;&nbsp;&nbsp;
             <span>费用类型:</span>
             <%--<input class="easyui-textbox"  type="text" name="costType" id="costType" data-options=""/>--%>
@@ -338,7 +344,11 @@
         </table>
         <div id="toolbarDoc" class="fee_detail" style="display: none;">
             <span>操作人:</span>
-            <input style="margin-top:9px; width: 150px;height: 17px;" class="easyui-textbox"  type="text" name="unameDoc" id="unameDoc" data-options=""/>
+            <%--<input style="margin-top:9px; width: 150px;height: 17px;" class="easyui-textbox"  type="text" name="unameDoc" id="unameDoc" data-options=""/>--%>
+            <select  style="width: 150px" name="unameDoc" id="unameDoc">
+                <option ></option>
+
+            </select>
             &nbsp;&nbsp;&nbsp;&nbsp;
             <span>资料类型:</span>
             <%--<input class="easyui-textbox"  type="text" name="costTypeDoc" id="costTypeDoc" data-options=""/>--%>
@@ -587,6 +597,16 @@
 
         tableStyle('.table_style');
 
+        $("#uname").select2({
+            placeholder: "可以模糊查询",
+            allowClear: true,
+            data:<%=underlingUsers%>
+        });
+        $("#unameDoc").select2({
+            placeholder: "可以模糊查询",
+            allowClear: true,
+            data:<%=underlingUsers%>
+        });
         $("#dataCostType").select2({
             tags: "true",
             placeholder: "可以模糊查询",
