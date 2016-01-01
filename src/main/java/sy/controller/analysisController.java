@@ -197,7 +197,7 @@ public class analysisController extends BaseController {
 //		String price_id = fieldData.getCostType();
 
 		List<Price> prices = priceService.getpPrices(Integer.parseInt(cid));
-		List<Project> projects = projectService.getProjects(ugroup);
+//		List<Project> projects = projectService.getProjects(ugroup);
 
 		if (!(project_id == null || price_id == null || project_id.equals("") || price_id
 				.equals(""))) {
@@ -230,7 +230,7 @@ public class analysisController extends BaseController {
 		}
 
 		request.setAttribute("project_id", project_id);
-		request.setAttribute("projects", projects);
+//		request.setAttribute("projects", projects);
 		request.setAttribute("prices", prices);
 		request.setAttribute("first", UtilDate.getshortFirst());
 		request.setAttribute("last", UtilDate.getshortLast());
