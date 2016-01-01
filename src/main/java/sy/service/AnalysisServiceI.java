@@ -27,4 +27,6 @@ public interface AnalysisServiceI {
 			String project_id, List<Integer> ugroup,String cid);
 
     public String getFeeStatList(int projectId, String cid, List<Integer> ugroup);
+
+    public List<Object[]> getAllFee(String cid, List<Integer> ugroup);
 }

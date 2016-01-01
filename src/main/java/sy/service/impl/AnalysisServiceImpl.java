@@ -1,5 +1,6 @@
 package sy.service.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sy.dao.AnalysisDaoI;
@@ -293,5 +294,27 @@ public class AnalysisServiceImpl implements AnalysisServiceI {
         rtn.put("totalMoney", totalMoney);
         rtn.put("cata", realCata);
         return com.alibaba.fastjson.JSONObject.toJSONString(rtn);
+    }
+
+    @Override
+    public List<Object[]> getAllFee(String cid, List<Integer> ugroup) {
+        String hql = "select base.projectId, base.proName, base.price_id, base.name, if (isnull(sum(base.money)), 0, sum(base.money)) from (\n" +
+                "SELECT  a.ID projectId, a.proName, a.price_id, a.name, a.costType, a.itemCode, f.count * f.price money from \n" +
+                "(SELECT p. NAME, pc.price_id, pc.cost_id, c.costType, c.itemCode, proj.proName, proj.ID\n" +
+                "FROM TPrice p, TPrice_Cost pc, TCost c, tgc_Project proj\n" +
+                "WHERE p.cid = " + cid + "\n" +
+                "AND pc.price_id = p.id\n" +
+                "AND pc.cost_id = c.id\n" +
+                "AND c.isDelete = '0'\n" +
+                "AND proj.compId = p.cid\n" +
+                "AND proj.isdel = '0'\n" +
+                "AND proj.uids IN (" + StringUtils.join(ugroup, ",") + ") ) a\n" +
+                "LEFT JOIN TFieldData f \n" +
+                "ON f.itemCode like CONCAT(a.itemCode,'%') and f.isDelete = '0' \n" +
+                "and f.projectName = a.ID and f.cid = " + cid + ") base\n" +
+                "group by base.projectId, base.proName, base.price_id, base.name";
+
+        List<Object[]> list = analysisDao.findBySql(hql);
+        return list;
     }
 }

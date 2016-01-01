@@ -180,8 +180,10 @@
 					</tr>
 
 					<tr>
-						<c:forEach items="${prices}" var="tem">
-							<th scope="col" align="center">${tem.name}</th>
+						<%--<c:forEach items="${prices}" var="tem">--%>
+							<%--<th scope="col" align="center">${tem.name}</th>--%>
+                            <c:forEach items="${prices}" var="name">
+                                <th scope="col" align="center">${name}</th>
 						</c:forEach>
 					</tr>
 				</thead>

@@ -1,39 +1,25 @@
 package sy.controller;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.ServletOutputStream;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-
 import sy.model.po.Price;
 import sy.model.po.Project;
 import sy.pageModel.AnalysisData;
 import sy.pageModel.AnalysisSearch;
 import sy.pageModel.FieldData;
 import sy.pageModel.SessionInfo;
-import sy.service.AnalysisServiceI;
-import sy.service.CostServiceI;
-import sy.service.PriceServiceI;
-import sy.service.ProjectServiceI;
-import sy.service.TaskServiceI;
+import sy.service.*;
 import sy.util.ConfigUtil;
 import sy.util.ExcelExportUtil;
 import sy.util.UtilDate;
+
+import javax.servlet.ServletOutputStream;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import java.io.*;
+import java.util.*;
 
 @Controller
 @RequestMapping("/analysisController")
@@ -66,67 +52,131 @@ public class analysisController extends BaseController {
 	/*
 	 * 跳转到汇总页
 	 */
-	@RequestMapping("/showTable")
-	public String showTable(HttpSession session, HttpServletRequest request,
-			AnalysisSearch analysisSearch) {
-//		if (analysisSearch.isNull()) {
-//			request.setAttribute("first", UtilDate.getshortFirst());
-//			request.setAttribute("last", UtilDate.getshortLast());
-//			return "/app/analysis/summary";// 当日期为空时不做任何查询
-//		}
-		FieldData fieldData = (FieldData) session.getAttribute("analusisInfo");
-		analysisSearch.setStartTime(fieldData.getStartTime());
-		analysisSearch.setEndTime(fieldData.getEndTime());
-		//名字和id
-		analysisSearch.setpName(fieldData.getProjectName());
-		analysisSearch.setCostTypeName(fieldData.getCostType());
-		SessionInfo sessionInfo = (SessionInfo) session.getAttribute(ConfigUtil
-				.getSessionInfoName());
-		String cid = sessionInfo.getCompid();
-		List<Integer> ugroup = sessionInfo.getUgroup();
-
-		List<Price> prices = priceService.getpPrices(Integer.parseInt(cid));
-		List<Project> projects;
-
-		if (analysisSearch.getpName() == null
-				|| "".equals(analysisSearch.getpName())) {
-			projects = projectService.getProjects(ugroup);// 当查询条件为空时查询出当前登录权限下的所有工程
-//		if (analysisSearch.getProject_id() == null
-//				|| "".equals(analysisSearch.getProject_id())) {
+//	@RequestMapping("/showTable")
+//	public String showTable(HttpSession session, HttpServletRequest request,
+//			AnalysisSearch analysisSearch) {
+////		if (analysisSearch.isNull()) {
+////			request.setAttribute("first", UtilDate.getshortFirst());
+////			request.setAttribute("last", UtilDate.getshortLast());
+////			return "/app/analysis/summary";// 当日期为空时不做任何查询
+////		}
+//		FieldData fieldData = (FieldData) session.getAttribute("analusisInfo");
+//		analysisSearch.setStartTime(fieldData.getStartTime());
+//		analysisSearch.setEndTime(fieldData.getEndTime());
+//		//名字和id
+//		analysisSearch.setpName(fieldData.getProjectName());
+//		analysisSearch.setCostTypeName(fieldData.getCostType());
+//		SessionInfo sessionInfo = (SessionInfo) session.getAttribute(ConfigUtil
+//				.getSessionInfoName());
+//		String cid = sessionInfo.getCompid();
+//		List<Integer> ugroup = sessionInfo.getUgroup();
+//
+//		List<Price> prices = priceService.getpPrices(Integer.parseInt(cid));
+//		List<Project> projects;
+//
+//		if (analysisSearch.getpName() == null
+//				|| "".equals(analysisSearch.getpName())) {
 //			projects = projectService.getProjects(ugroup);// 当查询条件为空时查询出当前登录权限下的所有工程
-		} else {
-//			Project project = projectService.findOneView(Integer
-//					.parseInt(analysisSearch.getProject_id()));
-//			projects = new ArrayList<Project>();
-//			projects.add(project);
-			//原来是通过id查询单个对象放入集合，现在是通过现场数据的名称模糊查询集合对象赋值给projects集合对象
-			projects = projectService.findListView(analysisSearch.getpName(),cid);
-		}
+////		if (analysisSearch.getProject_id() == null
+////				|| "".equals(analysisSearch.getProject_id())) {
+////			projects = projectService.getProjects(ugroup);// 当查询条件为空时查询出当前登录权限下的所有工程
+//		} else {
+////			Project project = projectService.findOneView(Integer
+////					.parseInt(analysisSearch.getProject_id()));
+////			projects = new ArrayList<Project>();
+////			projects.add(project);
+//			//原来是通过id查询单个对象放入集合，现在是通过现场数据的名称模糊查询集合对象赋值给projects集合对象
+//			projects = projectService.findListView(analysisSearch.getpName(),cid);
+//		}
+//
+//		// 获取表格数据
+//		List<AnalysisData> datas = analysisService.getTable(analysisSearch,
+//				ugroup, projects, prices,cid);
+//
+//		List<Double> totals = new ArrayList<Double>();
+//
+//		// 计算合计
+//		if (datas.size() > 0) {
+//			double[] sums = new double[datas.get(0).getMoneys().size()];
+//			for (int i = 0; i < datas.get(0).getMoneys().size(); i++) {
+//				sums[i] = 0;
+//				for (int j = 0; j < datas.size(); j++) {
+//					sums[i] += datas.get(j).getMoneys().get(i);
+//				}
+//				totals.add(sums[i]);
+//			}
+//		}
+//
+//		request.setAttribute("prices", prices);
+//		request.setAttribute("datas", datas);
+//		request.setAttribute("analysisSearch", analysisSearch);
+//		request.setAttribute("totals", totals);
+//		return "/app/analysis/summary";
+//	}
 
-		// 获取表格数据
-		List<AnalysisData> datas = analysisService.getTable(analysisSearch,
-				ugroup, projects, prices,cid);
-
-		List<Double> totals = new ArrayList<Double>();
-
-		// 计算合计
-		if (datas.size() > 0) {
-			double[] sums = new double[datas.get(0).getMoneys().size()];
-			for (int i = 0; i < datas.get(0).getMoneys().size(); i++) {
-				sums[i] = 0;
-				for (int j = 0; j < datas.size(); j++) {
-					sums[i] += datas.get(j).getMoneys().get(i);
-				}
-				totals.add(sums[i]);
-			}
-		}
-
-		request.setAttribute("prices", prices);
-		request.setAttribute("datas", datas);
-		request.setAttribute("analysisSearch", analysisSearch);
-		request.setAttribute("totals", totals);
-		return "/app/analysis/summary";
-	}
+    /**
+     * 新的『项目费用汇总』
+     * @param session
+     * @param request
+     * @param analysisSearch
+     * @return
+     */
+    @RequestMapping("/showTable")
+    public String showTableNew(HttpSession session, HttpServletRequest request,
+                               AnalysisSearch analysisSearch) {
+        FieldData fieldData = (FieldData) session.getAttribute("analusisInfo");
+        analysisSearch.setStartTime(fieldData.getStartTime());
+        analysisSearch.setEndTime(fieldData.getEndTime());
+        //名字和id
+        analysisSearch.setpName(fieldData.getProjectName());
+        analysisSearch.setCostTypeName(fieldData.getCostType());
+        SessionInfo sessionInfo = (SessionInfo) session.getAttribute(ConfigUtil
+                .getSessionInfoName());
+        String cid = sessionInfo.getCompid();
+        List<Integer> ugroup = sessionInfo.getUgroup();
+        List<Object[]> allFee = analysisService.getAllFee(cid, ugroup);
+        Set<Object> productIds = new HashSet<Object>();
+        Set<String> prices = new HashSet<String>();
+        if (allFee != null && allFee.size() > 0) {
+            for (Object[] fee : allFee) {
+                productIds.add(fee[0]);
+                Price p = new Price();
+                prices.add(String.valueOf(fee[3]));
+            }
+        }
+        List<AnalysisData> datas = new ArrayList<AnalysisData>();
+        AnalysisData tem = new AnalysisData();
+        List<Double> moneys = new ArrayList<Double>();
+        for (Object projectId : productIds) {
+            tem = new AnalysisData();
+            moneys = new ArrayList<Double>();
+            for (Object[] fee : allFee) {
+                if (fee[0].equals(projectId)) {
+                    tem.setProject_name(fee[1]== null ? "" : String.valueOf(fee[1]));
+                    moneys.add((Double) fee[4]);
+                }
+            }
+            tem.setMoneys(moneys);
+            datas.add(tem);
+        }
+        List<Double> totals = new ArrayList<Double>();
+        // 计算合计
+        if (datas.size() > 0) {
+            double[] sums = new double[datas.get(0).getMoneys().size()];
+            for (int i = 0; i < datas.get(0).getMoneys().size(); i++) {
+                sums[i] = 0;
+                for (int j = 0; j < datas.size(); j++) {
+                    sums[i] += datas.get(j).getMoneys().get(i);
+                }
+                totals.add(sums[i]);
+            }
+        }
+        request.setAttribute("prices", prices);
+        request.setAttribute("datas", datas);
+        request.setAttribute("analysisSearch", analysisSearch);
+        request.setAttribute("totals", totals);
+        return "/app/analysis/summary";
+    }
 
 	/* 跳转到详情页 */
 	@RequestMapping("/showDetail")
