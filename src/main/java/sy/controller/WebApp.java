@@ -140,7 +140,8 @@ public class WebApp extends BaseController {
 		User u = userService.getUser(uid);
 		try {
 			Department d = departmentService.findOneView(uid,cid);
-			List<Integer> ugroup = departmentService.getUserGroup(d, uid,cid);
+//			List<Integer> ugroup = departmentService.getUserGroup(d, uid,cid);
+            List<Integer> ugroup = departmentService.getUsers(cid, Integer.parseInt(u.getId()));
 			dataGrid = projectService.dataGrid(app, ph, ugroup);
 			json.setObj(dataGrid.getRows());
 		} catch (Exception e) {
