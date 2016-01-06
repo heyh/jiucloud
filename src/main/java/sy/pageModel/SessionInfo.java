@@ -1,5 +1,6 @@
 package sy.pageModel;
 
+import sy.model.Param;
 import sy.model.S_department;
 
 import java.util.List;
@@ -39,6 +40,7 @@ public class SessionInfo implements java.io.Serializable {
     private int parentId;
 
     private List<S_department> departmentIds;
+    private List<Param> unitParams;
 
     public List<S_department> getDepartmentIds() {
         return departmentIds;
@@ -237,4 +239,11 @@ public class SessionInfo implements java.io.Serializable {
 		this.last_project_id = last_project_id;
 	}
 
+    public void setUnitParams(List<Param> unitParams) {
+        this.unitParams = unitParams;
+    }
+
+    public List<Param> getUnitParams() {
+        return unitParams;
+    }
 }
