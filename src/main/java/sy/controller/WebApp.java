@@ -139,9 +139,10 @@ public class WebApp extends BaseController {
 		String cid = null;
 		User u = userService.getUser(uid);
 		try {
-			Department d = departmentService.findOneView(uid,cid);
+//			Department d = departmentService.findOneView(uid,cid);
 //			List<Integer> ugroup = departmentService.getUserGroup(d, uid,cid);
-            List<Integer> ugroup = departmentService.getUsers(cid, Integer.parseInt(u.getId()));
+            Company c = companyService.findOneView(u.getId(),cid);
+            List<Integer> ugroup = departmentService.getUsers(String.valueOf(c.getId()), Integer.parseInt(u.getId()));
 			dataGrid = projectService.dataGrid(app, ph, ugroup);
 			json.setObj(dataGrid.getRows());
 		} catch (Exception e) {
@@ -188,9 +189,10 @@ public class WebApp extends BaseController {
 		String cid = null;
 		User u = userService.getUser(uid);
 		try {
-			Department d = departmentService.findOneView(uid,cid);
+//			Department d = departmentService.findOneView(uid,cid);
 //			List<Integer> ugroup = departmentService.getUserGroup(d, uid,cid);
-            List<Integer> ugroup = departmentService.getUsers(cid, Integer.parseInt(u.getId()));
+            Company c = companyService.findOneView(u.getId(),cid);
+            List<Integer> ugroup = departmentService.getUsers(String.valueOf(c.getId()), Integer.parseInt(u.getId()));
 			dataGrid = fieldDataServiceI.dataGrid(fieldData, ph, ugroup, "");
 			json.setObj(dataGrid.getRows());
 		} catch (Exception e) {
