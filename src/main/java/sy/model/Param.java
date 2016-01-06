@@ -10,7 +10,7 @@ import javax.persistence.*;
 public class Param {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @Column(name = "ID", nullable = false)
     private int id;
 
     @Column(name = "PARAM_TYPE_CODE")
