@@ -16,25 +16,50 @@ public class CompanyServiceImpl implements CompanyServiceI {
 	@Autowired
 	CompanyDaoI companyDao;
 
-	@Override
-	public Company findOneView(String uid,String cid1) {
-		Map<String, Object> params = new HashMap<String, Object>();
-		if(cid1==null){
-//			List<Object[]> object_value = this.companyDao
-//			.findBySql("select user_id,company_id from jsw_corporation_department where user_id='"
-//					+ uid + "'");
+//	@Override
+//	public Company findOneView(String uid,String cid1) {
+//		Map<String, Object> params = new HashMap<String, Object>();
+//		if(cid1==null){
+////			List<Object[]> object_value = this.companyDao
+////			.findBySql("select user_id,company_id from jsw_corporation_department where user_id='"
+////					+ uid + "'");
+//            List<Object[]> object_value = this.companyDao.findBySql("select user_id,company_id from jsw_corporation_department where FIND_IN_SET(" + uid + ", user_id)");
+//			if (object_value != null && object_value.size() != 0) {
+//				int cid = Integer.parseInt(object_value.get(0)[1].toString()); // ovObjects[0];
+//				params.put("cid", cid);
+//				Company company = companyDao.get("from Company where id=:cid", params);
+//				return company;
+//			}
+//		}
+//			int cid = Integer.parseInt(cid1); // ovObjects[0];
+//			params.put("cid", cid);
+//			Company company = companyDao.get("from Company where id=:cid",
+//					params);
+//			return company;
+//	}
+
+    @Override
+    public Company findOneView(String uid,String cid1) {
+        Company company = new Company();
+        Map<String, Object> params = new HashMap<String, Object>();
+        if(cid1==null){
             List<Object[]> object_value = this.companyDao.findBySql("select user_id,company_id from jsw_corporation_department where FIND_IN_SET(" + uid + ", user_id)");
-			if (object_value != null && object_value.size() != 0) {
-				int cid = Integer.parseInt(object_value.get(0)[1].toString()); // ovObjects[0];
-				params.put("cid", cid);
-				Company company = companyDao.get("from Company where id=:cid", params);
-				return company;
-			}
-		}
-			int cid = Integer.parseInt(cid1); // ovObjects[0];
-			params.put("cid", cid);
-			Company company = companyDao.get("from Company where id=:cid",
-					params);
-			return company;
-	}
+            if (object_value != null && object_value.size() > 0) {
+                for (Object[] object : object_value) {
+                    int cid = Integer.parseInt(String.valueOf(object[1])); // ovObjects[0];
+                    params.put("cid", cid);
+                    company = companyDao.get("from Company where id=:cid", params);
+                    if (company != null) {
+                        return company;
+                    }
+                }
+            }
+        } else {
+            int cid = Integer.parseInt(cid1); // ovObjects[0];
+            params.put("cid", cid);
+            company = companyDao.get("from Company where id=:cid",params);
+        }
+
+        return company;
+    }
 }
