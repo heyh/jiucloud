@@ -62,6 +62,9 @@ public class UserController extends BaseController {
     @Autowired
     private CostServiceI costService;
 
+    @Autowired
+    private ParamService paramService;
+
 	// 获得token 同步操作
 	private final String token = SynchronizationController.getToken();
 
@@ -166,6 +169,7 @@ public class UserController extends BaseController {
                 }
                 sessionInfo.setCostTypeInfos(costService.getCostTypeInfos(departmentIds, cid));
                 sessionInfo.setUnderlingUsers(userService.findUnderlingUsers(ugroup));
+                sessionInfo.setUnitParams(paramService.getUnitParams());
 				session.setAttribute(ConfigUtil.getSessionInfoName(), sessionInfo);
 
 				System.out.println(sessionInfo);
