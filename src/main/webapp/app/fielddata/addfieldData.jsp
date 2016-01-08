@@ -1,6 +1,24 @@
+<%@ page import="sy.model.Param" %>
+<%@ page import="sy.pageModel.SessionInfo" %>
+<%@ page import="sy.util.ConfigUtil" %>
+<%@ page import="java.util.List" %>
+<%@ page import="java.util.ArrayList" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
+<%
+
+    List<Param> unitParams = new ArrayList<Param>();
+
+    SessionInfo sessionInfo = (SessionInfo) session.getAttribute(ConfigUtil.getSessionInfoName());
+    if (sessionInfo == null) {
+        response.sendRedirect(request.getContextPath());
+    } else {
+        unitParams = sessionInfo.getUnitParams();
+    }
+
+%>
 <!-- 引入jQuery -->
 <script src="${pageContext.request.contextPath}/jslib/jquery-1.8.3.js"
 	type="text/javascript" charset="utf-8"></script>
@@ -36,6 +54,10 @@
 	type="text/css" rel="stylesheet">
 <script type="text/javascript"
 	src="${pageContext.request.contextPath }/jslib/upload/ajaxfileupload.js"></script>
+
+<link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1-rc.1/css/select2.min.css" rel="stylesheet" />
+<script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1-rc.1/js/select2.min.js"></script>
+
 <script type="text/javascript">
 	var flag = 0;
 
@@ -228,6 +250,15 @@
 			flag = 0;
 		})
 	}
+
+    $(document).ready(function() {
+        $("#unit").select2({
+            tags: "true",
+            placeholder: "可以模糊查询",
+            allowClear: true
+        });
+    });
+
 </script>
 
 <style type="text/css">
@@ -349,7 +380,7 @@
 	width: 760px;
 }
 
-.ty-newsfileds label {
+.ty-newsfileds label ,.ty-newsfileds .special{
 	float: left;
 	display: block;
 	width: 50%;
@@ -377,11 +408,11 @@
 	width: 751px;
 	height: 80px;
 }
+
 </style>
 
 <div class="easyui-layout" data-options="fit:true,border:false">
-	<div data-options="region:'center',border:false" title=""
-		style="overflow: hidden; margin-top: 20px;">
+	<div data-options="region:'center',border:false" title="" style="overflow: hidden; margin-top: 20px;">
 		<form id="form" method="post" enctype="multipart/form-data"
 			action="http://180.96.11.6:8080/jiucloud/fieldDataController/savefieldData"
 			class="basic-grey ty-newsfileds">
@@ -405,15 +436,28 @@
 				alt="选择费用"
 				src="http://180.96.11.6:8080/jiucloud/style/images/extjs_icons/pencil.png"
 				style="cursor: pointer;" onclick="selectc()">
-			</label> <label> <span>名称:</span> <input name="dataName"
+			</label>
+            <label> <span>名称:</span> <input name="dataName"
 				id="dataName" type="text" style="width: 250px;" placeholder="名称"
 				class="easyui-validatebox span2" data-options="required:true"
 				value="">
-			</label> <label class="will_hide"> <span>单位:</span> <input
-				name="unit" id="unit" type="text" style="width: 250px;"
-				placeholder="单位" class="easyui-validatebox span2"
-				data-options="required:true">
-			</label> <label class="will_hide"> <span>单价:</span><input
+			</label>
+            <div class="will_hide special" style="height: 48px">
+                <span style="float: left; width: 20%; text-align: right; padding-right: 10px; margin-top: 10px; color: #888;">单位:</span>
+                <%--<input name="unit" id="unit" type="text" style="width: 250px;" placeholder="单位" class="easyui-validatebox span2" data-options="required:true">--%>
+                <select style="width:250px;margin-bottom: 20px" name="unit" id="unit">
+                    <option></option>
+                    <c:forEach var="unitParam" items="<%= unitParams %>" varStatus="index">
+                        <c:if test="${unitParam.parentCode == ''}">
+                            <optgroup label="${unitParam.paramValue}"></optgroup>
+                        </c:if>
+                        <c:if test="${unitParam.parentCode != ''}">
+                            <option value="${unitParam.paramValue}">&nbsp;&nbsp;&nbsp;&nbsp;${unitParam.paramValue}</option>
+                        </c:if>
+                    </c:forEach>
+                </select>
+            </div>
+            <label class="will_hide"> <span>单价:</span><input
 				name="price" id="price" type="text" style="width: 250px;"
 				placeholder="单价" class="easyui-validatebox span2"
 				data-options="required:true" onblur="cal()" value="">
