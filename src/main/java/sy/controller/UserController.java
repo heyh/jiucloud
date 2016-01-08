@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
+import sy.model.Param;
 import sy.model.S_department;
 import sy.model.po.Company;
 import sy.model.po.Department;
@@ -169,7 +170,7 @@ public class UserController extends BaseController {
                 }
                 sessionInfo.setCostTypeInfos(costService.getCostTypeInfos(departmentIds, cid));
                 sessionInfo.setUnderlingUsers(userService.findUnderlingUsers(ugroup));
-                sessionInfo.setUnitParams(paramService.getUnitParams());
+                sessionInfo.setUnitParams((List<Param>) paramService.getParams("UP", ""));
 				session.setAttribute(ConfigUtil.getSessionInfoName(), sessionInfo);
 
 				System.out.println(sessionInfo);
