@@ -44,6 +44,16 @@ public class FieldData {
 
     private String isLock;
 
+    private String needApproved;
+
+    public String getNeedApproved() {
+        return needApproved;
+    }
+
+    public void setNeedApproved(String needApproved) {
+        this.needApproved = needApproved;
+    }
+
     public String getIsLock() {
         return isLock;
     }
