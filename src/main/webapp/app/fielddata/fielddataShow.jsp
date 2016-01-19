@@ -128,7 +128,6 @@
                                         width : 100,
                                         hidden: true
                                     },
-
 									{
 										field : 'action',
 										title : '操作',
