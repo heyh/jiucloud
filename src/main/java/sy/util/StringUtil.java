@@ -196,4 +196,11 @@ public class StringUtil {
         }
         return sb.toString();
     }
+
+    public static String trimToEmpty(Object o) {
+        if (null == o) {
+            return "";
+        }
+        return String.valueOf(o).trim();
+    }
 }
