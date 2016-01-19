@@ -219,26 +219,20 @@ public class ProjectServiceImpl implements ProjectServiceI {
 
     // add by heyh
     @Override
-    public DataGrid dataGrid(ProjectSearch app, PageHelper ph,
-                             String compId) {
+    public DataGrid dataGrid(ProjectSearch app, PageHelper ph, String compId, String source) {
         DataGrid dg = new DataGrid();
         Map<String, Object> params = new HashMap<String, Object>();
         String hql = " from Project p  where 1=1 ";
 
-        System.out.println(hql + whereHql(app, params, compId));
         // 暂时不传入uid
-        List<Project> l = projectDao.find(hql + whereHql(app, params, compId),
-                params, ph.getPage(), ph.getRows());
+        List<Project> l = projectDao.find(hql + whereHql(app, params, compId, source), params, ph.getPage(), ph.getRows());
         dg.setRows(l);
-        dg.setTotal(projectDao.count(
-                "select count(*) " + hql + whereHql(app, params, compId),
-                params));
+        dg.setTotal(projectDao.count( "select count(*) " + hql + whereHql(app, params, compId, source), params));
         return dg;
     }
 
     // 查询时使用的动态添加where条件
-    private String whereHql(ProjectSearch app, Map<String, Object> params,
-                            String compId) {
+    private String whereHql(ProjectSearch app, Map<String, Object> params, String compId, String source) {
         StringBuffer hql = new StringBuffer();
         // 如果app中有值，则代表需要模糊查询
         if (null != app) {
@@ -275,7 +269,12 @@ public class ProjectServiceImpl implements ProjectServiceI {
             hql.append(" and compId = :compId");
             params.put("compId", compId);
         }
-        hql.append(" and p.isdel = 0 order by p.id desc");
+        if (source.equals("field")) {
+            hql.append(" and p.isdel = 0 and p.isLock = '0' order by p.id desc"); // 增加field时，需要过滤掉isLock为1的工程
+        } else {
+            hql.append(" and p.isdel = 0 order by p.id desc");
+        }
+
         return hql.toString();
 
     }
