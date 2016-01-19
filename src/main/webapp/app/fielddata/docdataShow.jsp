@@ -120,7 +120,12 @@
                                         width : 100,
                                         hidden: true
                                     },
-
+                                    {
+                                        field : 'isLock',
+                                        title : '工程锁定标志',
+                                        width : 100,
+                                        hidden: true
+                                    },
 									{
 										field : 'action',
 										title : '操作',
@@ -130,17 +135,19 @@
                                             // modify by heyh 当数据填报之后，在当日内23:59分内均可以修改自己填报数据
                                             var userId = <%= userId%>;
                                             if(compareDate(getCurrentDate(), row.creatTime.substring(0, 10)) == 0 && userId == row.uid) {
-                                                str += $
-                                                        .formatString(
-                                                                '<img onclick="editFun(\'{0}\');" src="{1}" title="编辑" />',
-                                                                row.id,
-                                                                '${pageContext.request.contextPath}/style/images/extjs_icons/pencil.png');
-                                                str += '&nbsp;';
-                                                str += $
-                                                        .formatString(
-                                                                '<img onclick="deleteFun(\'{0}\');" src="{1}" title="删除"/>',
-                                                                row.id,
-                                                                '${pageContext.request.contextPath}/style/images/extjs_icons/cancel.png');
+                                                if ('0' == row.isLock) {
+                                                    str += $
+                                                            .formatString(
+                                                                    '<img onclick="editFun(\'{0}\');" src="{1}" title="编辑" />',
+                                                                    row.id,
+                                                                    '${pageContext.request.contextPath}/style/images/extjs_icons/pencil.png');
+                                                    str += '&nbsp;';
+                                                    str += $
+                                                            .formatString(
+                                                                    '<img onclick="deleteFun(\'{0}\');" src="{1}" title="删除"/>',
+                                                                    row.id,
+                                                                    '${pageContext.request.contextPath}/style/images/extjs_icons/cancel.png');
+                                                }
                                             }
 											str += $
 													.formatString(
