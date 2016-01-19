@@ -621,4 +621,16 @@ public class FieldDataController extends BaseController {
 		listmap.add(mapValue);
 		return listmap;
 	}
+
+    @RequestMapping("/securi_approvedField")
+    @ResponseBody
+    public Json approvedField(Integer id) {
+        Json j = new Json();
+        if (id != null) {
+            fieldDataServiceI.approvedField(id);
+        }
+        j.setMsg("审批成功！");
+        j.setSuccess(true);
+        return j;
+    }
 }
