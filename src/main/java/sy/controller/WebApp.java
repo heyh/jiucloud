@@ -316,10 +316,11 @@ public class WebApp extends BaseController {
 		String uname = request.getParameter("uname");
 		String cid = request.getParameter("cid");
 		String company = request.getParameter("company");
+        String needApproved = request.getParameter("needApproved");
 
 		TFieldData fieldData = new TFieldData(projectName, uid, new Date(),
 				costType, dataName, price, company, count, specifications,
-				remark, cid, uname, unit);
+				remark, cid, uname, unit, needApproved);
 
 		Cost cost = costService.findById(costType);
 		fieldData.setItemCode(cost.getItemCode());
