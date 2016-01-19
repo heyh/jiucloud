@@ -287,7 +287,7 @@ public class ProjectController extends BaseController {
         if (id != null) {
             this.projectService.lockProject(id);
         }
-        j.setMsg("删除成功！");
+        j.setMsg("工程锁定成功！");
         j.setSuccess(true);
         return j;
     }
@@ -299,7 +299,7 @@ public class ProjectController extends BaseController {
         if (id != null) {
             this.projectService.unLockProject(id);
         }
-        j.setMsg("删除成功！");
+        j.setMsg("工程解锁成功！");
         j.setSuccess(true);
         return j;
     }
