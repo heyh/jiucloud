@@ -363,7 +363,7 @@
                                     dataType : "json",
                                     success : function(data) {
                                         if (data.success == true) {
-                                            searchFun();
+                                            searchAllProject();
                                         }
                                     }
                                 });
@@ -400,7 +400,7 @@
                                     dataType : "json",
                                     success : function(data) {
                                         if (data.success == true) {
-                                            searchFun();
+                                            searchAllProject();
                                         }
                                     }
                                 });
@@ -408,6 +408,16 @@
                 });
     };
 
+    function searchAllProject() {
+        var o = {};
+        o['manager'] = null;
+        o['gczt'] = null;
+        o['proName'] = null;
+        o['projetcId'] = null;
+        o['kgrq'] = null;
+        o['jgrq'] = null;
+        dataGrid.datagrid('load',o);
+    }
 	//过滤条件查询
 	function searchFun() {
 		if ($('#kgrq').val() != '') {
