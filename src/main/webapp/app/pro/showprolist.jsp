@@ -360,7 +360,7 @@
                         $
                                 .ajax({
                                     type : "post",
-                                    url : '${pageContext.request.contextPath}/projectController/lockProject',
+                                    url : '${pageContext.request.contextPath}/projectController/securi_lockProject',
                                     data : {
                                         id : id
                                     },
@@ -397,7 +397,7 @@
                         $
                                 .ajax({
                                     type : "post",
-                                    url : '${pageContext.request.contextPath}/projectController/unLockProject',
+                                    url : '${pageContext.request.contextPath}/projectController/securi_unLockProject',
                                     data : {
                                         id : id
                                     },
