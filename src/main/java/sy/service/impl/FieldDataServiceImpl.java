@@ -78,6 +78,7 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
             f.setRemark(tem.getRemark());
             f.setUname(tem.getUname());
             f.setCost_id(Integer.parseInt(tem.getCostType()));
+            f.setNeedApproved(tem.getNeedApproved());
             Cost cost = costDao.get("from Cost where isDelete=0 and id='"
                     + tem.getCostType() + "'");
             if (cost == null) {
