@@ -232,6 +232,21 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
         return 0;
     }
 
+    /**
+     * 审批
+     * @param id
+     */
+    @Override
+    public void approvedField(Integer id) {
+        try {
+            TFieldData t = fieldDataDaoI.get("from TFieldData t where t.id = " + id);
+            t.setNeedApproved("2");
+            this.fieldDataDaoI.update(t);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private Date string2date(String str) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = null;
