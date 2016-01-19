@@ -615,7 +615,7 @@
         parent.$.messager
                 .confirm(
                 '询问',
-                '您是否要锁定当前项目？',
+                '您是否确认审批通过当前记录？',
                 function(b) {
                     if (b) {
                         parent.$.messager.progress({
@@ -625,14 +625,14 @@
                         $
                                 .ajax({
                                     type : "post",
-                                    url : '${pageContext.request.contextPath}/fieldDataController/approvedField',
+                                    url : '${pageContext.request.contextPath}/fieldDataController/securi_approvedField',
                                     data : {
                                         id : id
                                     },
                                     dataType : "json",
                                     success : function(data) {
                                         if (data.success == true) {
-                                            searchAllProject();
+                                            searchFun();
                                         }
                                     }
                                 });
