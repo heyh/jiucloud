@@ -175,6 +175,7 @@
 		var remark = document.getElementById("remark").value;
 		var unit = document.getElementById("unit").value;
 		var itemCode = document.getElementById("itemCode").value;
+        var needApproved = document.getElementById("needApproved").value;
 
 		if (projectName == '') {
 			alert("项目名称不能为空");
@@ -208,7 +209,8 @@
 			'specifications' : specifications,
 			'remark' : remark,
 			'unit' : unit,
-			'itemCode' : itemCode
+			'itemCode' : itemCode,
+            'needApproved' : needApproved
 		}
 
 		$.ajax(cfg);
