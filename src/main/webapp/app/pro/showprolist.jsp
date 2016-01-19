@@ -94,7 +94,11 @@
                                     {
                                         field : 'isLock',
                                         title : '锁定状态',
-                                        width : 100
+                                        width : 100,
+                                        formatter: function(value, row, index) {
+                                            var str = '0' == value ? '正常' : '锁定';
+                                            return str;
+                                        }
 
                                     },
 									{
