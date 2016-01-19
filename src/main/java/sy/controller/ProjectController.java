@@ -283,7 +283,7 @@ public class ProjectController extends BaseController {
 		return dataGrid;
 	}
 
-    @RequestMapping("/lockProject")
+    @RequestMapping("/securi_lockProject")
     @ResponseBody
     public Json lockProject(Integer id) {
         Json j = new Json();
@@ -295,7 +295,7 @@ public class ProjectController extends BaseController {
         return j;
     }
 
-    @RequestMapping("/unLockProject")
+    @RequestMapping("/securi_unLockProject")
     @ResponseBody
     public Json unLockProject(Integer id) {
         Json j = new Json();
