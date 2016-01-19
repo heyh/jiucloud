@@ -24,7 +24,7 @@ public class TFieldData implements java.io.Serializable {
 	public TFieldData(String projectName, String uid, Date creatTime,
 			String costType, String dataName, String price, String company,
 			String count, String specifications, String remark, String cid,
-			String uname, String unit) {
+			String uname, String unit, String needApproved) {
 		super();
 		this.projectName = projectName;
 		this.uid = uid;
@@ -39,6 +39,7 @@ public class TFieldData implements java.io.Serializable {
 		this.cid = cid;
 		this.uname = uname;
 		this.unit = unit;
+        this.needApproved = needApproved;
 	}
 
 	@Id
