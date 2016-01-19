@@ -684,12 +684,12 @@
 
     //过滤条件查询
     function searchFun() {
-        $('#startTime').val($('#startTime').val().substring(0, 10) + ' 00:00:00');
-        $('#endTime').val($('#endTime').val().substring(0, 10) + ' 23:59:59');
+        var startTime = $('#startTime').datebox('getValue').substring(0, 10) + ' 00:00:00';
+        var endTime = $('#endTime').datebox('getValue').substring(0, 10) + ' 23:59:59';
 //        $('#dataGridCost').datagrid('reload',{uname:$('#uname').val(),costType:$('#costType').val(),
 //                                              startTime:$('#startTime').datebox('getValue'),endTime:$('#endTime').datebox('getValue')});
         $('#dataGridCost').datagrid('reload',{uname:$('#uname').val(),costType:$('#dataCostType').val(),
-                                             startTime:$('#startTime').datebox('getValue'),endTime:$('#endTime').datebox('getValue')});
+                                             startTime:startTime,endTime:endTime});
     }
     //清除条件
     function cleanFun() {
@@ -699,10 +699,10 @@
 
     //过滤条件查询
     function searchFunDoc() {
-        $('#startTimeDoc').val($('#startTimeDoc').val().substring(0, 10) + ' 00:00:00');
-        $('#endTimeDoc').val($('#endTimeDoc').val().substring(0, 10) + ' 23:59:59');
+        var startTimeDoc = $('#startTimeDoc').datebox('getValue').substring(0, 10) + ' 00:00:00';
+        var endTimeDoc = $('#endTimeDoc').datebox('getValue').substring(0, 10) + ' 23:59:59';
         $('#dataGridDoc').datagrid('reload',{uname:$('#unameDoc').val(),costType:$('#docCostType').val(),
-            startTime:$('#startTimeDoc').datebox('getValue'),endTime:$('#endTimeDoc').datebox('getValue')});
+            startTime: startTimeDoc, endTime:endTimeDoc});
     }
     //清除条件
     function cleanFunDoc() {
