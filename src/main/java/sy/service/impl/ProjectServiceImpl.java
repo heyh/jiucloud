@@ -98,7 +98,7 @@ public class ProjectServiceImpl implements ProjectServiceI {
 			}
 			hql.append(") ");
 		}
-		hql.append(" and p.isdel = 0 order by p.id desc");
+		hql.append(" and p.isdel = 0 and p.isLock = '0' order by p.id desc");
 		return hql.toString();
 
 	}
