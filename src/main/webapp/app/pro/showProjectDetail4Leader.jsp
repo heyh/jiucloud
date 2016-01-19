@@ -632,7 +632,7 @@
                                     dataType : "json",
                                     success : function(data) {
                                         if (data.success == true) {
-                                            searchFun();
+                                            searchFunDoc();
                                         }
                                     }
                                 });
