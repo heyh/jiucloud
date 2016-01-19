@@ -25,7 +25,7 @@ public interface ProjectServiceI {
 	DataGrid dataGrid(ProjectSearch app, PageHelper ph, List<Integer> ugroup);
 
     // add by heyh
-    DataGrid dataGrid(ProjectSearch app, PageHelper ph, String compId);
+    DataGrid dataGrid(ProjectSearch app, PageHelper ph, String compId, String source);
 
 	/**
 	 * 获取项目预览，查询一个
