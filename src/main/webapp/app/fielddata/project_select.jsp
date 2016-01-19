@@ -11,7 +11,7 @@
 			dataGrid = $('#dataGrid')
 					.datagrid(
 							{
-								url : '${pageContext.request.contextPath}/projectController/dataGrid',
+								url : '${pageContext.request.contextPath}/projectController/dataGrid?source=field',
 								fit : true,
 								fitColumns : true,
 								border : false,
