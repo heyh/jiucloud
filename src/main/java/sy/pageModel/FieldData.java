@@ -42,6 +42,16 @@ public class FieldData {
 
     private boolean action;
 
+    private String isLock;
+
+    public String getIsLock() {
+        return isLock;
+    }
+
+    public void setIsLock(String isLock) {
+        this.isLock = isLock;
+    }
+
     public boolean isAction() {
         return action;
     }

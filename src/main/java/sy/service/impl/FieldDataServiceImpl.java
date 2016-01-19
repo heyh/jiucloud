@@ -93,6 +93,7 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
                 f.setProjectName("该工程可能已经被删除");
             } else {
                 f.setProjectName(project.getProName());
+                f.setIsLock(project.getIsLock());
             }
             list.add(f);
         }
