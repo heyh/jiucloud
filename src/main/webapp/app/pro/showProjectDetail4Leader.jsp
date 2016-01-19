@@ -555,8 +555,25 @@
                             field : 'creatTime',
                             title : '入库时间',
                             width : 100
-                        }
-                        ,
+                        },
+                        {
+                            field : 'needApproved',
+                            title : '审批状态',
+                            width : 100,
+                            formatter : function(value, row, index) {
+                                var str = '';
+                                if ('0' == value) {
+                                    str = '不需审批'
+                                } else if ('1' == value) {
+                                    str = '未审批';
+                                } else if ('2' == value) {
+                                    str = '审批通过';
+                                } else if ('9' == value) {
+                                    str = '审批未通过'
+                                }
+                                return str;
+                            }
+                        },
                         {
                             field : 'action',
                             title : '操作',
@@ -568,6 +585,14 @@
                                         ' <img onclick="FileFun(\'{0}\');" src="{1}" title="附件管理"/>',
                                         row.id,
                                         '${pageContext.request.contextPath}/style/images/extjs_icons/book_go.png');
+                                if ('1' == row.needApproved) {
+                                    str += '&nbsp;';
+                                    str += $
+                                            .formatString(
+                                            '<img onclick="approvedFun(\'{0}\');" src="{1}" title="审批"/>',
+                                            row.id,
+                                            '${pageContext.request.contextPath}/style/images/extjs_icons/cancel.png');
+                                }
                                 return str;
                             }
                         }
@@ -579,6 +604,41 @@
                     }
                 });
     });
+
+    // 审批资料
+    function approvedFun(id) {
+
+        if (id == undefined) {//点击右键菜单才会触发这个
+            var rows = dataGrid.datagrid('getSelections');
+            id = rows[0].id;
+        }
+        parent.$.messager
+                .confirm(
+                '询问',
+                '您是否要锁定当前项目？',
+                function(b) {
+                    if (b) {
+                        parent.$.messager.progress({
+                            title : '提示',
+                            text : '数据处理中，请稍后....'
+                        });
+                        $
+                                .ajax({
+                                    type : "post",
+                                    url : '${pageContext.request.contextPath}/fieldDataController/approvedField',
+                                    data : {
+                                        id : id
+                                    },
+                                    dataType : "json",
+                                    success : function(data) {
+                                        if (data.success == true) {
+                                            searchAllProject();
+                                        }
+                                    }
+                                });
+                    }
+                });
+    };
 
     $(document).ready(function() {
 
