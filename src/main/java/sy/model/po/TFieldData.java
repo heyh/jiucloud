@@ -1,11 +1,10 @@
 package sy.model.po;
 
-import java.util.Date;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.Date;
 
 /*
  * 现场数据管理表
@@ -104,9 +103,19 @@ public class TFieldData implements java.io.Serializable {
 	// 用户姓名
 	@Column(name = "uname")
 	private String uname;
-	
 
-	public int getId() {
+    @Column(name = "needApproved")
+    private String needApproved;
+
+    public String getNeedApproved() {
+        return needApproved;
+    }
+
+    public void setNeedApproved(String needApproved) {
+        this.needApproved = needApproved;
+    }
+
+    public int getId() {
 		return id;
 	}
 
