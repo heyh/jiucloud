@@ -279,4 +279,28 @@ public class ProjectController extends BaseController {
         DataGrid dataGrid = projectService.dataGrid(app, ph, compId);
 		return dataGrid;
 	}
+
+    @RequestMapping("/lockProject")
+    @ResponseBody
+    public Json lockProject(Integer id) {
+        Json j = new Json();
+        if (id != null) {
+            this.projectService.lockProject(id);
+        }
+        j.setMsg("删除成功！");
+        j.setSuccess(true);
+        return j;
+    }
+
+    @RequestMapping("/unLockProject")
+    @ResponseBody
+    public Json unLockProject(Integer id) {
+        Json j = new Json();
+        if (id != null) {
+            this.projectService.unLockProject(id);
+        }
+        j.setMsg("删除成功！");
+        j.setSuccess(true);
+        return j;
+    }
 }

@@ -91,6 +91,12 @@
 										title : '工程状态',
 										width : 100
 									},
+                                    {
+                                        field : 'isLock',
+                                        title : '锁定状态',
+                                        width : 100
+
+                                    },
 									{
 										field : 'coll',
 										title : '协作单位',
@@ -117,18 +123,34 @@
 															row.id,
 															'${pageContext.request.contextPath}/style/images/extjs_icons/eye.png');
 											str += '&nbsp;';
-                                            if (<%= parentId == 0 %>) {
-                                                str += $
-                                                        .formatString(
-                                                                ' <img onclick="eidtFun(\'{0}\');" src="{1}" title="修改"/>',
-                                                                row.id,
-                                                                '${pageContext.request.contextPath}/style/images/extjs_icons/pencil.png');
-                                                str += '&nbsp;';
-                                                str += $
-                                                        .formatString(
-                                                                '<img onclick="deleteFun(\'{0}\');" src="{1}" title="删除"/>',
-                                                                row.id,
-                                                                '${pageContext.request.contextPath}/style/images/extjs_icons/cancel.png');
+                                            if ( '0' == row.isLock && <%= parentId == 0 %> ) {
+                                                if ('0' == row.isLock) {
+                                                    str += $
+                                                            .formatString(
+                                                            ' <img onclick="eidtFun(\'{0}\');" src="{1}" title="修改"/>',
+                                                            row.id,
+                                                            '${pageContext.request.contextPath}/style/images/extjs_icons/pencil.png');
+                                                    str += '&nbsp;';
+                                                    str += $
+                                                            .formatString(
+                                                            '<img onclick="deleteFun(\'{0}\');" src="{1}" title="删除"/>',
+                                                            row.id,
+                                                            '${pageContext.request.contextPath}/style/images/extjs_icons/cancel.png');
+
+                                                    str += '&nbsp;';
+                                                    str += $
+                                                            .formatString(
+                                                            ' <img onclick="lockFun(\'{0}\');" src="{1}" title="锁定"/>',
+                                                            row.id,
+                                                            '${pageContext.request.contextPath}/style/images/extjs_icons/pencil.png');
+                                                } else if ('1' == row.isLock) {
+                                                    str += '&nbsp;';
+                                                    str += $
+                                                            .formatString(
+                                                            ' <img onclick="unLockFun(\'{0}\');" src="{1}" title="解锁"/>',
+                                                            row.id,
+                                                            '${pageContext.request.contextPath}/style/images/extjs_icons/pencil.png');
+                                                }
                                             }
 											return str;
 										}
@@ -311,6 +333,80 @@
 					} ]
 				});
 	};
+
+    // 锁定工程
+    function lockFun(id) {
+
+        if (id == undefined) {//点击右键菜单才会触发这个
+            var rows = dataGrid.datagrid('getSelections');
+            id = rows[0].id;
+        } else {//点击操作里面的删除图标会触发这个
+            dataGrid.datagrid('unselectAll').datagrid('uncheckAll');
+        }
+        parent.$.messager
+                .confirm(
+                '询问',
+                '您是否要锁定当前项目？',
+                function(b) {
+                    if (b) {
+                        parent.$.messager.progress({
+                            title : '提示',
+                            text : '数据处理中，请稍后....'
+                        });
+                        $
+                                .ajax({
+                                    type : "post",
+                                    url : '${pageContext.request.contextPath}/projectController/lockProject',
+                                    data : {
+                                        id : id
+                                    },
+                                    dataType : "json",
+                                    success : function(data) {
+                                        if (data.success == true) {
+                                            searchFun();
+                                        }
+                                    }
+                                });
+                    }
+                });
+    };
+
+    // 解锁工程
+    function lockFun(id) {
+
+        if (id == undefined) {//点击右键菜单才会触发这个
+            var rows = dataGrid.datagrid('getSelections');
+            id = rows[0].id;
+        } else {//点击操作里面的删除图标会触发这个
+            dataGrid.datagrid('unselectAll').datagrid('uncheckAll');
+        }
+        parent.$.messager
+                .confirm(
+                '询问',
+                '您是否要解锁当前项目？',
+                function(b) {
+                    if (b) {
+                        parent.$.messager.progress({
+                            title : '提示',
+                            text : '数据处理中，请稍后....'
+                        });
+                        $
+                                .ajax({
+                                    type : "post",
+                                    url : '${pageContext.request.contextPath}/projectController/unLockProject',
+                                    data : {
+                                        id : id
+                                    },
+                                    dataType : "json",
+                                    success : function(data) {
+                                        if (data.success == true) {
+                                            searchFun();
+                                        }
+                                    }
+                                });
+                    }
+                });
+    };
 
 	//过滤条件查询
 	function searchFun() {

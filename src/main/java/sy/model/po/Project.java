@@ -1,13 +1,7 @@
 package sy.model.po;
 
+import javax.persistence.*;
 import java.util.Date;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 /**
  * 工程名称管理
@@ -101,7 +95,18 @@ public class Project {
 	@Temporal(TemporalType.DATE)
 	private Date gcyjrq;// 工程移交日期
 
-	public int getId() {
+    @Column(name = "isLock")
+    private String isLock;// 工程锁定标志
+
+    public String getIsLock() {
+        return isLock;
+    }
+
+    public void setIsLock(String isLock) {
+        this.isLock = isLock;
+    }
+
+    public int getId() {
 		return id;
 	}
 

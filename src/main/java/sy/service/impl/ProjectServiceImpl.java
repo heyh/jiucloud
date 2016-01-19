@@ -187,6 +187,36 @@ public class ProjectServiceImpl implements ProjectServiceI {
         return JSON.toJSONString(tmpList);
     }
 
+    /**
+     * 锁定
+     * @param id
+     */
+    @Override
+    public void lockProject(Integer id) {
+        try {
+            Project p = this.projectDao.get("from Project p where p.id = " + id);
+            p.setIsLock("1");
+            this.projectDao.update(p);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 解锁
+     * @param id
+     */
+    @Override
+    public void unLockProject(Integer id) {
+        try {
+            Project p = this.projectDao.get("from Project p where p.id = " + id);
+            p.setIsLock("0");
+            this.projectDao.update(p);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     // add by heyh
     @Override
     public DataGrid dataGrid(ProjectSearch app, PageHelper ph,

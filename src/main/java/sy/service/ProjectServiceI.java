@@ -66,4 +66,8 @@ public interface ProjectServiceI {
 	List<Project> getProjects(List<Integer> ugroup);
 
     public String getProjectInfos(String cid);
+
+    void lockProject(Integer id);
+
+    void unLockProject(Integer id);
 }
