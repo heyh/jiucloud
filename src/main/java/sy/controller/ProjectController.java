@@ -11,6 +11,7 @@ import sy.pageModel.*;
 import sy.service.CityServiceI;
 import sy.service.ProjectServiceI;
 import sy.service.ProvinceServiceI;
+import sy.util.StringUtil;
 import sy.util.UtilDate;
 
 import javax.servlet.http.HttpServletRequest;
@@ -276,7 +277,9 @@ public class ProjectController extends BaseController {
 		System.out.println(app);
 
 //		DataGrid dataGrid = projectService.dataGrid(app, ph, ugroup);
-        DataGrid dataGrid = projectService.dataGrid(app, ph, compId);
+        String source = StringUtil.trimToEmpty(request.getParameter("source"));
+
+        DataGrid dataGrid = projectService.dataGrid(app, ph, compId, source);
 		return dataGrid;
 	}
 
