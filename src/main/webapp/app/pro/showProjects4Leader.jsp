@@ -86,6 +86,16 @@
 										title : '工程状态',
 										width : 100
 									},
+                                    {
+                                        field : 'isLock',
+                                        title : '锁定状态',
+                                        width : 100,
+                                        formatter: function(value, row, index) {
+                                            var str = '0' == value ? '正常' : '锁定';
+                                            return str;
+                                        }
+
+                                    },
 									{
 										field : 'coll',
 										title : '协作单位',
