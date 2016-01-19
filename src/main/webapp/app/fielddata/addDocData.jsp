@@ -36,6 +36,10 @@
 	type="text/css" rel="stylesheet">
 <script type="text/javascript"
 	src="${pageContext.request.contextPath }/jslib/upload/ajaxfileupload.js"></script>
+
+<link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1-rc.1/css/select2.min.css" rel="stylesheet" />
+<script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1-rc.1/js/select2.min.js"></script>
+
 <script type="text/javascript">
 	var flag = 0;
 
@@ -228,6 +232,13 @@
 			flag = 0;
 		})
 	}
+
+    $(document).ready(function() {
+        $("#needApproved").select2({
+            placeholder: "可以模糊查询",
+            allowClear: true
+        });
+    });
 </script>
 
 <style type="text/css">
@@ -377,6 +388,11 @@
 	width: 751px;
 	height: 80px;
 }
+.special{
+    float: left;
+    display: block;
+    width: 50%;
+}
 </style>
 
 <div class="easyui-layout" data-options="fit:true,border:false">
@@ -405,11 +421,22 @@
 				alt="选择费用"
 				src="http://180.96.11.6:8080/jiucloud/style/images/extjs_icons/pencil.png"
 				style="cursor: pointer;" onclick="selectc()">
-			</label> <label> <span>名称:</span> <input name="dataName"
+			</label>
+            <label> <span>名称:</span> <input name="dataName"
 				id="dataName" type="text" style="width: 250px;" placeholder="名称"
 				class="easyui-validatebox span2" data-options="required:true"
 				value="">
 			</label>
+
+            <div class="special" style="height: 48px;">
+                <%--<span>需要审批:</span>--%>
+                <span style="float: left; width: 20%; text-align: right; padding-right: 10px; margin-top: 10px; color: #888;">需要审批:</span>
+                <select style="width:250px;margin-bottom: 20px" id="needApproved" name="needApproved" style="width:250px;">
+                    <option value="0" selected = "selected">不需要</option>
+                    <option value="1">需要</option>
+                </select>
+            </div>
+
             <label class="will_hide">
                 <span>单位:</span>
                 <input name="unit" id="unit" type="text" style="width: 250px;" placeholder="单位" class="easyui-validatebox span2">
