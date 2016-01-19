@@ -123,7 +123,7 @@
 															row.id,
 															'${pageContext.request.contextPath}/style/images/extjs_icons/eye.png');
 											str += '&nbsp;';
-                                            if ( '0' == row.isLock && <%= parentId == 0 %> ) {
+                                            if ( <%= parentId == 0 %> ) {
                                                 if ('0' == row.isLock) {
                                                     str += $
                                                             .formatString(
