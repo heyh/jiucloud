@@ -372,7 +372,7 @@
     };
 
     // 解锁工程
-    function lockFun(id) {
+    function unLockFun(id) {
 
         if (id == undefined) {//点击右键菜单才会触发这个
             var rows = dataGrid.datagrid('getSelections');
