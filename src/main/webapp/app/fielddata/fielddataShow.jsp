@@ -142,20 +142,20 @@
                                                             .formatString(
                                                             '<img onclick="editFun(\'{0}\');" src="{1}" title="编辑" />',
                                                             row.id,
-                                                            '${pageContext.request.contextPath}/style/images/extjs_icons/pencil.png');
+                                                            '${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/modify-blue.png');
                                                     str += '&nbsp;';
                                                     str += $
                                                             .formatString(
                                                             '<img onclick="deleteFun(\'{0}\');" src="{1}" title="删除"/>',
                                                             row.id,
-                                                            '${pageContext.request.contextPath}/style/images/extjs_icons/cancel.png');
+                                                            '${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/delete-blue.png');
                                                 }
                                             }
 											str += $
 													.formatString(
 															' <img onclick="FileFun(\'{0}\');" src="{1}" title="附件管理"/>',
 															row.id,
-															'${pageContext.request.contextPath}/style/images/extjs_icons/book_go.png');
+															'${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/fujianguanli-blue.png');
 											return str;
 										}
 									} ] ],
