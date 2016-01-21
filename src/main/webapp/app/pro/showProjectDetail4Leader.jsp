@@ -615,7 +615,7 @@
         parent.$.messager
                 .confirm(
                 '询问',
-                '您是否确认审批通过当前记录？',
+                '确认审批通过当前记录？',
                 function(b) {
                     if (b) {
                         parent.$.messager.progress({
