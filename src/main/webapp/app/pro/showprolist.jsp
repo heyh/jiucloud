@@ -111,7 +111,7 @@
 													.formatString(
 															'<img onclick="collFun(\'{0}\');" src="{1}" title="查看协作单位"/>',
 															row.id,
-															'${pageContext.request.contextPath}/style/images/extjs_icons/eye.png');
+															'${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/wanglaidanwei-blue.png');
 											return str;
 										}
 									},
@@ -125,7 +125,7 @@
 													.formatString(
 															'<img onclick="viewFun(\'{0}\');" src="{1}" title="预览"/>',
 															row.id,
-															'${pageContext.request.contextPath}/style/images/extjs_icons/eye.png');
+															'${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/preview-blue.png');
 											str += '&nbsp;';
                                             if ( <%= parentId == 0 %> ) {
                                                 if ('0' == row.isLock) {
@@ -133,27 +133,27 @@
                                                             .formatString(
                                                             ' <img onclick="eidtFun(\'{0}\');" src="{1}" title="修改"/>',
                                                             row.id,
-                                                            '${pageContext.request.contextPath}/style/images/extjs_icons/pencil.png');
+                                                            '${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/modify-blue.png');
                                                     str += '&nbsp;';
                                                     str += $
                                                             .formatString(
                                                             '<img onclick="deleteFun(\'{0}\');" src="{1}" title="删除"/>',
                                                             row.id,
-                                                            '${pageContext.request.contextPath}/style/images/extjs_icons/cancel.png');
+                                                            '${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/delete-blue.png');
 
                                                     str += '&nbsp;';
                                                     str += $
                                                             .formatString(
                                                             ' <img onclick="lockFun(\'{0}\');" src="{1}" title="锁定"/>',
                                                             row.id,
-                                                            '${pageContext.request.contextPath}/style/images/extjs_icons/pencil.png');
+                                                            '${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/lock-blue.png');
                                                 } else if ('1' == row.isLock) {
                                                     str += '&nbsp;';
                                                     str += $
                                                             .formatString(
                                                             ' <img onclick="unLockFun(\'{0}\');" src="{1}" title="解锁"/>',
                                                             row.id,
-                                                            '${pageContext.request.contextPath}/style/images/extjs_icons/pencil.png');
+                                                            '${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/unlock-blue.png');
                                                 }
                                             }
 											return str;
