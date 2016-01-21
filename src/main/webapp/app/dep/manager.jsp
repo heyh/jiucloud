@@ -46,12 +46,12 @@
 													.formatString(
 															'<img onclick="editCostFun(\'{0}\');" src="{1}" title="编辑费用类型"/>',
 															row.id,
-															'${pageContext.request.contextPath}/style/images/extjs_icons/eye.png');
+															'${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/gth-blue.png');
 											str += $
 													.formatString(
 															' <img onclick="addCostFun(\'{0}\');" src="{1}" title="添加费用类型"/>',
 															row.id,
-															'${pageContext.request.contextPath}/style/images/extjs_icons/bell_add.png');
+															'${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/zengjiaxiang-blue.png');
 											str += '&nbsp;';
 											return str;
 										}
