@@ -106,7 +106,7 @@
 													.formatString(
 															'<img onclick="collFun(\'{0}\');" src="{1}" title="查看协作单位"/>',
 															row.id,
-															'${pageContext.request.contextPath}/style/images/extjs_icons/eye.png');
+															'${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/wanglaidanwei-blue.png');
 											return str;
 										}
 									},
@@ -120,7 +120,7 @@
 													.formatString(
 															'<img onclick="viewFun(\'{0}\');" src="{1}" title="详情"/>',
 															row.id,
-															'${pageContext.request.contextPath}/style/images/extjs_icons/eye.png');
+															'${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/preview-blue.png');
 											return str;
 										}
 									} ] ],
