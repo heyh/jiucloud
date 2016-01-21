@@ -495,9 +495,9 @@
                                 }
                                 str += $
                                         .formatString(
-                                        ' <img onclick="FileFun(\'{0}\');" src="{1}" title="附件管理"/>',
+                                        ' <img style="cursor:pointer" onclick="FileFun(\'{0}\');" src="{1}" title="附件管理"/>',
                                         row.id,
-                                        '${pageContext.request.contextPath}/style/images/extjs_icons/book_go.png');
+                                        '${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/fujianguanli-blue.png');
                                 return str;
                             }
                         }
@@ -582,16 +582,16 @@
                                 var str = '';
                                 str += $
                                         .formatString(
-                                        ' <img onclick="FileFun(\'{0}\');" src="{1}" title="附件管理"/>',
+                                        ' <img style="cursor:pointer" onclick="FileFun(\'{0}\');" src="{1}" title="附件管理"/>',
                                         row.id,
-                                        '${pageContext.request.contextPath}/style/images/extjs_icons/book_go.png');
+                                        '${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/fujianguanli-blue.png');
                                 if ('1' == row.needApproved) {
                                     str += '&nbsp;';
                                     str += $
                                             .formatString(
-                                            '<img onclick="approvedFun(\'{0}\');" src="{1}" title="审批"/>',
+                                            '<img style="cursor:pointer" onclick="approvedFun(\'{0}\');" src="{1}" title="审批"/>',
                                             row.id,
-                                            '${pageContext.request.contextPath}/style/images/extjs_icons/cancel.png');
+                                            '${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/approve-blue.png');
                                 }
                                 return str;
                             }
