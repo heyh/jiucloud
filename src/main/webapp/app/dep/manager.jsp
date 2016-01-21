@@ -34,7 +34,7 @@
 									{
 										field : 'name',
 										title : '部门名称',
-										width : 400,
+										width : 400
 									},
 									{
 										field : 'action',
