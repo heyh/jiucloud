@@ -56,13 +56,13 @@
 														.formatString(
 																'<img onclick="editFun(\'{0}\');" src="{1}" title="编辑"/>',
 																row.id,
-																'${pageContext.request.contextPath}/style/images/extjs_icons/pencil.png');
+																'${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/modify-blue.png');
 												str += '&nbsp;';
 												str += $
 														.formatString(
 																'<img onclick="deleteFun(\'{0}\');" src="{1}" title="删除"/>',
 																row.id,
-																'${pageContext.request.contextPath}/style/images/extjs_icons/cancel.png');
+																'${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/delete-blue.png');
 												return str;
 											}
 										}
@@ -137,7 +137,7 @@
 											.getJSON(
 													'${pageContext.request.contextPath}/costController/securi_buntchDelCost',
 													{
-														ids : ids.join(','),
+														ids : ids.join(',')
 													},
 													function(result) {
 														if (result.success) {
