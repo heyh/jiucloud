@@ -29,7 +29,7 @@
 										{
 											field : 'projectId',
 											title : '项目编号',
-											width : 30
+											width : 50
 										},
 										{
 											field : 'proName',
@@ -48,7 +48,7 @@
 																'<img onclick="viewFun(\'{0}\',\'{1}\');" src="{2}" title="选择"/>',
 																row.id,
 																row.proName,
-																'${pageContext.request.contextPath}/style/images/extjs_icons/eye.png');
+																'${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/choose-blue.png');
 												return str;
 											}
 										} ] ],
