@@ -100,7 +100,7 @@
 	function selectc() {
 		parent.$
 				.modalDialog({
-					title : '选择费用类型',
+					title : '选择资料类型',
 					width : 450,
 					height : 500,
 					href : '${pageContext.request.contextPath }/fieldDataController/securi_selectcc',
@@ -414,13 +414,13 @@
                 <%--src="${pageContext.request.contextPath}/style/images/extjs_icons/pencil.png"--%>
 				src="http://180.96.11.6:8080/jiucloud/style/images/extjs_icons/pencil.png"
 				style="cursor: pointer;" onclick="selectp()">
-			</label> <label> <span>费用类型:</span> <input type="hidden"
+			</label> <label> <span>资料类型:</span> <input type="hidden"
 				id="costType" name="costType" value="" /> <input type="hidden"
 				id="itemCode" name="itemCode" value="" /><input type="text"
 				style="width: 250px;" id="costTypeName" placeholder="费用类型"
 				class="easyui-validatebox span2" data-options="required:true"
 				value="" readonly="readonly">&nbsp;&nbsp;&nbsp;&nbsp;<img
-				alt="选择费用"
+				alt="选择类型"
 				src="http://180.96.11.6:8080/jiucloud/style/images/extjs_icons/pencil.png"
 				style="cursor: pointer;" onclick="selectc()">
 			</label>
