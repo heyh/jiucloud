@@ -110,7 +110,7 @@
 							data-options="required:true" value="${project.proName }"
 							readonly="readonly">&nbsp;&nbsp;&nbsp;&nbsp;<img
 							alt="选择工程"
-							src="${pageContext.request.contextPath}/style/images/extjs_icons/pencil.png"
+                            src="${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/search-blue.png"
 							style="cursor: pointer;" onclick="selectp()"></td>
 						<td style="background: #ffffff">价目类型:&nbsp;
                             <select id="price_id" name="price_id">
@@ -125,7 +125,7 @@
 					<tr>
 						<td style="text-align: center" colspan=3><a
 							href="javascript:void(0);" class="easyui-linkbutton"
-							data-options="iconCls:'brick_add',plain:true"
+							data-options="iconCls:'search_new',plain:true"
 							onclick="searchFun();">查询明细</a></td>
 					</tr>
 
