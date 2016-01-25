@@ -133,12 +133,12 @@
 	</div>
 	<div id="toolbar" style="display: none;">
 		<a href="javascript:void(0);" class="easyui-linkbutton"
-			data-options="iconCls:'brick_add',plain:true"
+			data-options="iconCls:'batdelete_new',plain:true"
 			onclick="batchDeleteFun();">删除选中费用</a> <a href="javascript:void(0);"
 			class="easyui-linkbutton"
-			data-options="iconCls:'brick_add',plain:true" onclick="searchFun();">条件查询</a>
+			data-options="iconCls:'search_new',plain:true" onclick="searchFun();">条件查询</a>
 		<a href="javascript:void(0);" class="easyui-linkbutton"
-			data-options="iconCls:'brick_delete',plain:true"
+			data-options="iconCls:'zhongzhiguolvtiaojian_new',plain:true"
 			onclick="cleanFun();">清空条件</a>
 	</div>
 </div>
