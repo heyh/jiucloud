@@ -61,7 +61,7 @@
 												parent.$.messager
 														.progress('close');
 												$(this).treegrid('tooltip');
-											},
+											}
 										});
 					}
 				});
