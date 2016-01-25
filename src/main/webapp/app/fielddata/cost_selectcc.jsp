@@ -25,12 +25,12 @@
 											rownumbers : true,
 											columns : [ [
 													{
-														title : '费用类型名称',
+														title : '资料类型名称',
 														field : 'costType',
 														width : 200
 													},
 													{
-														title : '费用编码',
+														title : '类型编码',
 														field : 'itemCode',
 														width : 100
 													},
@@ -88,7 +88,7 @@
 				</tr> -->
 				<tr>
 					<td><input name="proidh" id="proidh" value='' type="hidden" /><input
-						name="code" id="code" type="hidden" />已选费用类型:</td>
+						name="code" id="code" type="hidden" />已选资料类型:</td>
 					<td><input name="proNameh" id="proNameh" value=''
 						readonly="readonly" /></td>
 				</tr>
