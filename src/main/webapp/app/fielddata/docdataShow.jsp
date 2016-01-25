@@ -444,7 +444,7 @@
 	<div id="toolbar" style="display: none;">
 		<a onclick="addFun();" href="javascript:void(0);"
 			class="easyui-linkbutton"
-			data-options="plain:true,iconCls:'pencil_add'">添加</a>
+			data-options="plain:true,iconCls:'add_new'">添加</a>
         <%--modify by heyh --%>
         <%--<a onclick="batchDeleteFun();" href="javascript:void(0);"--%>
 			<%--class="easyui-linkbutton" data-options="plain:true,iconCls:'delete'">批量删除</a>--%>
@@ -453,9 +453,9 @@
 			<%--onclick="exportFun();">execl导出</a>--%>
         <a href="javascript:void(0);"
 			class="easyui-linkbutton"
-			data-options="iconCls:'brick_add',plain:true" onclick="searchFun();">过滤条件</a><a
+			data-options="iconCls:'search_new',plain:true" onclick="searchFun();">过滤条件</a><a
 			href="javascript:void(0);" class="easyui-linkbutton"
-			data-options="iconCls:'brick_delete',plain:true"
+			data-options="iconCls:'zhongzhiguolvtiaojian_new',plain:true"
 			onclick="cleanFun();">清空条件</a>
 	</div>
 
