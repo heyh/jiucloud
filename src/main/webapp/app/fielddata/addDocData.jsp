@@ -417,7 +417,7 @@
 			</label> <label> <span>资料类型:</span> <input type="hidden"
 				id="costType" name="costType" value="" /> <input type="hidden"
 				id="itemCode" name="itemCode" value="" /><input type="text"
-				style="width: 250px;" id="costTypeName" placeholder="费用类型"
+				style="width: 250px;" id="costTypeName" placeholder="资料类型"
 				class="easyui-validatebox span2" data-options="required:true"
 				value="" readonly="readonly">&nbsp;&nbsp;&nbsp;&nbsp;<img
 				alt="选择类型"
