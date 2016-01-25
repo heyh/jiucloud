@@ -206,7 +206,7 @@
 						style="width: 230px; font-size: 12px;" type="file" name="file"
 						id="file" /> <a onclick="uploadfile('file');"
 						href="javascript:void(0);" class="easyui-linkbutton"
-						data-options="plain:true,iconCls:'pencil_add'">上传</a></td>
+						data-options="plain:true,iconCls:'upload_new'">上传</a></td>
 				</tr>
 				<tr>
 					<td style="text-align: right; width: 80px;">文件名:&nbsp;&nbsp;</td>
@@ -235,12 +235,8 @@
 		<table id="dataGrid"></table>
 	</div>
 	<div id="toolbar" style="display: none;">
-		<a href="javascript:void(0);" class="easyui-linkbutton"
-			data-options="iconCls:'brick_add',plain:true" onclick="searchFun();">条件查询</a>
-		<a href="javascript:void(0);" class="easyui-linkbutton"
-			data-options="iconCls:'brick_delete',plain:true"
-			onclick="cleanFun();">清空条件</a> <a onclick="downloadFun();"
-			href="javascript:void(0);" class="easyui-linkbutton"
-			data-options="plain:true,iconCls:'tux'">批量下载</a>
+		<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'search_new',plain:true" onclick="searchFun();">条件查询</a>
+		<a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'zhongzhiguolvtiaojian_new',plain:true" onclick="cleanFun();">清空条件</a>
+        <a onclick="downloadFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'download_new'">批量下载</a>
 	</div>
 </div>
