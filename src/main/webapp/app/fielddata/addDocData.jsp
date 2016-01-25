@@ -411,8 +411,8 @@
 				style="width: 250px;" id="pName" name="pName" placeholder="工程名称"
 				class="easyui-validatebox span2" data-options="required:true"
 				value="" readonly>&nbsp;&nbsp;&nbsp;&nbsp;<img alt="选择工程"
-                <%--src="${pageContext.request.contextPath}/style/images/extjs_icons/pencil.png"--%>
-				src="http://180.96.11.6:8080/jiucloud/style/images/extjs_icons/pencil.png"
+                src="${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/search-blue.png"
+				<%--src="http://180.96.11.6:8080/jiucloud/style/images/extjs_icons/pencil.png"--%>
 				style="cursor: pointer;" onclick="selectp()">
 			</label> <label> <span>资料类型:</span> <input type="hidden"
 				id="costType" name="costType" value="" /> <input type="hidden"
@@ -421,7 +421,7 @@
 				class="easyui-validatebox span2" data-options="required:true"
 				value="" readonly="readonly">&nbsp;&nbsp;&nbsp;&nbsp;<img
 				alt="选择类型"
-				src="http://180.96.11.6:8080/jiucloud/style/images/extjs_icons/pencil.png"
+                src="${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/search-blue.png"
 				style="cursor: pointer;" onclick="selectc()">
 			</label>
             <label> <span>名称:</span> <input name="dataName"
