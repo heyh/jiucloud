@@ -49,7 +49,7 @@
 																				row.nid,
 																				row.costType,
 																				row.itemCode,
-																				'${pageContext.request.contextPath}/style/images/extjs_icons/eye.png');
+																				'${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/choose-blue.png');
 															}
 															return str;
 														}
@@ -61,7 +61,7 @@
 												parent.$.messager
 														.progress('close');
 												$(this).treegrid('tooltip');
-											},
+											}
 										});
 					}
 				});
