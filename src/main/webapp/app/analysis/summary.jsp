@@ -149,7 +149,7 @@
 							data-options="iconCls:'brick_add',plain:true"
 							onclick="searchFun();">查询明细</a> --><a href="javascript:void(0);"
 							class="easyui-linkbutton"
-							data-options="iconCls:'brick_add',plain:true"
+							data-options="iconCls:'out_new',plain:true"
 							onclick="exportFun(travel);">execl导出</a></td>
 					</tr>
 				</table>
