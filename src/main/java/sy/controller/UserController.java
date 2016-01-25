@@ -132,8 +132,8 @@ public class UserController extends BaseController {
 //				List<S_department> s = departmentService.getDepartmentByUid(u.getId(), cid);
                 List<S_department> s = departmentService.getDepartmentsByUid(u.getId(), cid);
 				//根据用户id查询所有职位信息
-				Department d = departmentService.findOneView(u.getId(),cid);
-				System.out.println("Department:" + d);
+//				Department d = departmentService.findOneView(u.getId(),cid);
+//				System.out.println("Department:" + d);
 //				ugroup = departmentService.getUserGroup(d, u.getId(),cid);
                 ugroup = departmentService.getUsers(cid, Integer.parseInt(u.getId()));
 				System.out.println(ugroup);
@@ -148,14 +148,29 @@ public class UserController extends BaseController {
 				sessionInfo.setResourceList(userService.resourceList(String.valueOf(u.getId()), sessionInfo.getIsadmin()));
 				sessionInfo.setCompid(String.valueOf(c.getId()));
 				sessionInfo.setCompName(c.getName());
-				if(d!=null){
-					sessionInfo.setDepid(String.valueOf(d.getId()));
-					sessionInfo.setDepName(d.getName());
-                    sessionInfo.setParentId(d.getParent_id());
-				}else{
-					sessionInfo.setDepid(null);
+//				if(d!=null){
+//					sessionInfo.setDepid(String.valueOf(d.getId()));
+//					sessionInfo.setDepName(d.getName());
+//                    sessionInfo.setParentId(d.getParent_id());
+//				}else{
+//					sessionInfo.setDepid(null);
+//					sessionInfo.setDepName(null);
+//				}
+                if (null != s && s.size() > 0) {
+                    for (S_department d : s) {
+                        sessionInfo.setDepid(String.valueOf(d.getId()));
+					    sessionInfo.setDepName(d.getName());
+                        if (d.getParent_id() == 0) {
+                            sessionInfo.setParentId(0);
+                            break;
+                        } else {
+                            sessionInfo.setParentId(d.getParent_id());
+                        }
+                    }
+                } else {
+                    sessionInfo.setDepid(null);
 					sessionInfo.setDepName(null);
-				}
+                }
 //				sessionInfo.setDepartment_id(String.valueOf(s.getId()));
 //				sessionInfo.setDepartment_name(s.getName());
                 sessionInfo.setDepartmentIds(s); // 隶属多部门
