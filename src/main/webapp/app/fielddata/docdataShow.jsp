@@ -292,7 +292,7 @@
 
 	function addFun() {
 		var url = '${pageContext.request.contextPath}/fieldDataController/addDocData';
-		var text = "添加费用数据";
+		var text = "添加资料数据";
 		var params = {
 			url : url,
 			title : text,
