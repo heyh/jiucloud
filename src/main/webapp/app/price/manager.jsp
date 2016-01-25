@@ -226,11 +226,11 @@
 	<div id="toolbar" style="display: none;">
 		<a onclick="addFun();" href="javascript:void(0);"
 			class="easyui-linkbutton"
-			data-options="plain:true,iconCls:'pencil_add'">添加分类</a> <a
+			data-options="plain:true,iconCls:'add_new'">添加分类</a> <a
 			href="javascript:void(0);" class="easyui-linkbutton"
-			data-options="iconCls:'brick_add',plain:true" onclick="searchFun();">条件查询</a><a
+			data-options="iconCls:'search_new',plain:true" onclick="searchFun();">条件查询</a><a
 			href="javascript:void(0);" class="easyui-linkbutton"
-			data-options="iconCls:'brick_delete',plain:true"
+			data-options="iconCls:'zhongzhiguolvtiaojian_new',plain:true"
 			onclick="cleanFun();">清空条件</a>
 	</div>
 </body>
