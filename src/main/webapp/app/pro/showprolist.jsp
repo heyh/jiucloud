@@ -96,7 +96,7 @@
                                         title : '锁定状态',
                                         width : 100,
                                         formatter: function(value, row, index) {
-                                            var str = '0' == value ? '正常' : '锁定';
+                                            var str = '1' == value ? '锁定' : '正常';
                                             return str;
                                         }
 
@@ -128,7 +128,14 @@
 															'${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/preview-blue.png');
 											str += '&nbsp;';
                                             if ( <%= parentId == 0 %> ) {
-                                                if ('0' == row.isLock) {
+                                                if ('1' == row.isLock) {
+                                                    str += '&nbsp;';
+                                                    str += $
+                                                            .formatString(
+                                                            ' <img onclick="unLockFun(\'{0}\');" src="{1}" title="解锁"/>',
+                                                            row.id,
+                                                            '${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/unlock-blue.png');
+                                                } else {
                                                     str += $
                                                             .formatString(
                                                             ' <img onclick="eidtFun(\'{0}\');" src="{1}" title="修改"/>',
@@ -147,13 +154,6 @@
                                                             ' <img onclick="lockFun(\'{0}\');" src="{1}" title="锁定"/>',
                                                             row.id,
                                                             '${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/lock-blue.png');
-                                                } else if ('1' == row.isLock) {
-                                                    str += '&nbsp;';
-                                                    str += $
-                                                            .formatString(
-                                                            ' <img onclick="unLockFun(\'{0}\');" src="{1}" title="解锁"/>',
-                                                            row.id,
-                                                            '${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/unlock-blue.png');
                                                 }
                                             }
 											return str;

@@ -91,7 +91,7 @@
                                         title : '锁定状态',
                                         width : 100,
                                         formatter: function(value, row, index) {
-                                            var str = '0' == value ? '正常' : '锁定';
+                                            var str = '1' == value ? '锁定' : '正常';
                                             return str;
                                         }
 
