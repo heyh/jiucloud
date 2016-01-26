@@ -195,7 +195,7 @@ public class ProjectServiceImpl implements ProjectServiceI {
     public void lockProject(Integer id) {
         try {
             Project p = this.projectDao.get("from Project p where p.id = " + id);
-            p.setIsLock("1");
+            p.setIsLock(1);
             this.projectDao.update(p);
         } catch (Exception e) {
             e.printStackTrace();
@@ -210,7 +210,7 @@ public class ProjectServiceImpl implements ProjectServiceI {
     public void unLockProject(Integer id) {
         try {
             Project p = this.projectDao.get("from Project p where p.id = " + id);
-            p.setIsLock("0");
+            p.setIsLock(0);
             this.projectDao.update(p);
         } catch (Exception e) {
             e.printStackTrace();
