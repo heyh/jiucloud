@@ -42,7 +42,7 @@ public class FieldData {
 
     private boolean action;
 
-    private String isLock;
+    private int isLock;
 
     private String needApproved;
 
@@ -54,11 +54,11 @@ public class FieldData {
         this.needApproved = needApproved;
     }
 
-    public String getIsLock() {
+    public int getIsLock() {
         return isLock;
     }
 
-    public void setIsLock(String isLock) {
+    public void setIsLock(int isLock) {
         this.isLock = isLock;
     }
 
