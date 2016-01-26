@@ -95,16 +95,17 @@ public class Project {
 	@Temporal(TemporalType.DATE)
 	private Date gcyjrq;// 工程移交日期
 
-    @Column(name = "isLock")
-    private String isLock;// 工程锁定标志
+	public int getIsLock() {
+		return isLock;
+	}
 
-    public String getIsLock() {
-        return isLock;
-    }
+	public void setIsLock(int isLock) {
+		this.isLock = isLock;
+	}
 
-    public void setIsLock(String isLock) {
-        this.isLock = isLock;
-    }
+	@Column(name = "isLock")
+    private int isLock;// 工程锁定标志
+
 
     public int getId() {
 		return id;
