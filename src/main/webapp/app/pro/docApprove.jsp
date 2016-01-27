@@ -228,7 +228,7 @@
 <body>
 	<div class="easyui-layout" data-options="fit : true,border : false">
         <div id="toolbarDoc" class="fee_detail" style="display: none; height: 40px">
-            <div style="margin-top: 5px">
+            <div style="margin-top: 6px">
                 <span>操作人:</span>
                 <select  style="width: 150px" name="unameDoc" id="unameDoc">
                     <option ></option>
