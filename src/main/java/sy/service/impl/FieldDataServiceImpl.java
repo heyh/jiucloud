@@ -185,6 +185,10 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
             hql += " and projectName = :id ";
             params.put("id", String.valueOf(cmodel.getId()));
         }
+        if (null != cmodel.getNeedApproved() ) {
+            hql += " and needApproved = :needApproved";
+            params.put("needApproved", cmodel.getNeedApproved());
+        }
         hql += " order by t.id desc";
         return hql;
     }

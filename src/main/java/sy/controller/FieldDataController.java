@@ -83,10 +83,9 @@ public class FieldDataController extends BaseController {
 			fieldData.setStartTime(UtilDate.getshortFirst()+" 00:00:00");
 			fieldData.setEndTime(UtilDate.getshortLast()+" 23:59:59");
 		}
-//        else if (null!=fieldData.getStartTime() && null!=fieldData.getEndTime()){
-//            fieldData.setStartTime(fieldData.getStartTime().substring(0, 10)+" 00:00:00");
-//            fieldData.setEndTime(fieldData.getEndTime().substring(0, 10)+" 23:59:59");
-//        }
+        if (null != request.getParameter("needApproved")) {
+            fieldData.setNeedApproved(request.getParameter("needApproved"));
+        }
 
 		DataGrid dataGrid = fieldDataServiceI.dataGrid(fieldData, ph, ugroup,source);
 		session.setAttribute("analusisInfo", fieldData);
