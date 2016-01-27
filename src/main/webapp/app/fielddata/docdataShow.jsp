@@ -412,7 +412,7 @@
                                 <option ></option>
                             </select>
                         </td>
-						<td>费用类型:&nbsp;
+						<td>资料类型:&nbsp;
                             <%--<input name="costType" id='costType' placeholder="可以模糊查询" class="span2" />--%>
                             <select style="width: 136px" name="costType" id="costType">
                                 <option></option>
