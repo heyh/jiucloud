@@ -177,8 +177,7 @@ public class DepartmentServiceImpl implements DepartmentServiceI {
 		}
 		S_department department = new S_department();
 			//部门信息也是查询jsw_corporation_department,先通过用户id和公司id查询部门id,用部门id(parent_id)查询jsw_corporation_department,通过id查询部门信息
-			String sql = "select id,name from jsw_corporation_department where id="
-					+ id;
+			String sql = "select id,name from jsw_corporation_department where id=" + id;
 			List<Object[]> deps = departmentDaoI.findBySql(sql);
 			for (Object[] tem : deps) {
 				department.setId((Integer) tem[0]);
