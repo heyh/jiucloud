@@ -103,14 +103,8 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
             public int compare(FieldData o1, FieldData o2) {
                 String needApproved1 = o1.getNeedApproved() == null ? "0" : o1.getNeedApproved();
                 String needApproved2 = o2.getNeedApproved() == null ? "0" : o2.getNeedApproved();
-                if ((needApproved1.equals("1") && needApproved2.equals("1"))) {
-                    return 0;
-                } else if ((needApproved1.equals("0") && needApproved2.equals("0"))) {
-                    return 0;
-                } else if (needApproved1.equals("1")  && needApproved2.equals("0")) {
+                if (needApproved1.equals("1") && !needApproved1.equals(needApproved2)) {
                     return -1;
-                } else if (needApproved1.equals("0")  && needApproved2.equals("1")) {
-                    return 1;
                 }
                 return 0;
             }
