@@ -23,7 +23,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-<title>服务号管理</title>
+<title>资料审批</title>
 <jsp:include page="../../inc.jsp"></jsp:include>
     <link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1-rc.1/css/select2.min.css" rel="stylesheet" />
     <script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1-rc.1/js/select2.min.js"></script>
@@ -137,7 +137,7 @@
                     toolbar : '#toolbarDoc',
                     onLoadSuccess : function() {
                         parent.$.messager.progress('close');
-//                        $(this).datagrid('tooltip');
+                        $(this).datagrid('tooltip');
                     }
                 });
     });
@@ -259,8 +259,7 @@
         </div>
 
         <div data-options="region:'center',border:false">
-            <table id="dataGridDoc" class="easyui-datagrid" >
-            </table>
+            <table id="dataGridDoc" class="easyui-datagrid" />
         </div>
     </div>
 
