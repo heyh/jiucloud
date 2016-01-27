@@ -1,17 +1,15 @@
 package sy.interceptors;
 
-import java.util.List;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
 import org.apache.log4j.Logger;
 import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
-
 import sy.pageModel.SessionInfo;
 import sy.util.ConfigUtil;
 import sy.util.Constant;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * 权限拦截器
@@ -69,8 +67,10 @@ public class SecurityInterceptor implements HandlerInterceptor {
 		for (String tem : strs) {
 			if ((url.equals(tem) || url.contains("priceController"))
 					&& sessionInfo.getIsadmin() == 0) {
-				request.setAttribute("msg",
-						"您没有访问此资源的权限！<br/>请联系超管赋予您本的资源访问权限！");
+//				request.setAttribute("msg",
+//						"您没有访问此资源的权限！<br/>请联系超管赋予您本的资源访问权限！");
+                request.setAttribute("msg", "您没有访问此资源的权限！<br/>请联系超管赋予您<br/>[" + url
+                        + "]<br/>的资源访问权限！");
 				request.getRequestDispatcher("/error/noSecurity.jsp").forward(
 						request, response);
 				return false;
