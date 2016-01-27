@@ -474,7 +474,7 @@ public class CostServiceImpl implements CostServiceI {
                 }
             }
         }
-        hql += " order by t.sort,t.itemCode asc ";
+        hql += " order by t.itemCode, t.sort asc ";
         List<Cost> l = costDaoI.find(hql, params);
         if (l.size() == 0) {
             params.remove("department_id");
