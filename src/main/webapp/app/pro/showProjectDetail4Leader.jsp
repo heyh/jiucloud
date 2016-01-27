@@ -565,7 +565,7 @@
                                 if ('0' == value) {
                                     str = '不需审批'
                                 } else if ('1' == value) {
-                                    str = '未审批';
+                                    str = '<span style="color: #ff0000">' + '未审批' + '</span>';
                                 } else if ('2' == value) {
                                     str = '审批通过';
                                 } else if ('9' == value) {
