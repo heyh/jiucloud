@@ -110,7 +110,6 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
             }
         });
 
-
         // footer
         if (source.equals("data")) {
             List<TFieldData> fields = fieldDataDaoI.find(hql, params);
