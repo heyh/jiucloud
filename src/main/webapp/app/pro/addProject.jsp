@@ -53,9 +53,9 @@
 
 
 <!-- 引入EasyUI -->
-<script type="text/javascript"
-        src="${pageContext.request.contextPath}/jslib/jquery-easyui-1.3.3/jquery.easyui.min.js"
-        charset="UTF-8"></script>
+<%--<script type="text/javascript"--%>
+        <%--src="${pageContext.request.contextPath}/jslib/jquery-easyui-1.3.3/jquery.easyui.min.js"--%>
+        <%--charset="UTF-8"></script>--%>
 
 <style>
     .container-fluid {
