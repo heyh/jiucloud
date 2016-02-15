@@ -79,7 +79,8 @@ public class Project {
 	private String jgzl;// 竣工资料
 	private String zjy;// 造价员
 	private String zly;// 资料员
-	@Temporal(TemporalType.DATE)
+
+    @Temporal(TemporalType.DATE)
 	private Date jgysrq;// 竣工验收日期
 
 	// 工程维护
@@ -106,6 +107,171 @@ public class Project {
 	@Column(name = "isLock")
     private int isLock;// 工程锁定标志
 
+    @Column(name = "financeCode")
+    private String financeCode; // 财务编码
+
+    @Column(name = "jsdw")
+    private String jsdw; // 建设单位
+
+    @Column(name = "djdw")
+    private String djdw; // 代建单位
+
+    @Column(name = "jldw")
+    private String jldw; // 监理单位
+
+    @Column(name = "sbe")
+    private String sbe; // 申报额
+
+    @Column(name = "sje")
+    private String sje; // 初审额
+
+    @Column(name = "cse")
+    private String cse; // 审计额
+
+    @Column(name = "jsdwlink")
+    private String jsdwlink;
+
+    @Column(name = "djdwlink")
+    private String djdwlink;
+
+    @Column(name = "jldwlink")
+    private String jldwlink;
+
+    @Column(name = "maintenanceCost")
+    private String maintenanceCost;
+
+    @Column(name = "maintenanceManager")
+    private String maintenanceManager;
+
+    @Column(name = "htyhq")
+    private String htyhq;
+
+    @Column(name = "managerConfirm")
+    private String managerConfirm;
+
+    public String getManagerConfirm() {
+        return managerConfirm;
+    }
+
+    public void setManagerConfirm(String managerConfirm) {
+        this.managerConfirm = managerConfirm;
+    }
+
+    public String getHtyhq() {
+        return htyhq;
+    }
+
+    public void setHtyhq(String htyhq) {
+        this.htyhq = htyhq;
+    }
+
+    public String getMaintenanceManager() {
+        return maintenanceManager;
+    }
+
+    public void setMaintenanceManager(String maintenanceManager) {
+        this.maintenanceManager = maintenanceManager;
+    }
+
+    public String getJsdwlink() {
+        return jsdwlink;
+    }
+
+    public void setJsdwlink(String jsdwlink) {
+        this.jsdwlink = jsdwlink;
+    }
+
+    public String getDjdwlink() {
+        return djdwlink;
+    }
+
+    public void setDjdwlink(String djdwlink) {
+        this.djdwlink = djdwlink;
+    }
+
+    public String getJldwlink() {
+        return jldwlink;
+    }
+
+    public void setJldwlink(String jldwlink) {
+        this.jldwlink = jldwlink;
+    }
+
+    public String getMaintenanceCost() {
+        return maintenanceCost;
+    }
+
+    public void setMaintenanceCost(String maintenanceCost) {
+        this.maintenanceCost = maintenanceCost;
+    }
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
+    @Column(name = "remark")
+
+    private String remark; // 备注
+
+    public String getJsdw() {
+        return jsdw;
+    }
+
+    public void setJsdw(String jsdw) {
+        this.jsdw = jsdw;
+    }
+
+    public String getDjdw() {
+        return djdw;
+    }
+
+    public void setDjdw(String djdw) {
+        this.djdw = djdw;
+    }
+
+    public String getJldw() {
+        return jldw;
+    }
+
+    public void setJldw(String jldw) {
+        this.jldw = jldw;
+    }
+
+    public String getSbe() {
+        return sbe;
+    }
+
+    public void setSbe(String sbe) {
+        this.sbe = sbe;
+    }
+
+    public String getSje() {
+        return sje;
+    }
+
+    public void setSje(String sje) {
+        this.sje = sje;
+    }
+
+    public String getCse() {
+        return cse;
+    }
+
+    public void setCse(String cse) {
+        this.cse = cse;
+    }
+
+    public String getFinanceCode() {
+        return financeCode;
+    }
+
+    public void setFinanceCode(String financeCode) {
+        this.financeCode = financeCode;
+    }
 
     public int getId() {
 		return id;

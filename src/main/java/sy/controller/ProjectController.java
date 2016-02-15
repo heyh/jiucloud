@@ -15,7 +15,6 @@ import sy.util.StringUtil;
 import sy.util.UtilDate;
 
 import javax.servlet.http.HttpServletRequest;
-import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 /**
@@ -77,7 +76,7 @@ public class ProjectController extends BaseController {
 	public String toAddPage(HttpServletRequest request) {
 		List<S_province> provinces = provinceService.getProvinces();
 		request.setAttribute("provinces", provinces);
-		return "/app/pro/saveprolis";
+		return "/app/pro/addProject";
 	}
 
 	/**
@@ -191,7 +190,8 @@ public class ProjectController extends BaseController {
 		Project pro = this.projectService.findOneView(Integer.parseInt(proId));
 		pro.setCompId(sessionInfo.getCompName());
 		request.setAttribute("pro", pro);
-		return "/app/pro/findOneView";
+//		return "/app/pro/findOneView";
+        return "/app/pro/viewProject";
 	}
 
 	/**
@@ -212,7 +212,8 @@ public class ProjectController extends BaseController {
 		request.setAttribute("provinces", provinces);
 		request.setAttribute("cities", cities);
 		request.setAttribute("pro", pro);
-		return "/app/pro/edit";
+//		return "/app/pro/edit";
+        return "/app/pro/editProject";
 	}
 
 	/**

@@ -1,11 +1,10 @@
 package sy.service;
 
-import java.util.List;
-
 import org.springframework.stereotype.Repository;
-
 import sy.model.S_department;
 import sy.model.po.Department;
+
+import java.util.List;
 
 /**
  * **************************************************************** 文件名称 :
@@ -30,11 +29,13 @@ public interface DepartmentServiceI {
 	 */
 	public List<Integer> getListByDepartmentId(int id);
 
-	/**
-	 * 根据所有下辖部门获得所有下辖员工
-	 * 
-	 * @param id
-	 */
+    /**
+     * 根据所有下辖部门获得所有下辖员工
+     * @param d
+     * @param uid
+     * @param cid
+     * @return
+     */
 	List<Integer> getUserGroup(Department d, String uid,String cid);
 	
 	List<Department> getDepartments(String cid);
@@ -45,4 +46,9 @@ public interface DepartmentServiceI {
 
     public List<Integer> getUsers(String cid, int uid);
 
+    public boolean hasRight(String cid, int uid, String rightCode);
+
+    public List<String> getAllRight(String cid, int uid);
+
+    public int getParentId(String cid, int uid);
 }

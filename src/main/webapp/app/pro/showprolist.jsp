@@ -1,5 +1,6 @@
 <%@ page import="sy.pageModel.SessionInfo" %>
 <%@ page import="sy.util.ConfigUtil" %>
+<%@ page import="java.util.List" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -8,12 +9,14 @@
 <%
     Integer parentId = 1;
     String projectInfos = null;
+    List<String> rightList = null;
     SessionInfo sessionInfo = (SessionInfo) session.getAttribute(ConfigUtil.getSessionInfoName());
     if (sessionInfo == null) {
         response.sendRedirect(request.getContextPath());
     } else {
         parentId = sessionInfo.getParentId();
         projectInfos = sessionInfo.getProjectInfos();
+        rightList = sessionInfo.getRightList();
     }
 
 %>
@@ -72,7 +75,10 @@
 										title : '所在区域',
 										width : 100,
 										formatter : function(value, row, index) {
-											var str = value + '-' + row.city;
+                                            var str = value;
+                                            if(row.city != undefined) {
+                                                str = str + '-' + row.city;
+                                            }
 											return str;
 										}
 									},
@@ -86,11 +92,11 @@
 										title : '施工项目经理',
 										width : 100
 									},
-									{
-										field : 'gczt',
-										title : '工程状态',
-										width : 100
-									},
+//									{
+//										field : 'gczt',
+//										title : '工程状态',
+//										width : 100
+//									},
                                     {
                                         field : 'isLock',
                                         title : '锁定状态',
@@ -101,20 +107,20 @@
                                         }
 
                                     },
-									{
-										field : 'coll',
-										title : '协作单位',
-										width : 100,
-										formatter : function(value, row, index) {
-											var str = '';
-											str += $
-													.formatString(
-															'<img onclick="collFun(\'{0}\');" src="{1}" title="查看协作单位"/>',
-															row.id,
-															'${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/wanglaidanwei-blue.png');
-											return str;
-										}
-									},
+									<%--{--%>
+										<%--field : 'coll',--%>
+										<%--title : '协作单位',--%>
+										<%--width : 100,--%>
+										<%--formatter : function(value, row, index) {--%>
+											<%--var str = '';--%>
+											<%--str += $--%>
+													<%--.formatString(--%>
+															<%--'<img onclick="collFun(\'{0}\');" src="{1}" title="查看协作单位"/>',--%>
+															<%--row.id,--%>
+															<%--'${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/wanglaidanwei-blue.png');--%>
+											<%--return str;--%>
+										<%--}--%>
+									<%--},--%>
 									{
 										field : 'action',
 										title : '操作',
@@ -127,7 +133,7 @@
 															row.id,
 															'${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/preview-blue.png');
 											str += '&nbsp;';
-                                            if ( <%= parentId == 0 %> ) {
+                                            if ( <%= parentId == 0 || rightList.contains("3") || rightList.contains("4") || rightList.contains("5") || rightList.contains("6")%> ) {
                                                 if ('1' == row.isLock) {
                                                     str += '&nbsp;';
                                                     str += $
@@ -291,7 +297,7 @@
 	function eidtFun(id) {
 
         // add by heyh
-        if (<%= parentId != 0 %>) {
+        if (<%= parentId != 0 && !rightList.contains("3") && !rightList.contains("4") && !rightList.contains("5") && !rightList.contains("6")%>) {
             return;
         }
 		if (id == undefined) {
@@ -336,6 +342,15 @@
 						}
 					} ]
 				});
+            <%--var url = '${pageContext.request.contextPath}/projectController/toAddPage';--%>
+            <%--var text = "新增工程";--%>
+            <%--var params = {--%>
+                <%--url : url,--%>
+                <%--title : text,--%>
+                <%--iconCls : 'wrench'--%>
+            <%--};--%>
+            <%--window.parent.ac(params);--%>
+            //parent.$.modalDialog.handler.dialog('close');
 	};
 
     // 锁定工程
@@ -442,6 +457,12 @@
 	};
 
     $(document).ready(function() {
+        if ( <%= parentId == 0 || rightList.contains("4") %> ) {
+            $('#dataGrid').datagrid('showColumn', 'gchtj');
+        } else {
+            $('#dataGrid').datagrid('hideColumn', 'gchtj');
+        }
+
         $("#proName").select2({
             placeholder: "可以模糊查询",
             allowClear: true,
@@ -511,7 +532,7 @@
         <a onclick="addFun();" href="javascript:void(0);"
             class="easyui-linkbutton"
             data-options="plain:true,iconCls:'add_new'"
-                <%= parentId == 0 ? "" : "disabled"%> >添加</a>
+                <%= parentId == 0 || rightList.contains("3") ? "" : "disabled"%> >添加</a>
         <a onclick="batchDeleteFun();" href="javascript:void(0);"
             class="easyui-linkbutton"
             data-options="plain:true,iconCls:'batdelete_new'"

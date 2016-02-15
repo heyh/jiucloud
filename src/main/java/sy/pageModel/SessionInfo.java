@@ -41,6 +41,15 @@ public class SessionInfo implements java.io.Serializable {
 
     private List<S_department> departmentIds;
     private List<Param> unitParams;
+    private List<String> rightList;
+
+    public List<String> getRightList() {
+        return rightList;
+    }
+
+    public void setRightList(List<String> rightList) {
+        this.rightList = rightList;
+    }
 
     public List<S_department> getDepartmentIds() {
         return departmentIds;

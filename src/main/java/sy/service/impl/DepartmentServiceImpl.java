@@ -1,5 +1,6 @@
 package sy.service.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sy.dao.DepartmentDaoI;
@@ -244,11 +245,94 @@ public class DepartmentServiceImpl implements DepartmentServiceI {
             for (Object[] tem : deps) {
                 department.setId((Integer) tem[0]);
                 department.setName((String) tem[1]);
-                department.setParent_id((Integer) tem[2]);
+//                department.setParent_id((Integer) tem[2]);
             }
             departments.add(department);
         }
 
         return departments;
     }
+
+    @Override
+    public boolean hasRight(String cid, int uid, String rightCode) {
+        boolean hasRight = false;
+        List<String> rightsList = new ArrayList<String>();
+        if (null != cid) {
+            rightsList = (List<String>) departmentDaoI.getList("select cbgl_power from jsw_corporation_department where FIND_IN_SET(" + uid + ", user_id)" + " and company_id = " + cid);
+        } else {
+            rightsList = (List<String>) departmentDaoI.getList("select cbgl_power from jsw_corporation_department where FIND_IN_SET(" + uid + ", user_id)");
+        }
+
+        if (null != rightsList && rightsList.size() > 0) {
+            for (String rights : rightsList) {
+                if (hasRight) {
+                    break;
+                }
+
+                if (StringUtils.isNotEmpty(rights)) {
+                    String[] rightArr = rights.split(",");
+                    if (rightArr.length > 0) {
+                        for (String right : rightArr) {
+                            if (right.equals(rightCode)) {
+                                hasRight = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        return hasRight;
+    }
+
+    @Override
+    public List<String> getAllRight(String cid, int uid) {
+        List<String> rightList = new ArrayList<String>();
+        List<String> rightsList = new ArrayList<String>();
+        if (null != cid) {
+            rightsList = (List<String>) departmentDaoI.getList("select cbgl_power from jsw_corporation_department where FIND_IN_SET(" + uid + ", user_id)" + " and company_id = " + cid);
+        } else {
+            rightsList = (List<String>) departmentDaoI.getList("select cbgl_power from jsw_corporation_department where FIND_IN_SET(" + uid + ", user_id)");
+        }
+
+        if (null != rightsList && rightsList.size() > 0) {
+            for (String rights : rightsList) {
+                if (StringUtils.isNotEmpty(rights)) {
+                    String[] rightArr = rights.split(",");
+                    if (rightArr.length > 0) {
+                        for (String right : rightArr) {
+                            rightList.add(right);
+                        }
+                    }
+                }
+            }
+        }
+        if (null != rightList && rightList.size() > 1) {
+            Set<String> set = new HashSet<String>(rightList);
+            rightList = new ArrayList<String>(set);
+        }
+        return rightList;
+    }
+
+    @Override
+    public int getParentId(String cid, int uid) {
+        int parentId = 1;
+        List<Integer> ids = null;
+        if(cid!=null){
+            ids= (List<Integer>) departmentDaoI.getList("select parent_id from jsw_corporation_department where FIND_IN_SET(" + uid + ", user_id)" + " and company_id = " + cid);
+        }else{
+            ids = (List<Integer>) departmentDaoI.getList("select parent_id from jsw_corporation_department where FIND_IN_SET(" + uid + ", user_id)");
+        }
+        for (Integer id : ids) {
+            if (0 == id) {
+                parentId = 0;
+                break;
+            } else {
+                parentId = id;
+            }
+        }
+        return parentId;
+    }
+
 }

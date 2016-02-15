@@ -160,12 +160,12 @@ public class UserController extends BaseController {
                     for (S_department d : s) {
                         sessionInfo.setDepid(String.valueOf(d.getId()));
 					    sessionInfo.setDepName(d.getName());
-                        if (d.getParent_id() == 0) {
-                            sessionInfo.setParentId(0);
-                            break;
-                        } else {
-                            sessionInfo.setParentId(d.getParent_id());
-                        }
+//                        if (d.getParent_id() == 0) {
+//                            sessionInfo.setParentId(0);
+//                            break;
+//                        } else {
+//                            sessionInfo.setParentId(d.getParent_id());
+//                        }
                     }
                 } else {
                     sessionInfo.setDepid(null);
@@ -186,6 +186,8 @@ public class UserController extends BaseController {
                 sessionInfo.setCostTypeInfos(costService.getCostTypeInfos(departmentIds, cid));
                 sessionInfo.setUnderlingUsers(userService.findUnderlingUsers(ugroup));
                 sessionInfo.setUnitParams((List<Param>) paramService.getParams("UP", ""));
+                sessionInfo.setRightList(departmentService.getAllRight(cid, Integer.parseInt(u.getId())));
+                sessionInfo.setParentId(departmentService.getParentId(cid, Integer.parseInt(u.getId())));
 				session.setAttribute(ConfigUtil.getSessionInfoName(), sessionInfo);
 
 				System.out.println(sessionInfo);
