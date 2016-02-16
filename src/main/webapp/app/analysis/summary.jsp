@@ -23,6 +23,7 @@
 		var length = '${fn:length(datas)}';
 		if (length == '0') {
 			$('#travel').hide();
+            $('.easyui-linkbutton').removeAttr('onclick');
 		}
 	}
 
