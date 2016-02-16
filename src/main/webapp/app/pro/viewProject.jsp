@@ -146,28 +146,16 @@
                     <td>${pro.gcfkyd}</td>
                 </tr>
                 <tr>
-                    <td><span class="td_title">建设单位</span></td>
-                    <td>${pro.jsdw}</td>
-                    <td><span class="td_title">联系人/联系方式</span></td>
-                    <td>${pro.jsdwlink}</td>
-                </tr>
-                <tr>
-                    <td><span class="td_title">代建单位</span></td>
-                    <td>${pro.djdw}</td>
-                    <td><span class="td_title">联系人/联系方式</span></td>
-                    <td>${pro.djdwlink}</td>
-                </tr>
-                <tr>
-                    <td><span class="td_title">监理单位</span></td>
-                    <td>${pro.jldw}</td>
-                    <td><span class="td_title">联系人/联系方式</span></td>
-                    <td>${pro.jldwlink}</td>
-                </tr>
-                <tr>
                     <td><span class="td_title">项目所在省</span></td>
                     <td>${pro.provice}</td>
                     <td><span class="td_title">项目所在市</span></td>
                     <td>${pro.city}</td>
+                </tr>
+                <tr>
+                    <td><span class="td_title">项目所在区县</span></td>
+                    <td>${pro.area}</td>
+                    <td><span class="td_title"></span></td>
+                    <td></td>
                 </tr>
             </table>
         </fieldset>
