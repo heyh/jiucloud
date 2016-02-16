@@ -190,10 +190,47 @@ public class DepartmentServiceImpl implements DepartmentServiceI {
 
 
     @Override
+//    public List<Integer> getUsers(String cid, int uid) {
+//        List<Integer> uids = new ArrayList<Integer>();
+//        List<Object[]> objects = null;
+//        int id = -1;
+//        objects = departmentDaoI.findBySql("select id, parent_id, user_id, company_id from jsw_corporation_department where company_id= " +cid);
+//        List<Node> departments = new ArrayList<Node>();
+//        for (Object[] object : objects) {
+//            List<String> tmpUid = Arrays.asList(String.valueOf(object[2]).split(","));
+//            for (String tmp : tmpUid) {
+//                Node department = new Node();
+//                department.setId(Integer.parseInt(String.valueOf(object[0])));
+//                department.setParentId(Integer.parseInt(String.valueOf(object[1])));
+//                department.setUserId(Integer.parseInt(tmp));
+////                department.setCompanyId(Integer.parseInt(String.valueOf(object[3])));
+//                if (uid == Integer.parseInt(tmp)) {
+//                    id = Integer.parseInt(String.valueOf(object[0]));
+//                }
+//                departments.add(department);
+//            }
+//
+//        }
+//        if (id != -1) {
+////            String strUids = getChildNodes(id, departments);
+//            NodeUtil nodeUtil = new NodeUtil();
+//            uids = nodeUtil.getChildNodes(departments, id);
+////            if (strUids != null && !strUids.equals("")) {
+////                CollectionUtils.collect(Arrays.asList(strUids.split(",")),
+////                        new Transformer() {
+////                            public java.lang.Object transform(java.lang.Object input) {
+////                                return new Integer((String) input);
+////                            }
+////                        }, uids);
+////            }
+//        }
+//
+//        return uids;
+//    }
     public List<Integer> getUsers(String cid, int uid) {
         List<Integer> uids = new ArrayList<Integer>();
         List<Object[]> objects = null;
-        int id = -1;
+        List<Integer> ids = new ArrayList<Integer>();
         objects = departmentDaoI.findBySql("select id, parent_id, user_id, company_id from jsw_corporation_department where company_id= " +cid);
         List<Node> departments = new ArrayList<Node>();
         for (Object[] object : objects) {
@@ -203,26 +240,21 @@ public class DepartmentServiceImpl implements DepartmentServiceI {
                 department.setId(Integer.parseInt(String.valueOf(object[0])));
                 department.setParentId(Integer.parseInt(String.valueOf(object[1])));
                 department.setUserId(Integer.parseInt(tmp));
-//                department.setCompanyId(Integer.parseInt(String.valueOf(object[3])));
-                if (uid == Integer.parseInt(tmp)) {
-                    id = Integer.parseInt(String.valueOf(object[0]));
-                }
                 departments.add(department);
+                if (uid == Integer.parseInt(tmp)) {
+                    ids.add(Integer.parseInt(String.valueOf(object[0])));
+                }
             }
-
         }
-        if (id != -1) {
-//            String strUids = getChildNodes(id, departments);
-            NodeUtil nodeUtil = new NodeUtil();
-            uids = nodeUtil.getChildNodes(departments, id);
-//            if (strUids != null && !strUids.equals("")) {
-//                CollectionUtils.collect(Arrays.asList(strUids.split(",")),
-//                        new Transformer() {
-//                            public java.lang.Object transform(java.lang.Object input) {
-//                                return new Integer((String) input);
-//                            }
-//                        }, uids);
-//            }
+        if (ids != null && ids.size()>0) {
+            for (Integer id : ids) {
+                NodeUtil nodeUtil = new NodeUtil();
+                List<Integer> tmpUids = new ArrayList<Integer>();
+                tmpUids = nodeUtil.getChildNodes(departments, id);
+                if (tmpUids != null && tmpUids.size()>0) {
+                    uids.addAll(tmpUids);
+                }
+            }
         }
 
         return uids;
