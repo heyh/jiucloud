@@ -73,11 +73,14 @@
 									{
 										field : 'provice',
 										title : '所在区域',
-										width : 100,
+										width : 150,
 										formatter : function(value, row, index) {
                                             var str = value;
-                                            if(row.city != undefined) {
+                                            if(row.city != undefined && row.city != '') {
                                                 str = str + '-' + row.city;
+                                            }
+                                            if(row.area != undefined && row.area != '') {
+                                                str = str + '-' + row.area;
                                             }
 											return str;
 										}

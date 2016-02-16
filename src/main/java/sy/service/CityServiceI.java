@@ -1,16 +1,16 @@
 package sy.service;
 
-import java.util.List;
-
 import org.springframework.stereotype.Repository;
+import sy.model.City;
 
-import sy.model.S_city;
+import java.util.List;
 
 @Repository
 public interface CityServiceI {
 	/**
 	 * 根据省级信息获取市级列表信息
 	 */
-	List<S_city> getCities(int province_name);
+	List<City> getCities(String provincecode);
+    City getCityByName(String cityName);
 
 }

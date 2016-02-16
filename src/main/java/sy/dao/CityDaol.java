@@ -1,6 +1,6 @@
 package sy.dao;
 
-import sy.model.S_city;
+import sy.model.City;
 
 /**
  * 市级信息数据库操作类
@@ -8,6 +8,6 @@ import sy.model.S_city;
  * 
  */
 
-public interface CityDaol extends BaseDaoI<S_city> {
+public interface CityDaol extends BaseDaoI<City> {
 
 }

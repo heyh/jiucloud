@@ -156,10 +156,11 @@
             $("#city").empty();
             $.each(dataObj, function(idx, item) {
                 $(
-                        "<option value='" + item.cityname + "'>"
-                        + item.cityname + "</option>").appendTo(
+                        "<option value='" + item.name + "'>"
+                        + item.name + "</option>").appendTo(
                         $("#city"));
             });
+            getAreas();
         }
     };
 
@@ -169,6 +170,28 @@
             provincename : $("#provice").val()
         }
         $.ajax(cfg);
+    }
+
+    var cfg1 = {
+        url : '${pageContext.request.contextPath}/projectController/securi_getAreas',
+        type : 'GET',
+        dataType : 'json',
+        success : function(dataObj) {
+            $("#area").empty();
+            $.each(dataObj, function(idx, item) {
+                $(
+                        "<option value='" + item.name + "'>"
+                        + item.name + "</option>").appendTo(
+                        $("#area"));
+            });
+        }
+    };
+
+    function getAreas() {
+        cfg1.data = {
+            cityname : $("#city").val()
+        }
+        $.ajax(cfg1);
     }
 
     var provicehid = document.getElementById('provicehid').value;
@@ -185,6 +208,13 @@
             break;
         }
     }
+    var areahid = document.getElementById('areahid').value;
+    for (var i = 0; i < document.getElementById('area').options.length; i++) {
+        if (document.getElementById('area').options[i].value == areahid) {
+            document.getElementById('area').options[i].selected = true;
+            break;
+        }
+    }
 </script>
 <%--</head>--%>
 <%--<body>--%>
@@ -194,6 +224,7 @@
         <input name="id" type="hidden" class="span2" value="${pro.id}" readonly="readonly"/>
         <input type="hidden" id="provicehid" value='${pro.provice }'/>
         <input type="hidden" id="cityhid" value='${pro.city }'/>
+        <input type="hidden" id="areahid" value='${pro.area }'/>
 
         <fieldset class="showBase">
             <legend>项目立项</legend>
@@ -273,32 +304,21 @@
                         </div>
                     </div>
                     <div class="control-group">
-                        <label class="control-label" for="jsdw">建设单位:</label>
-
-                        <div class="controls">
-                            <input type="text" name="jsdw" id="jsdw" value="${pro.jsdw}">
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label" for="djdw">代建单位:</label>
-
-                        <div class="controls">
-                            <input type="text" name="djdw" id="djdw" value="${pro.djdw}">
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label" for="jldw">监理单位:</label>
-
-                        <div class="controls">
-                            <input type="text" name="jldw" id="jldw" value="${pro.jldw}">
-                        </div>
-                    </div>
-                    <div class="control-group">
                         <label class="control-label" for="provice">项目所在省:</label>
                         <div class="controls">
                             <select id="provice" name="provice" onchange="getCity()">
                                 <c:forEach items="${provinces}" var="tem">
-                                    <option value="${tem.provincename}">${tem.provincename}</option>
+                                    <option value="${tem.name}">${tem.name}</option>
+                                </c:forEach>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="area">项目所在市:</label>
+                        <div class="controls">
+                            <select id="area" name="area">
+                                <c:forEach items="${areas}" var="tem">
+                                    <option value="${tem.name}">${tem.name}</option>
                                 </c:forEach>
                             </select>
                         </div>
@@ -340,32 +360,11 @@
                         </div>
                     </div>
                     <div class="control-group">
-                        <label class="control-label" for="jsdwlink">联系人/联系方式:</label>
-
-                        <div class="controls">
-                            <input type="text" name="jsdwlink" id="jsdwlink" value="${pro.jsdwlink}">
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label" for="djdwlink">联系人/联系方式:</label>
-
-                        <div class="controls">
-                            <input type="text" name="djdwlink" id="djdwlink" value="${pro.djdwlink}">
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label" for="jldwlink">联系人/联系方式:</label>
-
-                        <div class="controls">
-                            <input type="text" name="jldwlink" id="jldwlink" value="${pro.jldwlink}">
-                        </div>
-                    </div>
-                    <div class="control-group">
                         <label class="control-label" for="city">项目所在市:</label>
                         <div class="controls">
-                            <select id="city" name="city">
+                            <select id="city" name="city" onchange="getAreas()">
                                 <c:forEach items="${cities}" var="tem">
-                                    <option value="${tem.cityname}">${tem.cityname}</option>
+                                    <option value="${tem.name}">${tem.name}</option>
                                 </c:forEach>
                             </select>
                         </div>

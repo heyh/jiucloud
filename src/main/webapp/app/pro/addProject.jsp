@@ -156,10 +156,11 @@
             $("#city").empty();
             $.each(dataObj, function(idx, item) {
                 $(
-                        "<option value='" + item.cityname + "'>"
-                        + item.cityname + "</option>").appendTo(
+                        "<option value='" + item.name + "'>"
+                        + item.name + "</option>").appendTo(
                         $("#city"));
             });
+            getAreas();
         }
     };
 
@@ -171,9 +172,30 @@
         $.ajax(cfg);
     }
 
+    var cfg1 = {
+        url : '${pageContext.request.contextPath}/projectController/securi_getAreas',
+        type : 'GET',
+        dataType : 'json',
+        success : function(dataObj) {
+            $("#area").empty();
+            $.each(dataObj, function(idx, item) {
+                $(
+                        "<option value='" + item.name + "'>"
+                        + item.name + "</option>").appendTo(
+                        $("#area"));
+            });
+        }
+    };
+
+    function getAreas() {
+        cfg1.data = {
+            cityname : $("#city").val()
+        }
+        $.ajax(cfg1);
+    }
 </script>
 <%--</head>--%>
-<%--<body>--%>
+<%--<body >--%>
 <div class="container-fluid">
 
     <form class="form-horizontal" name="form" id="form" method="post" enctype="multipart/form-data" role="form">
@@ -255,33 +277,19 @@
                         </div>
                     </div>
                     <div class="control-group">
-                        <label class="control-label" for="jsdw">建设单位:</label>
-
-                        <div class="controls">
-                            <input type="text" name="jsdw" id="jsdw">
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label" for="djdw">代建单位:</label>
-
-                        <div class="controls">
-                            <input type="text" name="djdw" id="djdw">
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label" for="jldw">监理单位:</label>
-
-                        <div class="controls">
-                            <input type="text" name="jldw" id="jldw">
-                        </div>
-                    </div>
-                    <div class="control-group">
                         <label class="control-label" for="provice">项目所在省:</label>
                         <div class="controls">
                             <select id="provice" name="provice" onchange="getCity()">
                                 <c:forEach items="${provinces}" var="tem">
-                                    <option value="${tem.provincename}">${tem.provincename}</option>
+                                    <option value="${tem.name}">${tem.name}</option>
                                 </c:forEach>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="area">项目所在区县:</label>
+                        <div class="controls">
+                            <select id="area" name="area">
                             </select>
                         </div>
                     </div>
@@ -322,30 +330,9 @@
                         </div>
                     </div>
                     <div class="control-group">
-                        <label class="control-label" for="jsdwlink">联系人/联系方式:</label>
-
-                        <div class="controls">
-                            <input type="text" name="jsdwlink" id="jsdwlink">
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label" for="djdwlink">联系人/联系方式:</label>
-
-                        <div class="controls">
-                            <input type="text" name="djdwlink" id="djdwlink">
-                        </div>
-                    </div>
-                    <div class="control-group">
-                        <label class="control-label" for="jldwlink">联系人/联系方式:</label>
-
-                        <div class="controls">
-                            <input type="text" name="jldwlink" id="jldwlink">
-                        </div>
-                    </div>
-                    <div class="control-group">
                         <label class="control-label" for="city">项目所在市:</label>
                         <div class="controls">
-                            <select id="city" name="city">
+                            <select id="city" name="city" onchange="getAreas()">
                             </select>
                         </div>
                     </div>

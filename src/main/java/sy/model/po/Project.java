@@ -31,6 +31,13 @@ public class Project {
 	private String provice;// 省
 	@Column(name = "city")
 	private String city;// 市
+    @Column(name = "area") // 区县
+
+    public String getArea() {
+        return area;
+    } public void setArea(String area) {
+        this.area = area;
+    } private String area;
 	@Temporal(TemporalType.DATE)
 	private Date zbtzsrq; // 中标通知书日期
 	@Temporal(TemporalType.DATE)

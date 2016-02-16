@@ -1,17 +1,16 @@
 package sy.service;
 
-import java.util.List;
-
 import org.springframework.stereotype.Repository;
+import sy.model.Province;
 
-import sy.model.S_province;
+import java.util.List;
 
 @Repository
 public interface ProvinceServiceI {
 	/**
 	 * 获取全部省级列表信息
 	 */
-	List<S_province> getProvinces();
+	List<Province> getProvinces();
 
-	S_province getProvinceByName(String name);
+	Province getProvinceByName(String name);
 }

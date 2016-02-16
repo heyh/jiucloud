@@ -4,10 +4,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import sy.model.S_city;
-import sy.model.S_province;
+import sy.model.Area;
+import sy.model.City;
+import sy.model.Province;
 import sy.model.po.Project;
 import sy.pageModel.*;
+import sy.service.AreaServiceI;
 import sy.service.CityServiceI;
 import sy.service.ProjectServiceI;
 import sy.service.ProvinceServiceI;
@@ -36,6 +38,9 @@ public class ProjectController extends BaseController {
 	@Autowired
 	private CityServiceI cityService;
 
+    @Autowired
+    private AreaServiceI areaService;
+
 	/**
 	 * 跳转管理页面
 	 * 
@@ -55,17 +60,29 @@ public class ProjectController extends BaseController {
 	 */
 	@RequestMapping("/getCities")
 	@ResponseBody
-	public List<S_city> getCities(HttpServletRequest reqs) {
-		String pidVar = reqs.getParameter("provincename");
+	public List<City> getCities(HttpServletRequest reqs) {
+		String provincename = reqs.getParameter("provincename");
 //		try {
 //			pidVar = new String(pidVar.getBytes("ISO-8859-1"), "utf-8");
 //		} catch (UnsupportedEncodingException e) {
 //			e.printStackTrace();
 //		}
-		S_province tem = provinceService.getProvinceByName(pidVar);
-		List<S_city> list = cityService.getCities(tem.getProvinceid());
+		Province tem = provinceService.getProvinceByName(provincename);
+		List<City> list = cityService.getCities(tem.getCode());
 		return list;
 	}
+
+    @RequestMapping("/securi_getAreas")
+    @ResponseBody
+    public List<Area> getAreas(HttpServletRequest reqs) {
+        String cityname = reqs.getParameter("cityname");
+        if (cityname.equals("")) {
+            return null;
+        }
+        City tem = cityService.getCityByName(cityname);
+        List<Area> list = areaService.getAreas(tem.getCode());
+        return list;
+    }
 
 	/**
 	 * 跳转新增页面
@@ -74,7 +91,7 @@ public class ProjectController extends BaseController {
 	 */
 	@RequestMapping("/toAddPage")
 	public String toAddPage(HttpServletRequest request) {
-		List<S_province> provinces = provinceService.getProvinces();
+		List<Province> provinces = provinceService.getProvinces();
 		request.setAttribute("provinces", provinces);
 		return "/app/pro/addProject";
 	}
@@ -134,12 +151,12 @@ public class ProjectController extends BaseController {
 		return j;
 	}
 
-	/**
-	 * 保存新增数据
-	 * 
-	 * @param id
-	 * @return
-	 */
+    /**
+     * 保存新增数据
+     * @param pro
+     * @param request
+     * @return
+     */
 	@RequestMapping("/save")
 	@ResponseBody
 	public Json save(Project pro, HttpServletRequest request) {
@@ -206,11 +223,17 @@ public class ProjectController extends BaseController {
 		String proId = request.getParameter("proId");
 		Project pro = this.projectService.findOneView(Integer.parseInt(proId));
 		pro.setCompId(sessionInfo.getCompName());
-		List<S_province> provinces = provinceService.getProvinces();
-		S_province tem = provinceService.getProvinceByName(pro.getProvice());
-		List<S_city> cities = cityService.getCities(tem.getProvinceid());
+		List<Province> provinces = provinceService.getProvinces();
+
+        Province tem = provinceService.getProvinceByName(pro.getProvice());
+		List<City> cities = cityService.getCities(tem.getCode());
+
+        City city = cityService.getCityByName(pro.getCity());
+        List<Area> areas = areaService.getAreas(city.getCode());
+
 		request.setAttribute("provinces", provinces);
 		request.setAttribute("cities", cities);
+        request.setAttribute("areas", areas);
 		request.setAttribute("pro", pro);
 //		return "/app/pro/edit";
         return "/app/pro/editProject";
@@ -258,12 +281,13 @@ public class ProjectController extends BaseController {
 		return j;
 	}
 
-	/**
-	 * 获取数据表格（注意：此处查询的为数据库中列isdel为0，即未删除状态的数据）
-	 * 
-	 * @param user
-	 * @return
-	 */
+    /**
+     * 获取数据表格（注意：此处查询的为数据库中列isdel为0，即未删除状态的数据）
+     * @param app
+     * @param ph
+     * @param request
+     * @return
+     */
 	@RequestMapping("/dataGrid")
 	@ResponseBody
 	public DataGrid dataGrid(ProjectSearch app, PageHelper ph,
