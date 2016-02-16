@@ -17,6 +17,7 @@ import sy.util.StringUtil;
 import sy.util.UtilDate;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -228,8 +229,15 @@ public class ProjectController extends BaseController {
         Province tem = provinceService.getProvinceByName(pro.getProvice());
 		List<City> cities = cityService.getCities(tem.getCode());
 
-        City city = cityService.getCityByName(pro.getCity());
-        List<Area> areas = areaService.getAreas(city.getCode());
+        List<Area> areas = new ArrayList<Area>();
+        if (pro.getCity() != null && !pro.getCity().equals("")) {
+            City city = cityService.getCityByName(pro.getCity());
+            if (city != null) {
+                areas = areaService.getAreas(city.getCode());
+            }
+
+        }
+
 
 		request.setAttribute("provinces", provinces);
 		request.setAttribute("cities", cities);
