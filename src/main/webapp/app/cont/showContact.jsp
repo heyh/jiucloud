@@ -219,7 +219,7 @@
 	<div id="toolbar" style="display: none;">
 		<a onclick="addFun();" href="javascript:void(0);"
 			class="easyui-linkbutton"
-			data-options="plain:true,iconCls:'pencil_add'">添加</a>
+			data-options="plain:true,iconCls:'add_new'">添加</a>
 	</div>
 </body>
 </html>
