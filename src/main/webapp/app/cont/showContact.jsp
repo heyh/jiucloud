@@ -77,19 +77,19 @@
 													.formatString(
 															'<img onclick="viewFun(\'{0}\');" src="{1}" title="预览"/>',
 															row.id,
-															'${pageContext.request.contextPath}/style/images/extjs_icons/eye.png');
+															'${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/preview-blue.png');
 											str += '&nbsp;';
 											str += $
 													.formatString(
 															'<img onclick="eidtFun(\'{0}\');" src="{1}" title="修改"/>',
 															row.id,
-															'${pageContext.request.contextPath}/style/images/extjs_icons/pencil.png');
+															'${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/modify-blue.png');
 											str += '&nbsp;';
 											str += $
 													.formatString(
 															'<img onclick="deleteFun(\'{0}\');" src="{1}" title="删除"/>',
 															row.id,
-															'${pageContext.request.contextPath}/style/images/extjs_icons/cancel.png');
+															'${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/delete-blue.png');
 											return str;
 										}
 									} ] ],
