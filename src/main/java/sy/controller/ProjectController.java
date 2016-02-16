@@ -168,19 +168,19 @@ public class ProjectController extends BaseController {
 		Json j = new Json();
 		if (pro.getProjectId() == null || "".equals(pro.getProjectId())) {
 			j.setSuccess(false);
-			j.setMsg("请输入项目编号！");
+			j.setMsg("请输入项目编码！");
 			return j;
 		}
 		if (pro.getProName() == null || "".equals(pro.getProName())) {
 			j.setSuccess(false);
-			j.setMsg("请输入项目名称！");
+			j.setMsg("请输入工程合同名称！");
 			return j;
 		}
-		if (pro.getShortname() == null || "".equals(pro.getShortname())) {
-			j.setSuccess(false);
-			j.setMsg("请输入项目简称！");
-			return j;
-		}
+//		if (pro.getShortname() == null || "".equals(pro.getShortname())) {
+//			j.setSuccess(false);
+//			j.setMsg("请输入项目简称！");
+//			return j;
+//		}
 		// 执行新增sql命令
 		try {
 			pro.setCompId(compid);
