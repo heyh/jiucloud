@@ -137,6 +137,19 @@
                         });
 	});
 
+    //查看协作单位
+    function collFun(id) {
+        var url = '${pageContext.request.contextPath}/collcontroller/securi_toShowPage?pid=' + id;
+        var text = "协作单位管理";
+        var params = {
+            url : url,
+            title : text,
+            iconCls : 'wrench'
+        }
+        window.parent.ac(params);
+        parent.$.modalDialog.handler.dialog('close');
+    }
+
     //查看
     function viewFun(id) {
 
