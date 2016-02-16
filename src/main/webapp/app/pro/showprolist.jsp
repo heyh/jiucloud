@@ -110,20 +110,20 @@
                                         }
 
                                     },
-									<%--{--%>
-										<%--field : 'coll',--%>
-										<%--title : '协作单位',--%>
-										<%--width : 100,--%>
-										<%--formatter : function(value, row, index) {--%>
-											<%--var str = '';--%>
-											<%--str += $--%>
-													<%--.formatString(--%>
-															<%--'<img onclick="collFun(\'{0}\');" src="{1}" title="查看协作单位"/>',--%>
-															<%--row.id,--%>
-															<%--'${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/wanglaidanwei-blue.png');--%>
-											<%--return str;--%>
-										<%--}--%>
-									<%--},--%>
+									{
+										field : 'coll',
+										title : '协作单位',
+										width : 100,
+										formatter : function(value, row, index) {
+											var str = '';
+											str += $
+													.formatString(
+															'<img onclick="collFun(\'{0}\');" src="{1}" title="查看协作单位"/>',
+															row.id,
+															'${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/wanglaidanwei-blue.png');
+											return str;
+										}
+									},
 									{
 										field : 'action',
 										title : '操作',
@@ -462,8 +462,10 @@
     $(document).ready(function() {
         if ( <%= parentId == 0 || rightList.contains("4") %> ) {
             $('#dataGrid').datagrid('showColumn', 'gchtj');
+            $('#dataGrid').datagrid('showColumn', 'coll');
         } else {
             $('#dataGrid').datagrid('hideColumn', 'gchtj');
+            $('#dataGrid').datagrid('hideColumn', 'coll');
         }
 
         $("#proName").select2({
