@@ -266,8 +266,7 @@
 
 	//查看协作单位
 	function collFun(id) {
-		var url = '${pageContext.request.contextPath}/collcontroller/securi_toShowPage?pid='
-				+ id;
+		var url = '${pageContext.request.contextPath}/collcontroller/securi_toShowPage?pid=' + id;
 		var text = "协作单位管理";
 		var params = {
 			url : url,
