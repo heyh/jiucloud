@@ -249,8 +249,7 @@ public class DepartmentServiceImpl implements DepartmentServiceI {
         if (ids != null && ids.size()>0) {
             for (Integer id : ids) {
                 NodeUtil nodeUtil = new NodeUtil();
-                List<Integer> tmpUids = new ArrayList<Integer>();
-                tmpUids = nodeUtil.getChildNodes(departments, id);
+                List<Integer> tmpUids = nodeUtil.getChildNodes(departments, id);
                 if (tmpUids != null && tmpUids.size()>0) {
                     uids.addAll(tmpUids);
                 }
