@@ -63,6 +63,13 @@ public class ResourceServiceImpl implements ResourceServiceI {
 				Map<String, Object> attr = new HashMap<String, Object>();
 				attr.put("url", r.getUrl());
 				tree.setAttributes(attr);
+
+                boolean hasDecisionRight = sessionInfo.getRightList().contains("1") || 0 == sessionInfo.getParentId();
+                boolean isDecisionRes = tree.getId().equals("jiucloud_menu_decision") || tree.getId().equals("jiucloud_menu_decision_approve") || tree.getId().equals("jiucloud_menu_decision_gc");
+                if (isDecisionRes && !hasDecisionRight) {
+                    continue;
+                }
+
 				lt.add(tree);
 			}
 		}
