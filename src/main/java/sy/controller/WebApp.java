@@ -96,18 +96,31 @@ public class WebApp extends BaseController {
 					j.setMsg("您好，您没有登录权限，请联系管理员订购该业务");
 					return j;
 				}
-				S_department s = departmentService
-						.getDepartmentByUid(u.getId(),cid);
-				Department d = departmentService.findOneView(u.getId(),cid);
+//				S_department s = departmentService.getDepartmentByUid(u.getId(),cid);
+//				Department d = departmentService.findOneView(u.getId(),cid);
+                List<S_department> s = departmentService.getDepartmentsByUid(u.getId(), cid);
 				SessionInfo sessionInfo = new SessionInfo();
 				sessionInfo.setName(u.getRealname());
 				sessionInfo.setId(u.getId());
 				sessionInfo.setCompid(String.valueOf(c.getId()));
 				sessionInfo.setCompName(c.getName());
-				sessionInfo.setDepid(String.valueOf(d.getId()));
-				sessionInfo.setDepName(d.getName());
-				sessionInfo.setDepartment_id(String.valueOf(s.getId()));
-				sessionInfo.setDepartment_name(s.getName());
+//				sessionInfo.setDepid(String.valueOf(d.getId()));
+//				sessionInfo.setDepName(d.getName());
+//				sessionInfo.setDepartment_id(String.valueOf(s.getId()));
+//				sessionInfo.setDepartment_name(s.getName());
+                if (null != s && s.size() > 0) {
+                    for (S_department d : s) {
+                        sessionInfo.setDepid(String.valueOf(d.getId()));
+                        sessionInfo.setDepName(d.getName());
+                        sessionInfo.setDepartment_id(String.valueOf(d.getId()));
+                        sessionInfo.setDepartment_name(d.getName());
+                    }
+                } else {
+                    sessionInfo.setDepid(null);
+                    sessionInfo.setDepName(null);
+                    sessionInfo.setDepartment_id(null);
+                    sessionInfo.setDepartment_name(null);
+                }
 				j.setObj(sessionInfo);
 			} else if (u == null) {
 				j.setMsg("用户名或密码错误！");
