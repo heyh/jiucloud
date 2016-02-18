@@ -11,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,7 +41,9 @@ import sy.service.GCPoServiceI;
 import sy.service.ProjectServiceI;
 import sy.service.UserServiceI;
 import sy.util.Constant;
+import sy.util.DateKit;
 import sy.util.GetRealPath;
+import sy.util.PropertyUtil;
 
 @Controller
 @RequestMapping("/webApp")
@@ -506,10 +509,10 @@ public class WebApp extends BaseController {
 			TFieldData tem = fieldDataServiceI.detail(mid);
 			String userPath = tem.getUid() + "/";
 
-			GetRealPath grp = new GetRealPath(req.getSession()
-					.getServletContext());
-			String file_path = grp.getRealPath() + "upload/" + Constant.SOURCE
-					+ userPath;
+//			GetRealPath grp = new GetRealPath(req.getSession().getServletContext());
+//			String file_path = grp.getRealPath() + "upload/" + Constant.SOURCE + userPath;
+            String file_path = PropertyUtil.getFileRealPath() + "/upload/" + Constant.SOURCE + userPath;
+
 			MultipartFile patch = rt.getFile("file");// 获取文件
 
 			String fileName = patch.getOriginalFilename();// 得到文件名
@@ -526,8 +529,10 @@ public class WebApp extends BaseController {
 					j.setMsg("上传的文件格式不支持");
 					return j;
 				}
-				String finalname = UUID.randomUUID().toString();
-				// boolean regxFlg = Constant.regex_ext(reg);
+//				String finalname = UUID.randomUUID().toString();
+                String finalname = fileName.substring(0, patch.getOriginalFilename().lastIndexOf(".")) + "-" + DateKit.getCurrentDate("yyyyMMddHHmmssSSS");
+
+                // boolean regxFlg = Constant.regex_ext(reg);
 				File f = new File(file_path + finalname + "." + reg);
 				patch.transferTo(f);
 				GCPo gcpo = new GCPo();
@@ -541,10 +546,14 @@ public class WebApp extends BaseController {
 
 				// 如果已经是pdf直接设置从pdf > swf状态开始
 				if (reg.equals("pdf")) {
-					Constant.copyFile(f, new File(file_path
-							+ Constant.PDFSOURCE + finalname + "." + reg));
-					gcpo.setStatus(Constant.PDF2SWF_STATUS);
-					gcpo.setPdfFilePath(finalname + "." + reg);
+                    String pdfFilePath = PropertyUtil.getFileRealPath() + "/upload/" + Constant.PDFSOURCE + userPath;
+                    FileUtils.copyFileToDirectory(f, new File(pdfFilePath));
+                    gcpo.setStatus(Constant.PDF2SWF_STATUS);
+                    gcpo.setPdfFilePath(userPath + finalname + "." + reg);
+
+//					Constant.copyFile(f, new File(file_path + Constant.PDFSOURCE + finalname + "." + reg));
+//					gcpo.setStatus(Constant.PDF2SWF_STATUS);
+//					gcpo.setPdfFilePath(finalname + "." + reg);
 				}
 				gcpoServiceI.add(gcpo);
 				j.setMsg("上传成功");
