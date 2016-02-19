@@ -297,18 +297,31 @@ public class WebApp extends BaseController {
 		}
 
 		String costName = costService.findById(costType).getCostType();
-		if (!"纯附件".equals(costName)) {
-			count = request.getParameter("count");
-			if (count == null || "".equals(count)) {
-				j.setMsg("请输入数量!!");
-				return j;
-			}
-			price = request.getParameter("price");
-			if (price == null || "".equals(price)) {
-				j.setMsg("请输入单价!!");
-				return j;
-			}
-		}
+        String itemCode = costService.findById(costType).getItemCode();
+        if (!itemCode.substring(0, 3).equals("000") && Integer.parseInt(itemCode.substring(0,3)) <= 900) {
+            count = request.getParameter("count");
+            if (count == null || "".equals(count)) {
+                j.setMsg("请输入数量!!");
+                return j;
+            }
+            price = request.getParameter("price");
+            if (price == null || "".equals(price)) {
+                j.setMsg("请输入单价!!");
+                return j;
+            }
+        }
+//		if (!"纯附件".equals(costName)) {
+//			count = request.getParameter("count");
+//			if (count == null || "".equals(count)) {
+//				j.setMsg("请输入数量!!");
+//				return j;
+//			}
+//			price = request.getParameter("price");
+//			if (price == null || "".equals(price)) {
+//				j.setMsg("请输入单价!!");
+//				return j;
+//			}
+//		}
 
 		String dataName = request.getParameter("dataName");
 		if (dataName == null || "".equals(dataName)) {
@@ -385,12 +398,22 @@ public class WebApp extends BaseController {
 		}
 		fieldData.setCostType(costType);
 
-		String count = request.getParameter("count");
-		if (count == null || "".equals(count)) {
-			j.setMsg("请输入数量!!");
-			return j;
-		}
-		fieldData.setCount(count);
+        String itemCode = costService.findById(costType).getItemCode();
+        if (!itemCode.substring(0, 3).equals("000") && Integer.parseInt(itemCode.substring(0,3)) <= 900) {
+            String count = request.getParameter("count");
+            if (count == null || "".equals(count)) {
+                j.setMsg("请输入数量!!");
+                return j;
+            }
+            fieldData.setCount(count);
+
+            String price = request.getParameter("price");
+            if (price == null || "".equals(price)) {
+                j.setMsg("请输入单价!!");
+                return j;
+            }
+            fieldData.setPrice(price);
+        }
 
 		String dataName = request.getParameter("dataName");
 		if (dataName == null || "".equals(dataName)) {
@@ -398,13 +421,6 @@ public class WebApp extends BaseController {
 			return j;
 		}
 		fieldData.setDataName(dataName);
-
-		String price = request.getParameter("price");
-		if (price == null || "".equals(price)) {
-			j.setMsg("请输入单价!!");
-			return j;
-		}
-		fieldData.setPrice(price);
 
 		String projectName = request.getParameter("projectName");
 		if (projectName == null || "".equals(projectName)) {
