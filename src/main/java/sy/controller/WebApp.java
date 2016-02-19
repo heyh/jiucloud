@@ -40,10 +40,7 @@ import sy.service.FieldDataServiceI;
 import sy.service.GCPoServiceI;
 import sy.service.ProjectServiceI;
 import sy.service.UserServiceI;
-import sy.util.Constant;
-import sy.util.DateKit;
-import sy.util.GetRealPath;
-import sy.util.PropertyUtil;
+import sy.util.*;
 
 @Controller
 @RequestMapping("/webApp")
@@ -158,8 +155,9 @@ public class WebApp extends BaseController {
 //			Department d = departmentService.findOneView(uid,cid);
 //			List<Integer> ugroup = departmentService.getUserGroup(d, uid,cid);
             Company c = companyService.findOneView(u.getId(),cid);
-            List<Integer> ugroup = departmentService.getUsers(String.valueOf(c.getId()), Integer.parseInt(u.getId()));
-			dataGrid = projectService.dataGrid(app, ph, ugroup);
+//            List<Integer> ugroup = departmentService.getUsers(String.valueOf(c.getId()), Integer.parseInt(u.getId()));
+//			dataGrid = projectService.dataGrid(app, ph, ugroup);
+            dataGrid = projectService.dataGrid(app, ph, StringUtil.trimToEmpty(c.getId()), "field");
 			json.setObj(dataGrid.getRows());
 		} catch (Exception e) {
 			json.setMsg("服务器错误,请稍后再试");
