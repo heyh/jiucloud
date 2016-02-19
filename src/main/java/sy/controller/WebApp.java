@@ -297,30 +297,30 @@ public class WebApp extends BaseController {
 		}
 
 		String costName = costService.findById(costType).getCostType();
-//		if (!"纯附件".equals(costName)) {
+		if (!"纯附件".equals(costName)) {
 			count = request.getParameter("count");
-//			if (count == null || "".equals(count)) {
-//				j.setMsg("请输入数量!!");
-//				return j;
-//			}
+			if (count == null || "".equals(count)) {
+				j.setMsg("请输入数量!!");
+				return j;
+			}
 			price = request.getParameter("price");
-//			if (price == null || "".equals(price)) {
-//				j.setMsg("请输入单价!!");
-//				return j;
-//			}
-//		}
+			if (price == null || "".equals(price)) {
+				j.setMsg("请输入单价!!");
+				return j;
+			}
+		}
 
 		String dataName = request.getParameter("dataName");
-//		if (dataName == null || "".equals(dataName)) {
-//			j.setMsg("请输入现场数据名称!!");
-//			return j;
-//		}
+		if (dataName == null || "".equals(dataName)) {
+			j.setMsg("请输入现场数据名称!!");
+			return j;
+		}
 
 		String projectName = request.getParameter("projectName");
-//		if (projectName == null || "".equals(projectName)) {
-//			j.setMsg("请选择工程!!");
-//			return j;
-//		}
+		if (projectName == null || "".equals(projectName)) {
+			j.setMsg("请选择工程!!");
+			return j;
+		}
 		String uid = request.getParameter("uid");
 		if (uid == null || "".equals(uid)) {
 			j.setMsg("请登录后再试!!");
@@ -379,38 +379,38 @@ public class WebApp extends BaseController {
 		}
 
 		String costType = request.getParameter("costType");
-//		if (costType == null || "".equals(costType)) {
-//			j.setMsg("请选择费用类型!!");
-//			return j;
-//		}
+		if (costType == null || "".equals(costType)) {
+			j.setMsg("请选择费用类型!!");
+			return j;
+		}
 		fieldData.setCostType(costType);
 
 		String count = request.getParameter("count");
-//		if (count == null || "".equals(count)) {
-//			j.setMsg("请输入数量!!");
-//			return j;
-//		}
+		if (count == null || "".equals(count)) {
+			j.setMsg("请输入数量!!");
+			return j;
+		}
 		fieldData.setCount(count);
 
 		String dataName = request.getParameter("dataName");
-//		if (dataName == null || "".equals(dataName)) {
-//			j.setMsg("请输入现场数据名称!!");
-//			return j;
-//		}
+		if (dataName == null || "".equals(dataName)) {
+			j.setMsg("请输入现场数据名称!!");
+			return j;
+		}
 		fieldData.setDataName(dataName);
 
 		String price = request.getParameter("price");
-//		if (price == null || "".equals(price)) {
-//			j.setMsg("请输入单价!!");
-//			return j;
-//		}
+		if (price == null || "".equals(price)) {
+			j.setMsg("请输入单价!!");
+			return j;
+		}
 		fieldData.setPrice(price);
 
 		String projectName = request.getParameter("projectName");
-//		if (projectName == null || "".equals(projectName)) {
-//			j.setMsg("请选择工程!!");
-//			return j;
-//		}
+		if (projectName == null || "".equals(projectName)) {
+			j.setMsg("请选择工程!!");
+			return j;
+		}
 		fieldData.setProjectName(projectName);
 		fieldData.setUnit(request.getParameter("unit"));
 		fieldData.setSpecifications(request.getParameter("specifications"));
