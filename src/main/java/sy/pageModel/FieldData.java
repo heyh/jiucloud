@@ -46,6 +46,16 @@ public class FieldData {
 
     private String needApproved;
 
+    private String itemCode;
+
+    public String getItemCode() {
+        return itemCode;
+    }
+
+    public void setItemCode(String itemCode) {
+        this.itemCode = itemCode;
+    }
+
     public String getNeedApproved() {
         return needApproved;
     }
