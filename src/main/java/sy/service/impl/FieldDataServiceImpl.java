@@ -87,11 +87,10 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
                 f.setCostType(cost.getCostType());
             }
             f.setProject_id(Integer.parseInt(tem.getProjectName()));
-            Project project = projectDao
-                    .get("from Project where isdel=0 and id='"
-                            + tem.getProjectName() + "'");
+            Project project = projectDao.get("from Project where isdel=0 and id='" + tem.getProjectName() + "'");
             if (project == null) {
                 f.setProjectName("该工程可能已经被删除");
+                continue; // 工程删除，记录不显示
             } else {
                 f.setProjectName(project.getProName());
                 f.setIsLock(project.getIsLock());
