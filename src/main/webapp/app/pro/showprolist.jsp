@@ -237,7 +237,6 @@
 					for (var i = 0; i < rows.length; i++) {
 						ids.push(rows[i].id);
 					}
-					alert(rows.length);
 					var getTimestamp = new Date().getTime();
 					$.getJSON(
 							'${pageContext.request.contextPath}/projectController/batchDeleteProject?t='
