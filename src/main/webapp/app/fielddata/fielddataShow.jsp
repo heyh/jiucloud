@@ -421,8 +421,11 @@
                             <select style="width: 136px" name="costType" id="costType">
                                 <option></option>
                                 <c:forEach var="costTypeInfo" items="<%= dataCostInfos %>" varStatus="index">
+                                    <%--<c:if test="${costTypeInfo.isSend == '0'}">--%>
+                                        <%--<optgroup label="${costTypeInfo.costType}"> " " </optgroup>--%>
+                                    <%--</c:if>--%>
                                     <c:if test="${costTypeInfo.isSend == '0'}">
-                                        <optgroup label="${costTypeInfo.costType}"> " " </optgroup>
+                                        <option value="${costTypeInfo.costType}">${costTypeInfo.costType}</option>
                                     </c:if>
                                     <c:if test="${costTypeInfo.isSend == '1'}">
                                         <option value="${costTypeInfo.costType}">&nbsp;&nbsp;&nbsp;&nbsp;${costTypeInfo.costType}</option>

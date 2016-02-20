@@ -353,8 +353,11 @@
             <select style="width: 150px" name="dataCostType" id="dataCostType" >
                 <option></option>
                 <c:forEach var="costTypeInfo" items="<%= dataCostInfos %>" varStatus="index">
+                    <%--<c:if test="${costTypeInfo.isSend == '0'}">--%>
+                        <%--<optgroup label="${costTypeInfo.costType}"> " " </optgroup>--%>
+                    <%--</c:if>--%>
                     <c:if test="${costTypeInfo.isSend == '0'}">
-                        <optgroup label="${costTypeInfo.costType}"> " " </optgroup>
+                        <option value="${costTypeInfo.costType}">${costTypeInfo.costType}</option>
                     </c:if>
                     <c:if test="${costTypeInfo.isSend == '1'}">
                         <option value="${costTypeInfo.costType}">&nbsp;&nbsp;&nbsp;&nbsp;${costTypeInfo.costType}</option>
@@ -394,8 +397,11 @@
             <select style="width: 150px"  name="docCostType" id="docCostType">
                 <option></option>
                 <c:forEach var="costTypeInfo" items="<%= docCostInfos %>" varStatus="index">
+                    <%--<c:if test="${costTypeInfo.isSend == '0'}">--%>
+                        <%--<optgroup label="${costTypeInfo.costType}"> " " </optgroup>--%>
+                    <%--</c:if>--%>
                     <c:if test="${costTypeInfo.isSend == '0'}">
-                        <optgroup label="${costTypeInfo.costType}"> " " </optgroup>
+                        <option value="${costTypeInfo.costType}">${costTypeInfo.costType}</option>
                     </c:if>
                     <c:if test="${costTypeInfo.isSend == '1'}">
                         <option value="${costTypeInfo.costType}">&nbsp;&nbsp;&nbsp;&nbsp;${costTypeInfo.costType}</option>
