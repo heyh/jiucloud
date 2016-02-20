@@ -79,6 +79,7 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
             f.setUname(tem.getUname());
             f.setCost_id(Integer.parseInt(tem.getCostType()));
             f.setNeedApproved(tem.getNeedApproved());
+            f.setItemCode(tem.getItemCode());
             Cost cost = costDao.get("from Cost where isDelete=0 and id='" + tem.getCostType() + "'");
             if (cost == null) {
                 f.setCostType("该费用类型可能已经被删除");
