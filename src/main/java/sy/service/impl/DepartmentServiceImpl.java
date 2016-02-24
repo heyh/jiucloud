@@ -239,6 +239,9 @@ public class DepartmentServiceImpl implements DepartmentServiceI {
                 Node department = new Node();
                 department.setId(Integer.parseInt(String.valueOf(object[0])));
                 department.setParentId(Integer.parseInt(String.valueOf(object[1])));
+                if (tmp.equals("")) {
+                    continue;
+                }
                 department.setUserId(Integer.parseInt(tmp));
                 departments.add(department);
                 if (uid == Integer.parseInt(tmp)) {
