@@ -229,7 +229,7 @@ public class DepartmentServiceImpl implements DepartmentServiceI {
 //    }
     public List<Integer> getUsers(String cid, int uid) {
         List<Integer> uids = new ArrayList<Integer>();
-        List<Object[]> objects = null;
+        List<Object[]> objects = new ArrayList<Object[]>();
         List<Integer> ids = new ArrayList<Integer>();
         objects = departmentDaoI.findBySql("select id, parent_id, user_id, company_id from jsw_corporation_department where company_id= " +cid);
         List<Node> departments = new ArrayList<Node>();
