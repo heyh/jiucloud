@@ -51,18 +51,12 @@ public class ProjectStatController {
 
     @RequestMapping("/docApprove")
     public String docApprove(HttpServletRequest request) {
-        SessionInfo sessionInfo = (SessionInfo) request.getSession().getAttribute(sy.util.ConfigUtil.getSessionInfoName());
-//        String id = request.getParameter("id");
-//        System.out.println(id);
-//        Project pro = projectService.findOneView(Integer.parseInt(id));
-//        pro.setCompId(sessionInfo.getCompName());
-//        request.setAttribute("pro", pro);
-//
-//        List<Integer> ugroup = sessionInfo.getUgroup();
-//        String cid = sessionInfo.getCompid();
-//        String project_id = id; // 项目名称
-
         return "/app/pro/docApprove";
+    }
+
+    @RequestMapping("/dataApprove")
+    public String dataApprove(HttpServletRequest request) {
+        return "/app/pro/dataApprove";
     }
 
     /**
