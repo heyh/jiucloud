@@ -252,10 +252,10 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
      * @param id
      */
     @Override
-    public void approvedField(Integer id) {
+    public void approvedField(Integer id, String approvedState) {
         try {
             TFieldData t = fieldDataDaoI.get("from TFieldData t where t.id = " + id);
-            t.setNeedApproved("2");
+            t.setNeedApproved(approvedState);
             this.fieldDataDaoI.update(t);
         } catch (Exception e) {
             e.printStackTrace();
