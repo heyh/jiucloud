@@ -126,7 +126,7 @@
                                     str += '&nbsp;';
                                     str += $
                                             .formatString(
-                                            '<img style="cursor:pointer" onclick="approvedFun(\'{0}\');" src="{1}" title="审批"/>',
+                                            '<img style="cursor:pointer" onclick="approvedFun(\'{0}\', 2);" src="{1}" title="审批"/>',
                                             row.id,
                                             '${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/approve-blue.png');
                                 }
