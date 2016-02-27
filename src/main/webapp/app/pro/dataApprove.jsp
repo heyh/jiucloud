@@ -10,20 +10,20 @@
 
 <%
     String underlingUsers = null;
-    List<Map<String, Object>> docCostInfos = new ArrayList<Map<String, Object>>();
+    List<Map<String, Object>> dataCostInfos = new ArrayList<Map<String, Object>>();
     SessionInfo sessionInfo = (SessionInfo) session.getAttribute(ConfigUtil.getSessionInfoName());
     if (sessionInfo == null) {
         response.sendRedirect(request.getContextPath());
     } else {
         underlingUsers = sessionInfo.getUnderlingUsers();
-        docCostInfos = sessionInfo.getCostTypeInfos().get("docCostInfos");
+        dataCostInfos = sessionInfo.getCostTypeInfos().get("dataCostInfos");
     }
 %>
 
 <!DOCTYPE html>
 <html>
 <head>
-<title>资料审批</title>
+<title>费用审批</title>
 <jsp:include page="../../inc.jsp"></jsp:include>
     <link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1-rc.1/css/select2.min.css" rel="stylesheet" />
     <script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1-rc.1/js/select2.min.js"></script>
@@ -43,16 +43,16 @@
     };
 
     window.onload = function () {
-        $('#startTimeDoc').datebox('setValue', formatterFirstDate(new Date()));
-        $('#endTimeDoc').datebox('setValue', formatterCurrentDate(new Date()));
+        $('#startTimeData').datebox('setValue', formatterFirstDate(new Date()));
+        $('#endTimeData').datebox('setValue', formatterCurrentDate(new Date()));
     }
 
 	var dataGrid;
     $(function() {
-        dataGrid = $('#dataGridDoc')
+        dataGrid = $('#dataGridData')
                 .datagrid(
                 {
-                    url : '${pageContext.request.contextPath}/fieldDataController/dataGrid?source=doc&needApproved=1',
+                    url : '${pageContext.request.contextPath}/fieldDataController/dataGrid?source=data&needApproved=1',
                     fit : true,
                     fitColumns : true,
                     border : true,
@@ -70,8 +70,13 @@
                         {
                             field : 'projectName',
                             title : '工程名称',
-                            width : 250
+                            width : 200
 
+                        },
+                        {
+                            field : 'dataName',
+                            title : '名称',
+                            width : 150
                         },
                         {
                             field : 'costType',
@@ -79,9 +84,29 @@
                             width : 100
                         },
                         {
-                            field : 'dataName',
-                            title : '名称',
+                            field : 'unit',
+                            title : '单位',
                             width : 100
+                        },
+                        {
+                            field : 'price',
+                            title : '单价',
+                            width : 100
+                        },
+                        {
+                            field : 'count',
+                            title : '数量',
+                            width : 100
+                        },
+                        {
+                            field : 'moeny',
+                            title : '金额',
+                            width : 100,
+                            formatter : function(value, row, index) {
+                                return (row.count * row.price)
+                                        .toFixed(2);
+                            }
+
                         },
                         {
                             field : 'uname',
@@ -128,7 +153,13 @@
                                     str += '&nbsp;';
                                     str += $
                                             .formatString(
-                                            '<img style="cursor:pointer" onclick="approvedFun(\'{0}\', 2);" src="{1}" title="审批"/>',
+                                            '<img style="cursor:pointer" onclick="approvedFun(\'{0}\', 2);" src="{1}" title="审批通过"/>',
+                                            row.id,
+                                            '${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/approve-blue.png');
+                                    str += '&nbsp;';
+                                    str += $
+                                            .formatString(
+                                            '<img style="cursor:pointer" onclick="approvedFun(\'{0}\', 9);" src="{1}" title="打回"/>',
                                             row.id,
                                             '${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/approve-blue.png');
                                 }
@@ -136,7 +167,7 @@
                             }
                         }
                     ] ],
-                    toolbar : '#toolbarDoc',
+                    toolbar : '#toolbarData',
                     onLoadSuccess : function() {
                         parent.$.messager.progress('close');
                         $(this).datagrid('tooltip');
@@ -146,7 +177,6 @@
 
     // 审批资料
     function approvedFun(id, approvedState) {
-
         if (id == undefined) {//点击右键菜单才会触发这个
             var rows = dataGrid.datagrid('getSelections');
             id = rows[0].id;
@@ -172,7 +202,7 @@
                                     dataType : "json",
                                     success : function(data) {
                                         if (data.success == true) {
-                                            searchFunDoc();
+                                            searchFunData();
                                         }
                                     }
                                 });
@@ -182,12 +212,12 @@
 
     $(document).ready(function() {
 
-        $("#unameDoc").select2({
+        $("#unameData").select2({
             placeholder: "可以模糊查询",
             allowClear: true,
             data:<%=underlingUsers%>
         });
-        $("#docCostType").select2({
+        $("#dataCostType").select2({
             tags: "true",
             placeholder: "可以模糊查询",
             allowClear: true
@@ -196,16 +226,16 @@
     });
 
     //过滤条件查询
-    function searchFunDoc() {
-        var startTimeDoc = $('#startTimeDoc').datebox('getValue').substring(0, 10) + ' 00:00:00';
-        var endTimeDoc = $('#endTimeDoc').datebox('getValue').substring(0, 10) + ' 23:59:59';
-        $('#dataGridDoc').datagrid('reload',{uname:$('#unameDoc').val(),costType:$('#docCostType').val(),
-            startTime: startTimeDoc, endTime:endTimeDoc});
+    function searchFunData() {
+        var startTimeData = $('#startTimeData').datebox('getValue').substring(0, 10) + ' 00:00:00';
+        var endTimeData = $('#endTimeData').datebox('getValue').substring(0, 10) + ' 23:59:59';
+        $('#dataGridData').datagrid('reload',{uname:$('#unameData').val(),costType:$('#dataCostType').val(),
+            startTime: startTimeData, endTime:endTimeData});
     }
     //清除条件
-    function cleanFunDoc() {
-        $('#toolbarDoc input').val('');
-        $('#dataGridDoc').datagrid('reload', {});
+    function cleanFunData() {
+        $('#toolbarData input').val('');
+        $('#dataGridData').datagrid('reload', {});
     }
 
     //附件管理
@@ -230,17 +260,17 @@
 </head>
 <body>
 	<div class="easyui-layout" data-options="fit : true,border : false">
-        <div id="toolbarDoc" class="fee_detail" style="display: none; height: 40px">
+        <div id="toolbarData" class="fee_detail" style="display: none; height: 40px">
             <div style="margin-top: 6px">
                 <span>操作人:</span>
-                <select  style="width: 150px" name="unameDoc" id="unameDoc">
+                <select  style="width: 150px" name="unameData" id="unameData">
                     <option ></option>
                 </select>
                 &nbsp;&nbsp;&nbsp;&nbsp;
                 <span>资料类型:</span>
-                <select style="width: 150px"  name="docCostType" id="docCostType">
+                <select style="width: 150px"  name="dataCostType" id="dataCostType">
                     <option></option>
-                    <c:forEach var="costTypeInfo" items="<%= docCostInfos %>" varStatus="index">
+                    <c:forEach var="costTypeInfo" items="<%= dataCostInfos %>" varStatus="index">
                         <c:if test="${costTypeInfo.isSend == '0'}">
                             <optgroup label="${costTypeInfo.costType}"> " " </optgroup>
                         </c:if>
@@ -251,18 +281,18 @@
                 </select>
                 &nbsp;&nbsp;&nbsp;&nbsp;
                 <span>起止时间:</span>
-                <input style="width: 150px" class="easyui-datebox" name="startTimeDoc" id='startTimeDoc' editable="false" placeholder="点击选择时间"  value='${first }' />
+                <input style="width: 150px" class="easyui-datebox" name="startTimeData" id='startTimeData' editable="false" placeholder="点击选择时间"  value='${first }' />
                 -
-                <input style="width: 150px" class="easyui-datebox"  name="endTimeDoc" id='endTimeDoc' editable="false" placeholder="点击选择时间"  value='${last }' />
+                <input style="width: 150px" class="easyui-datebox"  name="endTimeData" id='endTimeData' editable="false" placeholder="点击选择时间"  value='${last }' />
                 &nbsp;&nbsp;&nbsp;&nbsp;
-                <a href="javascript:void(0);" class="easyui-button" data-options="plain:true" onclick="searchFunDoc();">过滤条件</a>
+                <a href="javascript:void(0);" class="easyui-button" data-options="plain:true" onclick="searchFunData();">过滤条件</a>
                 &nbsp;&nbsp;&nbsp;&nbsp;
-                <a href="javascript:void(0);" class="easyui-button" data-options="plain:true" onclick="cleanFunDoc();">清空条件</a>
+                <a href="javascript:void(0);" class="easyui-button" data-options="plain:true" onclick="cleanFunData();">清空条件</a>
             </div>
         </div>
 
         <div data-options="region:'center',border:false">
-            <table id="dataGridDoc" class="easyui-datagrid" />
+            <table id="dataGridData" class="easyui-datagrid" />
         </div>
     </div>
 
