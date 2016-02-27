@@ -369,4 +369,40 @@ public class DepartmentServiceImpl implements DepartmentServiceI {
         return parentId;
     }
 
+    @Override
+    public List<Integer> getAllParents(String cid, int uid) {
+        List<Integer> parentUsers = new ArrayList<Integer>();
+        List<Object[]> objects = new ArrayList<Object[]>();
+        List<Integer> ids = new ArrayList<Integer>();
+        objects = departmentDaoI.findBySql("select id, parent_id, user_id, company_id from jsw_corporation_department where company_id= " + cid);
+        List<Node> departments = new ArrayList<Node>();
+        for (Object[] object : objects) {
+
+            Node department = new Node();
+            department.setId(Integer.parseInt(String.valueOf(object[0])));
+            department.setParentId(Integer.parseInt(String.valueOf(object[1])));
+
+            List<String> tmpUid = Arrays.asList(String.valueOf(object[2]).split(","));
+            String tmp = "";
+            if (tmpUid != null && tmpUid.size()>0) {
+                tmp = tmpUid.get(0);
+            }
+            if (tmp.equals("")) {
+                continue;
+            }
+            department.setUserId(Integer.parseInt(tmp));
+            departments.add(department);
+            if (uid == Integer.parseInt(tmp)) {
+                ids.add(Integer.parseInt(String.valueOf(object[0])));
+            }
+        }
+        if (ids != null && ids.size() > 0) {
+            for (Integer id : ids) {
+                NodeUtil nodeUtil = new NodeUtil();
+                parentUsers = nodeUtil.getParentNodes(departments, id);
+            }
+        }
+
+        return parentUsers;
+    }
 }
