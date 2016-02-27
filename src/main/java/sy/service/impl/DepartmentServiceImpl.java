@@ -403,6 +403,14 @@ public class DepartmentServiceImpl implements DepartmentServiceI {
             }
         }
 
+        Iterator<Integer> it = parentUsers.iterator();
+        while (it.hasNext()) {
+            Integer tmpUserId = it.next();
+            if (tmpUserId == uid) {
+                it.remove();
+                break;
+            }
+        }
         return parentUsers;
     }
 }
