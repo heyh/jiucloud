@@ -57,5 +57,28 @@ public class NodeUtil {
         return getChildList(list, node).size() > 0 ? true : false;
     }
 
+
+    public List<Map<String, Node>> getAllParents(List<Node> nodes, int userId) {
+        List<Map<String, Node>> parentNodeList = new ArrayList<Map<String, Node>>();
+        Iterator<Node> it = nodes.iterator();
+        Node currentNode = new Node();
+        while (it.hasNext()) {
+            Node node = it.next();
+            if (node.getUserId() == userId) {
+                currentNode = node;
+                break;
+            }
+        }
+
+        if (currentNode.getParentId() == 0) {
+            Map<String, Node> nodeMap = new HashMap<String, Node>();
+            nodeMap.put(String.valueOf(userId), currentNode);
+            parentNodeList.add(nodeMap);
+            return parentNodeList;
+        } else {
+            parentNodeList.addAll(getAllParents(nodes, currentNode.getParentId()));
+        }
+        return parentNodeList;
+    }
 }
 
