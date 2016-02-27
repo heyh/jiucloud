@@ -193,6 +193,7 @@
 		var remark = document.getElementById("remark").value;
 		var unit = document.getElementById("unit").value;
 		var itemCode = document.getElementById("itemCode").value;
+        var needApproved = document.getElementById("needApproved").value;
 
 		if (projectName == '') {
 			alert("项目名称不能为空");
@@ -226,7 +227,8 @@
 			'specifications' : specifications,
 			'remark' : remark,
 			'unit' : unit,
-			'itemCode' : itemCode
+			'itemCode' : itemCode,
+            'needApproved' : needApproved
 		}
 
 		$.ajax(cfg);
@@ -254,6 +256,11 @@
     $(document).ready(function() {
         $("#unit").select2({
             tags: "true",
+            placeholder: "可以模糊查询",
+            allowClear: true
+        });
+
+        $("#needApproved").select2({
             placeholder: "可以模糊查询",
             allowClear: true
         });
@@ -409,6 +416,11 @@
 	height: 80px;
 }
 
+.special{
+    float: left;
+    display: block;
+    width: 50%;
+}
 </style>
 
 <div class="easyui-layout" data-options="fit:true,border:false">
@@ -475,7 +487,18 @@
 				class="easyui-validatebox span2"
                 <%--data-options="required:true"--%>
 				value="">
-			</label> <label class="ty-summary"> <span>备注说明 :</span> <textarea
+			</label>
+
+            <div class="special" style="height: 48px;">
+                <%--<span>需要审批:</span>--%>
+                <span style="float: left; width: 20%; text-align: right; padding-right: 10px; margin-top: 10px; color: #888;">需要审批:</span>
+                <select style="width:250px;margin-bottom: 20px" id="needApproved" name="needApproved" style="width:250px;">
+                    <option value="0" selected = "selected">不需要</option>
+                    <option value="1">需要</option>
+                </select>
+            </div>
+
+            <label class="ty-summary"> <span>备注说明 :</span> <textarea
 					id="remark" name="remark" placeholder="请在这里填写备注信息"></textarea>
 			</label>
             <div class="ty-summary clearfix">
