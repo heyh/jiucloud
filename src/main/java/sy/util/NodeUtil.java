@@ -58,27 +58,95 @@ public class NodeUtil {
     }
 
 
-    public List<Map<String, Node>> getAllParents(List<Node> nodes, int userId) {
-        List<Map<String, Node>> parentNodeList = new ArrayList<Map<String, Node>>();
-        Iterator<Node> it = nodes.iterator();
-        Node currentNode = new Node();
-        while (it.hasNext()) {
-            Node node = it.next();
-            if (node.getUserId() == userId) {
-                currentNode = node;
-                break;
+
+
+    /////////////////////////////////////////////////////////////////////
+
+    public List<Integer> getParentNodes(List<Node> list, int id) {
+        if(list == null) return null;
+        for (Iterator<Node> iterator = list.iterator(); iterator.hasNext();) {
+            Node node = iterator.next();
+            if (id==node.getId()) {
+                recursionParentFn(list, node);
             }
         }
-
-        if (currentNode.getParentId() == 0) {
-            Map<String, Node> nodeMap = new HashMap<String, Node>();
-            nodeMap.put(String.valueOf(userId), currentNode);
-            parentNodeList.add(nodeMap);
-            return parentNodeList;
-        } else {
-            parentNodeList.addAll(getAllParents(nodes, currentNode.getParentId()));
-        }
-        return parentNodeList;
+        return returnList;
     }
+
+    private void recursionParentFn(List<Node> list, Node node) {
+        List<Node> parentList = getParentList(list, node);// 得到子节点列表
+        if (!returnList.contains(node.getUserId())) {
+            returnList.add(node.getUserId());
+        }
+        if (hasParent(list, node)) {// 判断是否有子节点
+            Iterator<Node> it = parentList.iterator();
+            while (it.hasNext()) {
+                Node n = (Node) it.next();
+                recursionParentFn(list, n);
+            }
+        }
+    }
+
+    // 得到子节点列表
+    private static List<Node> getParentList(List<Node> list, Node node) {
+        List<Node> nodeList = new ArrayList<Node>();
+        Iterator<Node> it = list.iterator();
+        while (it.hasNext()) {
+            Node n = (Node) it.next();
+            if (n.getId() == node.getParentId()) {
+                nodeList.add(n);
+            }
+        }
+        return nodeList;
+    }
+
+    // 判断是否有子节点
+    private static boolean hasParent(List<Node> list, Node node) {
+        return getParentList(list, node).size() > 0 ? true : false;
+    }
+
+
+
+    public static void main(String[] args) {
+
+
+        Node node2 = new Node();
+        node2.setId(100);
+        node2.setUserId(100);
+        node2.setParentId(10);
+
+        Node node4 = new Node();
+        node4.setId(10000);
+        node4.setUserId(10000);
+        node4.setParentId(1000);
+
+        Node node3 = new Node();
+        node3.setId(1000);
+        node3.setUserId(1000);
+        node3.setParentId(100);
+
+        Node node1 = new Node();
+        node1.setId(10);
+        node1.setUserId(10);
+        node1.setParentId(0);
+
+        Node node5 = new Node();
+        node5.setId(100000);
+        node5.setUserId(100000);
+        node5.setParentId(10000);
+
+
+
+        List<Node> list = new ArrayList<Node>();
+        list.add(node1);
+        list.add(node2);
+        list.add(node3);
+        list.add(node4);
+        list.add(node5);
+        NodeUtil nodeUtil = new NodeUtil();
+        System.out.print(nodeUtil.getParentNodes(list, 10000));
+
+    }
+
 }
 
