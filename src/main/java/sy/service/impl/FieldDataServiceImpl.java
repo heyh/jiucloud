@@ -80,6 +80,8 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
             f.setCost_id(Integer.parseInt(tem.getCostType()));
             f.setNeedApproved(tem.getNeedApproved());
             f.setItemCode(tem.getItemCode());
+            f.setApprovedUser(tem.getApprovedUser());
+            f.setCurrentApprovedUser(tem.getCurrentApprovedUser());
             Cost cost = costDao.get("from Cost where isDelete=0 and id='" + tem.getCostType() + "'");
             if (cost == null) {
                 f.setCostType("该费用类型可能已经被删除");
@@ -186,8 +188,8 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
             params.put("id", String.valueOf(cmodel.getId()));
         }
         if (null != cmodel.getNeedApproved() ) {
-            hql += " and needApproved = :needApproved";
-            params.put("needApproved", cmodel.getNeedApproved());
+            hql += " and needApproved in ('1', '8')"; // 未审批、审批中
+//            params.put("needApproved", cmodel.getNeedApproved());
         }
         hql += " order by t.id desc";
         return hql;
@@ -255,6 +257,24 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
     public void approvedField(Integer id, String approvedState) {
         try {
             TFieldData t = fieldDataDaoI.get("from TFieldData t where t.id = " + id);
+            if (!t.getApprovedUser().equals("")) {
+                String[] approvedUser = t.getApprovedUser().split(",");
+                if (approvedState.equals("2")) { // 需要查看是不是最终审批人，不是改为审批中
+                    String currentApprovedUser = t.getCurrentApprovedUser();
+                    if (!approvedUser[approvedUser.length-1].equals(currentApprovedUser)) { // 不是最终审批人
+                        approvedState = "8";
+                        for (int i=0; i<approvedUser.length; i++) {
+                            if (approvedUser[i].equals(currentApprovedUser)) {
+                                t.setCurrentApprovedUser(approvedUser[i+1]);
+                            }
+                        }
+                    } else {
+                        t.setCurrentApprovedUser("-1");
+                    }
+                }
+            }
+
+
             t.setNeedApproved(approvedState);
             this.fieldDataDaoI.update(t);
         } catch (Exception e) {

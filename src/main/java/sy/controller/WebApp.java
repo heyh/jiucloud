@@ -3,6 +3,7 @@ package sy.controller;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
@@ -12,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -344,10 +346,23 @@ public class WebApp extends BaseController {
 		String cid = request.getParameter("cid");
 		String company = request.getParameter("company");
         String needApproved = request.getParameter("needApproved");
+        String approvedUser = "";
+        String currentApprovedUser = "";
+        // add by heyh begin
+        List<Integer> approvedUserList = new ArrayList<Integer>();
+        if (needApproved.equals("1")) {
+            approvedUserList = departmentService.getAllParents(cid, Integer.parseInt(uid));
+            if (approvedUserList == null) {
+                approvedUserList.add(Integer.parseInt(uid)); // 如果为空说明是超级管理员，自己审批
+            }
+            approvedUser = StringUtils.join(approvedUserList, ","); // 所有审批人
+            currentApprovedUser = String.valueOf(approvedUserList.get(0)); // 当前审批人
+        }
+        // add by heyh end
 
 		TFieldData fieldData = new TFieldData(projectName, uid, new Date(),
 				costType, dataName, price, company, count, specifications,
-				remark, cid, uname, unit, needApproved);
+				remark, cid, uname, unit, needApproved, approvedUser, currentApprovedUser);
 
 		Cost cost = costService.findById(costType);
 		fieldData.setItemCode(cost.getItemCode());

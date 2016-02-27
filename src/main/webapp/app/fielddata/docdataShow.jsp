@@ -138,6 +138,8 @@
                                                 str = '<span style="color: #ff0000">' + '未审批' + '</span>';
                                             } else if ('2' == value) {
                                                 str = '审批通过';
+                                            } else if ('8' == value) {
+                                                str = '<span style="color: #ff0000">' + '审批中' + '</span>';
                                             } else if ('9' == value) {
                                                 str = '审批未通过'
                                             }

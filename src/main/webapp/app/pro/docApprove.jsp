@@ -105,6 +105,8 @@
                                     str = '<span style="color: #ff0000">' + '未审批' + '</span>';
                                 } else if ('2' == value) {
                                     str = '审批通过';
+                                }  else if ('8' == value) {
+                                    str = '<span style="color: #ff0000">' + '审批中' + '</span>';
                                 } else if ('9' == value) {
                                     str = '审批未通过'
                                 }
@@ -122,7 +124,7 @@
                                         ' <img style="cursor:pointer" onclick="FileFun(\'{0}\');" src="{1}" title="附件管理"/>',
                                         row.id,
                                         '${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/fujianguanli-blue.png');
-                                if ('1' == row.needApproved) {
+                                if ('1' == row.needApproved || '8' == row.needApproved) {
                                     str += '&nbsp;';
                                     str += $
                                             .formatString(

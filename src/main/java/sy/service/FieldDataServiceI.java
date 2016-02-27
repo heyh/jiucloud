@@ -55,5 +55,5 @@ public interface FieldDataServiceI {
 
 	public Object getId(TFieldData fieldData);
 
-    public void approvedField(Integer id);
+    public void approvedField(Integer id, String approvedState);
 }

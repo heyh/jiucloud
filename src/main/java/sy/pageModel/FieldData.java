@@ -47,6 +47,24 @@ public class FieldData {
     private String needApproved;
 
     private String itemCode;
+    private String approvedUser;
+    private String currentApprovedUser;
+
+    public String getApprovedUser() {
+        return approvedUser;
+    }
+
+    public void setApprovedUser(String approvedUser) {
+        this.approvedUser = approvedUser;
+    }
+
+    public String getCurrentApprovedUser() {
+        return currentApprovedUser;
+    }
+
+    public void setCurrentApprovedUser(String currentApprovedUser) {
+        this.currentApprovedUser = currentApprovedUser;
+    }
 
     public String getItemCode() {
         return itemCode;

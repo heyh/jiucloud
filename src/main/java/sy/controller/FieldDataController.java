@@ -1,6 +1,7 @@
 package sy.controller;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,10 +13,7 @@ import sy.model.po.GCPo;
 import sy.model.po.Project;
 import sy.model.po.TFieldData;
 import sy.pageModel.*;
-import sy.service.CostServiceI;
-import sy.service.FieldDataServiceI;
-import sy.service.GCPoServiceI;
-import sy.service.ProjectServiceI;
+import sy.service.*;
 import sy.util.*;
 
 import javax.servlet.ServletOutputStream;
@@ -40,6 +38,9 @@ public class FieldDataController extends BaseController {
 
 	@Autowired
 	private CostServiceI costServiceI;
+
+    @Autowired
+    private DepartmentServiceI departmentService;
 
 	/**
 	 * 跳转管理页面
@@ -88,6 +89,20 @@ public class FieldDataController extends BaseController {
         }
 
 		DataGrid dataGrid = fieldDataServiceI.dataGrid(fieldData, ph, ugroup,source);
+
+        // add by heyh begin 审批数据
+        if (null != request.getParameter("needApproved")) {
+            List<FieldData> fieldDatas = dataGrid.getRows();
+            for (int i = fieldDatas.size()-1; i >= 0; i--) {
+                String currentApprovedUser = fieldDatas.get(i).getCurrentApprovedUser() == null ? "" : fieldDatas.get(i).getCurrentApprovedUser();
+                if (!currentApprovedUser.equals(sessionInfo.getId())) {
+                    fieldDatas.remove(i);
+                }
+            }
+            dataGrid.setTotal((long) fieldDatas.size());
+        }
+
+        // add by heyh end
 		session.setAttribute("analusisInfo", fieldData);
 		return dataGrid;
 	}
@@ -279,6 +294,20 @@ public class FieldDataController extends BaseController {
         // modify by heyh
 		fieldData.setUname((sessionInfo.getName() != null && !sessionInfo.getName().equals("")) ? sessionInfo.getName() : sessionInfo.getUsername());
 		fieldData.setCompany(sessionInfo.getCompName());
+
+        // add by heyh begin
+        List<Integer> approvedUserList = new ArrayList<Integer>();
+        if (fieldData.getNeedApproved().equals("1")) {
+            approvedUserList = departmentService.getAllParents(fieldData.getCid(), Integer.parseInt(fieldData.getUid()));
+            if (approvedUserList == null) {
+                approvedUserList.add(Integer.parseInt(fieldData.getUid())); // 如果为空说明是超级管理员，自己审批
+            }
+            fieldData.setApprovedUser(StringUtils.join(approvedUserList, ",")); // 所有审批人
+            fieldData.setCurrentApprovedUser(String.valueOf(approvedUserList.get(0))); // 当前审批人
+
+        }
+        // add by heyh end
+
 		try {
 			Cost tem = costServiceI.findById(fieldData.getCostType());
             String fj = tem.getItemCode().substring(0, 3);
@@ -623,10 +652,10 @@ public class FieldDataController extends BaseController {
 
     @RequestMapping("/securi_approvedField")
     @ResponseBody
-    public Json approvedField(Integer id) {
+    public Json approvedField(Integer id, String approvedState,HttpServletResponse response, HttpServletRequest request) {
         Json j = new Json();
         if (id != null) {
-            fieldDataServiceI.approvedField(id);
+            fieldDataServiceI.approvedField(id, approvedState);
         }
         j.setMsg("审批成功！");
         j.setSuccess(true);
