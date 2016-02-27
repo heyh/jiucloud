@@ -65,7 +65,10 @@ public class ResourceServiceImpl implements ResourceServiceI {
 				tree.setAttributes(attr);
 
                 boolean hasDecisionRight = sessionInfo.getRightList().contains("1") || 0 == sessionInfo.getParentId();
-                boolean isDecisionRes = tree.getId().equals("jiucloud_menu_decision") || tree.getId().equals("jiucloud_menu_decision_approve") || tree.getId().equals("jiucloud_menu_decision_gc");
+                boolean isDecisionRes = tree.getId().equals("jiucloud_menu_decision") ||
+                        tree.getId().equals("jiucloud_menu_decision_approve_doc") ||
+                        tree.getId().equals("jiucloud_menu_decision_approve_data") ||
+                        tree.getId().equals("jiucloud_menu_decision_gc");
                 if (isDecisionRes && !hasDecisionRight) {
                     continue;
                 }
