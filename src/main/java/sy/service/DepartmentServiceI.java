@@ -51,4 +51,6 @@ public interface DepartmentServiceI {
     public List<String> getAllRight(String cid, int uid);
 
     public int getParentId(String cid, int uid);
+
+    public List<Integer> getAllParents(String cid, int uid);
 }
