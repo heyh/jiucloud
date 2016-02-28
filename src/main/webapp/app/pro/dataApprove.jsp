@@ -155,13 +155,13 @@
                                             .formatString(
                                             '<img style="cursor:pointer" onclick="approvedFun(\'{0}\', 2);" src="{1}" title="审批通过"/>',
                                             row.id,
-                                            '${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/approve-blue.png');
+                                            '${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/approved-true.png');
                                     str += '&nbsp;';
                                     str += $
                                             .formatString(
-                                            '<img style="cursor:pointer" onclick="approvedFun(\'{0}\', 9);" src="{1}" title="打回"/>',
+                                            '<img style="cursor:pointer" onclick="approvedFun(\'{0}\', 9);" src="{1}" title="审批不通过"/>',
                                             row.id,
-                                            '${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/approve-blue.png');
+                                            '${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/approved-false.png');
                                 }
                                 return str;
                             }
@@ -184,7 +184,7 @@
         parent.$.messager
                 .confirm(
                 '询问',
-                '确认审批通过当前记录？',
+                approvedState == '2' ? '确认审批通过当前记录？' : '确认打回当前记录？',
                 function(b) {
                     if (b) {
                         parent.$.messager.progress({
