@@ -119,7 +119,6 @@
 						data-options="required:true" value="${tfielddata.remark}"></td>
 				</tr>
                 <input name="needApproved" value="${tfielddata.needApproved}" type="hidden"/>
-                <input name="approvedUser" value="${tfielddata.approvedUser}" type="hidden"/>
 			</table>
 		</form>
 	</div>
