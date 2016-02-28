@@ -118,6 +118,8 @@
 						placeholder="备注说明" class="easyui-validatebox span2"
 						data-options="required:true" value="${tfielddata.remark}"></td>
 				</tr>
+                <input name="needApproved" value="${tfielddata.needApproved}" type="hidden"/>
+                <input name="approvedUser" value="${tfielddata.approvedUser}" type="hidden"/>
 			</table>
 		</form>
 	</div>
