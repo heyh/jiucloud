@@ -357,6 +357,19 @@ public class FieldDataController extends BaseController {
 //				Double.parseDouble(fieldData.getPrice());
 //				Integer.parseInt(fieldData.getCount());
 //			}
+
+            // add by heyh begin 修改后重新设置审批状态和当前审批人
+            if (fieldData.getNeedApproved() != null && !fieldData.getNeedApproved().equals("0")) {
+                fieldData.setNeedApproved("1");
+                List<Integer> approvedUserList = departmentService.getAllParents(fieldData.getCid(), Integer.parseInt(fieldData.getUid()));
+                if (approvedUserList == null) {
+                    approvedUserList.add(Integer.parseInt(fieldData.getUid())); // 如果为空说明是超级管理员，自己审批
+                }
+                fieldData.setApprovedUser(StringUtils.join(approvedUserList, ",")); // 所有审批人
+                fieldData.setCurrentApprovedUser(String.valueOf(approvedUserList.get(0))); // 当前审批人
+            }
+            // add by heyh end
+
 			fieldDataServiceI.update(fieldData);
 			j.setSuccess(true);
 			j.setMsg("操作成功！");
