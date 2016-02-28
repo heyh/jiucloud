@@ -527,8 +527,27 @@
                             field : 'creatTime',
                             title : '入库时间',
                             width : 100
-                        }
-                        ,
+                        },
+                        {
+                            field : 'needApproved',
+                            title : '审批状态',
+                            width : 100,
+                            formatter : function(value, row, index) {
+                                var str = '';
+                                if ('0' == value) {
+                                    str = '不需审批'
+                                } else if ('1' == value) {
+                                    str = '<span style="color: #ff0000">' + '未审批' + '</span>';
+                                } else if ('2' == value) {
+                                    str = '审批通过';
+                                } else if ('8' == value) {
+                                    str = '<span style="color: #ff0000">' + '审批中' + '</span>';
+                                } else if ('9' == value) {
+                                    str = '<span style="color: #ff0000">' + '审批未通过' + '</span>';
+                                }
+                                return str;
+                            }
+                        },
                         {
                             field : 'action',
                             title : '操作',
@@ -613,8 +632,10 @@
                                     str = '<span style="color: #ff0000">' + '未审批' + '</span>';
                                 } else if ('2' == value) {
                                     str = '审批通过';
+                                } else if ('8' == value) {
+                                    str = '<span style="color: #ff0000">' + '审批中' + '</span>';
                                 } else if ('9' == value) {
-                                    str = '审批未通过'
+                                    str = '<span style="color: #ff0000">' + '审批未通过' + '</span>';
                                 }
                                 return str;
                             }
