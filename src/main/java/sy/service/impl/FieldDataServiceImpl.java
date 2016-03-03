@@ -272,17 +272,17 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
             TFieldData t = fieldDataDaoI.get("from TFieldData t where t.id = " + id);
             if (!t.getApprovedUser().equals("")) {
                 String[] approvedUser = t.getApprovedUser().split(",");
-                if (approvedState.equals("2")) { // 需要查看是不是最终审批人，不是改为审批中
+                if (approvedState.equals("8")) { // 需要查看是不是最终审批人，不是改为审批中
                     String currentApprovedUser = t.getCurrentApprovedUser();
                     if (!approvedUser[approvedUser.length-1].equals(currentApprovedUser)) { // 不是最终审批人
-                        approvedState = "8";
                         for (int i=0; i<approvedUser.length; i++) {
                             if (approvedUser[i].equals(currentApprovedUser)) {
                                 t.setCurrentApprovedUser(approvedUser[i+1]);
+                                break;
                             }
                         }
                     } else {
-                        t.setCurrentApprovedUser("-1");
+                        t.setNeedApproved("2");
                     }
                 }
             }

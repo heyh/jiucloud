@@ -378,23 +378,39 @@ public class DepartmentServiceImpl implements DepartmentServiceI {
         List<Node> departments = new ArrayList<Node>();
         for (Object[] object : objects) {
 
-            Node department = new Node();
-            department.setId(Integer.parseInt(String.valueOf(object[0])));
-            department.setParentId(Integer.parseInt(String.valueOf(object[1])));
+//            Node department = new Node();
+//            department.setId(Integer.parseInt(String.valueOf(object[0])));
+//            department.setParentId(Integer.parseInt(String.valueOf(object[1])));
+//
+//            List<String> tmpUid = Arrays.asList(String.valueOf(object[2]).split(","));
+//            String tmp = "";
+//            if (tmpUid != null && tmpUid.size()>0) {
+//                tmp = tmpUid.get(0);
+//            }
+//            if (tmp.equals("")) {
+//                continue;
+//            }
+//            department.setUserId(Integer.parseInt(tmp));
+//            departments.add(department);
+//            if (uid == Integer.parseInt(tmp)) {
+//                ids.add(Integer.parseInt(String.valueOf(object[0])));
+//            }
 
             List<String> tmpUid = Arrays.asList(String.valueOf(object[2]).split(","));
-            String tmp = "";
-            if (tmpUid != null && tmpUid.size()>0) {
-                tmp = tmpUid.get(0);
+            for (String tmp : tmpUid) {
+                Node department = new Node();
+                department.setId(Integer.parseInt(String.valueOf(object[0])));
+                department.setParentId(Integer.parseInt(String.valueOf(object[1])));
+                if (tmp.equals("")) {
+                    continue;
+                }
+                department.setUserId(Integer.parseInt(tmp));
+                departments.add(department);
+                if (uid == Integer.parseInt(tmp)) {
+                    ids.add(Integer.parseInt(String.valueOf(object[0])));
+                }
             }
-            if (tmp.equals("")) {
-                continue;
-            }
-            department.setUserId(Integer.parseInt(tmp));
-            departments.add(department);
-            if (uid == Integer.parseInt(tmp)) {
-                ids.add(Integer.parseInt(String.valueOf(object[0])));
-            }
+
         }
         if (ids != null && ids.size() > 0) {
             for (Integer id : ids) {
