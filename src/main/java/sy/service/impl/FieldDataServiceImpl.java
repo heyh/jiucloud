@@ -282,13 +282,12 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
                             }
                         }
                     } else {
-                        t.setNeedApproved("2");
+                        approvedState = "2";
                     }
                 }
-            } else {
-                t.setNeedApproved(approvedState);
             }
 
+            t.setNeedApproved(approvedState);
             this.fieldDataDaoI.update(t);
         } catch (Exception e) {
             e.printStackTrace();
