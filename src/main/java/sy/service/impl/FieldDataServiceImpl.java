@@ -285,10 +285,10 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
                         t.setNeedApproved("2");
                     }
                 }
+            } else {
+                t.setNeedApproved(approvedState);
             }
 
-
-            t.setNeedApproved(approvedState);
             this.fieldDataDaoI.update(t);
         } catch (Exception e) {
             e.printStackTrace();
