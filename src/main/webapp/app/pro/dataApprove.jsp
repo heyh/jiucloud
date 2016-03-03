@@ -162,7 +162,7 @@
                                             .formatString(
                                             '<img style="cursor:pointer" onclick="approvedFun(\'{0}\', 8);" src="{1}" title="继续审批"/>',
                                             row.id,
-                                            '${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/approved-true.png');
+                                            '${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/approved-jixu.png');
 
                                     str += '&nbsp;';
                                     str += $

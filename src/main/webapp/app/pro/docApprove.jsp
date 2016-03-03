@@ -128,9 +128,17 @@
                                     str += '&nbsp;';
                                     str += $
                                             .formatString(
-                                            '<img style="cursor:pointer" onclick="approvedFun(\'{0}\', 2);" src="{1}" title="审批"/>',
+                                            '<img style="cursor:pointer" onclick="approvedFun(\'{0}\', 2);" src="{1}" title="结束审批"/>',
                                             row.id,
                                             '${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/approved-true.png');
+
+                                    str += '&nbsp;';
+                                    str += $
+                                            .formatString(
+                                            '<img style="cursor:pointer" onclick="approvedFun(\'{0}\', 8);" src="{1}" title="继续审批"/>',
+                                            row.id,
+                                            '${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/approved-jixu.png');
+
                                     str += '&nbsp;';
                                     str += $
                                             .formatString(
@@ -157,10 +165,20 @@
             var rows = dataGrid.datagrid('getSelections');
             id = rows[0].id;
         }
+
+        var approvedTip = '';
+        if(approvedState == '2') {
+            approvedTip = '确认审批通过,并结束后续审批?';
+        } else if(approvedState == '8') {
+            approvedTip = '确认审批通过,并继续后续审批?';
+        } else if(approvedState == '9') {
+            approvedTip = '确认打回当前记录?';
+        }
+
         parent.$.messager
                 .confirm(
                 '询问',
-                approvedState == '2' ? '确认审批通过当前记录？' : '确认打回当前记录？',
+                approvedTip,
                 function(b) {
                     if (b) {
                         parent.$.messager.progress({
