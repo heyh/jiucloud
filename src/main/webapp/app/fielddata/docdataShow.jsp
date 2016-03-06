@@ -146,6 +146,11 @@
                                             return str;
                                         }
                                     },
+                                    {
+                                        field : 'currentApprovedUser',
+                                        title : '当前审批人',
+                                        width : 100
+                                    },
 									{
 										field : 'action',
 										title : '操作',
