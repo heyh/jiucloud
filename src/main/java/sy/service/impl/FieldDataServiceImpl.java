@@ -6,12 +6,15 @@ import org.springframework.stereotype.Service;
 import sy.dao.CostDaoI;
 import sy.dao.FieldDataDaoI;
 import sy.dao.ProjectDaoI;
+import sy.dao.UserDaoI;
+import sy.model.Tuser;
 import sy.model.po.Cost;
 import sy.model.po.Project;
 import sy.model.po.TFieldData;
 import sy.pageModel.DataGrid;
 import sy.pageModel.FieldData;
 import sy.pageModel.PageHelper;
+import sy.pageModel.User;
 import sy.service.FieldDataServiceI;
 import sy.util.DateKit;
 import sy.util.StringUtil;
@@ -32,6 +35,9 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
 
     @Autowired
     private ProjectDaoI projectDao;
+
+    @Autowired
+    private UserDaoI userDao;
 
     @Override
     public TFieldData add(TFieldData tFieldData) {
@@ -82,6 +88,17 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
             f.setItemCode(tem.getItemCode());
             f.setApprovedUser(tem.getApprovedUser());
             f.setCurrentApprovedUser(tem.getCurrentApprovedUser());
+            // add by heyh begin
+            if (tem.getCurrentApprovedUser() != null && !tem.getCurrentApprovedUser().equals("")) {
+                User user = getUser(tem.getCurrentApprovedUser());
+                String realName = user.getRealname();
+                if (realName == null || realName.equals("")) {
+                    realName = user.getUsername();
+                }
+                f.setCurrentApprovedUser(realName);
+            }
+            // add by heyh end
+
             Cost cost = costDao.get("from Cost where isDelete=0 and id='" + tem.getCostType() + "'");
             if (cost == null) {
                 f.setCostType("该费用类型可能已经被删除");
@@ -307,5 +324,14 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
 
     public static String date2string(Date date) {
         return DateFormat.getDateInstance().format(date);
+    }
+
+    private User getUser(String id) {
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("id", id);
+        Tuser t = userDao.get(" from Tuser t  where t.id = :id", params);
+        User u = new User();
+        BeanUtils.copyProperties(t, u);
+        return u;
     }
 }
