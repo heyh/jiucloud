@@ -42,6 +42,9 @@ public class FieldDataController extends BaseController {
     @Autowired
     private DepartmentServiceI departmentService;
 
+    @Autowired
+    private UserServiceI userService;
+
 	/**
 	 * 跳转管理页面
 	 * 
@@ -91,17 +94,29 @@ public class FieldDataController extends BaseController {
 		DataGrid dataGrid = fieldDataServiceI.dataGrid(fieldData, ph, ugroup,source);
 
         // add by heyh begin 审批数据
-        if (null != request.getParameter("needApproved")) {
-            List<FieldData> fieldDatas = dataGrid.getRows();
+        List<FieldData> fieldDatas = dataGrid.getRows();
+        if (fieldDatas != null && fieldDatas.size()>0) {
             for (int i = fieldDatas.size()-1; i >= 0; i--) {
                 String currentApprovedUser = fieldDatas.get(i).getCurrentApprovedUser() == null ? "" : fieldDatas.get(i).getCurrentApprovedUser();
-                if (!currentApprovedUser.equals(sessionInfo.getId())) {
-                    fieldDatas.remove(i);
+
+                if (null != request.getParameter("needApproved")) {
+                    if (!currentApprovedUser.equals(sessionInfo.getId())) {
+                        fieldDatas.remove(i);
+                        continue;
+                    }
+                }
+
+                if (!currentApprovedUser.equals("")) {
+                    User user = userService.getUser(currentApprovedUser);
+                    String realName = user.getRealname();
+                    if (realName == null || realName.equals("")) {
+                        realName = user.getUsername();
+                    }
+                    fieldDatas.get(i).setCurrentApprovedUser(realName);
                 }
             }
-            dataGrid.setTotal((long) fieldDatas.size());
         }
-
+        dataGrid.setTotal((long) fieldDatas.size());
         // add by heyh end
 		session.setAttribute("analusisInfo", fieldData);
 		return dataGrid;
