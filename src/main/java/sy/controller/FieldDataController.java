@@ -114,6 +114,23 @@ public class FieldDataController extends BaseController {
                     }
                     fieldDatas.get(i).setCurrentApprovedUser(realName);
                 }
+
+                String uids = fieldDatas.get(i).getApprovedUser();
+                StringBuffer approvedUser = new StringBuffer();
+                if (uids != null && !uids.equals("")) {
+                    String[] uidArr = uids.split(",");
+                    for (String uid : uidArr) {
+                        if (!uid.equals("")) {
+                            User user = userService.getUser(uid);
+                            String realName = user.getRealname();
+                            if (realName == null || realName.equals("")) {
+                                realName = user.getUsername();
+                            }
+                            approvedUser.append(realName).append(",");
+                        }
+                    }
+                }
+                fieldDatas.get(i).setApprovedUser(approvedUser == null || approvedUser.toString().equals("") ? "" : approvedUser.substring(0, approvedUser.length() - 1));
             }
         }
         dataGrid.setTotal((long) fieldDatas.size());

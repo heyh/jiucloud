@@ -549,6 +549,16 @@
                             }
                         },
                         {
+                            field : 'approvedUser',
+                            title : '审批人列表',
+                            width : 100
+                        },
+                        {
+                            field : 'currentApprovedUser',
+                            title : '当前审批人',
+                            width : 100
+                        },
+                        {
                             field : 'action',
                             title : '操作',
                             width : 53,
@@ -639,6 +649,16 @@
                                 }
                                 return str;
                             }
+                        },
+                        {
+                            field : 'approvedUser',
+                            title : '审批人列表',
+                            width : 100
+                        },
+                        {
+                            field : 'currentApprovedUser',
+                            title : '当前审批人',
+                            width : 100
                         },
                         {
                             field : 'action',
