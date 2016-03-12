@@ -231,7 +231,15 @@ public class FieldDataController extends BaseController {
 		request.setAttribute("tfielddata", tFieldData);
 		request.setAttribute("project", project);
 		request.setAttribute("cost", cost);
-		return "/app/fielddata/updatefieldData";
+
+        // modify by heyh begin
+        String fj = tFieldData.getItemCode().substring(0, 3);
+        if (fj.equals("000") || Integer.parseInt(fj) > 900 ) {
+            return "/app/fielddata/updatefieldData4Doc";
+        } else {
+            return "/app/fielddata/updatefieldData";
+        }
+
 	}
 
 	/**
