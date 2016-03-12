@@ -210,6 +210,23 @@ public class WebApp extends BaseController {
             Company c = companyService.findOneView(u.getId(),cid);
             List<Integer> ugroup = departmentService.getUsers(String.valueOf(c.getId()), Integer.parseInt(u.getId()));
 			dataGrid = fieldDataServiceI.dataGrid(fieldData, ph, ugroup, "");
+
+			// add by heyh begin
+			List<FieldData> fieldDatas = dataGrid.getRows();
+			if (fieldDatas != null && fieldDatas.size()>0) {
+				for (int i = fieldDatas.size()-1; i >= 0; i--) {
+					String currentApprovedUser = fieldDatas.get(i).getCurrentApprovedUser() == null ? "" : fieldDatas.get(i).getCurrentApprovedUser();
+					if (!currentApprovedUser.equals("")) {
+						User user = userService.getUser(currentApprovedUser);
+						String realName = user.getRealname();
+						if (realName == null || realName.equals("")) {
+							realName = user.getUsername();
+						}
+						fieldDatas.get(i).setCurrentApprovedUser(realName);
+					}
+				}
+			}
+			// add by heyh end
 			json.setObj(dataGrid.getRows());
 		} catch (Exception e) {
 			json.setMsg("服务器错误,请稍后再试");
@@ -357,7 +374,9 @@ public class WebApp extends BaseController {
             }
             approvedUser = StringUtils.join(approvedUserList, ","); // 所有审批人
             currentApprovedUser = String.valueOf(approvedUserList.get(0)); // 当前审批人
-        }
+        } else {
+			needApproved = "0";
+		}
         // add by heyh end
 
 		TFieldData fieldData = new TFieldData(projectName, uid, new Date(),
@@ -456,18 +475,22 @@ public class WebApp extends BaseController {
         String approvedUser = "";
         String currentApprovedUser = "";
         List<Integer> approvedUserList = new ArrayList<Integer>();
-        if (needApproved != null && needApproved.equals("1")) {
-            approvedUserList = departmentService.getAllParents(cid, Integer.parseInt(uid));
-            if (approvedUserList == null) {
-                approvedUserList.add(Integer.parseInt(uid)); // 如果为空说明是超级管理员，自己审批
-            }
-            approvedUser = StringUtils.join(approvedUserList, ","); // 所有审批人
-            currentApprovedUser = String.valueOf(approvedUserList.get(0)); // 当前审批人
+		if (needApproved != null && needApproved.equals("1")) {
+			approvedUserList = departmentService.getAllParents(cid, Integer.parseInt(uid));
+			if (approvedUserList == null) {
+				approvedUserList.add(Integer.parseInt(uid)); // 如果为空说明是超级管理员，自己审批
+			}
+			approvedUser = StringUtils.join(approvedUserList, ","); // 所有审批人
+			currentApprovedUser = String.valueOf(approvedUserList.get(0)); // 当前审批人
 
-            fieldData.setNeedApproved("1");
-            fieldData.setApprovedUser(approvedUser);
-            fieldData.setCurrentApprovedUser(currentApprovedUser);
-        }
+			fieldData.setNeedApproved("1");
+			fieldData.setApprovedUser(approvedUser);
+			fieldData.setCurrentApprovedUser(currentApprovedUser);
+		} else {
+			fieldData.setNeedApproved("0");
+			fieldData.setApprovedUser("");
+			fieldData.setCurrentApprovedUser("");
+		}
         // add by heyh end
 
 		System.out.println(fieldData);
