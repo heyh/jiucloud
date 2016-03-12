@@ -350,7 +350,7 @@ public class WebApp extends BaseController {
         String currentApprovedUser = "";
         // add by heyh begin
         List<Integer> approvedUserList = new ArrayList<Integer>();
-        if (needApproved.equals("1")) {
+        if (needApproved != null && needApproved.equals("1")) {
             approvedUserList = departmentService.getAllParents(cid, Integer.parseInt(uid));
             if (approvedUserList == null) {
                 approvedUserList.add(Integer.parseInt(uid)); // 如果为空说明是超级管理员，自己审批
@@ -444,6 +444,31 @@ public class WebApp extends BaseController {
 		fieldData.setUnit(request.getParameter("unit"));
 		fieldData.setSpecifications(request.getParameter("specifications"));
 		fieldData.setRemark(request.getParameter("remark"));
+
+        // add by heyh begin
+        String cid = request.getParameter("cid");
+        String uid = request.getParameter("uid");
+        if (uid == null || "".equals(uid)) {
+            j.setMsg("请登录后再试!!");
+            return j;
+        }
+        String needApproved = request.getParameter("needApproved");
+        String approvedUser = "";
+        String currentApprovedUser = "";
+        List<Integer> approvedUserList = new ArrayList<Integer>();
+        if (needApproved != null && needApproved.equals("1")) {
+            approvedUserList = departmentService.getAllParents(cid, Integer.parseInt(uid));
+            if (approvedUserList == null) {
+                approvedUserList.add(Integer.parseInt(uid)); // 如果为空说明是超级管理员，自己审批
+            }
+            approvedUser = StringUtils.join(approvedUserList, ","); // 所有审批人
+            currentApprovedUser = String.valueOf(approvedUserList.get(0)); // 当前审批人
+
+            fieldData.setNeedApproved("1");
+            fieldData.setApprovedUser(approvedUser);
+            fieldData.setCurrentApprovedUser(currentApprovedUser);
+        }
+        // add by heyh end
 
 		System.out.println(fieldData);
 		try {
