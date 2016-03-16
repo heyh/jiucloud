@@ -336,6 +336,24 @@
                             </select>
                         </div>
                     </div>
+                    <div class="control-group">
+                        <label class="control-label" for="gczt">工程状态:</label>
+                        <div class="controls">
+                            <select id="gczt" name="gczt">
+                                <option/>
+                                <option value="在建工程">在建工程</option>
+                                <option value="未开工工程">未开工工程</option>
+                                <option value="分包工程">分包工程</option>
+                                <option value="已完成未验收工程">已完成未验收工程</option>
+                                <option value="已验收工程">已验收工程</option>
+                                <option value="审计完工程">审计完工程</option>
+                                <option value="纯维(养)护工程">纯维(养)护工程</option>
+                                <option value="维(养)护结束工程">维(养)护结束工程</option>
+                                <option value="尾款已付清工程">尾款已付清工程</option>
+                                <option value="其他工程">其他工程</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
             </div>
         </fieldset>

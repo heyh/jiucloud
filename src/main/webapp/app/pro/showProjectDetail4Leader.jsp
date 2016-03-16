@@ -210,8 +210,8 @@
                 <tr>
                     <td><span class="td_title">项目所在区县</span></td>
                     <td>${pro.area}</td>
-                    <td><span class="td_title"></span></td>
-                    <td></td>
+                    <td><span class="td_title">工程状态</span></td>
+                    <td>${pro.gczt}</td>
                 </tr>
             </table>
         </fieldset>

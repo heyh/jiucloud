@@ -215,6 +215,15 @@
             break;
         }
     }
+
+    var gcztid = document.getElementById('gcztid').value;
+    for (var i = 0; i < document.getElementById('gczt').options.length; i++) {
+        if (document.getElementById('gczt').options[i].value == gcztid) {
+            document.getElementById('gczt').options[i].selected = true;
+            break;
+        }
+    }
+
 </script>
 <%--</head>--%>
 <%--<body>--%>
@@ -225,6 +234,7 @@
         <input type="hidden" id="provicehid" value='${pro.provice }'/>
         <input type="hidden" id="cityhid" value='${pro.city }'/>
         <input type="hidden" id="areahid" value='${pro.area }'/>
+        <input type="hidden" id="gcztid" value="${pro.gczt}"/>
 
         <fieldset class="showBase">
             <legend>项目立项</legend>
@@ -366,6 +376,23 @@
                                 <c:forEach items="${cities}" var="tem">
                                     <option value="${tem.name}">${tem.name}</option>
                                 </c:forEach>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="gczt">工程状态:</label>
+                        <div class="controls">
+                            <select id="gczt" name="gczt">
+                                <option value="在建工程">在建工程</option>
+                                <option value="未开工工程">未开工工程</option>
+                                <option value="分包工程">分包工程</option>
+                                <option value="已完成未验收工程">已完成未验收工程</option>
+                                <option value="已验收工程">已验收工程</option>
+                                <option value="审计完工程">审计完工程</option>
+                                <option value="纯维(养)护工程">纯维(养)护工程</option>
+                                <option value="维(养)护结束工程">维(养)护结束工程</option>
+                                <option value="尾款已付清工程">尾款已付清工程</option>
+                                <option value="其他工程">其他工程</option>
                             </select>
                         </div>
                     </div>
