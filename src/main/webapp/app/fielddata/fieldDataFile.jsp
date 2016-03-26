@@ -101,8 +101,9 @@
                                                 str += '&nbsp;';
                                                 str += $
 														.formatString(
-																'<img onclick="download(\'{0}\');" src="{1}" title="下载"/>',
+																'<img onclick="download(\'{0}\', \'{1}\');" src="{2}" title="下载"/>',
 																row.sourceFilePath,
+                                                                row.fileName,
 																'${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/download-blue.png');
 												return str;
 											}
@@ -186,8 +187,8 @@
 		$(dataGrid).datagrid('load', {});
 	};
 
-	function download(path) {
-		window.location.href = "app/fielddata/DownLoa.jsp?name=" + path;
+	function download(path, realFileName) {
+		window.location.href = "app/fielddata/DownLoa.jsp?name=" + path + "&realFileName=" + realFileName;
 	}
 </script>
 <form method="post" id="ttform" target="_blank"

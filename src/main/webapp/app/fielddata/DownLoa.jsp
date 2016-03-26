@@ -9,9 +9,12 @@
     String fileName = request.getParameter("name");
     String realFile = filePath + fileName;
     fileName = fileName.substring(fileName.indexOf("/")+1);
+
+    String realFileName = request.getParameter("realFileName");
+
     response.reset();
     response.setContentType("application/x-download;");
-    response.setHeader("Content-disposition", "attachment; filename=\"" + new String(fileName.getBytes("utf-8"), "ISO8859-1")+ "\"");
+    response.setHeader("Content-disposition", "attachment; filename=\"" + new String(realFileName.getBytes("utf-8"), "ISO8859-1")+ "\"");
 
 	OutputStream outp = null;
 	FileInputStream in = null;

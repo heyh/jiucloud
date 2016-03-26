@@ -546,8 +546,8 @@ public class FieldDataController extends BaseController {
 					return j;
 				}
                 // modify by heyh begin
-				String finalname = fileName.substring(0, patch.getOriginalFilename().lastIndexOf(".")) + "-" + DateKit.getCurrentDate("yyyyMMddHHmmssSSS");
-//                String finalname = UUID.randomUUID().toString();
+//				String finalname = fileName.substring(0, patch.getOriginalFilename().lastIndexOf(".")) + "-" + DateKit.getCurrentDate("yyyyMMddHHmmssSSS");
+                String finalname = UUID.randomUUID().toString();
                 // end
 				File f = new File(file_path + finalname + "." + reg);
                     patch.transferTo(f);
