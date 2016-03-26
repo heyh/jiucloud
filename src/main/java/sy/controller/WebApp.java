@@ -606,8 +606,8 @@ public class WebApp extends BaseController {
 					j.setMsg("上传的文件格式不支持");
 					return j;
 				}
-//				String finalname = UUID.randomUUID().toString();
-                String finalname = fileName.substring(0, patch.getOriginalFilename().lastIndexOf(".")) + "-" + DateKit.getCurrentDate("yyyyMMddHHmmssSSS");
+				String finalname = UUID.randomUUID().toString();
+//                String finalname = fileName.substring(0, patch.getOriginalFilename().lastIndexOf(".")) + "-" + DateKit.getCurrentDate("yyyyMMddHHmmssSSS");
 
                 // boolean regxFlg = Constant.regex_ext(reg);
 				File f = new File(file_path + finalname + "." + reg);
