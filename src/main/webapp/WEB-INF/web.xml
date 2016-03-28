@@ -153,7 +153,10 @@
   <session-config>
     <session-timeout>200</session-timeout>
   </session-config>
-
+    <mime-mapping>
+        <extension>ico</extension>
+        <mime-type>image/x-icon</mime-type>
+    </mime-mapping>
     <welcome-file-list>
     <welcome-file>/mgrlogin.jsp</welcome-file>
     <welcome-file>/index.jsp</welcome-file>
