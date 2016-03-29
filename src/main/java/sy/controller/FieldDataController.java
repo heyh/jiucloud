@@ -510,8 +510,9 @@ public class FieldDataController extends BaseController {
 		SessionInfo sessionInfo = (SessionInfo) session.getAttribute(ConfigUtil
 				.getSessionInfoName());
 		String userPath = sessionInfo.getId() + "/";
-
-		String mid = rt.getParameter("id");// 关联ID;
+//		String mid = rt.getParameter("id");// 关联ID;
+        boolean isWebUploader = rt.getParameter("updateType") != null && rt.getParameter("updateType").equals("webuploader");
+        String mid = isWebUploader ? rt.getParameter("mid") : rt.getParameter("id");
 		if (mid == null || mid.length() == 0 || mid.equals("undefined")) {
 			j.setCode(000);
 			j.setSuccess(false);
@@ -530,7 +531,7 @@ public class FieldDataController extends BaseController {
             // modify by heyh begin
 			String file_path = PropertyUtil.getFileRealPath() + "/upload/" + Constant.SOURCE + userPath;
             // end
-			MultipartFile patch = rt.getFile(req.getParameter("name"));// 获取文件
+			MultipartFile patch = isWebUploader ? rt.getFile("file") : rt.getFile(req.getParameter("name"));// 获取文件
 			String fileName = patch.getOriginalFilename();// 得到文件名
 			if (!patch.isEmpty()) {
 				File saveDir = new File(file_path);
