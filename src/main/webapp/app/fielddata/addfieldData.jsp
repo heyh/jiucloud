@@ -49,49 +49,55 @@
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/jslib/extJquery.js?v=201305301341"
 	charset="utf-8"></script>
-<link
-	href="${pageContext.request.contextPath }/jslib/upload/ajaxfileupload.css"
-	type="text/css" rel="stylesheet">
-<script type="text/javascript"
-	src="${pageContext.request.contextPath }/jslib/upload/ajaxfileupload.js"></script>
+<%--<link--%>
+	<%--href="${pageContext.request.contextPath }/jslib/upload/ajaxfileupload.css"--%>
+	<%--type="text/css" rel="stylesheet">--%>
+<%--<script type="text/javascript"--%>
+	<%--src="${pageContext.request.contextPath }/jslib/upload/ajaxfileupload.js"></script>--%>
 
 <link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1-rc.1/css/select2.min.css" rel="stylesheet" />
 <script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1-rc.1/js/select2.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath }/jslib/webuploader/webuploader.css" />
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath }/jslib/webuploader/style.css" />
+
+<script type="text/javascript" src="${pageContext.request.contextPath }/jslib/webuploader/webuploader.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath }/jslib/webuploader/upload.js"></script>
 
 <script type="text/javascript">
 	var flag = 0;
 
 	//上传文件
-	function uploadfile(filed, mid) {
-		parent.$.messager.progress({
-			title : '提示',
-			text : '文件正在上传中，请不要离开此页面，请稍后....'
-		});
-		$
-				.ajaxFileUpload({
-					url : '${pageContext.request.contextPath }/fieldDataController/upload',
-					secureuri : false,
-					fileElementId : filed,
-					dataType : 'json',
-					data : {
-						id : mid,
-						name : filed,
-						fileds : filed
-					},
-					success : function(data) {
-						parent.$.messager.progress('close');
-						if (data.success) {
-							alert(data.msg);
-						} else {
-							alert(data.msg);
-						}
-					},
-					error : function(data, status, e) {
-						alert(data.msg);
-						parent.$.messager.progress('close');
-					}
-				});
-	}
+	<%--function uploadfile(filed, mid) {--%>
+		<%--parent.$.messager.progress({--%>
+			<%--title : '提示',--%>
+			<%--text : '文件正在上传中，请不要离开此页面，请稍后....'--%>
+		<%--});--%>
+		<%--$--%>
+				<%--.ajaxFileUpload({--%>
+					<%--url : '${pageContext.request.contextPath }/fieldDataController/upload',--%>
+					<%--secureuri : false,--%>
+					<%--fileElementId : filed,--%>
+					<%--dataType : 'json',--%>
+					<%--data : {--%>
+						<%--id : mid,--%>
+						<%--name : filed,--%>
+						<%--fileds : filed--%>
+					<%--},--%>
+					<%--success : function(data) {--%>
+						<%--parent.$.messager.progress('close');--%>
+						<%--if (data.success) {--%>
+							<%--alert(data.msg);--%>
+						<%--} else {--%>
+							<%--alert(data.msg);--%>
+						<%--}--%>
+					<%--},--%>
+					<%--error : function(data, status, e) {--%>
+						<%--alert(data.msg);--%>
+						<%--parent.$.messager.progress('close');--%>
+					<%--}--%>
+				<%--});--%>
+	<%--}--%>
 
 	function selectp() {
 		parent.$
@@ -153,19 +159,21 @@
 		success : function(data) {
 			alert(data.msg);
 			if (data.success) {
-				field_id = data.obj;
-				if (document.getElementById('file1').value != '') {
-					uploadfile('file1', field_id);
-				}
-				if (document.getElementById('file2').value != '') {
-					uploadfile('file2', field_id);
-				}
-				if (document.getElementById('file3').value != '') {
-					uploadfile('file3', field_id);
-				}
-				if (document.getElementById('file4').value != '') {
-					uploadfile('file4', field_id);
-				}
+//				field_id = data.obj;
+//				if (document.getElementById('file1').value != '') {
+//					uploadfile('file1', field_id);
+//				}
+//				if (document.getElementById('file2').value != '') {
+//					uploadfile('file2', field_id);
+//				}
+//				if (document.getElementById('file3').value != '') {
+//					uploadfile('file3', field_id);
+//				}
+//				if (document.getElementById('file4').value != '') {
+//					uploadfile('file4', field_id);
+//				}
+                uploader.options.formData = {'mid' : data.obj, 'updateType': 'webuploader'};
+                $('.uploadBtn').click();
 			}
 
             // add by heyh
@@ -504,29 +512,46 @@
             <div class="ty-summary clearfix">
                 <div style="width:10%;float:left;padding-right:10px;text-align:right">上传附件 :</div>
                 <div style="float:left;">
-				<table class="table table-hover table-condensed"
-					style="font-size: 12px; border: 1px solid #B4B4B4; line-height: 40px;width:751px ">
-					<tr>
-						<td style="width: 80px;">文档附件</td>
-						<td style="text-align: center;"><input
-							style="width: 100px; font-size: 12px;" type="file" name="file1"
-							id="file1" /></td>
-						<td style="text-align: center;"><span style="width: 80px;">视频附件</span></td>
-						<td style="text-align: center;"><input
-							style="width: 100px; font-size: 12px;" type="file" name="file2"
-							id="file2" /></td>
-					</tr>
-					<tr>
-						<td style="width: 80px;">音频附件</td>
-						<td style="text-align: center;"><input
-							style="width: 100px; font-size: 12px;" type="file" name="file3"
-							id="file3" /></td>
-						<td style="text-align: center;"><span style="width: 80px;">图片附件</span></td>
-						<td style="text-align: center;"><input
-							style="width: 100px; font-size: 12px;" type="file" name="file4"
-							id="file4" /></td>
-					</tr>
-				</table>
+				<%--<table class="table table-hover table-condensed" style="font-size: 12px; border: 1px solid #B4B4B4; line-height: 40px;width:751px ">--%>
+					<%--<tr>--%>
+						<%--<td style="width: 80px;">文档附件</td>--%>
+						<%--<td style="text-align: center;"><input--%>
+							<%--style="width: 100px; font-size: 12px;" type="file" name="file1"--%>
+							<%--id="file1" /></td>--%>
+						<%--<td style="text-align: center;"><span style="width: 80px;">视频附件</span></td>--%>
+						<%--<td style="text-align: center;"><input--%>
+							<%--style="width: 100px; font-size: 12px;" type="file" name="file2"--%>
+							<%--id="file2" /></td>--%>
+					<%--</tr>--%>
+					<%--<tr>--%>
+						<%--<td style="width: 80px;">音频附件</td>--%>
+						<%--<td style="text-align: center;"><input--%>
+							<%--style="width: 100px; font-size: 12px;" type="file" name="file3"--%>
+							<%--id="file3" /></td>--%>
+						<%--<td style="text-align: center;"><span style="width: 80px;">图片附件</span></td>--%>
+						<%--<td style="text-align: center;"><input--%>
+							<%--style="width: 100px; font-size: 12px;" type="file" name="file4"--%>
+							<%--id="file4" /></td>--%>
+					<%--</tr>--%>
+                        <div id="uploader" style="width: 751px">
+                            <div class="queueList">
+                                <div id="dndArea" class="placeholder">
+                                    <div id="filePicker"></div>
+                                    <%--<p>或将照片拖到这里，单次最多可选300张</p>--%>
+                                </div>
+                            </div>
+                            <div class="statusBar" style="display:none;">
+                                <div class="progress">
+                                    <span class="text">0%</span>
+                                    <span class="percentage"></span>
+                                </div><div class="info"></div>
+                                <div class="btns">
+                                    <div id="filePicker2"></div>
+                                    <div class="uploadBtn" style="display:none">开始上传</div>
+                                </div>
+                            </div>
+                        </div>
+				<%--</table>--%>
                 </div>
 			</div>
             <%--<label class="ty-addbtn">--%>
