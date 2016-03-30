@@ -342,11 +342,11 @@
         </table>
         <div id="toolbar" class="fee_detail" style="display: none;">
             <span>操作人:</span>
-            <%--<input class="easyui-textbox"  style="margin-top:9px; width: 150px;height: 17px;" type="text" name="uname" id="uname" data-options=""/>--%>
-            <select  style="width: 150px" name="uname" id="uname">
-                <option ></option>
+            <input class="easyui-textbox"  style="margin-top:9px; width: 150px; height: 17px" type="text" name="keywordCost" id="keywordCost" data-options=""/>
+            <%--<select  style="width: 150px" name="uname" id="uname">--%>
+                <%--<option ></option>--%>
 
-            </select>
+            <%--</select>--%>
             &nbsp;&nbsp;&nbsp;&nbsp;
             <span>费用类型:</span>
             <%--<input class="easyui-textbox"  type="text" name="costType" id="costType" data-options=""/>--%>
@@ -386,11 +386,11 @@
         </table>
         <div id="toolbarDoc" class="fee_detail" style="display: none;">
             <span>操作人:</span>
-            <%--<input style="margin-top:9px; width: 150px;height: 17px;" class="easyui-textbox"  type="text" name="unameDoc" id="unameDoc" data-options=""/>--%>
-            <select  style="width: 150px" name="unameDoc" id="unameDoc">
-                <option ></option>
+            <input style="margin-top:9px; width: 150px; height: 17px" class="easyui-textbox"  type="text" name="keywordDoc" id="keywordDoc" data-options=""/>
+            <%--<select  style="width: 150px" name="unameDoc" id="unameDoc">--%>
+                <%--<option ></option>--%>
 
-            </select>
+            <%--</select>--%>
             &nbsp;&nbsp;&nbsp;&nbsp;
             <span>资料类型:</span>
             <%--<input class="easyui-textbox"  type="text" name="costTypeDoc" id="costTypeDoc" data-options=""/>--%>
@@ -774,7 +774,7 @@
         var endTime = $('#endTime').datebox('getValue').substring(0, 10) + ' 23:59:59';
 //        $('#dataGridCost').datagrid('reload',{uname:$('#uname').val(),costType:$('#costType').val(),
 //                                              startTime:$('#startTime').datebox('getValue'),endTime:$('#endTime').datebox('getValue')});
-        $('#dataGridCost').datagrid('reload',{uname:$('#uname').val(),costType:$('#dataCostType').val(),
+        $('#dataGridCost').datagrid('reload',{keyword:$('#keywordCost').val(),costType:$('#dataCostType').val(),
                                              startTime:startTime,endTime:endTime});
     }
     //清除条件
@@ -787,7 +787,7 @@
     function searchFunDoc() {
         var startTimeDoc = $('#startTimeDoc').datebox('getValue').substring(0, 10) + ' 00:00:00';
         var endTimeDoc = $('#endTimeDoc').datebox('getValue').substring(0, 10) + ' 23:59:59';
-        $('#dataGridDoc').datagrid('reload',{uname:$('#unameDoc').val(),costType:$('#docCostType').val(),
+        $('#dataGridDoc').datagrid('reload',{keyword:$('#keywordDoc').val(),costType:$('#docCostType').val(),
             startTime: startTimeDoc, endTime:endTimeDoc});
     }
     //清除条件

@@ -79,6 +79,7 @@ public class FieldDataController extends BaseController {
 				.getSessionInfoName());
 		List<Integer> ugroup = sessionInfo.getUgroup();
 		String source = request.getParameter("source");
+        String keyword = request.getParameter("keyword") == null ? "" : request.getParameter("keyword");
         if (request.getParameter("id") != null) {
             Integer id = Integer.parseInt(request.getParameter("id"));
             fieldData.setId(id);
@@ -91,7 +92,7 @@ public class FieldDataController extends BaseController {
             fieldData.setNeedApproved(request.getParameter("needApproved"));
         }
 
-		DataGrid dataGrid = fieldDataServiceI.dataGrid(fieldData, ph, ugroup,source);
+		DataGrid dataGrid = fieldDataServiceI.dataGrid(fieldData, ph, ugroup,source, keyword);
 
         // add by heyh begin 审批数据
         List<FieldData> fieldDatas = dataGrid.getRows();
@@ -599,6 +600,7 @@ public class FieldDataController extends BaseController {
 			HttpServletResponse response, HttpServletRequest request) {
 		response.setContentType("text/html;charset=utf8");
 		String source = request.getParameter("source");
+        String keyword = request.getParameter("keyword");
 		HttpSession session = request.getSession();
 
 		SessionInfo sessionInfo = (SessionInfo) session.getAttribute(ConfigUtil
@@ -621,8 +623,7 @@ public class FieldDataController extends BaseController {
         fieldData.setProjectName(request.getParameter("projectName"));
         fieldData.setCostType(request.getParameter("costType"));
 
-		List<FieldData> datas = fieldDataServiceI.dataGrid(fieldData, ph,
-				ugroup,source).getRows();
+		List<FieldData> datas = fieldDataServiceI.dataGrid(fieldData, ph, ugroup,source, keyword).getRows();
 
 		List<Map<String, Object>> map = createExcelRecord(datas);
 

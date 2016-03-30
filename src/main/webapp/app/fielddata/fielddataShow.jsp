@@ -349,7 +349,8 @@
 
 	function exportFun(objTab) {
 		var str = '';
-		str += '&uname=' + $('#uname').val();
+//		str += '&uname=' + $('#uname').val();
+        str += '&keyword=' + $('#keyword').val();
 		str += '&projectName=' + $('#projectName').val();
 		str += '&costType=' + $('#costType').val();
 		str += '&startTime=' + $('#startTime').val();
@@ -427,12 +428,12 @@
 				<table class="table table-hover table-condensed"
 					style="display: none;">
 					<tr>
-						<td>操作人:&nbsp;
+						<td>搜索关键字:&nbsp;
                             <%--<input name="uname" id='uname' placeholder="可以模糊查询" class="span2" />--%>
-                            <select  style="width: 136px" name="uname" id="uname">
-                                <option ></option>
-
-                            </select>
+                            <%--<select  style="width: 136px" name="uname" id="uname">--%>
+                                <%--<option ></option>--%>
+                            <%--</select>--%>
+                            <input name="keyword" id="keyword" placeholder="可以模糊查询" class="span2" />
                         </td>
 						<td>工程名称:&nbsp;
                             <%--<input name="projectName" id="projectName" placeholder="可以模糊查询" class="span2" />--%>

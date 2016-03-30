@@ -46,7 +46,7 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
 
     @Override
     public DataGrid dataGrid(FieldData fieldData, PageHelper ph,
-                             List<Integer> ugroup,String source) {
+                             List<Integer> ugroup,String source, String keyword) {
         DataGrid dg = new DataGrid();
         Map<String, Object> params = new HashMap<String, Object>();
         String hql="";
@@ -63,7 +63,7 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
             hql = " from TFieldData t  where isDelete=0  ";
         }
 
-        hql += whereHql(fieldData, params, ugroup);
+        hql += whereHql(fieldData, params, ugroup, keyword);
 
         List<TFieldData> l = fieldDataDaoI.find(hql, params, ph.getPage(), ph.getRows());
         dg.setTotal(fieldDataDaoI.count("select count(*) " + hql, params));
@@ -158,12 +158,12 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
         Map<String, Object> params = new HashMap<String, Object>();
         String hql = " from TFieldData t  where isDelete=0 ";
         List<TFieldData> l = fieldDataDaoI.find(
-                hql + whereHql(null, params, ugroup), params, 0, 8);
+                hql + whereHql(null, params, ugroup, ""), params, 0, 8);
         return l;
     }
 
     private String whereHql(FieldData cmodel, Map<String, Object> params,
-                            List<Integer> ugroup) {
+                            List<Integer> ugroup, String keyword) {
         String hql = " ";
         if (cmodel != null) {
             if (cmodel.getUname() != null && cmodel.getUname().length() > 0) {
@@ -194,6 +194,23 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
                 params.put("endTime", DateKit.strToDateOrTime(cmodel.getEndTime()));
             }
         }
+
+        // add by heyh begin 模糊查询
+        if (!keyword.equals("")) {
+            hql += " and ( uname like :name ";
+            params.put("name", "%%" + keyword + "%%");
+
+            hql += " or (select proName from Project where id=t.projectName) like :proName ";
+            params.put("proName", "%%" + keyword + "%%");
+
+            hql += " or (select costType from Cost where id=t.costType) like :costName ";
+            params.put("costName", "%%" + keyword + "%%");
+
+            hql += " or dataName like :dataName )";
+            params.put("dataName", "%%" + keyword + "%%");
+        }
+        // add by heyh end
+
         if (ugroup != null && ugroup.size() > 0) {
             hql += " and uid in(" + ugroup.get(0).toString();
             for (int i = 1; i < ugroup.size(); i++) {
