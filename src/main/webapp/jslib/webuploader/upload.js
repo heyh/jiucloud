@@ -140,6 +140,7 @@
         }
 
         var locat = (window.location+'').split('/');
+        locat =  locat[0]+'//'+locat[2]+'/'+locat[3];
         uploader = WebUploader.create({
             pick: {
                 id: '#filePicker',
@@ -154,7 +155,8 @@
             chunked: false,
             chunkSize: 512 * 1024,
             //server: 'http://127.0.0.1:8080/pictures/save.do',
-            server: window.location.origin+'/fieldDataController/upload',
+            //server: window.location.origin+'/fieldDataController/upload',
+            server: locat+'/fieldDataController/upload',
             //runtimeOrder: 'flash',
 
             //accept: {
