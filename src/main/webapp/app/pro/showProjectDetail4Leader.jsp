@@ -8,7 +8,7 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%
-    String underlingUsers = null;
+//    String underlingUsers = null;
     List<Map<String, Object>> dataCostInfos = new ArrayList<Map<String, Object>>();
     List<Map<String, Object>> docCostInfos = new ArrayList<Map<String, Object>>();
 
@@ -16,7 +16,7 @@
     if (sessionInfo == null) {
         response.sendRedirect(request.getContextPath());
     } else {
-        underlingUsers = sessionInfo.getUnderlingUsers();
+//        underlingUsers = sessionInfo.getUnderlingUsers();
         dataCostInfos = sessionInfo.getCostTypeInfos().get("dataCostInfos");
         docCostInfos = sessionInfo.getCostTypeInfos().get("docCostInfos");
     }
@@ -743,16 +743,16 @@
 
         tableStyle('.table_style');
 
-        $("#uname").select2({
-            placeholder: "可以模糊查询",
-            allowClear: true,
-            data:<%=underlingUsers%>
-        });
-        $("#unameDoc").select2({
-            placeholder: "可以模糊查询",
-            allowClear: true,
-            data:<%=underlingUsers%>
-        });
+        <%--$("#uname").select2({--%>
+            <%--placeholder: "可以模糊查询",--%>
+            <%--allowClear: true,--%>
+            <%--data:<%=underlingUsers%>--%>
+        <%--});--%>
+        <%--$("#unameDoc").select2({--%>
+            <%--placeholder: "可以模糊查询",--%>
+            <%--allowClear: true,--%>
+            <%--data:<%=underlingUsers%>--%>
+        <%--});--%>
         $("#dataCostType").select2({
             tags: "true",
             placeholder: "可以模糊查询",

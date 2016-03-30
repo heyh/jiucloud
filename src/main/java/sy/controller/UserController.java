@@ -184,7 +184,7 @@ public class UserController extends BaseController {
                     }
                 }
                 sessionInfo.setCostTypeInfos(costService.getCostTypeInfos(departmentIds, cid));
-                sessionInfo.setUnderlingUsers(userService.findUnderlingUsers(ugroup));
+//                sessionInfo.setUnderlingUsers(userService.findUnderlingUsers(ugroup));
                 sessionInfo.setUnitParams((List<Param>) paramService.getParams("UP", ""));
                 sessionInfo.setRightList(departmentService.getAllRight(cid, Integer.parseInt(u.getId())));
                 sessionInfo.setParentId(departmentService.getParentId(cid, Integer.parseInt(u.getId())));

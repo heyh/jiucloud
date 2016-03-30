@@ -11,7 +11,7 @@
 
 <%
     String userId = null;
-    String underlingUsers = null;
+//    String underlingUsers = null;
     String projectInfos = null;
     List<Map<String, Object>> dataCostInfos = new ArrayList<Map<String, Object>>();
     
@@ -20,7 +20,7 @@
         response.sendRedirect(request.getContextPath());
     } else {
         userId = sessionInfo.getId();
-        underlingUsers = sessionInfo.getUnderlingUsers();
+//        underlingUsers = sessionInfo.getUnderlingUsers();
         projectInfos = sessionInfo.getProjectInfos();
         dataCostInfos = sessionInfo.getCostTypeInfos().get("dataCostInfos");
     }
@@ -400,11 +400,11 @@
     }
 
     $(document).ready(function() {
-        $("#uname").select2({
-            placeholder: "可以模糊查询",
-            allowClear: true,
-            data:<%=underlingUsers%>
-        });
+        <%--$("#uname").select2({--%>
+            <%--placeholder: "可以模糊查询",--%>
+            <%--allowClear: true,--%>
+            <%--data:<%=underlingUsers%>--%>
+        <%--});--%>
         $("#projectName").select2({
             placeholder: "可以模糊查询",
             allowClear: true,
