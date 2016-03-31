@@ -425,7 +425,7 @@
 				<table class="table table-hover table-condensed"
 					style="display: none;">
 					<tr>
-						<td>操作人:&nbsp;
+						<td>搜索关键字:&nbsp;
                             <%--<input name="uname" id='uname' placeholder="可以模糊查询" class="span2" />--%>
                             <%--<select  style="width: 136px" name="uname" id="uname">--%>
                                 <%--<option ></option>--%>
