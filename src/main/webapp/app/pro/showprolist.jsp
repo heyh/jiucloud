@@ -430,7 +430,7 @@
 
     function searchAllProject() {
         var o = {};
-        o['manager'] = null;
+        o['keyword'] = null;
         o['gczt'] = null;
         o['proName'] = null;
         o['projetcId'] = null;
@@ -491,14 +491,14 @@
 				<table class="table table-hover table-condensed"
 					style="display: none;">
 					<tr>
+                        <td >搜索关键字:&nbsp;
+                            <input name="keyword" id="keyword" style="width: 136px" placeholder="可以模糊查询" class="span2" />
+                        </td>
 						<td>项目名称:&nbsp;
                             <%--<input name="proName" placeholder="可以模糊查询" class="span2" style="width: 200px" />--%>
                             <select  style="width: 136px" name="proName" id="proName">
                                 <option ></option>
                             </select>
-                        </td>
-						<td >施工项目经理:&nbsp;
-                            <input style="width: 136px" name="manager" placeholder="可以模糊查询" class="span2" />
                         </td>
 						<td valign="middle">工程状态:&nbsp;
                             <select style="width: 136px" name="gczt" id="gczt">

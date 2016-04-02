@@ -11,6 +11,16 @@ public class ProjectSearch {
 	private Date kgrq;// 开工日期
 	private Date jgrq;// 结束日期
 
+    public String getKeyword() {
+        return keyword;
+    }
+
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
+    }
+
+    private String keyword;
+
 	public String getManager() {
 		return manager;
 	}
@@ -63,6 +73,6 @@ public class ProjectSearch {
 	public String toString() {
 		return "ProjectSearch [manager=" + manager + ", gczt=" + gczt
 				+ ", proName=" + proName + ", projetcId=" + projetcId
-				+ ", kgrq=" + kgrq + ", jgrq=" + jgrq + "]";
+				+ ", kgrq=" + kgrq + ", jgrq=" + jgrq + ", keyword=" + keyword +"]";
 	}
 }

@@ -264,6 +264,63 @@ public class ProjectServiceImpl implements ProjectServiceI {
                 hql.append(" and p.kgrq <= date(:jgrq) ");
                 params.put("jgrq", app.getJgrq());
             }
+
+            // add by heyh begin keyword
+            if (null != app.getKeyword() && !app.getKeyword().equals("")) {
+                String keyword = app.getKeyword();
+                hql.append(" and ( projectId like :projectId ");
+                params.put("projectId", "%%" + keyword + "%%");
+
+                hql.append(" or proName like :proName ");
+                params.put("proName", "%%" + keyword + "%%");
+
+                hql.append(" or financeCode like :financeCode ");
+                params.put("financeCode", "%%" + keyword + "%%");
+
+                hql.append(" or shortname like :shortname ");
+                params.put("shortname", "%%" + keyword + "%%");
+
+                hql.append(" or gchtj like :gchtj ");
+                params.put("gchtj", "%%" + keyword + "%%");
+
+                hql.append(" or gchtj like :gchtj ");
+                params.put("gchtj", "%%" + keyword + "%%");
+
+                hql.append(" or gczbyd like :gczbyd ");
+                params.put("gczbyd", "%%" + keyword + "%%");
+
+                hql.append(" or provice like :provice ");
+                params.put("provice", "%%" + keyword + "%%");
+
+                hql.append(" or area like :area ");
+                params.put("area", "%%" + keyword + "%%");
+
+                hql.append(" or manager2 like :manager2 ");
+                params.put("manager2", "%%" + keyword + "%%");
+
+                hql.append(" or city like :city ");
+                params.put("city", "%%" + keyword + "%%");
+
+                hql.append(" or gczt like :gczt ");
+                params.put("gczt", "%%" + keyword + "%%");
+
+                hql.append(" or manager like :manager ");
+                params.put("manager", "%%" + keyword + "%%");
+
+                hql.append(" or zjy like :zjy ");
+                params.put("zjy", "%%" + keyword + "%%");
+
+                hql.append(" or zly like :zly ");
+                params.put("zly", "%%" + keyword + "%%");
+
+                hql.append(" or maintenanceManager like :maintenanceManager ");
+                params.put("maintenanceManager", "%%" + keyword + "%%");
+
+                hql.append(" or yhcbr like :yhcbr )");
+                params.put("yhcbr", "%%" + keyword + "%%");
+
+            }
+            // add by heyh end
         }
         if (compId != null && !compId.equals("")) {
             hql.append(" and compId = :compId");
