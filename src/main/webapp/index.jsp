@@ -192,6 +192,8 @@
           href="${pageContext.request.contextPath}/layout/css/company.css">
     <link rel="stylesheet" type="text/css"
           href="${pageContext.request.contextPath}/layout/css/global.css">
+
+    <script src="${pageContext.request.contextPath}/jslib/online/head.js"></script>
 </head>
 <body>
 
