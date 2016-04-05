@@ -1,6 +1,7 @@
 package sy.controller;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -935,4 +936,16 @@ public class UserController extends BaseController {
 		String result = sb.toString();
 		return result;
 	}
+
+    @RequestMapping("/securi_getSessionUser")
+    @ResponseBody
+    public JSONObject getSessionUser(HttpServletRequest req) {
+        SessionInfo sessionInfo = (SessionInfo) req.getSession().getAttribute(ConfigUtil.getSessionInfoName());
+        String uid = sessionInfo.getId();
+        String name = sessionInfo.getName();
+        JSONObject userInfo = new JSONObject();
+        userInfo.put("uid", uid);
+        userInfo.put("name", name);
+        return userInfo;
+    }
 }
