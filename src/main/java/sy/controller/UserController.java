@@ -937,15 +937,15 @@ public class UserController extends BaseController {
 		return result;
 	}
 
-    @RequestMapping("/securi_getSessionUser")
-    @ResponseBody
-    public JSONObject getSessionUser(HttpServletRequest req, HttpSession session) {
-        SessionInfo sessionInfo = (SessionInfo) session.getAttribute(ConfigUtil.getSessionInfoName());
-        String uid = sessionInfo.getId();
-        String name = sessionInfo.getName();
-        JSONObject userInfo = new JSONObject();
-        userInfo.put("uid", uid);
-        userInfo.put("name", name);
-        return userInfo;
-    }
+//    @RequestMapping("/securi_getSessionUser")
+//    @ResponseBody
+//    public JSONObject getSessionUser(HttpServletRequest req, HttpSession session) {
+//        SessionInfo sessionInfo = (SessionInfo) session.getAttribute(ConfigUtil.getSessionInfoName());
+//        String uid = sessionInfo.getId();
+//        String name = sessionInfo.getName();
+//        JSONObject userInfo = new JSONObject();
+//        userInfo.put("uid", uid);
+//        userInfo.put("name", name);
+//        return userInfo;
+//    }
 }
