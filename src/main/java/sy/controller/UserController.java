@@ -939,8 +939,8 @@ public class UserController extends BaseController {
 
     @RequestMapping("/securi_getSessionUser")
     @ResponseBody
-    public JSONObject getSessionUser(HttpServletRequest req) {
-        SessionInfo sessionInfo = (SessionInfo) req.getSession().getAttribute(ConfigUtil.getSessionInfoName());
+    public JSONObject getSessionUser(HttpServletRequest req, HttpSession session) {
+        SessionInfo sessionInfo = (SessionInfo) session.getAttribute(ConfigUtil.getSessionInfoName());
         String uid = sessionInfo.getId();
         String name = sessionInfo.getName();
         JSONObject userInfo = new JSONObject();
