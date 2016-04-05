@@ -12,8 +12,12 @@
                 .getAttribute(ConfigUtil.getSessionInfoName());
         if (sessionInfo == null) {
             response.sendRedirect(request.getContextPath());
+        } else {
+            uid=sessionInfo.getId();
+            cid=sessionInfo.getCompid();
         }
     }
+    String loginUrl="user/login.jsp?uid="+uid+"&cid="+cid;
 %>
 <html>
 <head>
@@ -180,10 +184,39 @@
                 if (b) {
                     location.replace('${pageContext.request.contextPath}/');
                 } else {
-                    window.location.href = '${pageContext.request.contextPath}/';
+                    window.location.href = '';
                 }
             });
         }
+
+        $(function () {
+            var websocket;
+            if (window.WebSocket) {
+                websocket = new WebSocket(encodeURI('ws://127.0.0.1:8889'));
+
+                websocket.onopen = function () {
+                    //连接成功
+                    websocket.send('[join]' + <%= uid %>);
+                };
+                websocket.onerror = function () {
+                    //连接失败
+                };
+                websocket.onclose = function () {
+                    //连接断开
+                };
+                //消息接收
+                websocket.onmessage = function (message) {
+                    var message = JSON.parse(message.data);
+                    if (message.type == 'goOut') {
+                        $("body").html("");
+//                                goOut("此用户在其它终端已经登录,您暂时无法登录");
+                        alert("此用户在其它终端已经登录,您暂时无法登录");
+                        //window.location.href = locat + "/logout";
+                        window.location.href = 'http://www.9393915.com/department';
+                    }
+                };
+            }
+        });
     </script>
 
     <link rel="stylesheet" type="text/css"
@@ -193,11 +226,11 @@
     <link rel="stylesheet" type="text/css"
           href="${pageContext.request.contextPath}/layout/css/global.css">
 
-    <script src="${pageContext.request.contextPath}/jslib/online/head.js"></script>
+    <%--<script src="${pageContext.request.contextPath}/jslib/online/head.js"></script>--%>
 </head>
 <body>
 
-<jsp:include page="user/login.jsp?uid=<%=uid%>&cid=<%=cid%>"></jsp:include>
+<jsp:include page="<%=loginUrl%>"></jsp:include>
 
 <div id="index_layout">
     <!-- class="logo" -->
