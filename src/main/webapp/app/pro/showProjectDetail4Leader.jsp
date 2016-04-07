@@ -551,7 +551,10 @@
                         {
                             field : 'approvedUser',
                             title : '审批人列表',
-                            width : 100
+                            width : 100,
+                            formatter : function (value, row, index) {
+                                return value.substring(0, value.indexOf(row.currentApprovedUser) - 1) ;
+                            }
                         },
                         {
                             field : 'currentApprovedUser',
@@ -653,7 +656,10 @@
                         {
                             field : 'approvedUser',
                             title : '审批人列表',
-                            width : 100
+                            width : 100,
+                            formatter : function (value, row, index) {
+                                return value.substring(0, value.indexOf(row.currentApprovedUser) - 1) ;
+                            }
                         },
                         {
                             field : 'currentApprovedUser',
