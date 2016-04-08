@@ -1,5 +1,6 @@
 package sy.service.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -211,13 +212,16 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
         }
         // add by heyh end
 
-        if (ugroup != null && ugroup.size() > 0) {
-            hql += " and uid in(" + ugroup.get(0).toString();
-            for (int i = 1; i < ugroup.size(); i++) {
-                hql += "," + ugroup.get(i).toString();
-            }
-            hql += ") ";
-        }
+//        if (ugroup != null && ugroup.size() > 0) {
+//            hql += " and uid in(" + ugroup.get(0).toString();
+//            for (int i = 1; i < ugroup.size(); i++) {
+//                hql += "," + ugroup.get(i).toString();
+//            }
+//            hql += ") ";
+//        }
+        String uids = StringUtils.join(ugroup, ",");
+        hql += " and uid in (" + uids + ")";
+
         if ( cmodel.getId() != 0) {
             hql += " and projectName = :id ";
             params.put("id", String.valueOf(cmodel.getId()));
