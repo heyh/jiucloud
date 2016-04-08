@@ -1,12 +1,12 @@
 package sy.model;
 
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
 
 @Entity
 @Table(name = "jsw_user")
@@ -29,11 +29,26 @@ public class Tuser implements java.io.Serializable {
 	private String safecode;
 	private String corporation_id;
 	private String corporation_creater;
-	
-	
+    private String mobile_phone;
+    private String email;
 
+    public String getMobile_phone() {
+        return mobile_phone;
+    }
 
-	public String getId() {
+    public void setMobile_phone(String mobile_phone) {
+        this.mobile_phone = mobile_phone;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getId() {
 		return id;
 	}
 
