@@ -163,7 +163,7 @@ public class OnlineManageServer extends WebSocketServer {
 
     public static void main(String[] args) throws InterruptedException, IOException {
         WebSocketImpl.DEBUG = false;
-        int port = 8887; //端口
+        int port = 8889; //端口
         OnlineManageServer onlineManageServer = new OnlineManageServer(port);
         onlineManageServer.start();
     }
