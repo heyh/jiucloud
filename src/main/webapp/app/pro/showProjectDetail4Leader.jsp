@@ -553,6 +553,9 @@
                             title : '审批人列表',
                             width : 100,
                             formatter : function (value, row, index) {
+                                if(row.currentApprovedUser == undefined) {
+                                    return '';
+                                }
                                 return value.substring(0, value.indexOf(row.currentApprovedUser) - 1) ;
                             }
                         },
