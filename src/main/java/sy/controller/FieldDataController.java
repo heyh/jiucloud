@@ -1,5 +1,6 @@
 package sy.controller;
 
+import com.alibaba.druid.sql.ast.expr.SQLCaseExpr;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -103,6 +104,7 @@ public class FieldDataController extends BaseController {
                 if (null != request.getParameter("needApproved")) {
                     if (!currentApprovedUser.equals(sessionInfo.getId())) {
                         fieldDatas.remove(i);
+                        dataGrid.setTotal(dataGrid.getTotal()-1);
                         continue;
                     }
                 }
@@ -134,7 +136,7 @@ public class FieldDataController extends BaseController {
                 fieldDatas.get(i).setApprovedUser(approvedUser == null || approvedUser.toString().equals("") ? "" : approvedUser.substring(0, approvedUser.length() - 1));
             }
         }
-        dataGrid.setTotal((long) fieldDatas.size());
+//        dataGrid.setTotal((long) fieldDatas.size());
         // add by heyh end
 		session.setAttribute("analusisInfo", fieldData);
 		return dataGrid;
@@ -715,5 +717,32 @@ public class FieldDataController extends BaseController {
         j.setMsg("审批成功！");
         j.setSuccess(true);
         return j;
+    }
+
+    @RequestMapping("securi_getNeedApproveList")
+    @ResponseBody
+    public Json getNeedApproveList(String currentApprovedUser, HttpServletResponse response, HttpServletRequest request) {
+        Json json = new Json();
+        List<TFieldData> needApproveList = fieldDataServiceI.getNeedApproveList(currentApprovedUser);
+        for (TFieldData needApprove : needApproveList) {
+            String uid = needApprove.getUid();
+            User user = userService.getUser(uid);
+            String realName = user.getRealname();
+            if (realName == null || realName.equals("")) {
+                realName = user.getUsername();
+            }
+            needApprove.setUname(realName);
+
+            String itemcode = needApprove.getItemCode();
+            boolean isData = itemcode != null && !itemcode.equals("") && !itemcode.substring(0, 3).equals("000") && Integer.parseInt(itemcode.substring(0, 3)) <= 900;
+            if (isData) {
+                needApprove.setItemCode("0");
+            } else {
+                needApprove.setItemCode("1");
+            }
+        }
+        json.setObj(needApproveList);
+        json.setSuccess(true);
+        return json;
     }
 }

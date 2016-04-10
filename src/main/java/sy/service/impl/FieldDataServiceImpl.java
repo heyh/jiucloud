@@ -320,6 +320,15 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
         }
     }
 
+    @Override
+    public List<TFieldData> getNeedApproveList(String currentApprovedUser) {
+        Map<String, Object> paramMap = new HashMap<String, Object>();
+        paramMap.put("currentApprovedUser", currentApprovedUser);
+        String hql = " from TFieldData t  where isDelete=0 and  needApproved in ('1','8') and currentApprovedUser = :currentApprovedUser";
+        List<TFieldData> fieldDataList = fieldDataDaoI.find(hql, paramMap);
+        return fieldDataList;
+    }
+
     private Date string2date(String str) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = null;

@@ -189,6 +189,7 @@
             });
         }
 
+        <!-- 单点登录 -->
         $(function () {
             var websocket;
             if (window.WebSocket) {
@@ -217,6 +218,67 @@
                 };
             }
         });
+
+        <!-- 消息通知 -->
+        setTimeout(function () {
+            getNeedApproveList();
+        }, 200);
+        setInterval(function () {
+            getNeedApproveList();
+        }, 60000 * 10);
+        function getNeedApproveList() {
+            $.ajax({
+                url: '${pageContext.request.contextPath}/fieldDataController/securi_getNeedApproveList',
+                data: {currentApprovedUser: <%= uid %>},
+                type: 'post',
+                dataType: 'json',
+                contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                success: function (data) {
+                    if (data.success) {
+                        console.log(data.obj)
+                        $('.notice_num').text(data.obj.length);
+
+                        var htmlStr = '';
+                        $.each(data.obj, function(index, item) {
+                            htmlStr +=
+                            '<div class="con_list_item clearfix">' +
+                            '   <div class="span4">' +
+                            '       <div><a class="info_desc">' + item.uname + '提交一份申请【' + item.dataName + '】,需要您的审批' + '</a></div>' +
+                            '       <div><a class="date">' + item.creatTime + '</a></div>' +
+                            '   </div>' +
+                            '   <div class="span2 text-right">' +
+                            '       <button type="button" class="btn" onclick="goApprove(' + item.itemCode + ')">去审批</button>' +
+                            '   </div>' +
+                            '</div>'
+                        })
+                        $('#noticeDiv').html(htmlStr);
+                    }
+                }
+            });
+        };
+
+        function goApprove(todo) {
+            var url = '${pageContext.request.contextPath}/projectStatController/dataApprove';
+            var text = '项目费用审批';
+            var iconCls = 'approve';
+
+            if(todo == 0) {
+                url = '${pageContext.request.contextPath}/projectStatController/dataApprove';
+                text = '项目费用审批';
+                iconCls = 'approve';
+            } else if (todo == 1) {
+                url = '${pageContext.request.contextPath}/projectStatController/docApprove';
+                text = '项目资料审批';
+                iconCls = 'approve';
+            }
+
+            var params = {
+                url : url,
+                title : text,
+                iconCls : 'approve'
+            }
+            window.parent.ac(params);
+        }
     </script>
 
     <link rel="stylesheet" type="text/css"
@@ -225,8 +287,10 @@
           href="${pageContext.request.contextPath}/layout/css/company.css">
     <link rel="stylesheet" type="text/css"
           href="${pageContext.request.contextPath}/layout/css/global.css">
+    <link rel="stylesheet" type="text/css"
+          href="${pageContext.request.contextPath}/css/yjd_web.css">
 
-    <%--<script src="${pageContext.request.contextPath}/jslib/online/head.js"></script>--%>
+
 </head>
 <body>
 
@@ -250,7 +314,24 @@
                     <li><a href="http://www.9393915.com/user/base/index">个人主页</a></li>
                     <li><a href="http://www.9393915.com/service">业务管理</a></li>
                     <li><a href="http://www.9393915.com/department">企业用户</a></li>
+
+                    <div class="notice_area pull-right dropdown" >
+                        <div id="notice_nav" class="notice_nav " data-toggle="dropdown">
+                            <span class="glyphicon icon-bell icon-white">
+                            </span><span class="notice_num">0</span>
+                        </div>
+                        <div class="dropdown-menu notice_con" aria-labelledby="notice_area">
+                            <div class="notice_con_til"><a style="font-size: 14px;">站内消息通知</a></div>
+                            <div class="notice_con_list">
+                                <div class="row" id="noticeDiv">
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </ul>
+
             </nav>
         </div>
 

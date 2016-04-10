@@ -1,6 +1,7 @@
 package sy.service;
 
 import java.util.List;
+import java.util.Map;
 
 import sy.model.po.TFieldData;
 import sy.pageModel.DataGrid;
@@ -56,4 +57,6 @@ public interface FieldDataServiceI {
 	public Object getId(TFieldData fieldData);
 
     public void approvedField(Integer id, String approvedState);
+
+    public List<TFieldData> getNeedApproveList(String currentApprovedUser);
 }

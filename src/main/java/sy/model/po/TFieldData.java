@@ -43,6 +43,7 @@ public class TFieldData implements java.io.Serializable {
         this.needApproved = needApproved;
         this.approvedUser = approvedUser;
         this.currentApprovedUser = currentApprovedUser;
+        this.itemCode = itemCode;
 
 	}
 
