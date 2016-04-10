@@ -1,0 +1,14 @@
+/*消息通知*/
+.fixed-top .notice_area .notice_nav{line-height:40px;height:40px; padding:0 16px;cursor:pointer }
+.fixed-top .notice_area .notice_nav:hover{background:#4B96DC;}
+.fixed-top .notice_area .notice_nav .glyphicon{color:#fff;margin-right:5px; position:relative; top:-10px;}
+.fixed-top .notice_area .notice_nav .notice_num{color:#fff; font-size:12px; }
+.notice_area .notice_nav:hover .glyphicon{color:#fff;}
+.fixed-top .notice_area .notice_num{padding:2px 4px; background:#ff9718; border-radius:4px;position:relative;top:-5px; }
+.fixed-top .notice_area .notice_con{padding:0;margin-right:-265px;}
+.fixed-top .notice_area .notice_con .notice_con_til{background:#eaedf2; padding:15px; }
+.fixed-top .notice_area .notice_con .notice_con_list{width:500px; height:300px; overflow-y:scroll; padding:15px; }
+.fixed-top .notice_area .notice_con .notice_con_list .con_list_item{border-bottom:1px solid #eeeef0; padding:10px 0}
+.fixed-top .notice_area .notice_con .notice_con_list .con_list_item .info_desc{color: #196DBF;}
+.fixed-top .notice_area .notice_con .notice_con_list .con_list_item .date{color:#d9dee4;}
+.fixed-top .notice_area .more{padding:10px; color:#196DBF}
