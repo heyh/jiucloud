@@ -225,7 +225,7 @@
         }, 200);
         setInterval(function () {
             getNeedApproveList();
-        }, 60000 * 10);
+        }, 1000 * 10);
         function getNeedApproveList() {
             $.ajax({
                 url: '${pageContext.request.contextPath}/fieldDataController/securi_getNeedApproveList',
