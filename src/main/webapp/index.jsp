@@ -210,9 +210,7 @@
                     var message = JSON.parse(message.data);
                     if (message.type == 'goOut') {
                         $("body").html("");
-//                                goOut("此用户在其它终端已经登录,您暂时无法登录");
                         alert("此用户在其它终端已经登录,您暂时无法登录");
-                        //window.location.href = locat + "/logout";
                         window.location.href = 'http://www.9393915.com/department';
                     }
                 };
