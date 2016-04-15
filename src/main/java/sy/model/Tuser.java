@@ -31,6 +31,15 @@ public class Tuser implements java.io.Serializable {
 	private String corporation_creater;
     private String mobile_phone;
     private String email;
+    private String qq;
+
+    public String getQq() {
+        return qq;
+    }
+
+    public void setQq(String qq) {
+        this.qq = qq;
+    }
 
     public String getMobile_phone() {
         return mobile_phone;

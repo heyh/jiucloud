@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserServiceI {
 		params.put("pwd", pwd);
 		User user = new User();
 //		Tuser t = userDao.get("from Tuser t where t.username=:name and password=md5(concat(md5(:pwd),safecode))", params);
-        Tuser t = userDao.get("from Tuser t where (t.username=:name or t.mobile_phone=:name or email=:name ) and password=md5(concat(md5(:pwd),safecode))", params);
+        Tuser t = userDao.get("from Tuser t where (t.username=:name or t.mobile_phone=:name or t.email=:name or t.qq=:name) and password=md5(concat(md5(:pwd),safecode))", params);
 		if (t != null) {
 			BeanUtils.copyProperties(t, user);
 			return user;
