@@ -35,7 +35,7 @@ public class ParentNode {
             tmp.setId(0);
             tmp.setParentId(-1);
             tmp.setUserId(-1);
-            tmp.setName("Root");
+            tmp.setName("BOSS");
             returnList.add(tmp);
         }
         return returnList;
