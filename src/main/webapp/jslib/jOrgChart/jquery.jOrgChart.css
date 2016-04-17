@@ -31,15 +31,20 @@
 
 /* The node */
 .jOrgChart .node {
-  background-color 		: #7a7a7a;
-  /*border-style: solid solid solid;*/
-  /*border-width: 2px 2px 2px;*/
-  /*border-color        : #468847;*/
-  display               : inline-block;
-  width                 : 60px;
-  height                : 50px;
-  z-index 				: 10;
-  margin               : 0 10px;
+
+    background-color 		: #5aabe1;
+     /*border-style: solid solid solid;*/
+     /*border-width: 2px 2px 2px;*/
+     /*border-color        : #468847;*/
+    display               : inline-block;
+    width                 : 60px;
+    height                : 50px;
+    z-index 				: 10;
+    margin               : 0 10px;
+    /*font-family : 微软雅黑,宋体;*/
+    font-size : 5em;
+    color : rgba(0, 0, 0, 0);
+    text-align:center;
 }
 
 /* jQuery drag 'n drop */
@@ -54,7 +59,7 @@
 }
 
 .jOrgChart .chooseNode {
-    background-color 		: #5aabe1;
+    background-color 		: #3786e1;
     /*border-style: solid solid solid;*/
     /*border-width: 2px 2px 2px;*/
     /*border-color        : #468847;*/
@@ -63,4 +68,8 @@
     height                : 50px;
     z-index 				: 10;
     margin               : 0 10px;
+    font-family : 微软雅黑,宋体;
+    font-size : 5em;
+    color : rgba(0, 0, 0, 0);
+    text-align:center;
 }
