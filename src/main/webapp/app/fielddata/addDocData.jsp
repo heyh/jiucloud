@@ -228,11 +228,11 @@
                                 var approveUids = [];
                                 var approveNames = [];
                                 $.each(chooseNodes, function (index, chooseNode) {
-                                    approveUids.push(chooseNode.firstChild.id);
-                                    approveNames.push(chooseNode.innerText);
+                                    if(chooseNode.firstChild.id != '-1') {
+                                        approveUids.push(chooseNode.firstChild.id);
+                                        approveNames.push(chooseNode.innerText);
+                                    }
                                 });
-//                                console.log(approveUids.reverse().join(','));
-//                                console.log(approveNames.reverse().join(','));
                                 document.getElementById("chooseApproveName").value = approveNames.reverse().join(',');
                                 document.getElementById("approvedUser").value = approveUids.reverse().join(',');
                                 parent.$.modalDialog.handler.dialog('close');
