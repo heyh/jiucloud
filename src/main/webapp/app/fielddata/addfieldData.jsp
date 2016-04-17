@@ -128,12 +128,10 @@
 			if (data.success) {
                 uploader.options.formData = {'mid' : data.obj, 'updateType': 'webuploader'};
                 $('.uploadBtn').click();
+                uploader.on( 'uploadComplete', function( file ) {
+                    location.reload();
+                });
 			}
-
-            // add by heyh
-            $("input[type=reset]").trigger("click");
-            location.reload();
-			flag = 1;
 		}
 	};
 
