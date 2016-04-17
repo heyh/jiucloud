@@ -3,6 +3,7 @@ package sy.service;
 import org.springframework.stereotype.Repository;
 import sy.model.S_department;
 import sy.model.po.Department;
+import sy.util.Node;
 
 import java.util.List;
 
@@ -53,4 +54,6 @@ public interface DepartmentServiceI {
     public int getParentId(String cid, int uid);
 
     public List<Integer> getAllParents(String cid, int uid);
+
+    public List<Node> getParentNodes(String cid, int uid);
 }

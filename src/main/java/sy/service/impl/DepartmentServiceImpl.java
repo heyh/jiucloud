@@ -6,9 +6,13 @@ import org.springframework.stereotype.Service;
 import sy.dao.DepartmentDaoI;
 import sy.model.S_department;
 import sy.model.po.Department;
+import sy.pageModel.User;
 import sy.service.DepartmentServiceI;
+import sy.service.UserServiceI;
 import sy.util.Node;
 import sy.util.NodeUtil;
+import sy.util.ParentNode;
+import sy.util.StringUtil;
 
 import java.util.*;
 
@@ -17,6 +21,9 @@ public class DepartmentServiceImpl implements DepartmentServiceI {
 
 	@Autowired
 	DepartmentDaoI departmentDaoI;
+
+    @Autowired
+    private UserServiceI userService;
 
 	@Override
 	public Department findOneView(String uid,String cid) {
@@ -428,5 +435,56 @@ public class DepartmentServiceImpl implements DepartmentServiceI {
             }
         }
         return parentUsers;
+    }
+
+    @Override
+    public List<Node> getParentNodes(String cid, int uid) {
+        List<Node> parentNodes = new ArrayList<Node>();
+        List<Object[]> objects = new ArrayList<Object[]>();
+        List<Integer> ids = new ArrayList<Integer>();
+        objects = departmentDaoI.findBySql("select id, parent_id, user_id, company_id from jsw_corporation_department where company_id= " + cid);
+        List<Node> departments = new ArrayList<Node>();
+        for (Object[] object : objects) {
+            List<String> tmpUid = Arrays.asList(String.valueOf(object[2]).split(","));
+            for (String tmp : tmpUid) {
+                Node department = new Node();
+                department.setId(Integer.parseInt(String.valueOf(object[0])));
+                department.setParentId(Integer.parseInt(String.valueOf(object[1])));
+                if (tmp.equals("")) {
+                    continue;
+                }
+                department.setUserId(Integer.parseInt(tmp));
+                departments.add(department);
+                if (uid == Integer.parseInt(tmp)) {
+                    ids.add(Integer.parseInt(String.valueOf(object[0])));
+                }
+            }
+
+        }
+        if (ids != null && ids.size() > 0) {
+            for (Integer id : ids) {
+                ParentNode parentNode = new ParentNode();
+                parentNodes = parentNode.getParentNodes(departments, id);
+            }
+        }
+
+        Iterator<Node> it = parentNodes.iterator();
+        while (it.hasNext()) {
+            Node tmpUser = it.next();
+            if (tmpUser.getUserId() == uid) {
+                it.remove();
+                break;
+            }
+        }
+
+        for (Node parentNode : parentNodes) {
+            if (parentNode.getUserId() == -1) {
+                continue;
+            }
+            User user = userService.getUser(StringUtil.trimToEmpty(parentNode.getUserId()));
+            parentNode.setName(user.getRealname());
+        }
+
+        return parentNodes;
     }
 }

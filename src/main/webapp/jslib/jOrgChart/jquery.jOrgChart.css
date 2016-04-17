@@ -1,0 +1,66 @@
+/* Basic styling */
+/* Draw the lines */
+.jOrgChart .line {
+  height                : 20px;
+  width                 : 2px;
+}
+
+.jOrgChart .down {
+  background-color 		: rgba(0, 0, 0, 0);
+  margin 				: 0px auto;
+}
+
+.jOrgChart .top {
+  border-top          : 2px solid rgba(0, 0, 0, 0);
+}
+
+.jOrgChart .left {
+  border-right          : 2px solid rgba(0, 0, 0, 0);
+}
+
+.jOrgChart .right {
+  border-left           : 2px solid rgba(0, 0, 0, 0);
+}
+
+/* node cell */
+.jOrgChart td {
+  text-align            : center;
+  vertical-align        : top;
+  padding               : 0;
+}
+
+/* The node */
+.jOrgChart .node {
+  background-color 		: #7a7a7a;
+  /*border-style: solid solid solid;*/
+  /*border-width: 2px 2px 2px;*/
+  /*border-color        : #468847;*/
+  display               : inline-block;
+  width                 : 60px;
+  height                : 50px;
+  z-index 				: 10;
+  margin               : 0 10px;
+}
+
+/* jQuery drag 'n drop */
+
+.drag-active {
+  border-style			: dotted !important;
+}
+
+.drop-hover {
+  border-style			: solid !important;
+  border-color 			: #E05E00 !important;
+}
+
+.jOrgChart .chooseNode {
+    background-color 		: #5aabe1;
+    /*border-style: solid solid solid;*/
+    /*border-width: 2px 2px 2px;*/
+    /*border-color        : #468847;*/
+    display               : inline-block;
+    width                 : 60px;
+    height                : 50px;
+    z-index 				: 10;
+    margin               : 0 10px;
+}

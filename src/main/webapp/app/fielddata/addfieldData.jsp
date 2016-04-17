@@ -66,39 +66,6 @@
 
 <script type="text/javascript">
 	var flag = 0;
-
-	//上传文件
-	<%--function uploadfile(filed, mid) {--%>
-		<%--parent.$.messager.progress({--%>
-			<%--title : '提示',--%>
-			<%--text : '文件正在上传中，请不要离开此页面，请稍后....'--%>
-		<%--});--%>
-		<%--$--%>
-				<%--.ajaxFileUpload({--%>
-					<%--url : '${pageContext.request.contextPath }/fieldDataController/upload',--%>
-					<%--secureuri : false,--%>
-					<%--fileElementId : filed,--%>
-					<%--dataType : 'json',--%>
-					<%--data : {--%>
-						<%--id : mid,--%>
-						<%--name : filed,--%>
-						<%--fileds : filed--%>
-					<%--},--%>
-					<%--success : function(data) {--%>
-						<%--parent.$.messager.progress('close');--%>
-						<%--if (data.success) {--%>
-							<%--alert(data.msg);--%>
-						<%--} else {--%>
-							<%--alert(data.msg);--%>
-						<%--}--%>
-					<%--},--%>
-					<%--error : function(data, status, e) {--%>
-						<%--alert(data.msg);--%>
-						<%--parent.$.messager.progress('close');--%>
-					<%--}--%>
-				<%--});--%>
-	<%--}--%>
-
 	function selectp() {
 		parent.$
 				.modalDialog({
@@ -159,26 +126,13 @@
 		success : function(data) {
 			alert(data.msg);
 			if (data.success) {
-//				field_id = data.obj;
-//				if (document.getElementById('file1').value != '') {
-//					uploadfile('file1', field_id);
-//				}
-//				if (document.getElementById('file2').value != '') {
-//					uploadfile('file2', field_id);
-//				}
-//				if (document.getElementById('file3').value != '') {
-//					uploadfile('file3', field_id);
-//				}
-//				if (document.getElementById('file4').value != '') {
-//					uploadfile('file4', field_id);
-//				}
                 uploader.options.formData = {'mid' : data.obj, 'updateType': 'webuploader'};
                 $('.uploadBtn').click();
 			}
 
             // add by heyh
             $("input[type=reset]").trigger("click");
-
+            location.reload();
 			flag = 1;
 		}
 	};
@@ -202,6 +156,7 @@
 		var unit = document.getElementById("unit").value;
 		var itemCode = document.getElementById("itemCode").value;
         var needApproved = document.getElementById("needApproved").value;
+        var approvedUser = document.getElementById("approvedUser").value;
 
 		if (projectName == '') {
 			alert("项目名称不能为空");
@@ -236,7 +191,8 @@
 			'remark' : remark,
 			'unit' : unit,
 			'itemCode' : itemCode,
-            'needApproved' : needApproved
+            'needApproved' : needApproved,
+            'approvedUser': approvedUser
 		}
 
 		$.ajax(cfg);
@@ -261,6 +217,53 @@
 		})
 	}
 
+    function isNeedApprove(isNeedApprove) {
+        $('#approvedUser').value = '';
+        $('#chooseApproveName').value = '';
+        if(isNeedApprove == '0') {
+            $('#chooseApproveDiv').hide();
+            $('#approvedUserLabel').hide();
+        } else if(isNeedApprove == '1') {
+            $('#chooseApproveDiv').show();
+        }
+    }
+
+    function isChooseApprove(isChooseApprove) {
+        $('#approvedUser').value = '';
+        $('#chooseApproveName').value = '';
+        if(isChooseApprove == '1') {
+            parent.$
+                    .modalDialog({
+                        title : '选择审批人',
+                        width : 450,
+                        height : 500,
+                        href : '${pageContext.request.contextPath }/fieldDataController/securi_chooseApprove',
+                        buttons : [ {
+                            text : '确认',
+                            handler : function() {
+                                var chooseNodes = parent.$.modalDialog.handler.find(".chooseNode");
+                                console.log(chooseNodes);
+                                var approveUids = [];
+                                var approveNames = [];
+                                $.each(chooseNodes, function (index, chooseNode) {
+                                    approveUids.push(chooseNode.firstChild.id);
+                                    approveNames.push(chooseNode.innerText);
+                                });
+//                                console.log(approveUids.reverse().join(','));
+//                                console.log(approveNames.reverse().join(','));
+                                document.getElementById("chooseApproveName").value = approveNames.reverse().join(',');
+                                document.getElementById("approvedUser").value = approveUids.reverse().join(',');
+                                parent.$.modalDialog.handler.dialog('close');
+
+                                $('#approvedUserLabel').show();
+                            }
+                        } ]
+                    });
+        } else {
+            $('#approvedUserLabel').hide();
+        }
+    }
+
     $(document).ready(function() {
         $("#unit").select2({
             tags: "true",
@@ -269,7 +272,11 @@
         });
 
         $("#needApproved").select2({
-            placeholder: "可以模糊查询",
+            placeholder: "请选择",
+            allowClear: true
+        });
+        $("#chooseApprove").select2({
+            placeholder: "请选择",
             allowClear: true
         });
     });
@@ -432,10 +439,8 @@
 </style>
 
 <div class="easyui-layout" data-options="fit:true,border:false">
-	<div data-options="region:'center',border:false" title="" style="overflow: hidden; margin-top: 20px;">
-		<form id="form" method="post" enctype="multipart/form-data"
-			action="http://180.96.11.6:8080/jiucloud/fieldDataController/savefieldData"
-			class="basic-grey ty-newsfileds">
+	<div data-options="region:'center',border:false" title="" style=" margin-top: 10px;">
+		<form id="form" method="post" enctype="multipart/form-data" class="basic-grey ty-newsfileds">
 			<h1>
 				<span>添加数据</span>
 			</h1>
@@ -498,13 +503,25 @@
 			</label>
 
             <div class="special" style="height: 48px;">
-                <%--<span>需要审批:</span>--%>
                 <span style="float: left; width: 20%; text-align: right; padding-right: 10px; margin-top: 10px; color: #888;">需要审批:</span>
-                <select style="width:250px;margin-bottom: 20px" id="needApproved" name="needApproved" style="width:250px;">
+                <select onchange="isNeedApprove(this.options[this.options.selectedIndex].value)" style="width:250px;margin-bottom: 20px" id="needApproved" name="needApproved" style="width:250px;">
                     <option value="0" selected = "selected">不需要</option>
                     <option value="1">需要</option>
                 </select>
             </div>
+            <div id="chooseApproveDiv" class="special" style="height: 48px; display: none" >
+                <span style="float: left; width: 20%; text-align: right; padding-right: 10px; margin-top: 10px; color: #888;">审批人选择:</span>
+                <select onchange="isChooseApprove(this.options[this.options.selectedIndex].value)" style="width:250px;margin-bottom: 20px" id="chooseApprove" name="chooseApprove" style="width:250px;">
+                    <option value="0" selected = "selected">默认</option>
+                    <option value="1">自定义</option>
+                </select>
+            </div>
+
+            <label id="approvedUserLabel" style="display:none">
+                <span>审批人:</span>
+                <input name="chooseApproveName" id="chooseApproveName" type="text" style="width: 250px;" class="easyui-validatebox span2" value="" readonly>
+                <input name="approvedUser" id="approvedUser" type="text" style="width: 250px;display: none" class="easyui-validatebox span2" value="">
+            </label>
 
             <label class="ty-summary"> <span>备注说明 :</span> <textarea
 					id="remark" name="remark" placeholder="请在这里填写备注信息"></textarea>
@@ -512,27 +529,6 @@
             <div class="ty-summary clearfix">
                 <div style="width:10%;float:left;padding-right:10px;text-align:right">上传附件 :</div>
                 <div style="float:left;">
-				<%--<table class="table table-hover table-condensed" style="font-size: 12px; border: 1px solid #B4B4B4; line-height: 40px;width:751px ">--%>
-					<%--<tr>--%>
-						<%--<td style="width: 80px;">文档附件</td>--%>
-						<%--<td style="text-align: center;"><input--%>
-							<%--style="width: 100px; font-size: 12px;" type="file" name="file1"--%>
-							<%--id="file1" /></td>--%>
-						<%--<td style="text-align: center;"><span style="width: 80px;">视频附件</span></td>--%>
-						<%--<td style="text-align: center;"><input--%>
-							<%--style="width: 100px; font-size: 12px;" type="file" name="file2"--%>
-							<%--id="file2" /></td>--%>
-					<%--</tr>--%>
-					<%--<tr>--%>
-						<%--<td style="width: 80px;">音频附件</td>--%>
-						<%--<td style="text-align: center;"><input--%>
-							<%--style="width: 100px; font-size: 12px;" type="file" name="file3"--%>
-							<%--id="file3" /></td>--%>
-						<%--<td style="text-align: center;"><span style="width: 80px;">图片附件</span></td>--%>
-						<%--<td style="text-align: center;"><input--%>
-							<%--style="width: 100px; font-size: 12px;" type="file" name="file4"--%>
-							<%--id="file4" /></td>--%>
-					<%--</tr>--%>
                         <div id="uploader" style="width: 751px">
                             <div class="queueList">
                                 <div id="dndArea" class="placeholder">
@@ -551,14 +547,10 @@
                                 </div>
                             </div>
                         </div>
-				<%--</table>--%>
                 </div>
 			</div>
-            <%--<label class="ty-addbtn">--%>
-                <%--<input type="button" class="button" value="添加" onclick="aaa()" style="width: 250px; height: 40px;" />--%>
-            <%--</label>--%>
             <div style="text-align:center">
-                <input type="button" class="button" value="添加" onclick="aaa()" style="width: 250px; margin-top:20px;height: 40px;" />
+                <input type="button" class="button" value="添加" onclick="aaa()" style="width: 250px; margin-top:10px;height: 40px;" />
             </div>
 
 

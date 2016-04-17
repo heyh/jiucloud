@@ -339,15 +339,22 @@ public class FieldDataController extends BaseController {
 		fieldData.setCompany(sessionInfo.getCompName());
 
         // add by heyh begin
-        List<Integer> approvedUserList = new ArrayList<Integer>();
-        if (fieldData.getNeedApproved().equals("1")) {
-            approvedUserList = departmentService.getAllParents(fieldData.getCid(), Integer.parseInt(fieldData.getUid()));
-            if (approvedUserList == null) {
-                approvedUserList.add(Integer.parseInt(fieldData.getUid())); // 如果为空说明是超级管理员，自己审批
-            }
-            fieldData.setApprovedUser(StringUtils.join(approvedUserList, ",")); // 所有审批人
-            fieldData.setCurrentApprovedUser(String.valueOf(approvedUserList.get(0))); // 当前审批人
+        if (fieldData.getApprovedUser() == null || fieldData.getApprovedUser().equals("")) {
+            List<Integer> approvedUserList = new ArrayList<Integer>();
+            if (fieldData.getNeedApproved().equals("1")) {
+                approvedUserList = departmentService.getAllParents(fieldData.getCid(), Integer.parseInt(fieldData.getUid()));
+                if (approvedUserList == null) {
+                    approvedUserList.add(Integer.parseInt(fieldData.getUid())); // 如果为空说明是超级管理员，自己审批
+                }
+                fieldData.setApprovedUser(StringUtils.join(approvedUserList, ",")); // 所有审批人
+                fieldData.setCurrentApprovedUser(String.valueOf(approvedUserList.get(0))); // 当前审批人
 
+            }
+        } else {
+            List<String> approvedUsers = Arrays.asList(fieldData.getApprovedUser().split(","));
+            if (approvedUsers != null && approvedUsers.size()>0) {
+                fieldData.setCurrentApprovedUser(approvedUsers.get(0)); // 当前审批人
+            }
         }
         // add by heyh end
 
@@ -744,5 +751,24 @@ public class FieldDataController extends BaseController {
         json.setObj(needApproveList);
         json.setSuccess(true);
         return json;
+    }
+
+    @RequestMapping("securi_chooseApprove")
+    public String chooseApprove() {
+        return "/app/fielddata/chooseApprove";
+    }
+
+    @RequestMapping("securi_getParentNodes")
+    @ResponseBody
+    public Json getParentNodes(HttpServletResponse response, HttpServletRequest request) {
+        Json json = new Json();
+        SessionInfo sessionInfo = (SessionInfo) request.getSession().getAttribute(ConfigUtil.getSessionInfoName());
+        String uid = sessionInfo.getId();
+        String cid = sessionInfo.getCompid();
+        List<Node> parentNodeList = departmentService.getParentNodes(cid, Integer.parseInt(uid));
+        json.setObj(NodeUtil.transJson(NodeUtil.buildListToTree(parentNodeList)));
+        json.setSuccess(true);
+        return json;
+
     }
 }
