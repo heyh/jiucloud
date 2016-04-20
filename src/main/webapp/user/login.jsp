@@ -65,7 +65,7 @@
 									}
 									var url = '${pageContext.request.contextPath}/fieldDataController/fieldDataShow';
 //									var text = "现场数据管理";
-                                    var text = "工程数据管理";
+                                    var text = "项目数据管理";
 									var params = {
 										url : url,
 										title : text,
