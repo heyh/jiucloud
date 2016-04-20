@@ -338,6 +338,11 @@ public class FieldDataController extends BaseController {
 		fieldData.setUname((sessionInfo.getName() != null && !sessionInfo.getName().equals("")) ? sessionInfo.getName() : sessionInfo.getUsername());
 		fieldData.setCompany(sessionInfo.getCompName());
 
+        if (fieldDataServiceI.hasSameFieldData(fieldData)) {
+            j.setMsg("系统已有相同数据，不能重复填加!");
+            return j;
+        }
+
         // add by heyh begin
         if (fieldData.getApprovedUser() == null || fieldData.getApprovedUser().equals("")) {
             List<Integer> approvedUserList = new ArrayList<Integer>();
