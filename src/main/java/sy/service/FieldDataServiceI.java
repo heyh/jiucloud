@@ -59,4 +59,6 @@ public interface FieldDataServiceI {
     public void approvedField(Integer id, String approvedState);
 
     public List<TFieldData> getNeedApproveList(String currentApprovedUser);
+
+    public boolean hasSameFieldData(TFieldData fieldData);
 }

@@ -333,11 +333,12 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
     public boolean hasSameFieldData(TFieldData fieldData) {
         Map<String, Object> paramMap = new HashMap<String, Object>();
         paramMap.put("cid", fieldData.getCid());
+        paramMap.put("projectName", fieldData.getProjectName());
         paramMap.put("dataName", fieldData.getDataName());
         paramMap.put("price", fieldData.getPrice());
         paramMap.put("unit", fieldData.getUnit());
         paramMap.put("itemCode", fieldData.getItemCode());
-        String hql = "from TFieldData where isDelete=0 and cid = :cid and dataName = :dataName and price = :price and unit = :unit and itemCode = :itemCode";
+        String hql = "from TFieldData where isDelete=0 and cid = :cid and projectName = :projectName and dataName = :dataName and price = :price and unit = :unit and itemCode = :itemCode";
         List<TFieldData> fieldDataList = fieldDataDaoI.find(hql, paramMap);
         if (fieldDataList != null && fieldDataList.size() > 0) {
             return true;
