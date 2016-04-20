@@ -140,23 +140,25 @@ public class analysisController extends BaseController {
         if (allFee != null && allFee.size() > 0) {
             for (Object[] fee : allFee) {
                 productIds.add(fee[0]);
-                Price p = new Price();
-                prices.add(String.valueOf(fee[3]));
             }
         }
         List<AnalysisData> datas = new ArrayList<AnalysisData>();
         AnalysisData tem = new AnalysisData();
         List<Double> moneys = new ArrayList<Double>();
+        List<String> pricenames = new ArrayList<String>();
         for (Object projectId : productIds) {
             tem = new AnalysisData();
             moneys = new ArrayList<Double>();
+            pricenames = new ArrayList<String>();
             for (Object[] fee : allFee) {
                 if (fee[0].equals(projectId)) {
                     tem.setProject_name(fee[1]== null ? "" : String.valueOf(fee[1]));
+                    pricenames.add(fee[3]== null ? "" : String.valueOf(fee[3]));
                     moneys.add((Double) fee[4]);
                 }
             }
             tem.setMoneys(moneys);
+            tem.setPriceName(pricenames);
             datas.add(tem);
         }
         List<Double> totals = new ArrayList<Double>();

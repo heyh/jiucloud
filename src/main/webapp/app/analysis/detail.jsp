@@ -144,14 +144,14 @@
 
 			<table id="travel">
 				<thead>
-					<tr>
-						<th>项目名称</th>
-						<th colspan="5">${project.proName }</th>
-					</tr>
-					<tr>
-						<th>价目名称</th>
-						<th colspan="5">${price.name }</th>
-					</tr>
+					<%--<tr>--%>
+						<%--<th>项目名称</th>--%>
+						<%--<th colspan="5">${project.proName }</th>--%>
+					<%--</tr>--%>
+					<%--<tr>--%>
+						<%--<th>价目名称</th>--%>
+						<%--<th colspan="5">${price.name }</th>--%>
+					<%--</tr>--%>
 					<tr>
 						<td colspan="6"></td>
 					</tr>

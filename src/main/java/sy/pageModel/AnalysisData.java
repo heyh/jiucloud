@@ -15,8 +15,17 @@ public class AnalysisData {
 	private int cost_id;
 	private int isend;
 	private List<Double> moneys;
+    private List<String> priceName;
 
-	public double getMoney() {
+    public List<String> getPriceName() {
+        return priceName;
+    }
+
+    public void setPriceName(List<String> priceName) {
+        this.priceName = priceName;
+    }
+
+    public double getMoney() {
 		return money;
 	}
 

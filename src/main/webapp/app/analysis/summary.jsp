@@ -177,13 +177,13 @@
 				<thead>
 					<tr>
 						<th scope="col" rowspan="2">项目名称</th>
-						<th scope="col" colspan="${fn:length(prices)}">价目类型(单位:元)</th>
+						<th scope="col" colspan="${fn:length(datas[0].priceName)}">价目类型(单位:元)</th>
 					</tr>
 
 					<tr>
 						<%--<c:forEach items="${prices}" var="tem">--%>
 							<%--<th scope="col" align="center">${tem.name}</th>--%>
-                            <c:forEach items="${prices}" var="name">
+                            <c:forEach items="${datas[0].priceName}" var="name">
                                 <th scope="col" align="center">${name}</th>
 						</c:forEach>
 					</tr>
