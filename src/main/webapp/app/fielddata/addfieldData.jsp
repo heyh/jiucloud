@@ -126,11 +126,22 @@
 		success : function(data) {
 			alert(data.msg);
 			if (data.success) {
-                debugger
-                uploader.options.formData = {'mid' : data.obj, 'updateType': 'webuploader'};
-                $('.uploadBtn').click().after(function() {
-                    location.reload();
+
+                var count = 0;
+                $(".filelist").each(function () {
+                    count += $(this).children('li').length;
                 });
+                if (count <= 0) {
+                    location.reload();
+                } else {
+                    uploader.options.formData = {'mid': data.obj, 'updateType': 'webuploader'};
+                    $('.uploadBtn').click();
+                    uploader.on('uploadFinished', function (file) {
+                        setTimeout(function () {
+                            location.reload();
+                        }, 500);
+                    });
+                }
 			}
 		}
 	};

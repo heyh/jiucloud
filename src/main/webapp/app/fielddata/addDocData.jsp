@@ -105,15 +105,28 @@
 		type : 'post',
 		dataType : 'json',
 		contentType : "application/x-www-form-urlencoded; charset=utf-8",
-		success : function(data) {
-			alert(data.msg);
-			if (data.success) {
-                uploader.options.formData = {'mid' : data.obj, 'updateType': 'webuploader'};
-                $('.uploadBtn').click().after(function() {
-                    location.reload();
+        success: function (data) {
+            alert(data.msg);
+            if (data.success) {
+
+                var count = 0;
+                $(".filelist").each(function () {
+                    count += $(this).children('li').length;
                 });
-			}
-		}
+                if (count <= 0) {
+                    location.reload();
+                } else {
+                    uploader.options.formData = {'mid': data.obj, 'updateType': 'webuploader'};
+                    $('.uploadBtn').click();
+                    uploader.on('uploadFinished', function (file) {
+                        setTimeout(function () {
+                            location.reload();
+                        }, 500);
+                    });
+                }
+
+            }
+        }
 	};
 
 	function aaa() {
