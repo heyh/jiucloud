@@ -109,8 +109,7 @@
 			alert(data.msg);
 			if (data.success) {
                 uploader.options.formData = {'mid' : data.obj, 'updateType': 'webuploader'};
-                $('.uploadBtn').click();
-                uploader.on( 'uploadComplete', function( file ) {
+                $('.uploadBtn').click().after(function() {
                     location.reload();
                 });
 			}
