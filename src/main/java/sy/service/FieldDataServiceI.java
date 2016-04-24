@@ -61,4 +61,9 @@ public interface FieldDataServiceI {
     public List<TFieldData> getNeedApproveList(String currentApprovedUser);
 
     public boolean hasSameFieldData(TFieldData fieldData);
+
+    /**
+     * 获得审批列表
+     */
+    public DataGrid approveDataGrid(PageHelper ph, String currentApprovedUser);
 }
