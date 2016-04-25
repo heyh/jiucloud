@@ -310,7 +310,7 @@ public class AnalysisServiceImpl implements AnalysisServiceI {
                 "AND proj.isdel = '0'\n" +
                 "AND proj.uids IN (" + StringUtils.join(ugroup, ",") + ") ) a\n" +
                 "LEFT JOIN TFieldData f \n" +
-                "ON f.itemCode like CONCAT(a.itemCode,'%') and f.isDelete = '0' \n" +
+                "ON f.itemCode = a.itemCode and f.isDelete = '0' \n" +
                 "and f.projectName = a.ID and f.cid = " + cid + ") base\n" +
                 "group by base.projectId, base.proName, base.price_id, base.name";
 
