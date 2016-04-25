@@ -716,6 +716,18 @@ public class WebApp extends BaseController {
         return json;
     }
 
+    @RequestMapping("/securi_approvedField")
+    @ResponseBody
+    public Json approvedField(Integer id, String approvedState,HttpServletResponse response, HttpServletRequest request) {
+        Json j = new Json();
+        if (id != null) {
+            fieldDataServiceI.approvedField(id, approvedState);
+        }
+        j.setMsg("审批成功！");
+        j.setSuccess(true);
+        return j;
+    }
+
 	@RequestMapping("/securi_update")
 	@ResponseBody
 	public Json filedelete(HttpServletRequest request,
