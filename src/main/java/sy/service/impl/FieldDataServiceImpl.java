@@ -87,6 +87,7 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
             f.setItemCode(tem.getItemCode());
             f.setApprovedUser(tem.getApprovedUser());
             f.setCurrentApprovedUser(tem.getCurrentApprovedUser());
+            f.setApprovedOption(tem.getApprovedOption());
 
             Cost cost = costDao.get("from Cost where isDelete=0 and id='" + tem.getCostType() + "'");
             if (cost == null) {
@@ -293,7 +294,7 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
      * @param id
      */
     @Override
-    public void approvedField(Integer id, String approvedState) {
+    public void approvedField(Integer id, String approvedState, String approvedOption) {
         try {
             TFieldData t = fieldDataDaoI.get("from TFieldData t where t.id = " + id);
             if (!t.getApprovedUser().equals("")) {
@@ -314,6 +315,7 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
             }
 
             t.setNeedApproved(approvedState);
+            t.setApprovedOption(approvedOption);
             this.fieldDataDaoI.update(t);
         } catch (Exception e) {
             e.printStackTrace();
@@ -373,6 +375,7 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
             f.setItemCode(tem.getItemCode());
             f.setApprovedUser(tem.getApprovedUser());
             f.setCurrentApprovedUser(tem.getCurrentApprovedUser());
+            f.setApprovedOption(tem.getApprovedOption());
 
             Cost cost = costDao.get("from Cost where isDelete=0 and id='" + tem.getCostType() + "'");
             if (cost == null) {

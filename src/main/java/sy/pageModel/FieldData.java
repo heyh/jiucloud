@@ -49,6 +49,15 @@ public class FieldData {
     private String itemCode;
     private String approvedUser;
     private String currentApprovedUser;
+    private String approvedOption;
+
+    public String getApprovedOption() {
+        return approvedOption;
+    }
+
+    public void setApprovedOption(String approvedOption) {
+        this.approvedOption = approvedOption;
+    }
 
     public String getApprovedUser() {
         return approvedUser;

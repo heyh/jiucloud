@@ -381,7 +381,7 @@ public class WebApp extends BaseController {
 
 		TFieldData fieldData = new TFieldData(projectName, uid, new Date(),
 				costType, dataName, price, company, count, specifications,
-				remark, cid, uname, unit, needApproved, approvedUser, currentApprovedUser);
+				remark, cid, uname, unit, needApproved, approvedUser, currentApprovedUser, "");
 
 		Cost cost = costService.findById(costType);
 		fieldData.setItemCode(cost.getItemCode());
@@ -718,10 +718,10 @@ public class WebApp extends BaseController {
 
     @RequestMapping("/securi_approvedField")
     @ResponseBody
-    public Json approvedField(Integer id, String approvedState,HttpServletResponse response, HttpServletRequest request) {
+    public Json approvedField(Integer id, String approvedState, String approvedOption, HttpServletResponse response, HttpServletRequest request) {
         Json j = new Json();
         if (id != null) {
-            fieldDataServiceI.approvedField(id, approvedState);
+            fieldDataServiceI.approvedField(id, approvedState, approvedOption);
         }
         j.setMsg("审批成功！");
         j.setSuccess(true);

@@ -721,10 +721,10 @@ public class FieldDataController extends BaseController {
 
     @RequestMapping("/securi_approvedField")
     @ResponseBody
-    public Json approvedField(Integer id, String approvedState,HttpServletResponse response, HttpServletRequest request) {
+    public Json approvedField(Integer id, String approvedState,String approvedOption, HttpServletResponse response, HttpServletRequest request) {
         Json j = new Json();
         if (id != null) {
-            fieldDataServiceI.approvedField(id, approvedState);
+            fieldDataServiceI.approvedField(id, approvedState, approvedOption);
         }
         j.setMsg("审批成功！");
         j.setSuccess(true);

@@ -25,7 +25,7 @@ public class TFieldData implements java.io.Serializable {
 			String costType, String dataName, String price, String company,
 			String count, String specifications, String remark, String cid,
 			String uname, String unit, String needApproved, String approvedUser,
-            String currentApprovedUser) {
+            String currentApprovedUser, String approvedOption) {
 		super();
 		this.projectName = projectName;
 		this.uid = uid;
@@ -44,6 +44,7 @@ public class TFieldData implements java.io.Serializable {
         this.approvedUser = approvedUser;
         this.currentApprovedUser = currentApprovedUser;
         this.itemCode = itemCode;
+        this.approvedOption = approvedOption;
 
 	}
 
@@ -118,6 +119,17 @@ public class TFieldData implements java.io.Serializable {
 
     @Column(name = "currentApprovedUser")
     private String currentApprovedUser;
+
+    public String getApprovedOption() {
+        return approvedOption;
+    }
+
+    public void setApprovedOption(String approvedOption) {
+        this.approvedOption = approvedOption;
+    }
+
+    @Column(name = "approvedOption")
+    private String approvedOption;
 
     public String getCurrentApprovedUser() {
         return currentApprovedUser;
