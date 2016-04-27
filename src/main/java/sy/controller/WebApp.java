@@ -716,6 +716,51 @@ public class WebApp extends BaseController {
         return json;
     }
 
+    /**
+     * 我提交的审批数据列表
+     */
+    @RequestMapping("/securi_myApproveFielddataList")
+    @ResponseBody
+    public Json myApproveFielddataList(FieldData fieldData, PageHelper ph,
+                                     HttpServletRequest request, HttpServletResponse response) {
+        response.setContentType("text/html;charset=utf8");
+        Json json = new Json();
+        DataGrid dataGrid = null;
+        String uid = request.getParameter("uid");
+        String cid = null;
+        User u = userService.getUser(uid);
+        try {
+//			Department d = departmentService.findOneView(uid,cid);
+//			List<Integer> ugroup = departmentService.getUserGroup(d, uid,cid);
+            Company c = companyService.findOneView(u.getId(),cid);
+            List<Integer> ugroup = departmentService.getUsers(String.valueOf(c.getId()), Integer.parseInt(u.getId()));
+            dataGrid = fieldDataServiceI.myApproveDataGrid(ph, uid);
+
+            // add by heyh begin
+            List<FieldData> fieldDatas = dataGrid.getRows();
+            if (fieldDatas != null && fieldDatas.size()>0) {
+                for (int i = fieldDatas.size()-1; i >= 0; i--) {
+                    String currentApprovedUser = fieldDatas.get(i).getCurrentApprovedUser() == null ? "" : fieldDatas.get(i).getCurrentApprovedUser();
+                    if (!currentApprovedUser.equals("")) {
+                        User user = userService.getUser(currentApprovedUser);
+                        String realName = user.getRealname();
+                        if (realName == null || realName.equals("")) {
+                            realName = user.getUsername();
+                        }
+                        fieldDatas.get(i).setCurrentApprovedUser(realName);
+                    }
+                }
+            }
+            // add by heyh end
+            json.setObj(dataGrid.getRows());
+        } catch (Exception e) {
+            json.setMsg("服务器错误,请稍后再试");
+            return json;
+        }
+        json.setSuccess(true);
+        return json;
+    }
+
     @RequestMapping("/securi_approvedField")
     @ResponseBody
     public Json approvedField(Integer id, String approvedState, String approvedOption, HttpServletResponse response, HttpServletRequest request) {

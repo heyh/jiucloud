@@ -424,6 +424,82 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
         return dg;
     }
 
+    @Override
+    public DataGrid myApproveDataGrid(PageHelper ph, String uid) {
+        DataGrid dg = new DataGrid();
+        Map<String, Object> params = new HashMap<String, Object>();
+        String hql= " from TFieldData t  where isDelete=0 and  needApproved != '0' and uid = :uid order by t.id desc";
+        params.put("uid", uid);
+        List<TFieldData> l = fieldDataDaoI.find(hql, params, ph.getPage(), ph.getRows());
+        dg.setTotal(fieldDataDaoI.count("select count(*) " + hql, params));
+        List<FieldData> list = new ArrayList<FieldData>();
+        for (TFieldData tem : l) {
+            FieldData f = new FieldData();
+            f.setId(tem.getId());
+            f.setUid(tem.getUid());
+            f.setCreatTime(tem.getCreatTime());
+            f.setDataName(tem.getDataName());
+            f.setPrice(tem.getPrice());
+            f.setCompany(tem.getCompany());
+            f.setCount(tem.getCount());
+            f.setUnit(tem.getUnit());
+            f.setSpecifications(tem.getSpecifications());
+            f.setRemark(tem.getRemark());
+            f.setUname(tem.getUname());
+            f.setCost_id(Integer.parseInt(tem.getCostType()));
+            f.setNeedApproved(tem.getNeedApproved());
+            f.setItemCode(tem.getItemCode());
+            f.setApprovedUser(tem.getApprovedUser());
+            f.setCurrentApprovedUser(tem.getCurrentApprovedUser());
+            f.setApprovedOption(tem.getApprovedOption());
+
+            Cost cost = costDao.get("from Cost where isDelete=0 and id='" + tem.getCostType() + "'");
+            if (cost == null) {
+                f.setCostType("该费用类型可能已经被删除");
+            } else {
+                f.setCostType(cost.getCostType());
+            }
+            f.setProject_id(Integer.parseInt(tem.getProjectName()));
+            Project project = projectDao.get("from Project where isdel=0 and id='" + tem.getProjectName() + "'");
+            if (project == null) {
+                f.setProjectName("该工程可能已经被删除");
+                continue; // 工程删除，记录不显示
+            } else {
+                f.setProjectName(project.getProName());
+                f.setIsLock(project.getIsLock());
+            }
+            list.add(f);
+        }
+        // 0 不需要审批； 1 需要审批（显示未审批）
+        Collections.sort(list, new Comparator<FieldData>(){
+            @Override
+            public int compare(FieldData o1, FieldData o2) {
+                String needApproved1 = o1.getNeedApproved() == null ? "0" : o1.getNeedApproved();
+                String needApproved2 = o2.getNeedApproved() == null ? "0" : o2.getNeedApproved();
+                if (needApproved1.equals("1") && !needApproved1.equals(needApproved2)) {
+                    return -1;
+                }
+                return 0;
+            }
+        });
+
+        // 9 审批不通过
+        Collections.sort(list, new Comparator<FieldData>(){
+            @Override
+            public int compare(FieldData o1, FieldData o2) {
+                String needApproved1 = o1.getNeedApproved() == null ? "0" : o1.getNeedApproved();
+                String needApproved2 = o2.getNeedApproved() == null ? "0" : o2.getNeedApproved();
+                if (needApproved1.equals("9") && !needApproved1.equals(needApproved2)) {
+                    return -1;
+                }
+                return 0;
+            }
+        });
+
+        dg.setRows(list);
+        return dg;
+    }
+
     private Date string2date(String str) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = null;

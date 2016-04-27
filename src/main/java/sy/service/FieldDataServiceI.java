@@ -66,4 +66,12 @@ public interface FieldDataServiceI {
      * 获得审批列表
      */
     public DataGrid approveDataGrid(PageHelper ph, String currentApprovedUser);
+
+    /**
+     * 我的需要审批记录信息
+     * @param ph
+     * @param uid
+     * @return
+     */
+    public DataGrid myApproveDataGrid(PageHelper ph, String uid);
 }
