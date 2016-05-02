@@ -463,7 +463,7 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
             Project project = projectDao.get("from Project where isdel=0 and id='" + tem.getProjectName() + "'");
             if (project == null) {
                 f.setProjectName("该工程可能已经被删除");
-                continue; // 工程删除，记录不显示
+//                continue; // 工程删除，记录不显示
             } else {
                 f.setProjectName(project.getProName());
                 f.setIsLock(project.getIsLock());

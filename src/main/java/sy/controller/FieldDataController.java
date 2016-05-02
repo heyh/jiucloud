@@ -9,10 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
-import sy.model.po.Cost;
-import sy.model.po.GCPo;
-import sy.model.po.Project;
-import sy.model.po.TFieldData;
+import sy.model.po.*;
 import sy.pageModel.*;
 import sy.service.*;
 import sy.util.*;
@@ -776,4 +773,38 @@ public class FieldDataController extends BaseController {
         return json;
 
     }
+
+    @RequestMapping("/myApproveShow")
+    public String myApproveShow(HttpServletRequest req) {
+        req.setAttribute("first", UtilDate.getshortFirst());
+        req.setAttribute("last", UtilDate.getshortLast());
+        return "/app/fielddata/myApproveShow";
+    }
+
+    @RequestMapping("/securi_myApproveDataGrid")
+    @ResponseBody
+    public DataGrid securi_myApproveDataGrid(PageHelper ph, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+        SessionInfo sessionInfo = (SessionInfo) session.getAttribute(ConfigUtil.getSessionInfoName());
+        String uid = sessionInfo.getId();
+        DataGrid dataGrid = fieldDataServiceI.myApproveDataGrid(ph, uid);
+
+        // add by heyh begin
+        List<FieldData> fieldDatas = dataGrid.getRows();
+        if (fieldDatas != null && fieldDatas.size() > 0) {
+            for (int i = fieldDatas.size() - 1; i >= 0; i--) {
+                String currentApprovedUser = fieldDatas.get(i).getCurrentApprovedUser() == null ? "" : fieldDatas.get(i).getCurrentApprovedUser();
+                if (!currentApprovedUser.equals("")) {
+                    User user = userService.getUser(currentApprovedUser);
+                    String realName = user.getRealname();
+                    if (realName == null || realName.equals("")) {
+                        realName = user.getUsername();
+                    }
+                    fieldDatas.get(i).setCurrentApprovedUser(realName);
+                }
+            }
+        }
+
+        return dataGrid;
+    }
+
 }
