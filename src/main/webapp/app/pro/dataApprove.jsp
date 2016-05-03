@@ -191,6 +191,7 @@
         }
 
         var approvedTip = '';
+        var approvedOption = '';
         if(approvedState == '2') {
             approvedTip = '确认审批通过,并结束后续审批?';
         } else if(approvedState == '8') {
@@ -205,25 +206,28 @@
                 approvedTip,
                 function(b) {
                     if (b) {
+                        if(approvedState == '9') {
+                            approvedOption = prompt("审批意见","")
+                        }
                         parent.$.messager.progress({
                             title : '提示',
                             text : '数据处理中，请稍后....'
                         });
-                        $
-                                .ajax({
-                                    type : "post",
-                                    url : '${pageContext.request.contextPath}/fieldDataController/securi_approvedField',
-                                    data : {
-                                        id : id,
-                                        approvedState: approvedState
-                                    },
-                                    dataType : "json",
-                                    success : function(data) {
-                                        if (data.success == true) {
-                                            searchFunData();
-                                        }
-                                    }
-                                });
+                        $.ajax({
+                            type : "post",
+                            url : '${pageContext.request.contextPath}/fieldDataController/securi_approvedField',
+                            data : {
+                                id : id,
+                                approvedState: approvedState,
+                                approvedOption: approvedOption
+                            },
+                            dataType : "json",
+                            success : function(data) {
+                                if (data.success == true) {
+                                    searchFunData();
+                                }
+                            }
+                        });
                     }
                 });
     };
