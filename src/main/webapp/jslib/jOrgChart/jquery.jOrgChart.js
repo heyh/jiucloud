@@ -31,7 +31,7 @@
     // add drag and drop if enabled
     if(opts.dragAndDrop){
         $('div.node').draggable({
-            cursor      : 'move',
+            cursor      : 'hand',
             distance    : 40,
             helper      : 'clone',
             opacity     : 0.8,
@@ -172,7 +172,7 @@
 
     if($childNodes.length > 0) {
       // if it can be expanded then change the cursor
-      $nodeDiv.css('cursor','n-resize');
+      $nodeDiv.css('cursor','hand');
     
       // recurse until leaves found (-1) or to the level specified
       if(opts.depth == -1 || (level+1 < opts.depth)) {
@@ -224,7 +224,7 @@
                 $nodeRow.nextAll('tr').css('visibility', 'hidden');
                     $nodeRow.removeClass('expanded');
                     $nodeRow.addClass('contracted');
-                    $nodeDiv.css('cursor','s-resize');
+                    $nodeDiv.css('cursor','hand');
             } else {
                 $nodeDiv.addClass(item);
             }
@@ -235,10 +235,10 @@
     $appendTo.append($table);
     
     /* Prevent trees collapsing if a link inside a node is clicked */
-    $nodeDiv.children('a').click(function(e){
-        console.log(e);
-        e.stopPropagation();
-    });
+    //$nodeDiv.children('a').click(function(e){
+    //    console.log(e);
+    //    e.stopPropagation();
+    //});
   };
 
 })(jQuery);
