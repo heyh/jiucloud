@@ -255,7 +255,7 @@
                                 var approveUids = [];
                                 var approveNames = [];
                                 $.each(chooseNodes, function (index, chooseNode) {
-                                    if(chooseNode.firstChild.id != '-1') {
+                                    if(chooseNode.firstChild.id != '-1' && $.inArray(chooseNode.firstChild.id, approveUids) == '-1' ) {
                                         approveUids.push(chooseNode.firstChild.id);
                                         approveNames.push(chooseNode.innerText);
                                     }
