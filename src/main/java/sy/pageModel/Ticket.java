@@ -22,7 +22,6 @@ public class Ticket {
     private String price;
     private String specifications;
     private String money;
-    private String linkPerson;
     private String linkPhone;
     private Date createTime;
     private Date updateTime;
@@ -166,14 +165,6 @@ public class Ticket {
 
     public void setMoney(String money) {
         this.money = money;
-    }
-
-    public String getLinkPerson() {
-        return linkPerson;
-    }
-
-    public void setLinkPerson(String linkPerson) {
-        this.linkPerson = linkPerson;
     }
 
     public String getLinkPhone() {

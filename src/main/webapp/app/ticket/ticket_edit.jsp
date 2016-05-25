@@ -244,13 +244,6 @@
                         </div>
                     </div>
                     <div class="control-group">
-                        <label class="control-label" for="taxNo">纳税识别号:</label>
-
-                        <div class="controls">
-                            <input type="text" name="taxNo" id="taxNo" value='${tTicket.taxNo }'>
-                        </div>
-                    </div>
-                    <div class="control-group">
                         <label class="control-label" for="taxAccount">纳税账户开户账号:</label>
 
                         <div class="controls">
@@ -258,10 +251,10 @@
                         </div>
                     </div>
                     <div class="control-group">
-                        <label class="control-label" for="address">地址:</label>
+                        <label class="control-label" for="taxNo">纳税识别号:</label>
 
                         <div class="controls">
-                            <input type="text" name="address" id="address" value='${tTicket.address }'>
+                            <input type="text" name="taxNo" id="taxNo" value='${tTicket.taxNo }'>
                         </div>
                     </div>
                     <div class="control-group">
@@ -280,14 +273,12 @@
                         </div>
                     </div>
                     <div class="control-group">
-                        <label class="control-label" for="linkPerson">联系人:</label>
+                        <label class="control-label" for="address">地址:</label>
 
                         <div class="controls">
-                            <input type="text" name="linkPerson" id="linkPerson" value='${tTicket.linkPerson }'>
+                            <input type="text" name="address" id="address" value='${tTicket.address }'>
                         </div>
                     </div>
-
-
                 </div>
             </div>
         </fieldset>

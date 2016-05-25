@@ -59,7 +59,8 @@
                             {
                                 field: 'ticketDate',
                                 title: '开票日期',
-                                width: 100
+                                width: 100,
+                                formatter: formatDatebox
                             },
                             {
                                 field: 'contract',
@@ -170,9 +171,9 @@
         function addFun() {
             var ticketType = $("#ticketType").val();
             var title = '';
-            if(ticketType == 0) {
+            if (ticketType == 0) {
                 title = '销项发票';
-            } else if(ticketType == 1) {
+            } else if (ticketType == 1) {
                 title = '进项发票';
             }
             parent.$
@@ -180,7 +181,7 @@
                         title: title,
                         width: 1050,
                         height: 600,
-                        href: '${pageContext.request.contextPath}/ticket/toAddPage?ticketType=' + ticketType ,
+                        href: '${pageContext.request.contextPath}/ticket/toAddPage?ticketType=' + ticketType,
                         buttons: [{
                             text: '添加',
                             handler: function () {
@@ -292,16 +293,48 @@
             dataGrid.datagrid('load', {});
         }
 
+        Date.prototype.format = function (format) {
+            var o = {
+                "M+": this.getMonth() + 1, // month
+                "d+": this.getDate(), // day
+                "h+": this.getHours(), // hour
+                "m+": this.getMinutes(), // minute
+                "s+": this.getSeconds(), // second
+                "q+": Math.floor((this.getMonth() + 3) / 3), // quarter
+                "S": this.getMilliseconds()
+                // millisecond
+            }
+            if (/(y+)/.test(format))
+                format = format.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+            for (var k in o)
+                if (new RegExp("(" + k + ")").test(format))
+                    format = format.replace(RegExp.$1, RegExp.$1.length == 1 ? o[k] : ("00" + o[k]).substr(("" + o[k]).length));
+            return format;
+        }
+        function formatDatebox(value) {
+            if (value == null || value == '') {
+                return '';
+            }
+            var dt;
+            if (value instanceof Date) {
+                dt = value;
+            } else {
+                dt = new Date(value);
+            }
+
+            return dt.format("yyyy-MM-dd"); //扩展的Date的format方法(上述插件实现)
+        }
+
         $(document).ready(function () {
             <%--$("#projectName").select2({--%>
-                <%--placeholder: "可以模糊查询",--%>
-                <%--allowClear: true,--%>
-                <%--&lt;%&ndash;data:<%=projectInfos%>&ndash;%&gt;--%>
+            <%--placeholder: "可以模糊查询",--%>
+            <%--allowClear: true,--%>
+            <%--&lt;%&ndash;data:<%=projectInfos%>&ndash;%&gt;--%>
             <%--});--%>
             <%--$("#costType").select2({--%>
-                <%--tags: "true",--%>
-                <%--placeholder: "可以模糊查询",--%>
-                <%--allowClear: true--%>
+            <%--tags: "true",--%>
+            <%--placeholder: "可以模糊查询",--%>
+            <%--allowClear: true--%>
             <%--});--%>
         });
 

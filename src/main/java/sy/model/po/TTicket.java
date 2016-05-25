@@ -81,10 +81,6 @@ public class TTicket {
     @Column(name = "money")
     private String money;
 
-    // 联系人
-    @Column(name = "linkPerson")
-    private String linkPerson;
-
     // 联系电话
     @Column(name = "linkPhone")
     private String linkPhone;
@@ -150,7 +146,6 @@ public class TTicket {
         this.price = price;
         this.specifications = specifications;
         this.money = money;
-        this.linkPerson = linkPerson;
         this.linkPhone = linkPhone;
         this.createTime = createTime;
         this.updateTime = updateTime;
@@ -299,14 +294,6 @@ public class TTicket {
 
     public void setMoney(String money) {
         this.money = money;
-    }
-
-    public String getLinkPerson() {
-        return linkPerson;
-    }
-
-    public void setLinkPerson(String linkPerson) {
-        this.linkPerson = linkPerson;
     }
 
     public String getLinkPhone() {

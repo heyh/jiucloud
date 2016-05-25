@@ -193,9 +193,9 @@ public class TicketController extends BaseController {
 
         // 填充数据
         String[] columnNames = {"发票名称", "开票日期", "合同", "供应商名称", "纳税识别号", "地址", "纳税账户开户银行", "纳税账户开户账号", "纳税资格状况",
-                "单位", "数量", "单价", "规格型号", "金额", "联系人", "联系电话", "入库时间", "操作人"}; // 列名
+                "单位", "数量", "单价", "规格型号", "金额", "联系电话", "入库时间", "操作人"}; // 列名
         String[] keys = {"ticketName", "ticketDate", "contract", "supplier", "taxNo", "address", "taxBank", "taxAccount", "taxStatus",
-                "unit", "count", "price", "specifications", "money", "linkPerson", "linkPhone", "createTime", "uname"};// map中的key
+                "unit", "count", "price", "specifications", "money", "linkPhone", "createTime", "uname"};// map中的key
 
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         BufferedInputStream bis = null;
@@ -257,7 +257,6 @@ public class TicketController extends BaseController {
             item.put("price", ticket.getPrice());
             item.put("specifications", ticket.getSpecifications());
             item.put("money", ticket.getMoney());
-            item.put("linkPerson", ticket.getLinkPerson());
             item.put("linkPhone", ticket.getLinkPhone());
             item.put("createTime", ticket.getCreateTime());
             item.put("uname", ticket.getUname());

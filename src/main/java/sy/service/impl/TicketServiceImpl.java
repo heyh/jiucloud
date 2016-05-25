@@ -58,7 +58,6 @@ public class TicketServiceImpl implements TicketServiceI {
             t.setPrice(tTicket.getPrice());
             t.setSpecifications(tTicket.getSpecifications());
             t.setMoney(tTicket.getMoney());
-            t.setLinkPerson(tTicket.getLinkPerson());
             t.setLinkPhone(tTicket.getLinkPhone());
             t.setCreateTime(tTicket.getCreateTime());
             t.setUpdateTime(tTicket.getUpdateTime());
