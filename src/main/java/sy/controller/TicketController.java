@@ -1,16 +1,18 @@
 package sy.controller;
 
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
+import sy.model.po.GCPo;
 import sy.model.po.TTicket;
 import sy.pageModel.*;
+import sy.service.GCPoServiceI;
 import sy.service.TicketServiceI;
-import sy.util.ConfigUtil;
-import sy.util.ExcelExportUtil;
-import sy.util.UtilDate;
-import sy.util.UuidUtil;
+import sy.util.*;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -29,6 +31,9 @@ public class TicketController extends BaseController {
 
     @Autowired
     private TicketServiceI ticketService;
+
+    @Autowired
+    private GCPoServiceI gcPoService;
 
     /**
      * 销项发票列表页面
@@ -99,7 +104,7 @@ public class TicketController extends BaseController {
     @RequestMapping("/add")
     @ResponseBody
     public Json add(TTicket tTicket, HttpServletRequest request) {
-        SessionInfo sessionInfo = (SessionInfo) request.getSession().getAttribute(sy.util.ConfigUtil.getSessionInfoName());
+        SessionInfo sessionInfo = (SessionInfo) request.getSession().getAttribute(ConfigUtil.getSessionInfoName());
         Json j = new Json();
         tTicket.setUid(sessionInfo.getId());
         tTicket.setCid(sessionInfo.getCompid());
@@ -108,6 +113,7 @@ public class TicketController extends BaseController {
         tTicket.setId(UuidUtil.get32UUID());
         try {
             this.ticketService.add(tTicket);
+            j.setObj(tTicket.getId());
             j.setMsg("新增成功！");
             j.setSuccess(true);
         } catch (Exception ex) {
@@ -118,12 +124,92 @@ public class TicketController extends BaseController {
     }
 
     /**
+     * 文件上传
+     * @param req
+     * @param rt
+     * @return
+     */
+    @RequestMapping("/upload")
+    @ResponseBody
+    public Json uploadFile(HttpServletRequest req, MultipartHttpServletRequest rt) {
+        Json j = new Json();
+        SessionInfo sessionInfo = (SessionInfo) req.getSession().getAttribute(ConfigUtil.getSessionInfoName());
+        String userPath = sessionInfo.getId() + "/";
+        String mid = rt.getParameter("mid");
+        if (mid == null || mid.length() == 0 || mid.equals("undefined")) {
+            j.setCode(000);
+            j.setSuccess(false);
+            j.setMsg("mid is need not null");
+            return j;
+        }
+        try {
+            String file_path = PropertyUtil.getFileRealPath() + "/upload/" + Constant.SOURCE + userPath;
+            MultipartFile patch =  rt.getFile("file");// 获取文件
+            String fileName = patch.getOriginalFilename();// 得到文件名
+            if (!patch.isEmpty()) {
+                File saveDir = new File(file_path);
+                if (!saveDir.exists())
+                    saveDir.mkdirs();
+                String reg = fileName.substring(
+                        patch.getOriginalFilename().lastIndexOf(".") + 1)
+                        .toLowerCase();
+                int status = Constant.fileStatus(reg);
+                if (status == -1) {
+                    j.setSuccess(false);
+                    j.setMsg("上传的文件格式不支持");
+                    return j;
+                }
+               String finalname = UUID.randomUUID().toString();
+                // end
+                File f = new File(file_path + finalname + "." + reg);
+                patch.transferTo(f);
+
+                GCPo gcpo = new GCPo();
+                gcpo.setMpid(mid);
+                gcpo.setFileName(patch.getOriginalFilename());
+                gcpo.setPdfFilePath("");
+                gcpo.setSwfFilePath("");
+                gcpo.setSourceFilePath(userPath + finalname + "." + reg);
+                gcpo.setExt(reg);
+                gcpo.setStatus(status);
+
+                // 如果已经是pdf直接设置从pdf > swf状态开始
+                if (reg.equals("pdf")) {
+                    String pdfFilePath = PropertyUtil.getFileRealPath() + "/upload/" + Constant.PDFSOURCE + userPath;
+                    FileUtils.copyFileToDirectory(f, new File(pdfFilePath));
+                    gcpo.setStatus(Constant.PDF2SWF_STATUS);
+                    gcpo.setPdfFilePath(userPath + finalname + "." + reg);
+                }
+                gcPoService.add(gcpo);
+                j.setMsg(fileName + "上传成功");
+                j.setObj(gcpo.getId());
+                j.setCode(2000);
+                j.setSuccess(true);
+                return j;
+            } else {
+                j.setCode(1004);
+                j.setObj(null);
+                j.setSuccess(false);
+                j.setMsg("上传的文件不存在");
+                return j;
+            }
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            j.setCode(1005);
+            j.setObj(null);
+            j.setSuccess(false);
+            j.setMsg("上传异常:" + ex.getMessage());
+            return j;
+        }
+    }
+
+    /**
      * 跳转修改页面
      *
      * @param request
      * @param response
      * @return
-     * @throws IOException
+     * @throws java.io.IOException
      */
     @RequestMapping("/toEditPage")
     public String toEditPage(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -142,7 +228,7 @@ public class TicketController extends BaseController {
     @ResponseBody
     public Json edit(TTicket tTicket, HttpServletRequest request) {
         Json j = new Json();
-        SessionInfo sessionInfo = (SessionInfo) request.getSession().getAttribute(sy.util.ConfigUtil.getSessionInfoName());
+        SessionInfo sessionInfo = (SessionInfo) request.getSession().getAttribute(ConfigUtil.getSessionInfoName());
         tTicket.setUid(sessionInfo.getId());
         tTicket.setUname((sessionInfo.getName() != null && !sessionInfo.getName().equals("")) ? sessionInfo.getName() : sessionInfo.getUsername());
         tTicket.setUpdateTime(new Date());

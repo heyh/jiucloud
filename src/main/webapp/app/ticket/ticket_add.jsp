@@ -28,6 +28,11 @@
 <link rel="stylesheet"
       href="${pageContext.request.contextPath}/jslib/bootstrap-datepicker/dist/css/bootstrap-datepicker.standalone.css">
 
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath }/jslib/webuploader/webuploader.css"/>
+<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath }/jslib/webuploader/style.css"/>
+
+<script type="text/javascript" src="${pageContext.request.contextPath }/jslib/webuploader/webuploader.js"></script>
+<script type="text/javascript" src="${pageContext.request.contextPath }/jslib/webuploader/upload-common.js"></script>
 
 <style>
     .container-fluid {
@@ -49,10 +54,16 @@
         margin-top: 20px;
     }
 
+    .ty-summary {
+        width: 100%;
+    }
+
+    .clearfix {
+        zoom: 1;
+    }
 </style>
 
 <script type="text/javascript">
-
     $('.input-append').datepicker({
         format: "yyyy-mm-dd",
         language: "zh-CN",
@@ -71,7 +82,7 @@
                     title: '提示',
                     text: '数据处理中，请稍后....'
                 });
-                debugger;
+
                 var isValid = $(this).form('validate');
                 if (!isValid) {
                     parent.$.messager.progress('close');
@@ -85,19 +96,34 @@
                 return isValid;
             },
             success: function (result) {
-                debugger;
                 parent.$.messager.progress('close');
                 result = $.parseJSON(result);
                 if (result.success) {
                     parent.$.messager.progress('close');
                     jQuery.messager.show({
-                        title:'温馨提示:',
-                        msg:'添加成功!',
-                        timeout:3000,
-                        showType:'show'
+                        title: '温馨提示:',
+                        msg: '添加成功!',
+                        timeout: 3000,
+                        showType: 'show'
                     });
-                    parent.$.modalDialog.openner_dataGrid.datagrid('reload');//之所以能在这里调用到parent.$.modalDialog.openner_dataGrid这个对象，是因为user.jsp页面预定义好了
-                    parent.$.modalDialog.handler.dialog('close');
+
+                    var count = 0;
+                    $(".filelist").each(function () {
+                        count += $(this).children('li').length;
+                    });
+                    if (count > 0) {
+                        uploader.options.formData = {'mid': result.obj};
+                        $('.uploadBtn').click();
+                        uploader.on('uploadSuccess', function (file) {
+                            setTimeout(function () {
+                                parent.$.modalDialog.openner_dataGrid.datagrid('reload');//之所以能在这里调用到parent.$.modalDialog.openner_dataGrid这个对象，是因为user.jsp页面预定义好了
+                                parent.$.modalDialog.handler.dialog('close');
+                            }, 1000);
+                        });
+                    } else {
+                        parent.$.modalDialog.openner_dataGrid.datagrid('reload');//之所以能在这里调用到parent.$.modalDialog.openner_dataGrid这个对象，是因为user.jsp页面预定义好了
+                        parent.$.modalDialog.handler.dialog('close');
+                    }
                 } else {
                     parent.$.messager.alert('错误', result.msg, 'error');
                 }
@@ -105,7 +131,7 @@
         });
     });
 
-    $(function() {
+    $(function () {
         var ticketType = $("#ticketType").val();
         if (ticketType == '0') {
             $("#consumerDiv").attr("style", "display:none;");
@@ -190,6 +216,7 @@
                 <div class="span6">
                     <div class="control-group">
                         <label class="control-label" for="date1">发票日期:</label>
+
                         <div class="controls">
                             <div class="input-append date">
                                 <input type="text" name="ticketDate" id="date1" readonly>
@@ -257,6 +284,7 @@
                 <div class="span6">
                     <div class="control-group" id="ticketStatusDiv">
                         <label class="control-label" for="ticketStatus">发票状态:</label>
+
                         <div class="controls">
                             <select id="ticketStatus" name="ticketStatus">
                                 <option/>
@@ -270,6 +298,7 @@
 
                     <div class="control-group" id="authStatusDiv">
                         <label class="control-label" for="authStatus">认证状态:</label>
+
                         <div class="controls">
                             <select id="authStatus" name="authStatus">
                                 <option/>
@@ -282,6 +311,7 @@
                 <div class="span6">
                     <div class="control-group">
                         <label class="control-label" for="reciveStatus">接收状态:</label>
+
                         <div class="controls">
                             <select id="reciveStatus" name="reciveStatus">
                                 <option/>
@@ -294,6 +324,33 @@
             </div>
         </fieldset>
 
+        <fieldset>
+            <legend>上传附件</legend>
+            <div id="wrapper">
+                <div id="container">
+                    <!--头部，相册选择和格式选择-->
+                    <div id="uploader">
+                        <div class="queueList">
+                            <div id="dndArea" class="placeholder">
+                                <div id="filePicker" style="text-align: center"></div>
+                                <%--<p>或将照片拖到这里，单次最多可选300张</p>--%>
+                            </div>
+                        </div>
+                        <div class="statusBar" style="display:none;">
+                            <div class="progress">
+                                <span class="text">0%</span>
+                                <span class="percentage"></span>
+                            </div>
+                            <div class="info"></div>
+                            <div class="btns">
+                                <div id="filePicker2"></div>
+                                <div class="uploadBtn" style="display: none">开始上传</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </fieldset>
     </form>
 
 </div>
