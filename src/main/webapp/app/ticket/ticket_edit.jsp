@@ -150,6 +150,15 @@
 
     });
 
+    function cal() {
+        var price = $('#price').val().trim();
+        var count = $('#count').val().trim();
+        if (price != '' && count != '') {
+            $("#money").val((price * count).toFixed(2));
+        } else {
+            $("#money").val('0.00');
+        }
+    }
 </script>
 
 <div class="container-fluid">
@@ -205,21 +214,21 @@
                         <label class="control-label" for="count">数量:</label>
 
                         <div class="controls">
-                            <input type="text" name="count" id="count" value='${tTicket.count }'>
+                            <input type="text" name="count" id="count" value='${tTicket.count }' onblur="cal()">
                         </div>
                     </div>
                     <div class="control-group">
                         <label class="control-label" for="price">单价:</label>
 
                         <div class="controls">
-                            <input type="text" name="price" id="price" value='${tTicket.price }'>
+                            <input type="text" name="price" id="price" value='${tTicket.price }' onblur="cal()">
                         </div>
                     </div>
                     <div class="control-group">
                         <label class="control-label" for="money">金额:</label>
 
                         <div class="controls">
-                            <input type="text" name="money" id="money" value='${tTicket.money }'>
+                            <input type="text" name="money" id="money" value='${tTicket.money }' readonly>
                         </div>
                     </div>
                     <div class="control-group">
