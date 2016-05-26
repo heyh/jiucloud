@@ -138,6 +138,16 @@
                 break;
             }
         }
+
+        var taxStatusId = document.getElementById('taxStatusId').value;
+        for (var i = 0; i < document.getElementById('taxStatus').options.length; i++) {
+            if (document.getElementById('taxStatus').options[i].value == taxStatusId) {
+                document.getElementById('taxStatus').options[i].selected = true;
+                break;
+            }
+        }
+
+
     });
 
 </script>
@@ -153,6 +163,7 @@
         <input type="hidden" id="ticketStatusId" name="ticketStatusId" value="${tTicket.ticketStatus}"/>
         <input type="hidden" id="authStatusId" name="authStatusId" value="${tTicket.authStatus}"/>
         <input type="hidden" id="reciveStatusId" name="reciveStatusId" value="${tTicket.reciveStatus}"/>
+        <input type="hidden" id="taxStatusId" name="taxStatusId" value="${tTicket.taxStatus}"/>
 
         <fieldset>
             <legend id="outLegend">开票台帐</legend>
@@ -181,10 +192,13 @@
                         </div>
                     </div>
                     <div class="control-group">
-                        <label class="control-label" for="taxStatus">纳税资格状况:</label>
+                        <label class="control-label" for="taxStatus">纳税人资格:</label>
 
                         <div class="controls">
-                            <input type="text" name="taxStatus" id="taxStatus" value='${tTicket.taxStatus }'>
+                            <select id="taxStatus" name="taxStatus">
+                                <option value="一般纳税人">一般纳税人</option>
+                                <option value="小规模纳税人">小规模纳税人</option>
+                            </select>
                         </div>
                     </div>
                     <div class="control-group">

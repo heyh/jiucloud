@@ -176,10 +176,13 @@
                         </div>
                     </div>
                     <div class="control-group">
-                        <label class="control-label" for="taxStatus">纳税资格状况:</label>
+                        <label class="control-label" for="taxStatus">纳税人资格:</label>
 
                         <div class="controls">
-                            <input type="text" name="taxStatus" id="taxStatus">
+                            <select id="taxStatus" name="taxStatus">
+                                <option value="一般纳税人">一般纳税人</option>
+                                <option value="小规模纳税人">小规模纳税人</option>
+                            </select>
                         </div>
                     </div>
                     <div class="control-group">
@@ -315,8 +318,8 @@
                         <div class="controls">
                             <select id="reciveStatus" name="reciveStatus">
                                 <option/>
-                                <option value="已接收">已接收</option>
                                 <option value="未接收">未接收</option>
+                                <option value="已接收">已接收</option>
                             </select>
                         </div>
                     </div>
