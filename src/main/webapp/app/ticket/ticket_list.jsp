@@ -71,13 +71,13 @@
                                 field: 'supplier',
                                 title: '供应商名称',
                                 width: 100,
-                                hidden: $("#ticketType").val() == 0 ? false : true
+                                hidden: $("#ticketType").val() == 0 ? true : false
                             },
                             {
                                 field: 'consumer',
                                 title: '客户名称',
                                 width: 100,
-                                hidden: $("#ticketType").val() == 1 ? false : true
+                                hidden: $("#ticketType").val() == 1 ? true : false
                             },
                             {
                                 field: 'taxNo',

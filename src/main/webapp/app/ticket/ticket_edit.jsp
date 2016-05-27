@@ -106,12 +106,12 @@
     $(function () {
         var ticketType = $("#ticketType").val();
         if (ticketType == '0') {
-            $("#consumerDiv").attr("style", "display:none;");
-            $("#authStatusDiv").attr("style", "display:none;");
-            $("#inLegend").attr("style", "display:none;");
-        } else if (ticketType == '1') {
             $("#supplierDiv").attr("style", "display:none;");
             $("#ticketStatusDiv").attr("style", "display:none;");
+            $("#inLegend").attr("style", "display:none;");
+        } else if (ticketType == '1') {
+            $("#consumerDiv").attr("style", "display:none;");
+            $("#authStatusDiv").attr("style", "display:none;");
             $("#outLegend").attr("style", "display:none;");
         }
 
