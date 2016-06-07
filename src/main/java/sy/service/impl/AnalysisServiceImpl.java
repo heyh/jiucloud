@@ -9,10 +9,14 @@ import sy.dao.FieldDataDaoI;
 import sy.model.po.Cost;
 import sy.model.po.Price;
 import sy.model.po.Project;
+import sy.model.po.TFieldData;
 import sy.pageModel.AnalysisData;
 import sy.pageModel.AnalysisSearch;
+import sy.pageModel.FieldData;
 import sy.service.AnalysisServiceI;
 import sy.service.CostServiceI;
+import sy.util.DateKit;
+import sy.util.StringUtil;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -52,7 +56,7 @@ public class AnalysisServiceImpl implements AnalysisServiceI {
 		params.put("price_id", price_id);
 		params.put("project_id", project_id);
 
-		String hql = "select c.costType,sum(f.count*f.price),c.isend,c.itemCode,f.price,f.unit,sum(f.count) from TCost c LEFT JOIN TFieldData f on f.itemCode=c.itemCode and f.projectName=:project_id  and f.isDelete=0";
+		String hql = "select c.costType,sum(f.count*f.price),c.isend,c.itemCode,f.price,f.unit,sum(f.count), c.id from TCost c LEFT JOIN TFieldData f on f.itemCode=c.itemCode and f.projectName=:project_id  and f.isDelete=0";
 		if (date != null && date.length() > 0) {
 			hql += " and f.creatTime>='" + date + "'";
 		}
@@ -67,7 +71,7 @@ public class AnalysisServiceImpl implements AnalysisServiceI {
 			hql += ") ";
 		}
 
-		hql += " where c.isDelete=0 and c.ID in (select cost_id from TPrice_Cost where price_id=:price_id) GROUP BY c.ID,f.price,f.unit";
+		hql += " where c.isDelete=0 and c.ID in (select cost_id from TPrice_Cost where price_id=:price_id) GROUP BY c.ID";
 
 		List<Object[]> list = analysisDao.findBySql(hql, params);
 		List<AnalysisData> result = new ArrayList<AnalysisData>();
@@ -77,6 +81,9 @@ public class AnalysisServiceImpl implements AnalysisServiceI {
 			if (tem[1] != null) {
 				a.setMoney((Double) tem[1]);
 			}
+            if (tem[1] == null || tem[1].equals("0") || tem[1].equals("0.00")) {
+                continue;
+            }
 			a.setIsend((Integer) tem[2]);
 			a.setItemCode((String) tem[3]);
 			a.setPrice((String) tem[4]);
@@ -86,6 +93,7 @@ public class AnalysisServiceImpl implements AnalysisServiceI {
 			} else {
 				a.setCount((Double) tem[6]);
 			}
+            a.setCost_id(Integer.parseInt(StringUtil.trimToEmpty(tem[7])));
 			result.add(a);
 		}
 		return result;
@@ -317,4 +325,63 @@ public class AnalysisServiceImpl implements AnalysisServiceI {
         List<Object[]> list = analysisDao.findBySql(hql);
         return list;
     }
+
+    @Override
+    public List<FieldData> getListByItemCode(String itemCode, String unit, String price, String startDate, String endDate, String projectName, List<Integer> ugroup,String cid) {
+        Map<String, Object> paramMap = new HashMap<String, Object>();
+        String hql = " from TFieldData t  where isDelete=0" ;
+        if (projectName != null  && !projectName.equals("")) {
+            hql += " and projectName = :projectName ";
+            paramMap.put("projectName", projectName);
+        }
+        if (itemCode != null  && !itemCode.equals("")) {
+            hql += " and itemCode = :itemCode ";
+            paramMap.put("itemCode", itemCode);
+        }
+
+        if (unit != null  && !unit.equals("")) {
+            hql += " and unit = :unit ";
+            paramMap.put("unit", unit);
+        }
+
+        if (price != null  && !price.equals("")) {
+            hql += " and price = :price ";
+            paramMap.put("price", price);
+        }
+
+        if (startDate != null && !startDate.equals("")) {
+            hql += " and t.creatTime >= :startTime";
+            paramMap.put("startTime", DateKit.strToDateOrTime(startDate));
+        }
+        if (endDate != null && !endDate.equals("")) {
+            hql += " and t.creatTime <= :endDate";
+            paramMap.put("endDate", DateKit.strToDateOrTime(endDate));
+        }
+        String uids = StringUtils.join(ugroup, ",");
+        hql += " and uid in (" + uids + ")";
+
+        hql += " order by t.id desc";
+        List<TFieldData> list = fieldDataDaoI.find(hql, paramMap);
+        List<FieldData> result = new ArrayList<FieldData>();
+        for (TFieldData item : list) {
+            FieldData a = new FieldData();
+            a.setDataName(item.getDataName());
+            a.setUnit(item.getUnit());
+
+            DecimalFormat decimalFormat = new DecimalFormat("###.00");
+            if (item.getPrice() != null && !item.getPrice().equals("") && StringUtil.isNum(item.getPrice())) {
+                price = decimalFormat.format(Double.parseDouble(item.getPrice()));
+            }
+            a.setPrice(price);
+            a.setCount(item.getCount());
+            Double money = new Double("0.00");
+            if (item.getCount() != null && !item.equals("") && StringUtil.isNum(item.getCount()) && item.getPrice() != null && !item.getPrice().equals("") && StringUtil.isNum(item.getPrice())) {
+                money = Double.parseDouble(item.getCount()) * Double.parseDouble(item.getPrice());
+             }
+            a.setMoney(money);
+            result.add(a);
+        }
+        return result;
+    }
+
 }

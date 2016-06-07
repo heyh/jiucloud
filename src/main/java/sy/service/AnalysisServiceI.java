@@ -5,6 +5,7 @@ import sy.model.po.Price;
 import sy.model.po.Project;
 import sy.pageModel.AnalysisData;
 import sy.pageModel.AnalysisSearch;
+import sy.pageModel.FieldData;
 
 import java.util.List;
 
@@ -29,4 +30,5 @@ public interface AnalysisServiceI {
     public String getFeeStatList(int projectId, String cid, List<Integer> ugroup);
 
     public List<Object[]> getAllFee(String cid, List<Integer> ugroup);
-}
+    public List<FieldData> getListByItemCode(String itemCode, String unit, String price, String startDate, String endDate, String projectName, List<Integer> ugroup,String cid);
+    }

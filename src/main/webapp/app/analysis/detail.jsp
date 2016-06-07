@@ -70,10 +70,63 @@
 
                 });
 	}
-    $(document).ready(function() { $("#price_id").select2({
-        placeholder: "可以模糊查询",
-        allowClear: true
-    }); });
+    $(document).ready(function() {
+        $("#price_id").select2({
+            placeholder: "可以模糊查询",
+            allowClear: true
+        });
+    });
+
+    function openClose(id,  curObj, trIndex) {
+        var txt = $(curObj).text();
+        if (txt == "详情") {
+            $(curObj).text("折叠");
+            $("#tr" + id).after("<tr id='tempTr" + id + "'><td colspan='6'>数据载入中</td></tr>");
+            if (trIndex % 2 == 0) {
+                $("#tempTr" + id).addClass("main_table_even");
+            }
+            var startDate = $('#date').val();
+            var endDate = $('#date2').val();
+            var projectName = $('#projectName').val();
+            var url = "${pageContext.request.contextPath}/analysisController/securi_showDetailByItemCode?startDate=" + startDate + "&endDate=" + endDate + "&itemCode=" + id + "&projectName=" + projectName;
+            $.get(url, function (data) {
+                data = data.obj;
+                if (data.length > 0) {
+                    var html = "";
+                    $.each(data, function (i, item) {
+                        html = "<tr style='height:20px;line-height:20px;' name='subTr" + id + "'>";
+                        html += "<td></td>";
+                        html += "<td><span style='width:80px;display:inline-block;'></span>";
+                        if (i == data.length - 1)
+                            html += "<img src='${pageContext.request.contextPath}/images/joinbottom.gif' style='vertical-align: middle;'/>";
+                        else
+                            html += "<img src='${pageContext.request.contextPath}/images/join.gif' style='vertical-align: middle;'/>";
+
+                        html += "<span style='width:60px;text-align:left;display:inline-block;'>" + item.dataName + "</span>";
+                        html += "</td>";
+                        html += "<td style='text-align: center'>" + item.unit + "</td>";
+                        html += "<td style='text-align: center'>" + item.price + "</td>";
+                        html += "<td style='text-align: center'>" + item.count + "</td>";
+                        html += "<td style='text-align: center'>" + item.money.toFixed(2) + "</td>";
+                        html += "<td></td>";
+
+                        html += "</tr>";
+                        $("#tempTr" + id).before(html);
+                    });
+                    $("#tempTr" + id).remove();
+                    if (trIndex % 2 == 0) {
+                        $("tr[name='subTr" + id + "']").addClass("main_table_even");
+                    }
+                } else {
+                    $("#tempTr" + id + " > td").html("没有相关数据");
+                }
+            }, "json");
+        } else {
+            $("#tempTr" + id).remove();
+            $("tr[name='subTr" + id + "']").remove();
+            $(curObj).text("详情");
+        }
+    }
 </script>
 
 
@@ -153,10 +206,10 @@
 						<%--<th colspan="5">${price.name }</th>--%>
 					<%--</tr>--%>
 					<tr>
-						<td colspan="6"></td>
+						<td colspan="7"></td>
 					</tr>
 					<tr>
-						<th colspan="6">费用类型明细</th>
+						<th colspan="7">费用类型明细</th>
 					</tr>
 					<tr>
 						<th scope="col">序号</th>
@@ -165,28 +218,29 @@
 						<th scope="col">单价</th>
 						<th scope="col">数量</th>
 						<th scope="col">金额(价格:元)</th>
+                        <th scope="col">操作</th>
 					</tr>
 				</thead>
 
 				<tbody>
 					<c:forEach items="${analysisDatas}" var="tem" varStatus="status">
-						<tr>
+                        <tr id="tr${tem.itemCode}">
 							<th style="text-align: center; width: 50px">${status.index+1}</th>
 							<c:choose>
 								<c:when test="${tem.isend==0 }">
 									<th style="text-align: center"><font color='red'>${tem.costType}</font></th>
-									<td colspan=4></td>
+									<td colspan=5></td>
 								</c:when>
 								<c:otherwise>
 									<th style="text-align: center">${tem.costType}</th>
-									<td style="text-align: right">${tem.unit}</td>
-									<td style="text-align: right"><fmt:formatNumber
-											value="${tem.price}" pattern="#.##" minFractionDigits="2"></fmt:formatNumber></td>
-									<td style="text-align: right"><fmt:formatNumber
-											value="${tem.count}" pattern="#"></fmt:formatNumber></td>
-									<td style="text-align: right"><fmt:formatNumber
-											value="${tem.money}" pattern="#.##" minFractionDigits="2"></fmt:formatNumber></td>
-								</c:otherwise>
+									<td style="text-align: center">${tem.unit}</td>
+									<td style="text-align: center"><fmt:formatNumber value="${tem.price}" pattern="#.##" minFractionDigits="2"></fmt:formatNumber></td>
+									<td style="text-align: center"><fmt:formatNumber value="${tem.count}" pattern="#"></fmt:formatNumber></td>
+									<td style="text-align: center"><fmt:formatNumber value="${tem.money}" pattern="#.##" minFractionDigits="2"></fmt:formatNumber></td>
+								    <td>
+                                        <a class='btn btn-mini btn-warning' onclick="openClose('${tem.itemCode}', this , ${status.index })">详情</a>
+                                    </td>
+                                </c:otherwise>
 							</c:choose>
 						</tr>
 					</c:forEach>
@@ -194,8 +248,9 @@
 					<tr>
 						<th style="text-align: center">合计</th>
 						<th style="text-align: center" colspan=4>${price.name}</th>
-						<td style="text-align: right"><fmt:formatNumber
+						<td style="text-align: center"><fmt:formatNumber
 								value="${total}" pattern="#.##" minFractionDigits="2"></fmt:formatNumber></td>
+                        <td></td>
 					</tr>
 				</tfoot>
 			</table>

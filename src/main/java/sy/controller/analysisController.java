@@ -3,12 +3,10 @@ package sy.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import sy.model.po.Price;
 import sy.model.po.Project;
-import sy.pageModel.AnalysisData;
-import sy.pageModel.AnalysisSearch;
-import sy.pageModel.FieldData;
-import sy.pageModel.SessionInfo;
+import sy.pageModel.*;
 import sy.service.*;
 import sy.util.ConfigUtil;
 import sy.util.ExcelExportUtil;
@@ -206,9 +204,7 @@ public class analysisController extends BaseController {
 			Project project = projectService.findOneView(Integer
 					.parseInt(project_id));
 			Price price = priceService.findoneview(Integer.parseInt(price_id));
-			List<AnalysisData> analysisDatas = analysisService.getList(datestr,
-					datestr2, Integer.parseInt(price_id),
-					Integer.parseInt(project_id), ugroup);// 获取明细数据
+			List<AnalysisData> analysisDatas = analysisService.getList(datestr, datestr2, Integer.parseInt(price_id), Integer.parseInt(project_id), ugroup);// 获取明细数据
 //		if (!(project_id == null || price_id == null || "".equals(project_id) || "".equals(price_id))) {
 //			List<Project> project = projectService.findListView(project_id,cid);
 //			List<Price> price = priceService.findListview(price_id,cid);
@@ -358,4 +354,26 @@ public class analysisController extends BaseController {
 		listmap.add(mapValue);
 		return listmap;
 	}
+
+
+    @RequestMapping("/securi_showDetailByItemCode")
+    @ResponseBody
+    public Json securi_showDetailByItemCode(HttpServletResponse response, HttpServletRequest request) {
+        Json j = new Json();
+        SessionInfo sessionInfo = (SessionInfo) request.getSession().getAttribute(ConfigUtil.getSessionInfoName());
+        List<Integer> ugroup = sessionInfo.getUgroup();
+        String cid = sessionInfo.getCompid();
+        String projectName = request.getParameter("projectName");// 项目名称
+        String startDate = request.getParameter("startDate");// 日期
+        String endDate = request.getParameter("endDate");// 日期
+        String itemCode = request.getParameter("itemCode");
+        String unit = request.getParameter("unit");
+        String price = request.getParameter("price");
+        List<FieldData> analysisDatasByItemCode = analysisService.getListByItemCode(itemCode, unit, price, startDate, endDate, projectName, ugroup, cid);
+        System.out.println(analysisDatasByItemCode);
+        j.setMsg("成功");
+        j.setObj(analysisDatasByItemCode);
+        j.setSuccess(true);
+        return j;
+    }
 }
