@@ -79,7 +79,7 @@ public interface CostServiceI {
                              String cid, int price_id);
 
 	public List<Cost> getEndCosts(String title, String code, PageHelper ph,
-                                  String cid);
+                                  String cid, String departmentIds);
 
 	public Cost getParentByCode(String itemCode, String cid);
 

@@ -106,6 +106,7 @@ public class WebApp extends BaseController {
 				sessionInfo.setId(u.getId());
 				sessionInfo.setCompid(String.valueOf(c.getId()));
 				sessionInfo.setCompName(c.getName());
+                sessionInfo.setDepartmentIds(s);
 //				sessionInfo.setDepid(String.valueOf(d.getId()));
 //				sessionInfo.setDepName(d.getName());
 //				sessionInfo.setDepartment_id(String.valueOf(s.getId()));
@@ -520,12 +521,13 @@ public class WebApp extends BaseController {
 		String cid = request.getParameter("cid");
 		String title = request.getParameter("title");
 		String code = request.getParameter("code");
+        String departmentIds = request.getParameter("departmentIds");
 		if (cid == null || "".equals(cid)) {
 			json.setMsg("公司id不能为空!!");
 			return json;
 		}
 		try {
-			List<Cost> list = costService.getEndCosts(title, code, ph, cid);
+			List<Cost> list = costService.getEndCosts(title, code, ph, cid, departmentIds);
 			json.setObj(list);
 		} catch (Exception e) {
 			json.setMsg("服务器错误,请稍后再试");

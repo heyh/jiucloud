@@ -106,12 +106,12 @@
 						<%--placeholder="单位" class="easyui-validatebox span2"--%>
 						<%--data-options="required:true" value="${tfielddata.unit}"></td>--%>
 				<%--</tr>--%>
-				<tr>
-					<td style="width: 80px;">规格型号</td>
-					<td><input style="width: 250px;" name="specifications"
-						type="text" placeholder="规格型号" class="easyui-validatebox span2"
-						 value="${tfielddata.specifications}">
-				</tr>
+				<%--<tr>--%>
+					<%--<td style="width: 80px;">规格型号</td>--%>
+					<%--<td><input style="width: 250px;" name="specifications"--%>
+						<%--type="text" placeholder="规格型号" class="easyui-validatebox span2"--%>
+						 <%--value="${tfielddata.specifications}">--%>
+				<%--</tr>--%>
 				<tr>
 					<td style="width: 80px;">备注说明</td>
 					<td><input name="remark" style="width: 250px;" type="text"

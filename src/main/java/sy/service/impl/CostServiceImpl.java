@@ -266,7 +266,7 @@ public class CostServiceImpl implements CostServiceI {
 
 	@Override
 	public List<Cost> getEndCosts(String title, String code, PageHelper ph,
-			String cid) {
+			String cid, String departmentIds) {
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("cid", cid);
 		String hql = " from Cost t where cid=:cid and isdelete=0";
@@ -276,6 +276,14 @@ public class CostServiceImpl implements CostServiceI {
 		if (code != null && code.length() > 0) {
 			hql += " and itemCode like '" + code + "%' ";
 		}
+
+        if (departmentIds != null && !departmentIds.equals("")) {
+//			params.put("department_id", StringUtil.listToString(departmentIds));
+//			hql += " and id in (select cost_id from Department_Cost where department_id in (:department_id))";
+            hql += " and id in (select cost_id from Department_Cost where department_id in (" + departmentIds + "))";
+
+        }
+
 		hql += " order by level asc";
 		System.out.println(hql);
 		return costDaoI.find(hql, params, ph.getPage(), ph.getRows());
