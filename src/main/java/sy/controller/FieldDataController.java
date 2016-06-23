@@ -1,6 +1,5 @@
 package sy.controller;
 
-import com.alibaba.druid.sql.ast.expr.SQLCaseExpr;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,17 +8,49 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
-import sy.model.po.*;
-import sy.pageModel.*;
-import sy.service.*;
-import sy.util.*;
+import sy.model.po.Cost;
+import sy.model.po.GCPo;
+import sy.model.po.Project;
+import sy.model.po.TFieldData;
+import sy.pageModel.DataGrid;
+import sy.pageModel.FieldData;
+import sy.pageModel.Json;
+import sy.pageModel.PageHelper;
+import sy.pageModel.SessionInfo;
+import sy.pageModel.User;
+import sy.service.CostServiceI;
+import sy.service.DepartmentServiceI;
+import sy.service.FieldDataServiceI;
+import sy.service.GCPoServiceI;
+import sy.service.ProjectServiceI;
+import sy.service.UserServiceI;
+import sy.util.ConfigUtil;
+import sy.util.Constant;
+import sy.util.ExcelExportUtil;
+import sy.util.Node;
+import sy.util.NodeUtil;
+import sy.util.PropertyUtil;
+import sy.util.UtilDate;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.*;
-import java.util.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 @Controller
 @RequestMapping("/fieldDataController")
@@ -219,6 +250,7 @@ public class FieldDataController extends BaseController {
 	public String updatePage(HttpServletRequest request,
 			HttpServletResponse response) throws IOException {
 		String id = request.getParameter("id");
+        String preview = request.getParameter("preview");
 		TFieldData tFieldData = fieldDataServiceI.detail(id);
 		if (tFieldData == null) {
 			response.getWriter().write("1");
@@ -231,6 +263,7 @@ public class FieldDataController extends BaseController {
 		request.setAttribute("tfielddata", tFieldData);
 		request.setAttribute("project", project);
 		request.setAttribute("cost", cost);
+        request.setAttribute("preview", preview == null ? false : true);
 
         // modify by heyh begin
         String fj = tFieldData.getItemCode().substring(0, 3);

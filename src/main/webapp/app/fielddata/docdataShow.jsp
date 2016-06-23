@@ -159,8 +159,9 @@
 											var str = '';
                                             // modify by heyh 当数据填报之后，在当日内23:59分内均可以修改自己填报数据
                                             var userId = <%= userId%>;
-                                            if(compareDate(getCurrentDate(), row.creatTime.substring(0, 10)) == 0 && userId == row.uid) {
-                                                if ('0' == row.isLock && '2' != row.needApproved) {
+                                            if(compareDate(getCurrentDate(), row.creatTime.substring(0, 10)) == 0
+                                                    && userId == row.uid && '0' == row.isLock && '2' != row.needApproved) {
+//                                                if ('0' == row.isLock && '2' != row.needApproved) {
                                                     str += $
                                                             .formatString(
                                                                     '<img onclick="editFun(\'{0}\');" src="{1}" title="编辑" />',
@@ -172,7 +173,14 @@
                                                                     '<img onclick="deleteFun(\'{0}\');" src="{1}" title="删除"/>',
                                                                     row.id,
                                                                     '${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/delete-blue.png');
-                                                }
+//                                                }
+                                            } else {
+                                                str += $
+                                                        .formatString(
+                                                        '<img onclick="previewFun(\'{0}\');" src="{1}" title="预览" />',
+                                                        row.id,
+                                                        '${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/preview-blue.png');
+                                                str += '&nbsp;';
                                             }
 											str += $
 													.formatString(
@@ -314,6 +322,26 @@
 					} ]
 				});
 	}
+
+    //预览
+    function previewFun(id) {
+        parent.$
+                .modalDialog({
+                    title : '预览',
+                    width : 420,
+                    height : 460,
+                    href :
+                    '${pageContext.request.contextPath}/fieldDataController/upfieldData?id=' +
+                    id + '&preview=' + true ,
+                    buttons : [ {
+                        text : '关闭',
+                        handler : function() {
+                            parent.$.modalDialog.handler.dialog('destroy');
+                            parent.$.modalDialog.handler = undefined;
+                        }
+                    } ]
+                });
+    }
 
 	function addFun() {
 		var url = '${pageContext.request.contextPath}/fieldDataController/addDocData';

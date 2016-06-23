@@ -48,11 +48,20 @@
 		});
 	}
 
+    $(function() {
+        if($('.priview').val() == 'true'){
+            debugger;
+            $('.easyui-validatebox').attr('disabled', true);
+        } else {
+            $('.easyui-validatebox').removeAttr('disabled');
+        }
+    });
 	//上传文件
 </script>
 <div class="easyui-layout" data-options="fit:true,border:false">
 	<div data-options="region:'center',border:false" title=""
 		style="overflow: hidden;">
+        <input class="priview" value="${preview}" style="display: none;"/>
 		<form id="form" method="post" enctype="multipart/form-data">
 			<table class="table table-hover table-condensed">
 				<tr>
