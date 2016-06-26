@@ -478,11 +478,11 @@ public class DepartmentServiceImpl implements DepartmentServiceI {
         }
 
         for (Node parentNode : parentNodes) {
-            if (parentNode.getUserId() == -1) {
+            if (parentNode.getUserId() == -1 || parentNode.getUserId() == 0) {
                 continue;
             }
             User user = userService.getUser(StringUtil.trimToEmpty(parentNode.getUserId()));
-            parentNode.setName(user.getRealname());
+            parentNode.setName(user.getRealname() == null ? user.getUsername() : user.getRealname());
         }
 
         return parentNodes;
