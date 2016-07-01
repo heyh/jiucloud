@@ -277,16 +277,24 @@ public class CostServiceImpl implements CostServiceI {
 			hql += " and itemCode like '" + code + "%' ";
 		}
 
+        String dhql = "";
         if (departmentIds != null && !departmentIds.equals("")) {
 //			params.put("department_id", StringUtil.listToString(departmentIds));
 //			hql += " and id in (select cost_id from Department_Cost where department_id in (:department_id))";
-            hql += " and id in (select cost_id from Department_Cost where department_id in (" + departmentIds + "))";
+            dhql += hql + " and id in (select cost_id from Department_Cost where department_id " +
+                    "in" + " (" + departmentIds + "))";
 
         }
 
 		hql += " order by level asc";
-		System.out.println(hql);
-		return costDaoI.find(hql, params, ph.getPage(), ph.getRows());
+		System.out.println(dhql);
+        List<Cost> l = costDaoI.find(dhql, params, ph.getPage(), ph.getRows());
+        if (l == null || l.size()<=0) {
+            l = costDaoI.find(hql, params, ph.getPage(), ph.getRows());
+        }
+
+
+		return l;
 	}
 
 	@Override
