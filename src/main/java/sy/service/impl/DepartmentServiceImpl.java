@@ -273,9 +273,11 @@ public class DepartmentServiceImpl implements DepartmentServiceI {
     public List<S_department> getDepartmentsByUid(String uid,String cid) {
         List<Integer> ids = null;
         if(cid!=null){
-            ids= (List<Integer>) departmentDaoI.getList("select parent_id from jsw_corporation_department where FIND_IN_SET(" + uid + ", user_id)" + " and company_id = " + cid);
+            ids= (List<Integer>) departmentDaoI.getList("select IF(endnode='0', id, parent_id) " +
+                    "departmentId  from " + "jsw_corporation_department where FIND_IN_SET(" + uid + ", user_id)" + " and company_id = " + cid);
         }else{
-            ids = (List<Integer>) departmentDaoI.getList("select parent_id from jsw_corporation_department where FIND_IN_SET(" + uid + ", user_id)");
+            ids = (List<Integer>) departmentDaoI.getList("select IF(endnode='0', id, parent_id) " +
+                    "departmentId  from " + "jsw_corporation_department where FIND_IN_SET(" + uid + ", user_id)");
         }
         List<S_department> departments = new ArrayList<S_department>();
         for (Integer id : ids) {
