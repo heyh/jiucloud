@@ -47,7 +47,7 @@
 				</tr>
 				<tr>
 					<td style="width: 80px;">费用编码</td>
-					<td><input name="itemCode" type="text" placeholder="请输入费用编码"
+					<td><input name="itemCode" type="number" placeholder="请输入费用编码"
 						class="easyui-validatebox span2" data-options="required:true"
 						value="" style="width: 150px">
 				</tr>
