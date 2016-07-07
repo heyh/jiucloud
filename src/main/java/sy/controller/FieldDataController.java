@@ -76,7 +76,7 @@ public class FieldDataController extends BaseController {
 
 	/**
 	 * 跳转管理页面
-	 * 
+	 *
 	 * @return
 	 */
 	@RequestMapping("/fieldDataShow")
@@ -87,7 +87,7 @@ public class FieldDataController extends BaseController {
 	}
 	/**
 	 * 跳转费用管理页面
-	 * 
+	 *
 	 * @return
 	 */
 	@RequestMapping("/docDataShow")
@@ -230,7 +230,7 @@ public class FieldDataController extends BaseController {
 
 	/**
 	 * 跳转到附件管理
-	 * 
+	 *
 	 * @param request
 	 */
 	@RequestMapping("/securi_fieldDataFile")
@@ -241,7 +241,7 @@ public class FieldDataController extends BaseController {
 
 	/**
 	 * 跳转到修改
-	 * 
+	 *
 	 * @param request
 	 * @return
 	 * @throws java.io.IOException
@@ -277,7 +277,7 @@ public class FieldDataController extends BaseController {
 
 	/**
 	 * 跳转到添加
-	 * 
+	 *
 	 * @param request
 	 * @return
 	 */
@@ -310,9 +310,21 @@ public class FieldDataController extends BaseController {
 		request.setAttribute("proName", proName);
 		return "/app/fielddata/addfieldData";
 	}
+
+	/**
+	 * 快速添加项目费用数据
+	 * @param request
+	 * @param response
+     * @return
+     */
+	@RequestMapping("/quickAddFieldData")
+	public String quickAddFieldData(HttpServletRequest request, HttpServletResponse response) {
+		return "app/fielddata/quickAddFieldData";
+	}
+
 	/**
 	 * 跳转到添加
-	 * 
+	 *
 	 * @param request
 	 * @return
 	 */
@@ -347,7 +359,7 @@ public class FieldDataController extends BaseController {
 
 	/**
 	 * 保存
-	 * 
+	 *
 	 * @param request
 	 * @return
 	 */
@@ -489,7 +501,7 @@ public class FieldDataController extends BaseController {
 
 	/**
 	 * 批量删除
-	 * 
+	 *
 	 * @param request
 	 * @return
 	 */
@@ -529,7 +541,7 @@ public class FieldDataController extends BaseController {
 
 	/**
 	 * 跳转至批量下载附件
-	 * 
+	 *
 	 * @param request
 	 * @return
 	 */

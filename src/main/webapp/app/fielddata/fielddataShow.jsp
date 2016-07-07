@@ -345,6 +345,7 @@
                 });
     }
 
+	// 添加
 	function addFun() {
 		var url = '${pageContext.request.contextPath}/fieldDataController/addfieldData';
 		var text = "添加费用数据";
@@ -355,6 +356,25 @@
 		};
 		window.parent.ac(params);
 		//parent.$.modalDialog.handler.dialog('close');
+	}
+
+	// 快速添加
+	function quickAddFun() {
+		parent.$
+				.modalDialog({
+					title : '快速添加费用数据',
+					width : 1050,
+					height : 600,
+					href : '${pageContext.request.contextPath}/fieldDataController/quickAddFieldData',
+					buttons : [ {
+						text : '提交',
+						handler : function() {
+							parent.$.modalDialog.openner_dataGrid = dataGrid;//因为添加成功之后，需要刷新这个dataGrid，所以先预定义好
+							var f = parent.$.modalDialog.handler.find('#form');
+							f.submit();
+						}
+					} ]
+				});
 	}
 
 	//附件管理
@@ -506,6 +526,9 @@
 		<a onclick="addFun();" href="javascript:void(0);"
 			class="easyui-linkbutton"
 			data-options="plain:true,iconCls:'add_new'">添加</a>
+		<a onclick="quickAddFun();" href="javascript:void(0);"
+		   class="easyui-linkbutton"
+		   data-options="plain:true,iconCls:'add_quick'">快速添加</a>
         <%--modify by heyh --%>
         <%--<a onclick="batchDeleteFun();" href="javascript:void(0);"--%>
 			<%--class="easyui-linkbutton" data-options="plain:true,iconCls:'delete'">批量删除</a>--%>
