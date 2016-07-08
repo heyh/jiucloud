@@ -1,5 +1,6 @@
 package sy.pageModel;
 
+import net.sf.json.JSONArray;
 import sy.model.Param;
 import sy.model.S_department;
 
@@ -42,8 +43,17 @@ public class SessionInfo implements java.io.Serializable {
     private List<S_department> departmentIds;
     private List<Param> unitParams;
     private List<String> rightList;
+	private JSONArray costTree;
 
-    public List<String> getRightList() {
+	public JSONArray getCostTree() {
+		return costTree;
+	}
+
+	public void setCostTree(JSONArray costTree) {
+		this.costTree = costTree;
+	}
+
+	public List<String> getRightList() {
         return rightList;
     }
 
