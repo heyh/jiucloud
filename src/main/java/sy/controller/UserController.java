@@ -11,10 +11,12 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import sy.model.Param;
 import sy.model.S_department;
 import sy.model.po.Company;
+import sy.model.po.Cost;
 import sy.model.po.Department;
 import sy.pageModel.*;
 import sy.service.*;
 import sy.util.ConfigUtil;
+import sy.util.Utility;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -23,9 +25,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * **************************************************************** 文件名称 :
@@ -184,8 +184,21 @@ public class UserController extends BaseController {
                         departmentIds.add(department.getId());
                     }
                 }
-                sessionInfo.setCostTypeInfos(costService.getCostTypeInfos(departmentIds, cid));
-//                sessionInfo.setUnderlingUsers(userService.findUnderlingUsers(ugroup));
+
+				Map<String, List<Map<String, Object>>> costInfos = costService.getCostTypeInfos(departmentIds, cid);
+				List<Map<String, Object>> dataCostList = costInfos.get("dataCostInfos");
+				List<Map<String, Object>> _dataCostList = new ArrayList<Map<String, Object>>();
+				Map<String, Object> _dataCost = new HashMap<String, Object>();
+				for (Map<String, Object> dataCost : dataCostList) {
+					_dataCost = new HashMap<String, Object>();
+					_dataCost.put("text", dataCost.get("costType"));
+					_dataCost.put("id", dataCost.get("nid"));
+					_dataCost.put("pid", dataCost.get("pid"));
+					_dataCostList.add(_dataCost);
+				}
+				sessionInfo.setCostTypeInfos(costInfos);
+				sessionInfo.setCostTree(Utility.treeList(_dataCostList, "-1"));
+
                 sessionInfo.setUnitParams((List<Param>) paramService.getParams("UP", ""));
                 sessionInfo.setRightList(departmentService.getAllRight(cid, Integer.parseInt(u.getId())));
                 sessionInfo.setParentId(departmentService.getParentId(cid, Integer.parseInt(u.getId())));
