@@ -1,5 +1,9 @@
 package sy.service.impl;
 
+import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
+import org.apache.commons.collections.ListUtils;
+import org.apache.commons.collections.iterators.ObjectArrayIterator;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,6 +17,7 @@ import sy.model.po.Department_Cost;
 import sy.pageModel.DataGrid;
 import sy.pageModel.PageHelper;
 import sy.service.CostServiceI;
+import sy.util.Utility;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -79,6 +84,57 @@ public class CostServiceImpl implements CostServiceI {
 		dg.setRows(l);
 		dg.setTotal(costDaoI.count("select count(*) " + hql, params));
 		return dg;
+	}
+
+	@Override
+	public JSONArray getCostList(List<Integer> departmentIds, String cid, String source) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("cid", cid);
+		String hql="";
+		if (source!=null && source.equals("data"))
+		{
+			hql = " from Cost t  where cid=:cid and isdelete=0 and (itemcode is null or itemcode='' or substring(itemcode,1,3)!='000' and substring(itemcode,1,3)<=900) ";
+		} else if (source!=null && source.equals("doc")) {
+			hql = " from Cost t  where cid=:cid and isdelete=0 and itemcode is not null and itemcode!='' and  (substring(itemcode,1,3)='000' or substring(itemcode,1,3)>900) ";
+		} else {
+			hql = " from Cost t  where cid=:cid and isdelete=0";
+		}
+
+		if (departmentIds != null && departmentIds.size()>0) {
+			hql += " and id in (select cost_id from Department_Cost where department_id in (";
+			for (int i=0; i<departmentIds.size(); i++) {
+				if (i < departmentIds.size() - 1) {
+					hql += departmentIds.get(i) + ",";
+				} else {
+					hql += departmentIds.get(i) + "))";
+				}
+			}
+		}
+		hql += " order by t.sort,t.itemCode asc ";
+		List<Cost> l = costDaoI.find(hql, params);
+		if (l.size() == 0) {
+			params.remove("department_id");
+			if (source.equals("data"))
+			{
+				hql = "from Cost t  where cid=:cid and isdelete=0 and (itemcode is null or itemcode='' or substring(itemcode,1,3)!='000' and substring(itemcode,1,3)<=900)  order by t.sort,t.itemCode asc";
+			} else if (source.equals("doc")) {
+				hql = "from Cost t  where cid=:cid and isdelete=0 and itemcode is not null and itemcode!='' and  (substring(itemcode,1,3)='000' or substring(itemcode,1,3)>900) order by t.sort,t.itemCode asc";
+			} else {
+				hql = "from Cost t  where cid=:cid and isdelete=0 order by t.sort,t.itemCode asc";
+			}
+			l = costDaoI.find(hql, params);
+		}
+
+		List<Map<String, Object>> costList = new ArrayList<Map<String, Object>>();
+		Map<String, Object> cost = new HashMap<String, Object>();
+		for (Cost c : l) {
+			cost = new HashMap<String, Object>();
+			cost.put("text", c.getCostType());
+			cost.put("id", c.getNid());
+			cost.put("pid", c.getPid());
+			costList.add(cost);
+		}
+		return Utility.treeList(costList, "-1");
 	}
 
 	@Override
@@ -508,6 +564,7 @@ public class CostServiceImpl implements CostServiceI {
             tmp = new HashMap<String, Object>();
             tmp.put("costType", cost.getCostType());
             tmp.put("id", cost.getId());
+			tmp.put("nid", cost.getNid());
             tmp.put("pid", cost.getPid());
             tmp.put("itemCode", cost.getItemCode());
             tmp.put("isSend", cost.getIsend());
