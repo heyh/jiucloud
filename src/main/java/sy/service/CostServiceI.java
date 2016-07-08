@@ -1,5 +1,6 @@
 package sy.service;
 
+import net.sf.json.JSONArray;
 import sy.model.po.Cost;
 import sy.model.po.Department_Cost;
 import sy.pageModel.DataGrid;
@@ -57,8 +58,10 @@ public interface CostServiceI {
 	 */
 	public void init(String cid);
 
+	JSONArray getCostList(List<Integer> departmentIds, String cid, String source);
+
 	public DataGrid dataGrid(String title, String code, PageHelper ph,
-                             String cid);
+							 String cid);
 
 	public List<Cost> getFamily(String nid, String cid);
 
