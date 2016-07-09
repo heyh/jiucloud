@@ -3,6 +3,8 @@
 <%@ page import="sy.util.ConfigUtil" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
+<%@ page import="net.sf.json.JSONArray" %>
+<%@ page import="java.util.Map" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -10,12 +12,14 @@
 <%
 
     List<Param> unitParams = new ArrayList<Param>();
+	List<Map<String, Object>> dataCostInfos = new ArrayList<Map<String, Object>>();
 
     SessionInfo sessionInfo = (SessionInfo) session.getAttribute(ConfigUtil.getSessionInfoName());
     if (sessionInfo == null) {
         response.sendRedirect(request.getContextPath());
     } else {
         unitParams = sessionInfo.getUnitParams();
+		dataCostInfos = sessionInfo.getCostTypeInfos().get("dataCostInfos");
     }
 
 %>
@@ -23,7 +27,7 @@
 <script src="${pageContext.request.contextPath}/jslib/jquery-1.8.3.js"
 	type="text/javascript" charset="utf-8"></script>
 <!-- 引入EasyUI -->
-<!-- <link rel="stylesheet" href="${pageContext.request.contextPath}/jslib/jquery-easyui-1.3.3/themes/icon.css" type="text/css"> -->
+<link rel="stylesheet" href="${pageContext.request.contextPath}/jslib/jquery-easyui-1.3.3/themes/icon.css" type="text/css">
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/jslib/jquery-easyui-1.3.3/jquery.easyui.min.js"
 	charset="utf-8"></script>
@@ -155,7 +159,7 @@
 			}
 		}
 		var projectName = document.getElementById("projectName").value;
-		var costType = document.getElementById("costType").value;
+		var costType = $("#itemCode").val().trim().split('|')[1];
 		var dataName = document.getElementById("dataName").value;
 		var price = document.getElementById("price").value;
 		price = (price * 1).toFixed(2);
@@ -163,7 +167,7 @@
 		var specifications = document.getElementById("specifications").value;
 		var remark = document.getElementById("remark").value;
 		var unit = document.getElementById("unit").value;
-		var itemCode = document.getElementById("itemCode").value;
+		var itemCode = $("#itemCode").val().trim().split('|')[0];
         var needApproved = document.getElementById("needApproved").value;
         var approvedUser = document.getElementById("approvedUser").value;
 
@@ -218,9 +222,9 @@
 	}
 
 	window.onload = function() {
-		if (document.getElementById("costTypeName").value == '纯附件') {
-			$('.will_hide').hide();
-		}
+//		if (document.getElementById("costTypeName").value == '纯附件') {
+//			$('.will_hide').hide();
+//		}
 		$('#form input').click(function() {
 			flag = 0;
 		})
@@ -288,7 +292,25 @@
             placeholder: "请选择",
             allowClear: true
         });
+
+		$('#projectName').select2({
+			tags: "true",
+			placeholder: "可以模糊查询",
+			allowClear: true
+		});
+		$('#itemCode').select2({
+			placeholder: "可以模糊查询",
+			allowClear: true
+		});
     });
+
+	$.getJSON('${pageContext.request.contextPath}/projectController/securi_getProjects', function (data) {
+		debugger;
+		$('#projectName').select2({
+			data: data.obj,
+			allowClear: true
+		});
+	})
 
 </script>
 
@@ -453,24 +475,40 @@
 			<h1>
 				<span>添加数据</span>
 			</h1>
-			<label> <span>工程名称:</span> <input type="hidden"
-				id="projectName" name="projectName" value='' /> <input type="text"
-				style="width: 250px;" id="pName" name="pName" placeholder="工程名称"
-				class="easyui-validatebox span2" data-options="required:true"
-				value="" readonly>&nbsp;&nbsp;&nbsp;&nbsp;<img alt="选择工程"
-                src="${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/search-blue.png"
-				<%--src="http://180.96.11.6:8080/jiucloud/style/images/extjs_icons/pencil.png"--%>
-				style="cursor: pointer;" onclick="selectp()">
-			</label> <label> <span>费用类型:</span> <input type="hidden"
-				id="costType" name="costType" value="" /> <input type="hidden"
-				id="itemCode" name="itemCode" value="" /><input type="text"
-				style="width: 250px;" id="costTypeName" placeholder="费用类型"
-				class="easyui-validatebox span2" data-options="required:true"
-				value="" readonly="readonly">&nbsp;&nbsp;&nbsp;&nbsp;<img
-				alt="选择费用"
-                src="${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/search-blue.png"
-				style="cursor: pointer;" onclick="selectc()">
-			</label>
+			<div class="special" style="height: 48px;">
+				<span style="float: left; width: 20%; text-align: right; padding-right: 10px; margin-top: 10px; color: #888;">工程名称:</span>
+				<select style="width:250px;margin-bottom: 20px" id="projectName" name="projectName" class="select2" >
+				</select>
+			</div>
+			<div class="special" style="height: 48px">
+				<span style="float: left; width: 20%; text-align: right; padding-right: 10px; margin-top: 10px; color: #888;">费用类型:</span>
+				<select style="width:250px;margin-bottom: 20px" id="itemCode" name="itemCode" class="select2" >
+					<option></option>
+					<c:forEach var="costTypeInfo" items="<%= dataCostInfos %>" varStatus="index">
+						<c:if test="${costTypeInfo.isSend == '0'}">
+						<optgroup label="${costTypeInfo.costType}"> " " </optgroup>
+						</c:if>
+						<%--<c:if test="${costTypeInfo.isSend == '0'}">--%>
+							<%--<option value="${costTypeInfo.itemCode}">${costTypeInfo.costType}</option>--%>
+						<%--</c:if>--%>
+						<c:if test="${costTypeInfo.isSend == '1'}">
+							<option value="${costTypeInfo.itemCode}|${costTypeInfo.id}">&nbsp;&nbsp;&nbsp;&nbsp;${costTypeInfo.costType}</option>
+						</c:if>
+					</c:forEach>
+				</select>
+			</div>
+			<%--<label>--%>
+				<%--<span>费用类型:</span>--%>
+				<%--<input type="hidden"--%>
+				<%--id="costType" name="costType" value="" /> <input type="hidden"--%>
+				<%--id="itemCode" name="itemCode" value="" /><input type="text"--%>
+				<%--style="width: 250px;" id="costTypeName" placeholder="费用类型"--%>
+				<%--class="easyui-validatebox span2" data-options="required:true"--%>
+				<%--value="" readonly="readonly">&nbsp;&nbsp;&nbsp;&nbsp;<img--%>
+				<%--alt="选择费用"--%>
+                <%--src="${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/search-blue.png"--%>
+				<%--style="cursor: pointer;" onclick="selectc()">--%>
+			<%--</label>--%>
             <label> <span>名称:</span> <input name="dataName"
 				id="dataName" type="text" style="width: 250px;" placeholder="名称"
 				class="easyui-validatebox span2" data-options="required:true"
@@ -478,7 +516,6 @@
 			</label>
             <div class="will_hide special" style="height: 48px">
                 <span style="float: left; width: 20%; text-align: right; padding-right: 10px; margin-top: 10px; color: #888;">单位:</span>
-                <%--<input name="unit" id="unit" type="text" style="width: 250px;" placeholder="单位" class="easyui-validatebox span2" data-options="required:true">--%>
                 <select style="width:250px;margin-bottom: 20px" name="unit" id="unit">
                     <option></option>
                     <c:forEach var="unitParam" items="<%= unitParams %>" varStatus="index">

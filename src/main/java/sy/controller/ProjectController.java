@@ -19,6 +19,7 @@ import sy.util.UtilDate;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 /**
  * **************************************************************** 文件名称 :
@@ -314,6 +315,19 @@ public class ProjectController extends BaseController {
 
         DataGrid dataGrid = projectService.dataGrid(app, ph, compId, source);
 		return dataGrid;
+	}
+
+	@RequestMapping("/securi_getProjects")
+	@ResponseBody
+	public Json getProjects(ProjectSearch app, PageHelper ph,
+							 HttpServletRequest request) {
+		Json j = new Json();
+		SessionInfo sessionInfo = (SessionInfo) request.getSession().getAttribute(sy.util.ConfigUtil.getSessionInfoName());
+		String compId = sessionInfo.getCompid();
+		List<Map<String, Object>> projects = projectService.getProjects(compId);
+		j.setObj(projects);
+		j.setSuccess(true);
+		return j;
 	}
 
     @RequestMapping("/securi_lockProject")

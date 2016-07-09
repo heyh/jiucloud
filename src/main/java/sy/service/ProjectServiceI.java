@@ -1,6 +1,7 @@
 package sy.service;
 
 import java.util.List;
+import java.util.Map;
 
 import com.alibaba.fastjson.JSONArray;
 import org.springframework.stereotype.Repository;
@@ -67,7 +68,9 @@ public interface ProjectServiceI {
 
     public String getProjectInfos(String cid);
 
-    void lockProject(Integer id);
+	List<Map<String, Object>> getProjects(String cid);
+
+	void lockProject(Integer id);
 
     void unLockProject(Integer id);
 }

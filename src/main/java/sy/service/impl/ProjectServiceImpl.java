@@ -187,6 +187,23 @@ public class ProjectServiceImpl implements ProjectServiceI {
         return JSON.toJSONString(tmpList);
     }
 
+    @Override
+    public List<Map<String, Object>> getProjects(String cid) {
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("cid", cid);
+        String hql = " from Project where isdel=0 and compId=:cid and isLock = '0' order by id desc ";
+        List<Project> proList = projectDao.find(hql, params);
+        List<Map<String, Object>> tmpList = new ArrayList<Map<String, Object>>();
+        Map<String, Object> tmpMap = new HashMap<String, Object>();
+        for (Project pro : proList) {
+            tmpMap = new HashMap<String, Object>();
+            tmpMap.put("id", pro.getId());
+            tmpMap.put("text", pro.getProName());
+            tmpList.add(tmpMap);
+        }
+        return tmpList;
+    }
+
     /**
      * 锁定
      * @param id

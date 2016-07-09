@@ -526,9 +526,9 @@
 		<a onclick="addFun();" href="javascript:void(0);"
 			class="easyui-linkbutton"
 			data-options="plain:true,iconCls:'add_new'">添加</a>
-		<a onclick="quickAddFun();" href="javascript:void(0);"
-		   class="easyui-linkbutton"
-		   data-options="plain:true,iconCls:'add_quick'">快速添加</a>
+		<%--<a onclick="quickAddFun();" href="javascript:void(0);"--%>
+		   <%--class="easyui-linkbutton"--%>
+		   <%--data-options="plain:true,iconCls:'add_quick'">快速添加</a>--%>
         <%--modify by heyh --%>
         <%--<a onclick="batchDeleteFun();" href="javascript:void(0);"--%>
 			<%--class="easyui-linkbutton" data-options="plain:true,iconCls:'delete'">批量删除</a>--%>
