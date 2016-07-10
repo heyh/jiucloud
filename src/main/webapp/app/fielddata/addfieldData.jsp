@@ -159,7 +159,7 @@
 			}
 		}
 		var projectName = document.getElementById("projectName").value;
-		var costType = $("#itemCode").val().trim().split('|')[1];
+		var costType = $("#costType").val();
 		var dataName = document.getElementById("dataName").value;
 		var price = document.getElementById("price").value;
 		price = (price * 1).toFixed(2);
@@ -167,7 +167,7 @@
 		var specifications = document.getElementById("specifications").value;
 		var remark = document.getElementById("remark").value;
 		var unit = document.getElementById("unit").value;
-		var itemCode = $("#itemCode").val().trim().split('|')[0];
+		var itemCode = $("#itemCode").val();
         var needApproved = document.getElementById("needApproved").value;
         var approvedUser = document.getElementById("approvedUser").value;
 
@@ -293,21 +293,20 @@
             allowClear: true
         });
 
-		$('#projectName').select2({
-			tags: "true",
-			placeholder: "可以模糊查询",
-			allowClear: true
-		});
-		$('#itemCode').select2({
-			placeholder: "可以模糊查询",
-			allowClear: true
-		});
+//		$('#projectName').select2({
+//			placeholder: "可以模糊查询",
+//			allowClear: true
+//		});
+//		$('#itemCode').select2({
+//			placeholder: "可以模糊查询",
+//			allowClear: true
+//		});
     });
 
 	$.getJSON('${pageContext.request.contextPath}/projectController/securi_getProjects', function (data) {
-		debugger;
 		$('#projectName').select2({
-			data: data.obj,
+			placeholder: "可以模糊查询",
+			data: [{id:'', text:''}].concat(data.obj),
 			allowClear: true
 		});
 	})
@@ -477,38 +476,38 @@
 			</h1>
 			<div class="special" style="height: 48px;">
 				<span style="float: left; width: 20%; text-align: right; padding-right: 10px; margin-top: 10px; color: #888;">工程名称:</span>
-				<select style="width:250px;margin-bottom: 20px" id="projectName" name="projectName" class="select2" >
+				<select style="width:250px;margin-bottom: 20px" id="projectName" name="projectName" class="select2">
 				</select>
 			</div>
-			<div class="special" style="height: 48px">
-				<span style="float: left; width: 20%; text-align: right; padding-right: 10px; margin-top: 10px; color: #888;">费用类型:</span>
-				<select style="width:250px;margin-bottom: 20px" id="itemCode" name="itemCode" class="select2" >
-					<option></option>
-					<c:forEach var="costTypeInfo" items="<%= dataCostInfos %>" varStatus="index">
-						<c:if test="${costTypeInfo.isSend == '0'}">
-						<optgroup label="${costTypeInfo.costType}"> " " </optgroup>
-						</c:if>
+			<%--<div class="special" style="height: 48px">--%>
+				<%--<span style="float: left; width: 20%; text-align: right; padding-right: 10px; margin-top: 10px; color: #888;">费用类型:</span>--%>
+				<%--<select style="width:250px;margin-bottom: 20px" id="itemCode" name="itemCode" class="select2" >--%>
+					<%--<option></option>--%>
+					<%--<c:forEach var="costTypeInfo" items="<%= dataCostInfos %>" varStatus="index">--%>
 						<%--<c:if test="${costTypeInfo.isSend == '0'}">--%>
-							<%--<option value="${costTypeInfo.itemCode}">${costTypeInfo.costType}</option>--%>
+						<%--<optgroup label="${costTypeInfo.costType}"> " " </optgroup>--%>
 						<%--</c:if>--%>
-						<c:if test="${costTypeInfo.isSend == '1'}">
-							<option value="${costTypeInfo.itemCode}|${costTypeInfo.id}">&nbsp;&nbsp;&nbsp;&nbsp;${costTypeInfo.costType}</option>
-						</c:if>
-					</c:forEach>
-				</select>
-			</div>
-			<%--<label>--%>
-				<%--<span>费用类型:</span>--%>
-				<%--<input type="hidden"--%>
-				<%--id="costType" name="costType" value="" /> <input type="hidden"--%>
-				<%--id="itemCode" name="itemCode" value="" /><input type="text"--%>
-				<%--style="width: 250px;" id="costTypeName" placeholder="费用类型"--%>
-				<%--class="easyui-validatebox span2" data-options="required:true"--%>
-				<%--value="" readonly="readonly">&nbsp;&nbsp;&nbsp;&nbsp;<img--%>
-				<%--alt="选择费用"--%>
-                <%--src="${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/search-blue.png"--%>
-				<%--style="cursor: pointer;" onclick="selectc()">--%>
-			<%--</label>--%>
+						<%--&lt;%&ndash;<c:if test="${costTypeInfo.isSend == '0'}">&ndash;%&gt;--%>
+							<%--&lt;%&ndash;<option value="${costTypeInfo.itemCode}">${costTypeInfo.costType}</option>&ndash;%&gt;--%>
+						<%--&lt;%&ndash;</c:if>&ndash;%&gt;--%>
+						<%--<c:if test="${costTypeInfo.isSend == '1'}">--%>
+							<%--<option value="${costTypeInfo.itemCode}|${costTypeInfo.id}">&nbsp;&nbsp;&nbsp;&nbsp;${costTypeInfo.costType}</option>--%>
+						<%--</c:if>--%>
+					<%--</c:forEach>--%>
+				<%--</select>--%>
+			<%--</div>--%>
+			<label>
+				<span>费用类型:</span>
+				<input type="hidden"
+				id="costType" name="costType" value="" /> <input type="hidden"
+				id="itemCode" name="itemCode" value="" /><input type="text"
+				style="width: 250px;" id="costTypeName" placeholder="费用类型"
+				class="easyui-validatebox span2" data-options="required:true"
+				value="" readonly="readonly">&nbsp;&nbsp;&nbsp;&nbsp;<img
+				alt="选择费用"
+                src="${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/search-blue.png"
+				style="cursor: pointer;" onclick="selectc()">
+			</label>
             <label> <span>名称:</span> <input name="dataName"
 				id="dataName" type="text" style="width: 250px;" placeholder="名称"
 				class="easyui-validatebox span2" data-options="required:true"
