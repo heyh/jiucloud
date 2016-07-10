@@ -32,8 +32,10 @@
 <head>
 <title>服务号管理</title>
 <jsp:include page="../../inc.jsp"></jsp:include>
-    <link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1-rc.1/css/select2.min.css" rel="stylesheet" />
-    <script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1-rc.1/js/select2.min.js"></script>
+	<link rel="stylesheet" type="text/css"
+		  href="${pageContext.request.contextPath }/jslib/select2/dist/css/select2.min.css"/>
+	<script type="text/javascript" src="${pageContext.request.contextPath }/jslib/select2/dist/js/select2.min.js"></script>
+
 <script type="text/javascript">
 	var dataGrid;
 	$(function() {
