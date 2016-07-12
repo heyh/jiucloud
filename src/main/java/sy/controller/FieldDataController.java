@@ -385,6 +385,13 @@ public class FieldDataController extends BaseController {
             return j;
         }
 
+		// costType 代替 nid
+		if (fieldData.getItemCode() == null || fieldData.getItemCode().equals("")) {
+			Cost cost = costServiceI.findOneView(fieldData.getCostType(), sessionInfo.getCompid());
+			fieldData.setCostType(String.valueOf(cost.getId()));
+			fieldData.setItemCode(cost.getItemCode());
+		}
+
         // add by heyh begin
         if (fieldData.getApprovedUser() == null || fieldData.getApprovedUser().equals("")) {
             List<Integer> approvedUserList = new ArrayList<Integer>();
