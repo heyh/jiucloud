@@ -3,6 +3,7 @@ package sy.controller;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.ServletRequestDataBinder;
@@ -22,6 +23,9 @@ import sy.util.StringEscapeEditor;
 @Controller
 @RequestMapping("/baseController")
 public class BaseController {
+
+    protected Logger logger = Logger.getLogger(this.getClass());
+
 	@InitBinder
 	public void initBinder(ServletRequestDataBinder binder) {
 		/**
