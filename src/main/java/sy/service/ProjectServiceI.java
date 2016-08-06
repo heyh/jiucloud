@@ -17,7 +17,6 @@ import sy.pageModel.ProjectSearch;
  * project接口，管理项目名称的增删改查等功能 版权声明 : 修改历史 : 2015年6月4日 初始版本
  *****************************************************************
  */
-@Repository
 public interface ProjectServiceI {
 
 	/**

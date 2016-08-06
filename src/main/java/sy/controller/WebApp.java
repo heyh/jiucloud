@@ -379,13 +379,11 @@ public class WebApp extends BaseController {
 			needApproved = "0";
 		}
         // add by heyh end
-
+		Cost cost = costService.findById(costType);
+//		fieldData.setItemCode(cost.getItemCode());
 		TFieldData fieldData = new TFieldData(projectName, uid, new Date(),
 				costType, dataName, price, company, count, specifications,
-				remark, cid, uname, unit, needApproved, approvedUser, currentApprovedUser, "");
-
-		Cost cost = costService.findById(costType);
-		fieldData.setItemCode(cost.getItemCode());
+				remark, cid, uname, unit, needApproved, approvedUser, cost.getItemCode(), currentApprovedUser, "");
 
 		System.out.println(fieldData);
 		try {

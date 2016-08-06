@@ -25,7 +25,7 @@ public class TFieldData implements java.io.Serializable {
 			String costType, String dataName, String price, String company,
 			String count, String specifications, String remark, String cid,
 			String uname, String unit, String needApproved, String approvedUser,
-            String currentApprovedUser, String approvedOption) {
+            String currentApprovedUser, String itemCode, String approvedOption) {
 		super();
 		this.projectName = projectName;
 		this.uid = uid;
