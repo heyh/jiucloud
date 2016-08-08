@@ -117,6 +117,26 @@ public class Api extends BaseController {
         return new WebResult().ok().set("fieldDataList", dataGrid.getRows());
     }
 
+    /**
+     * 获取附件
+     * @param request
+     * @param response
+     * @return
+     */
+    @RequestMapping("/securi_fileList")
+    @ResponseBody
+    public JSONObject fileList(@RequestParam(value = "mid", required = true) String mid,
+                         HttpServletRequest request, HttpServletResponse response) {
+        List<GCPo> list = null;
+        try {
+            list = gcPoService.dataGrid(mid, null, null).getRows();
+            System.out.println(list);
+        } catch (Exception e) {
+            return new WebResult().fail().setMessage("网络异常,请稍后再试");
+        }
+        return new WebResult().ok().set("fileList", list);
+    }
+
     @RequestMapping("/securi_getProjects")
     @ResponseBody
     public JSONObject getProjects(@RequestParam(value = "cid", required = true) String cid,
@@ -284,6 +304,13 @@ public class Api extends BaseController {
 
     /**
      * 审批数据列表
+     * @param uid
+     * @param cid
+     * @param currentPage
+     * @param limitSize
+     * @param request
+     * @param response
+     * @return
      */
     @RequestMapping("/securi_approvalFielddataList")
     @ResponseBody
@@ -299,8 +326,6 @@ public class Api extends BaseController {
         try {
             List<Integer> ugroup = departmentService.getUsers(cid, Integer.parseInt(uid));
             dataGrid = fieldDataService.approveDataGrid(pageHelper, uid);
-
-            // add by heyh begin
             List<FieldData> fieldDatas = dataGrid.getRows();
             if (fieldDatas != null && fieldDatas.size()>0) {
                 for (int i = fieldDatas.size()-1; i >= 0; i--) {
@@ -320,4 +345,82 @@ public class Api extends BaseController {
         }
         return new WebResult().ok().set("approvalFieldDataList", dataGrid.getRows());
     }
+
+    /**
+     * 我的填报
+     * @param uid
+     * @param cid
+     * @param currentPage
+     * @param limitSize
+     * @param request
+     * @param response
+     * @return
+     */
+    @RequestMapping("/securi_myApproveFielddataList")
+    @ResponseBody
+    public JSONObject myApproveFielddataList(@RequestParam(value = "uid", required = true) String uid,
+                                             @RequestParam(value = "cid", required = true) String cid,
+                                             @RequestParam(value = "currentPage", required = true) int currentPage,
+                                             @RequestParam(value = "limitSize", required = true) int limitSize,
+                                             HttpServletRequest request, HttpServletResponse response) {
+        DataGrid dataGrid = null;
+        PageHelper pageHelper = new PageHelper();
+        pageHelper.setPage(currentPage);
+        pageHelper.setRows(limitSize);
+        try {
+            List<Integer> ugroup = departmentService.getUsers(String.valueOf(cid), Integer.parseInt(uid));
+            dataGrid = fieldDataService.myApproveDataGrid(pageHelper, uid);
+            List<FieldData> fieldDatas = dataGrid.getRows();
+            if (fieldDatas != null && fieldDatas.size()>0) {
+                for (int i = fieldDatas.size()-1; i >= 0; i--) {
+                    String currentApprovedUser = fieldDatas.get(i).getCurrentApprovedUser() == null ? "" : fieldDatas.get(i).getCurrentApprovedUser();
+                    if (!currentApprovedUser.equals("")) {
+                        User user = userService.getUser(currentApprovedUser);
+                        String realName = user.getRealname();
+                        if (realName == null || realName.equals("")) {
+                            realName = user.getUsername();
+                        }
+                        fieldDatas.get(i).setCurrentApprovedUser(realName);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            return new WebResult().fail().setMessage("网络异常,请稍后再试");
+        }
+        return new WebResult().ok().set("myApprovalDataList", dataGrid.getRows());
+    }
+
+    /**
+     * 需要审批的列表
+     * @param currentApprovedUser
+     * @param response
+     * @param request
+     * @return
+     */
+    @RequestMapping("securi_getNeedApproveList")
+    @ResponseBody
+    public JSONObject getNeedApproveList(@RequestParam(value = "uid", required = true) String currentApprovedUser,
+                                         HttpServletResponse response, HttpServletRequest request) {
+        List<TFieldData> needApproveList = fieldDataService.getNeedApproveList(currentApprovedUser);
+        for (TFieldData needApprove : needApproveList) {
+            String uid = needApprove.getUid();
+            User user = userService.getUser(uid);
+            String realName = user.getRealname();
+            if (realName == null || realName.equals("")) {
+                realName = user.getUsername();
+            }
+            needApprove.setUname(realName);
+
+            String itemcode = needApprove.getItemCode();
+            boolean isData = itemcode != null && !itemcode.equals("") && !itemcode.substring(0, 3).equals("000") && Integer.parseInt(itemcode.substring(0, 3)) <= 900;
+            if (isData) {
+                needApprove.setItemCode("0");
+            } else {
+                needApprove.setItemCode("1");
+            }
+        }
+
+        return new WebResult().ok().set("needApproveList", needApproveList);
+    }
+
 }
