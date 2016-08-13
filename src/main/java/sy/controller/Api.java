@@ -127,14 +127,20 @@ public class Api extends BaseController {
     @ResponseBody
     public JSONObject fileList(@RequestParam(value = "mid", required = true) String mid,
                          HttpServletRequest request, HttpServletResponse response) {
-        List<GCPo> list = null;
+        List<GCPo> fileList = null;
         try {
-            list = gcPoService.dataGrid(mid, null, null).getRows();
-            System.out.println(list);
+            String ip = IPUtility.getLocalIP();
+            String servAddr = "http://" + ip + ":8080/fileserver";
+            fileList = gcPoService.dataGrid(mid, null, null).getRows();
+            if (fileList != null && fileList.size()>0) {
+                for (GCPo _file : fileList) {
+                    _file.setSourceFilePath(servAddr + "/upload/source/" + _file.getSourceFilePath());
+                }
+            }
         } catch (Exception e) {
             return new WebResult().fail().setMessage("网络异常,请稍后再试");
         }
-        return new WebResult().ok().set("fileList", list);
+        return new WebResult().ok().set("fileList", fileList);
     }
 
     @RequestMapping("/securi_getProjects")
@@ -239,6 +245,82 @@ public class Api extends BaseController {
         return new WebResult().ok().set("mid", fieldDataService.getId(fieldData));
     }
 
+    @RequestMapping("/securi_editFieldData")
+    @ResponseBody
+    public JSONObject editFieldData(@RequestParam(value = "id", required = true) String id,
+                                      @RequestParam(value = "projectName", required = false) String projectName,
+                                      @RequestParam(value = "nid", required = false) String nid,
+                                      @RequestParam(value = "dataName", required = false) String dataName,
+                                      @RequestParam(value = "unit", required = false) String unit,
+                                      @RequestParam(value = "price", required = false) String price,
+                                      @RequestParam(value = "count", required = false) String count,
+                                      @RequestParam(value = "specifications", required = false) String specifications,
+                                      @RequestParam(value = "remark", required = false) String remark,
+                                      @RequestParam(value = "needApproved", required = false) String needApproved,
+                                      HttpServletRequest request, HttpServletResponse response) {
+
+        TFieldData fieldData = fieldDataService.detail(id);
+        String uid = fieldData.getUid();
+        String cid = fieldData.getCid();
+
+        if (nid != null && !nid.equals("")) {
+            Cost cost = costService.findOneView(nid, cid);
+            if (!fieldData.getItemCode().equals(cost.getItemCode())) {
+                fieldData.setCostType(String.valueOf(cost.getId()));
+                fieldData.setItemCode(cost.getItemCode());
+            }
+        }
+        if (dataName != null && !dataName.equals("") && !dataName.equals(fieldData.getDataName())) {
+            fieldData.setDataName(dataName);
+        }
+        if (unit != null && !unit.equals("") && !unit.equals(fieldData.getUnit())) {
+            fieldData.setUnit(unit);
+        }
+        if (price != null && !price.equals("") && !price.equals(fieldData.getPrice())) {
+            fieldData.setPrice(price);
+        }
+        if (count != null && !count.equals("") && !count.equals(fieldData.getCount())) {
+            fieldData.setCount(count);
+        }
+        if (specifications != null && !specifications.equals("")  && !specifications.equals(fieldData.getSpecifications())) {
+            fieldData.setSpecifications(specifications);
+        }
+        if (remark != null && !remark.equals("") && !remark.equals(fieldData.getRemark())) {
+            fieldData.setRemark(remark);
+        }
+        if (needApproved != null && !needApproved.equals("") && !needApproved.equals(fieldData.getNeedApproved())) {
+            fieldData.setRemark(needApproved);
+        }
+
+        String approvedUser = "";
+        String currentApprovedUser = "";
+        List<Integer> approvedUserList = new ArrayList<Integer>();
+        if (needApproved != null && needApproved.equals("1")) {
+            approvedUserList = departmentService.getAllParents(cid, Integer.parseInt(uid));
+            if (approvedUserList == null) {
+                approvedUserList.add(Integer.parseInt(uid)); // 如果为空说明是超级管理员，自己审批
+            }
+            approvedUser = StringUtils.join(approvedUserList, ","); // 所有审批人
+            currentApprovedUser = String.valueOf(approvedUserList.get(0)); // 当前审批人
+
+            fieldData.setNeedApproved("1");
+            fieldData.setApprovedUser(approvedUser);
+            fieldData.setCurrentApprovedUser(currentApprovedUser);
+        } else {
+            fieldData.setNeedApproved("0");
+            fieldData.setApprovedUser("");
+            fieldData.setCurrentApprovedUser("");
+        }
+
+        try {
+            fieldDataService.update(fieldData);
+            return new WebResult().ok().set("mid", fieldDataService.getId(fieldData));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new WebResult().fail().setMessage("网络异常,修改失败");
+        }
+    }
+
     /**
      * 附件上传
      *
@@ -298,7 +380,20 @@ public class Api extends BaseController {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-            return new WebResult().fail().setMessage("上传异常:" + ex.getMessage());
+            return new WebResult().fail().setMessage("网络异常,上传失败");
+        }
+    }
+
+    @RequestMapping("/securi_delFieldData")
+    @ResponseBody
+    public JSONObject delFieldData(@RequestParam(value = "id", required = true) String id,
+                                   HttpServletResponse response) {
+        try {
+            fieldDataService.delete(id);
+            return new WebResult().ok().setMessage("删除成功");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new WebResult().fail().setMessage("网络异常,删除失败");
         }
     }
 
@@ -423,4 +518,14 @@ public class Api extends BaseController {
         return new WebResult().ok().set("needApproveList", needApproveList);
     }
 
+    @RequestMapping("/securi_approvedField")
+    @ResponseBody
+    public JSONObject approvedField(@RequestParam(value = "id", required = true) int id,
+                              @RequestParam(value = "approvedState", required = true) String approvedState,
+                              @RequestParam(value = "approvedOption", required = true) String approvedOption,
+                              HttpServletResponse response, HttpServletRequest request) {
+
+        fieldDataService.approvedField(id, approvedState, approvedOption);
+        return new WebResult().ok().setMessage("审批成功");
+    }
 }
