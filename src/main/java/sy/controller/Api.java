@@ -289,7 +289,7 @@ public class Api extends BaseController {
             fieldData.setRemark(remark);
         }
         if (needApproved != null && !needApproved.equals("") && !needApproved.equals(fieldData.getNeedApproved())) {
-            fieldData.setRemark(needApproved);
+            fieldData.setNeedApproved(needApproved);
         }
 
         String approvedUser = "";
