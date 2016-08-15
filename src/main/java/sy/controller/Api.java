@@ -83,6 +83,8 @@ public class Api extends BaseController {
     @ResponseBody
     public JSONObject getFieldDataList(@RequestParam(value = "uid", required = true) String uid,
                                        @RequestParam(value = "cid", required = true) String cid,
+                                       @RequestParam(value = "type", required = false) String type,
+                                       @RequestParam(value = "keyword", required=false) String keyword,
                                        @RequestParam(value = "currentPage", required = true) int currentPage,
                                        @RequestParam(value = "limitSize", required = true) int limitSize,
                                        HttpServletRequest request, HttpServletResponse response) {
@@ -95,7 +97,7 @@ public class Api extends BaseController {
         pageHelper.setRows(limitSize);
         try {
             List<Integer> ugroup = departmentService.getUsers(cid, Integer.parseInt(uid));
-            dataGrid = fieldDataService.dataGrid(fieldData, pageHelper, ugroup, "", "");
+            dataGrid = fieldDataService.dataGrid(fieldData, pageHelper, ugroup, type, keyword);
 
             List<FieldData> fieldDatas = dataGrid.getRows();
             if (fieldDatas != null && fieldDatas.size() > 0) {
@@ -263,6 +265,9 @@ public class Api extends BaseController {
         String uid = fieldData.getUid();
         String cid = fieldData.getCid();
 
+        if (projectName != null && !projectName.equals("") && !projectName.equals(fieldData.getProjectName())) {
+            fieldData.setProjectName(projectName);
+        }
         if (nid != null && !nid.equals("")) {
             Cost cost = costService.findOneView(nid, cid);
             if (!fieldData.getItemCode().equals(cost.getItemCode())) {
