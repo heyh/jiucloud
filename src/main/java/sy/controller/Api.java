@@ -92,6 +92,7 @@ public class Api extends BaseController {
         DataGrid dataGrid = null;
         FieldData fieldData = new FieldData();
         fieldData.setUid(uid);
+        keyword = keyword == null ? "" : keyword;
         PageHelper pageHelper = new PageHelper();
         pageHelper.setPage(currentPage);
         pageHelper.setRows(limitSize);
@@ -166,6 +167,7 @@ public class Api extends BaseController {
     @ResponseBody
     public JSONObject getCostInfos(@RequestParam(value = "uid", required = true) String uid,
                                    @RequestParam(value = "cid", required = true) String cid,
+                                   @RequestParam(value = "type", required = true) String type,
                                    HttpServletRequest request, HttpServletResponse response) {
         List<S_department> s = departmentService.getDepartmentsByUid(uid, cid);
         List<Integer> departmentIds = new ArrayList<Integer>();
@@ -175,18 +177,23 @@ public class Api extends BaseController {
             }
         }
         Map<String, List<Map<String, Object>>> costInfos = costService.getCostTypeInfos(departmentIds, cid);
-        List<Map<String, Object>> dataCostList = costInfos.get("dataCostInfos");
-        List<Map<String, Object>> _dataCostList = new ArrayList<Map<String, Object>>();
-        Map<String, Object> _dataCost = new HashMap<String, Object>();
-        for (Map<String, Object> dataCost : dataCostList) {
-            _dataCost = new HashMap<String, Object>();
-            _dataCost.put("name", dataCost.get("costType"));
-            _dataCost.put("id", dataCost.get("nid"));
-            _dataCost.put("pid", dataCost.get("pid"));
-            _dataCost.put("itemCode", dataCost.get("itemCode"));
-            _dataCostList.add(_dataCost);
+        List<Map<String, Object>> costList = new ArrayList<Map<String, Object>>();
+        if (type.equals("data")) {
+            costList = costInfos.get("dataCostInfos");
+        } else if (type.equals("doc")) {
+            costList = costInfos.get("docCostInfos");
         }
-        return new WebResult().ok().set("costInfos", Utility.treeList(_dataCostList, "-1"));
+        List<Map<String, Object>> _costList = new ArrayList<Map<String, Object>>();
+        Map<String, Object> _cost = new HashMap<String, Object>();
+        for (Map<String, Object> cost : costList) {
+            _cost = new HashMap<String, Object>();
+            _cost.put("name", cost.get("costType"));
+            _cost.put("id", cost.get("nid"));
+            _cost.put("pid", cost.get("pid"));
+            _cost.put("itemCode", cost.get("itemCode"));
+            _costList.add(_cost);
+        }
+        return new WebResult().ok().set("costInfos", Utility.treeList(_costList, "-1"));
     }
 
     @ResponseBody
@@ -302,7 +309,7 @@ public class Api extends BaseController {
         List<Integer> approvedUserList = new ArrayList<Integer>();
         if (needApproved != null && needApproved.equals("1")) {
             approvedUserList = departmentService.getAllParents(cid, Integer.parseInt(uid));
-            if (approvedUserList == null) {
+            if (approvedUserList == null || approvedUserList.size() == 0) {
                 approvedUserList.add(Integer.parseInt(uid)); // 如果为空说明是超级管理员，自己审批
             }
             approvedUser = StringUtils.join(approvedUserList, ","); // 所有审批人
