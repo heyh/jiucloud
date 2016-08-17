@@ -404,7 +404,17 @@ public class Api extends BaseController {
             fieldDataService.delete(id);
             return new WebResult().ok().setMessage("删除成功");
         } catch (Exception e) {
-            e.printStackTrace();
+            return new WebResult().fail().setMessage("网络异常,删除失败");
+        }
+    }
+
+    @RequestMapping("/securi_delFile")
+    @ResponseBody
+    public JSONObject delFile(String id, HttpServletResponse response) {
+        try {
+            gcPoService.deleteOne(Integer.parseInt(id));
+            return new WebResult().ok().setMessage("删除成功");
+        } catch (Exception e) {
             return new WebResult().fail().setMessage("网络异常,删除失败");
         }
     }
