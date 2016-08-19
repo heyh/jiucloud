@@ -550,4 +550,23 @@ public class Api extends BaseController {
         fieldDataService.approvedField(id, approvedState, approvedOption);
         return new WebResult().ok().setMessage("审批成功");
     }
+
+    @RequestMapping("/securi_getAd")
+    @ResponseBody
+    public JSONObject getAd(HttpServletResponse response, HttpServletRequest request) {
+
+        List<Map<String, Object>> adList = new ArrayList<Map<String, Object>>();
+//        String ip = IPUtility.getLocalIP();
+//        String servAddr = "http://" + ip + ":8080/fileserver";
+        String servAddr = "http://gcgl.9393915.com:8080/fileserver";
+
+        Map<String, Object> ad = new HashMap<String, Object>();
+        for (int i=1; i<=3; i++) {
+            ad = new HashMap<String, Object>();
+            ad.put("_orderNo", i);
+            ad.put("_fileUrl", servAddr + "/upload/ad/banner" + i + ".png");
+            adList.add(ad);
+        }
+        return new WebResult().ok().set("adList", adList);
+    }
 }
