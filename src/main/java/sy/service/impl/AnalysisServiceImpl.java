@@ -63,13 +63,14 @@ public class AnalysisServiceImpl implements AnalysisServiceI {
 		if (date2 != null && date2.length() > 0) {
 			hql += " and f.creatTime<='" + date2 + "'";
 		}
-		if (ugroup != null && ugroup.size() > 0) {
-			hql += " and f.uid in (0";
-			for (int i = 0; i < ugroup.size(); i++) {
-				hql += "," + ugroup.get(i).toString();
-			}
-			hql += ") ";
-		}
+		// 不能带ugroup
+//		if (ugroup != null && ugroup.size() > 0) {
+//			hql += " and f.uid in (0";
+//			for (int i = 0; i < ugroup.size(); i++) {
+//				hql += "," + ugroup.get(i).toString();
+//			}
+//			hql += ") ";
+//		}
 
 		hql += " where c.isDelete=0 and c.ID in (select cost_id from TPrice_Cost where price_id=:price_id) GROUP BY c.ID";
 
