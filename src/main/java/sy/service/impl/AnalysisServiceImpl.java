@@ -358,8 +358,8 @@ public class AnalysisServiceImpl implements AnalysisServiceI {
             hql += " and t.creatTime <= :endDate";
             paramMap.put("endDate", DateKit.strToDateOrTime(endDate));
         }
-        String uids = StringUtils.join(ugroup, ",");
-        hql += " and uid in (" + uids + ")";
+//        String uids = StringUtils.join(ugroup, ",");
+//        hql += " and uid in (" + uids + ")";
 
         hql += " order by t.id desc";
         List<TFieldData> list = fieldDataDaoI.find(hql, paramMap);
