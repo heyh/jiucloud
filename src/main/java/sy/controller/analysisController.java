@@ -327,7 +327,7 @@ public class analysisController extends BaseController {
 
 		List<Integer> ugroup = new ArrayList<Integer>();
 		Integer selDepartmentId = request.getParameter("selDepartmentId") == null ? -1 : Integer.parseInt(request.getParameter("selDepartmentId"));
-		if (selDepartmentId == -1) {
+		if (selDepartmentId == -1) { // 没传，
 			for (S_department department : departments) {
 				if (department.getId() != 0) {
 					selDepartmentId = department.getId();
