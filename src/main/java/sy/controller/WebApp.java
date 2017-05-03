@@ -366,6 +366,8 @@ public class WebApp extends BaseController {
         String needApproved = request.getParameter("needApproved");
         String approvedUser = "";
         String currentApprovedUser = "";
+        String section = StringUtil.trimToEmpty(request.getParameter("section"));
+		String supplier = StringUtil.trimToEmpty(request.getParameter("supplier"));
         // add by heyh begin
         List<Integer> approvedUserList = new ArrayList<Integer>();
         if (needApproved != null && needApproved.equals("1")) {
@@ -383,7 +385,7 @@ public class WebApp extends BaseController {
 //		fieldData.setItemCode(cost.getItemCode());
 		TFieldData fieldData = new TFieldData(projectName, uid, new Date(),
 				costType, dataName, price, company, count, specifications,
-				remark, cid, uname, unit, needApproved, approvedUser, cost.getItemCode(), currentApprovedUser, "");
+				remark, cid, uname, unit, needApproved, approvedUser, cost.getItemCode(), currentApprovedUser, "", section, supplier, "");
 
 		System.out.println(fieldData);
 		try {

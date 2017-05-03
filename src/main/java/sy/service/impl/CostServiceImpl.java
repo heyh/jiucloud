@@ -1,9 +1,6 @@
 package sy.service.impl;
 
 import net.sf.json.JSONArray;
-import net.sf.json.JSONObject;
-import org.apache.commons.collections.ListUtils;
-import org.apache.commons.collections.iterators.ObjectArrayIterator;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -280,8 +277,7 @@ public class CostServiceImpl implements CostServiceI {
 				"select count(*) from Cost where cid=:cid and flag=1", params);
 		if (count != 0)
 			return;
-		List<Cost> dlist = costDaoI.find("from CostModel where cid=:cid",
-				params);
+		List<Cost> dlist = costDaoI.find("from CostModel where cid=:cid", params);
 		for (Cost tem : dlist) {
 			this.delete(tem);
 		}
@@ -364,11 +360,8 @@ public class CostServiceImpl implements CostServiceI {
 	}
 
 	/**
-	 * 
 	 * 删除
-	 * 
-	 * @param id
-	 *            void
+	 * @param cost
 	 */
 
 	@Override
@@ -578,4 +571,44 @@ public class CostServiceImpl implements CostServiceI {
         costTypeInfos.put("docCostInfos", docCostInfos);
         return costTypeInfos;
     }
+
+	@Override
+	public void initDefaultCost(String cid) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("cid", cid);
+		long count = costDaoI.count("select count(*) from Cost where cid=:cid and flag=1", params);
+		if (count != 0) {
+			return;
+		}
+
+		Cost cost = new Cost();
+		List<CostModel> list = costModelDaoI.find("from CostModel");
+		for (CostModel tem : list) {
+			cost = new Cost(tem);
+			cost.setCid(cid);
+			this.add(cost);
+		}
+	}
+
+	@Override
+	public int insertDefaultCost(String cid) {
+		String insertSql = "insert into TCost select null, :cid, costType, isDelete, flag, pid, sort, nid, isend, level, itemCode, type from TCost_tem";
+		return costDaoI.executeSql(insertSql);
+	}
+
+	@Override
+	public List<Cost> getMatrialsCostList(String cid, Integer selDepartmentId) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("cid", cid);
+		params.put("department_id", selDepartmentId);
+		String hql = " from Cost t where cid=:cid and isdelete=0 and  substring(itemcode, 1, 3) = 800 and isend='1'";
+
+		hql += " and id in (select cost_id from Department_Cost where department_id  = :department_id ) ";
+
+		hql += " order by t.sort,t.itemCode asc ";
+		List<Cost> l = costDaoI.find(hql, params);
+		return l;
+	}
+
+
 }

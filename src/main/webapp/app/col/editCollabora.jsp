@@ -48,16 +48,34 @@
 							}
 						});
 	});
+
+    var sectionId = document.getElementById('sectionId').value;
+    for (var i = 0; i < document.getElementById('section').options.length; i++) {
+        if (document.getElementById('section').options[i].value == sectionId) {
+            document.getElementById('section').options[i].selected = true;
+            break;
+        }
+    }
 </script>
 
 <div class="easyui-layout" data-options="fit:true,border:false">
 	<div data-options="region:'center',border:false" title=""
 		style="overflow: hidden;">
 		<form id="form" method="post">
+			<input type="hidden" id="sectionId" value="${detail.section}"/>
 			<input name="id" type="hidden" class="span2" value="${pro.id}"
 				readonly="readonly">
-			<table class="table table-hover table-condensed"
-				style="font-size: 12px;">
+			<table class="table table-hover table-condensed" style="font-size: 12px;">
+				<tr>
+					<td>标段</td>
+					<td>
+						<select id="section" name="section">
+							<c:forEach items="${selectItems}" var="selectItem">
+								<option value="${selectItem.id}">${selectItem.text}</option>
+							</c:forEach>
+						</select>
+					</td>
+				</tr>
 				<tr>
 					<td>单位名称</td>
 					<td><input type="text" name="name" style="width: 208px;"

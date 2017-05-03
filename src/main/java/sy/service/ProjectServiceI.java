@@ -22,7 +22,7 @@ public interface ProjectServiceI {
 	/**
 	 * 获取项目名称列表
 	 */
-	DataGrid dataGrid(ProjectSearch app, PageHelper ph, List<Integer> ugroup);
+	DataGrid dataGrid(ProjectSearch app, PageHelper ph, List<Integer> ugroup, List<Integer> departmentIds);
 
     // add by heyh
     DataGrid dataGrid(ProjectSearch app, PageHelper ph, String compId, String source);
@@ -65,11 +65,19 @@ public interface ProjectServiceI {
 
 	List<Project> getProjects(List<Integer> ugroup);
 
-    public String getProjectInfos(String cid);
+    public String getProjectInfos(String cid, List<Integer> departmentIds);
 
-	List<Map<String, Object>> getProjects(String cid);
+	public List<Map<String, Object>> getProjects(String cid,List<Integer> departmentIds);
 
 	void lockProject(Integer id);
 
     void unLockProject(Integer id);
+
+	// 新建虚拟工程后(projectId),查询得到id
+	public List<Project> getProjectByProjectId( String cid, String projectId);
+
+	// 新建虚拟工程后(projectName),查询得到id
+	public List<Project> getProjectByProjectName( String cid, String projectName);
+
+	public List<Project> initDefaultProject(String cid, String uid);
 }

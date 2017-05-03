@@ -44,6 +44,15 @@ public class SessionInfo implements java.io.Serializable {
     private List<Param> unitParams;
     private List<String> rightList;
 	private JSONArray costTree;
+	private JSONArray docCostTree;
+
+	public JSONArray getDocCostTree() {
+		return docCostTree;
+	}
+
+	public void setDocCostTree(JSONArray docCostTree) {
+		this.docCostTree = docCostTree;
+	}
 
 	public JSONArray getCostTree() {
 		return costTree;

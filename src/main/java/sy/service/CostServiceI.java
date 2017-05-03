@@ -105,4 +105,9 @@ public interface CostServiceI {
                                   String cid, int price_id);
     public Map<String, List<Map<String, Object>>> getCostTypeInfos(List<Integer> departmentIds, String cid);
 
+    public void initDefaultCost(String cid);
+    public int insertDefaultCost(String cid);
+
+    public List<Cost> getMatrialsCostList(String cid, Integer selDepartmentId);
+
 }

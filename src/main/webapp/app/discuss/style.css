@@ -1,0 +1,58 @@
+@charset "UTF-8";
+/* common */
+*{ margin:0; padding:0;}
+body{ 
+	 font-family:Microsoft YaHei; 
+	 font-size:14px; 
+	 line-height:1.5; 
+	 color:#24292e; 
+	 background-color:#fff;
+	 padding-bottom:50px;
+ }
+.clearfix:after {visibility:hidden;display:block;font-size:0;content:" ";clear:both;height:0;}
+.clearfix {zoom:1;}
+.l-space{ margin-left:10px;}
+.t-space-10{ margin-top:10px;}
+ h1{ font-size:16px; }
+ .font-small{ font-size:12px;}
+ .font-gray{ color:#999;}
+
+ /*discussion-header*/
+.discussion-header-box{ background-color:#f2f2f2; text-align:center; padding:20px 0;}
+.discussion-header,.discussion-bucket{ width:80%; margin:0 auto; text-align:left;}
+.meta-strong{color:#24292e;}
+
+/*discussion-bucket*/
+.discussion-bucket-box{ text-align:center;}
+.discussion-sidebar{ width:220px; float:right;}
+.discussion-timeline{ width: calc(100% - 240px); float:left; }
+.user-head{ width:50px; height:50px; border-radius:50px; overflow:hidden; float:left; background-color:#f2f2f2;}
+.user-comment{width:calc(100% - 60px); float:right;}
+.comment-content-wrapper{ position:relative; }
+.arrow-left { width:10px; height:20px; background:url(images/arrow.png) no-repeat left center; position:absolute; left:0; top:10px; z-index:10; }
+.comment-content{ border-radius:6px; border:1px solid #ebebeb; padding:10px; margin-left:9px; margin-top:3px; color:#666;}
+.comment-meta{ margin-left:9px;}
+.comment-user-name{ float:left;}
+.comment-time{ float:right;}
+.comment-list{ margin-top:20px;}
+.comment-list:first-child { margin-top:0;}
+.my-comment .user-head{ float:right;}
+.my-comment .user-comment{ float:left;}
+.my-comment .comment-user-name{ float:right;}
+.my-comment .comment-time{ float:left;}
+.my-comment .arrow-left { right:0; left:auto;transform:rotate(180deg); -ms-transform:rotate(180deg); -moz-transform:rotate(180deg); 	/* Firefox */-webkit-transform:rotate(180deg); /* Safari 和 Chrome */-o-transform:rotate(180deg); 	/* Opera */}
+.my-comment .comment-content{ margin-left:0; margin-right:9px;}
+.my-comment .comment-meta{ margin-left:0; margin-right:9px;}
+
+/*add comment*/
+.add-comment textarea{ width:calc(100% - 22px);border:1px solid #ebebeb; border-radius:6px; height:80px; line-height:1.5;padding:10px; color:#666;}
+.add-comment button{ width:80px; height:35px; margin-top:5px; line-height:35px; background-color:#24292e; color:#fff; border:0; float:right; cursor:pointer;}
+.add-comment button:hover{ background-color:#000;}
+
+/*add comment*/
+.discussion-sidebar{}
+.user-info{ border:1px solid #ebebeb; padding:10px;}
+.banner{ background-color:#f9f9f9; height:60px; padding:10px;}
+
+
+

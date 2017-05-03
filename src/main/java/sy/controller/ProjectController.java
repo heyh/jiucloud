@@ -1,23 +1,26 @@
 package sy.controller;
 
+import net.sf.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 import sy.model.Area;
 import sy.model.City;
 import sy.model.Province;
+import sy.model.S_department;
 import sy.model.po.Project;
 import sy.pageModel.*;
-import sy.service.AreaServiceI;
-import sy.service.CityServiceI;
-import sy.service.ProjectServiceI;
-import sy.service.ProvinceServiceI;
+import sy.service.*;
+import sy.util.ConfigUtil;
 import sy.util.StringUtil;
 import sy.util.UtilDate;
 
 import javax.servlet.http.HttpServletRequest;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -43,6 +46,9 @@ public class ProjectController extends BaseController {
     @Autowired
     private AreaServiceI areaService;
 
+	@Autowired
+	private DepartmentServiceI departmentService;
+
 	/**
 	 * 跳转管理页面
 	 * 
@@ -65,10 +71,13 @@ public class ProjectController extends BaseController {
 	public List<City> getCities(HttpServletRequest reqs) {
 		String provincename = reqs.getParameter("provincename");
 //		try {
-//			pidVar = new String(pidVar.getBytes("ISO-8859-1"), "utf-8");
+//			provincename = new String(provincename.getBytes("ISO-8859-1"), "utf-8");
 //		} catch (UnsupportedEncodingException e) {
 //			e.printStackTrace();
 //		}
+		if (provincename.equals("")) {
+			return null;
+		}
 		Province tem = provinceService.getProvinceByName(provincename);
 		List<City> list = cityService.getCities(tem.getCode());
 		return list;
@@ -78,6 +87,11 @@ public class ProjectController extends BaseController {
     @ResponseBody
     public List<Area> getAreas(HttpServletRequest reqs) {
         String cityname = reqs.getParameter("cityname");
+//		try {
+//			cityname = new String(cityname.getBytes("ISO-8859-1"), "utf-8");
+//		} catch (UnsupportedEncodingException e) {
+//			e.printStackTrace();
+//		}
         if (cityname.equals("")) {
             return null;
         }
@@ -228,7 +242,11 @@ public class ProjectController extends BaseController {
 		List<Province> provinces = provinceService.getProvinces();
 
         Province tem = provinceService.getProvinceByName(pro.getProvice());
-		List<City> cities = cityService.getCities(tem.getCode());
+		List<City> cities = new ArrayList<City>();
+		if (tem != null) {
+			cities = cityService.getCities(tem.getCode());
+		}
+
 
         List<Area> areas = new ArrayList<Area>();
         if (pro.getCity() != null && !pro.getCity().equals("")) {
@@ -324,7 +342,14 @@ public class ProjectController extends BaseController {
 		Json j = new Json();
 		SessionInfo sessionInfo = (SessionInfo) request.getSession().getAttribute(sy.util.ConfigUtil.getSessionInfoName());
 		String compId = sessionInfo.getCompid();
-		List<Map<String, Object>> projects = projectService.getProjects(compId);
+		List<S_department> departmentList  = sessionInfo.getDepartmentIds();
+		List<Integer> departmentIds = new ArrayList<Integer>();
+		if (departmentList != null && departmentList.size() > 0) {
+			for (S_department department : departmentList) {
+				departmentIds.add(department.getId());
+			}
+		}
+		List<Map<String, Object>> projects = projectService.getProjects(compId, departmentIds);
 		j.setObj(projects);
 		j.setSuccess(true);
 		return j;
@@ -353,4 +378,63 @@ public class ProjectController extends BaseController {
         j.setSuccess(true);
         return j;
     }
+
+	@RequestMapping("/securi_goAssigned")
+	public ModelAndView goAssigned(HttpServletRequest request) {
+		ModelAndView mv = new ModelAndView();
+		SessionInfo sessionInfo = (SessionInfo) request.getSession().getAttribute(ConfigUtil.getSessionInfoName());
+		String cid = sessionInfo.getCompid();
+		String proId = request.getParameter("proId");
+		Project pro = this.projectService.findOneView(Integer.parseInt(proId));
+		List<Object[]> departmentList = departmentService.getAllDepartmentList(cid);
+		List<Map<String, Object>> _departmentList = new ArrayList<Map<String, Object>>();
+		Map<String,Object> _department = new HashMap<String, Object>();
+		for (Object[] department : departmentList) {
+			_department = new HashMap<String, Object>();
+			_department.put("id", department[0]);
+			_department.put("pId", department[1]);
+			_department.put("name", department[2]);
+			if (pro.getBelongDeparts() != null && !pro.getBelongDeparts().equals("") && pro.getBelongDeparts().contains(StringUtil.trimToEmpty(department[0]))) {
+				_department.put("checked", true);
+			}
+			_departmentList.add(_department);
+		}
+
+		mv.addObject("pro", pro);
+		mv.addObject("departmentList", JSONArray.fromObject(_departmentList));
+		mv.setViewName("/app/pro/assignedProject");
+		return mv;
+	}
+
+	@RequestMapping("/securi_assignedProject")
+	@ResponseBody
+	public Json assignedProject(Project pro, HttpServletRequest request) {
+		Json j = new Json();
+
+		Project project = this.projectService.findOneView(pro.getId());
+		project.setBelongDeparts(pro.getBelongDeparts());
+		// 执行新增sql命令
+		try {
+			this.projectService.update(project);
+			j.setMsg("修改成功！");
+			j.setSuccess(true);
+		} catch (Exception ex) {
+			j.setMsg("修改失败");
+			j.setSuccess(false);
+		}
+		return j;
+	}
+
+	@RequestMapping("/securi_getAllProjects")
+	@ResponseBody
+	public List<Project> getAllProjects(HttpServletRequest request) {
+		Json j = new Json();
+		SessionInfo sessionInfo = (SessionInfo) request.getSession().getAttribute(sy.util.ConfigUtil.getSessionInfoName());
+		String compId = sessionInfo.getCompid();
+		String uid = sessionInfo.getId();
+		List<Project> projectList = projectService.initDefaultProject(compId, uid);
+//		j.setObj(projectList);
+//		j.setSuccess(true);
+		return projectList;
+	}
 }

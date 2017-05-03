@@ -479,4 +479,7 @@ public class Constant {
 		}
 		return date;
 	}
+
+	public static final String EXCEL_TEMPLATE = "upload/template/";
+	public static final String FILEPATHFILE = "uploadFiles/file/";
 }

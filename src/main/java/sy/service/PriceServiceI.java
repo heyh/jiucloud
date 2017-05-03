@@ -37,4 +37,6 @@ public interface PriceServiceI {
 	void delete2(Price_Cost tem);
 
 	Price_Cost findoneview2(int cost_id, int price_id);
+
+	public void initPrice(String cid);
 }

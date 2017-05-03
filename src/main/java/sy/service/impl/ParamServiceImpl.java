@@ -29,20 +29,20 @@ public class ParamServiceImpl implements ParamService{
         if (!pMap.containsKey(key + "|" + value)) {
             Map<String,Object> paramMap=new HashMap<String,Object>();
             List<Map<String,Object>> list=new ArrayList<Map<String,Object>>();
-            if(key.equals("UP")){
-                Object result = getUnitParams();
+//            if(key.equals("UP")){
+                Object result = getUnitParams(key);
                 if(result != null) {
                     pMap.put(key + "|" + value, result);
                 }
-            }
+//            }
         }
         return pMap.containsKey(key + "|" + value) ? pMap.get(key + "|" + value) : null;
     }
 
-    private List<Param> getUnitParams() {
+    private List<Param> getUnitParams(String key) {
         Map<String, Object> paramMap = new HashMap<String, Object>();
-        paramMap.put("paramTypeCode", "UP");
-        String hql = "from Param where paramTypeCode =:paramTypeCode";
+        paramMap.put("paramTypeCode", key);
+        String hql = "from Param where paramTypeCode =:paramTypeCode order by id";
         List<Param> ups = paramDao.find(hql, paramMap);
         return ups;
     }

@@ -8,10 +8,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import sy.model.Collaboration;
-import sy.pageModel.DataGrid;
-import sy.pageModel.Json;
-import sy.pageModel.PageHelper;
+import sy.model.Item;
+import sy.pageModel.*;
 import sy.service.CollaborationServiceI;
+import sy.service.ItemServiceI;
+import sy.util.ConfigUtil;
+
+import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping("/collcontroller")
@@ -20,16 +24,22 @@ public class CollaborationController {
 	@Autowired
 	private CollaborationServiceI collaborationService;
 
+	@Autowired
+	private ItemServiceI itemService;
+
 	/**
 	 * 获取表格数据
-	 * @param user
+	 * @param ph
+	 * @param request
 	 * @return
 	 */
 	@RequestMapping("/securi_dataGrid")
 	@ResponseBody
 	public DataGrid dataGrid(PageHelper ph, HttpServletRequest request) {
+		SessionInfo sessionInfo = (SessionInfo) request.getSession().getAttribute(ConfigUtil.getSessionInfoName());
+		String cid = sessionInfo.getCompid();
 		String pid = request.getParameter("pid");
-		DataGrid dataGrid = collaborationService.dataGrid(pid, ph);
+		DataGrid dataGrid = collaborationService.dataGrid(cid, pid, ph);
 		return dataGrid;
 	}
 
@@ -50,8 +60,24 @@ public class CollaborationController {
 	@RequestMapping("/securi_toEditPage")
 	public String toEditPage(int id, HttpServletRequest request) {
 		Collaboration tem = collaborationService.findoneview(id);
-		System.out.println(tem);
 		request.setAttribute("detail", tem);
+
+		SessionInfo sessionInfo = (SessionInfo) request.getSession().getAttribute(ConfigUtil.getSessionInfoName());
+		String cid = sessionInfo.getCompid();
+		String uid = sessionInfo.getId();
+		List<Map<String, Object>> selectItems = itemService.getSelectItems(cid, String.valueOf(tem.getPid()));
+		if (selectItems.size()<=0) {
+			List<Item> defaultItemList = itemService.getDefaultItems();
+			for (Item defaultItem : defaultItemList) {
+				defaultItem.setCid(cid);
+				defaultItem.setProjectId(String.valueOf(tem.getPid()));
+				defaultItem.setOperator(uid);
+				itemService.add(defaultItem);
+			}
+			selectItems = itemService.getSelectItems(cid, String.valueOf(tem.getPid()));
+		}
+		request.setAttribute("selectItems", selectItems);
+
 		return "/app/col/editCollabora";
 	}
 
@@ -73,7 +99,20 @@ public class CollaborationController {
 	 */
 	@RequestMapping("/securi_toViewPage")
 	public String toViewPage(int id, HttpServletRequest request) {
+		SessionInfo sessionInfo = (SessionInfo) request.getSession().getAttribute(ConfigUtil.getSessionInfoName());
+		String sectionName = "";
 		Collaboration tem = collaborationService.findoneview(id);
+
+		PmCollaboration pmCollaboration = new PmCollaboration();
+		if (tem != null) {
+			Item sectionItem = itemService.getSingleItem(sessionInfo.getCompid(), String.valueOf(tem.getPid()), tem.getSection());
+			if (sectionItem == null) {
+				sectionName = "标段1";
+			} else {
+				sectionName = sectionItem.getName();
+			}
+		}
+		request.setAttribute("sectionName", sectionName);
 		request.setAttribute("detail", tem);
 		return "/app/col/viewCollabora";
 	}
@@ -131,6 +170,7 @@ public class CollaborationController {
 		tem.setPower(request.getParameter("power"));
 		tem.setRemark(request.getParameter("remark"));
 		tem.setPid(Integer.parseInt(request.getParameter("pid")));
+		tem.setSection(request.getParameter("section"));
 		try {
 			collaborationService.update(tem);
 		} catch (Exception e) {

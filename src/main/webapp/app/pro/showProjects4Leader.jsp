@@ -121,7 +121,7 @@
 															'<img onclick="viewFun(\'{0}\');" src="{1}" title="详情"/>',
 															row.id,
 															'${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/preview-blue.png');
-											return str;
+                                            return str;
 										}
 									} ] ],
 							toolbar : '#toolbar',

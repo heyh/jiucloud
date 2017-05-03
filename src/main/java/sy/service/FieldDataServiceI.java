@@ -74,4 +74,12 @@ public interface FieldDataServiceI {
      * @return
      */
     public DataGrid myApproveDataGrid(PageHelper ph, String uid);
+
+	public TFieldData getMaxFieldByCidUid(String cid, String uid);
+
+    public TFieldData getFieldByMaxId(String cid, String uid, String projectId);
+
+    public List<TFieldData> getOutFieldByRelId(String relId);
+
+    public List<Map<String, Object>> getMaterialDatas(String cid, String statDate, List<Integer> ugroup, Integer selDepartmentId);
 }

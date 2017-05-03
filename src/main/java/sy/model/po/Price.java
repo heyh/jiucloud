@@ -1,19 +1,28 @@
 package sy.model.po;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
 @Table(name = "TPrice")
 public class Price {
 
+	public Price(PriceModel priceModel) {
+		this.name = priceModel.getName();
+		this.cid = priceModel.getCid();
+	}
+
 	@Id
 	@Column(name = "id", nullable = false, length = 36)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+
 	private int id;
 	private String name;
 	private int cid;
+
+	public Price() {
+
+	}
+
 
 	public int getId() {
 		return id;

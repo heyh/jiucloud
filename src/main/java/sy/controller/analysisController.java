@@ -4,13 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import sy.model.S_department;
+import sy.model.po.Cost;
 import sy.model.po.Price;
 import sy.model.po.Project;
 import sy.pageModel.*;
 import sy.service.*;
-import sy.util.ConfigUtil;
-import sy.util.ExcelExportUtil;
-import sy.util.UtilDate;
+import sy.util.*;
 
 import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
@@ -38,6 +38,12 @@ public class analysisController extends BaseController {
 	@Autowired
 	private PriceServiceI priceService;
 
+	@Autowired
+	private FieldDataServiceI fieldDataService;
+
+	@Autowired
+	private DepartmentServiceI departmentService;
+
 	/*
 	 * 跳转到费用类型选择
 	 */
@@ -46,71 +52,6 @@ public class analysisController extends BaseController {
 	public String selectc() {
 		return "/app/analysis/cost_select";
 	}
-
-	/*
-	 * 跳转到汇总页
-	 */
-//	@RequestMapping("/showTable")
-//	public String showTable(HttpSession session, HttpServletRequest request,
-//			AnalysisSearch analysisSearch) {
-////		if (analysisSearch.isNull()) {
-////			request.setAttribute("first", UtilDate.getshortFirst());
-////			request.setAttribute("last", UtilDate.getshortLast());
-////			return "/app/analysis/summary";// 当日期为空时不做任何查询
-////		}
-//		FieldData fieldData = (FieldData) session.getAttribute("analusisInfo");
-//		analysisSearch.setStartTime(fieldData.getStartTime());
-//		analysisSearch.setEndTime(fieldData.getEndTime());
-//		//名字和id
-//		analysisSearch.setpName(fieldData.getProjectName());
-//		analysisSearch.setCostTypeName(fieldData.getCostType());
-//		SessionInfo sessionInfo = (SessionInfo) session.getAttribute(ConfigUtil
-//				.getSessionInfoName());
-//		String cid = sessionInfo.getCompid();
-//		List<Integer> ugroup = sessionInfo.getUgroup();
-//
-//		List<Price> prices = priceService.getpPrices(Integer.parseInt(cid));
-//		List<Project> projects;
-//
-//		if (analysisSearch.getpName() == null
-//				|| "".equals(analysisSearch.getpName())) {
-//			projects = projectService.getProjects(ugroup);// 当查询条件为空时查询出当前登录权限下的所有工程
-////		if (analysisSearch.getProject_id() == null
-////				|| "".equals(analysisSearch.getProject_id())) {
-////			projects = projectService.getProjects(ugroup);// 当查询条件为空时查询出当前登录权限下的所有工程
-//		} else {
-////			Project project = projectService.findOneView(Integer
-////					.parseInt(analysisSearch.getProject_id()));
-////			projects = new ArrayList<Project>();
-////			projects.add(project);
-//			//原来是通过id查询单个对象放入集合，现在是通过现场数据的名称模糊查询集合对象赋值给projects集合对象
-//			projects = projectService.findListView(analysisSearch.getpName(),cid);
-//		}
-//
-//		// 获取表格数据
-//		List<AnalysisData> datas = analysisService.getTable(analysisSearch,
-//				ugroup, projects, prices,cid);
-//
-//		List<Double> totals = new ArrayList<Double>();
-//
-//		// 计算合计
-//		if (datas.size() > 0) {
-//			double[] sums = new double[datas.get(0).getMoneys().size()];
-//			for (int i = 0; i < datas.get(0).getMoneys().size(); i++) {
-//				sums[i] = 0;
-//				for (int j = 0; j < datas.size(); j++) {
-//					sums[i] += datas.get(j).getMoneys().get(i);
-//				}
-//				totals.add(sums[i]);
-//			}
-//		}
-//
-//		request.setAttribute("prices", prices);
-//		request.setAttribute("datas", datas);
-//		request.setAttribute("analysisSearch", analysisSearch);
-//		request.setAttribute("totals", totals);
-//		return "/app/analysis/summary";
-//	}
 
     /**
      * 新的『项目费用汇总』
@@ -376,4 +317,39 @@ public class analysisController extends BaseController {
         j.setSuccess(true);
         return j;
     }
+
+	@RequestMapping("/materialStatReportPage")
+	public String materialStatReportPage(HttpServletRequest request) {
+		SessionInfo sessionInfo = (SessionInfo) request.getSession().getAttribute(ConfigUtil.getSessionInfoName());
+		String cid = sessionInfo.getCompid();
+		String uid = sessionInfo.getId();
+		List<S_department> departments = sessionInfo.getDepartmentIds();
+
+		List<Integer> ugroup = new ArrayList<Integer>();
+		Integer selDepartmentId = request.getParameter("selDepartmentId") == null ? -1 : Integer.parseInt(request.getParameter("selDepartmentId"));
+		if (selDepartmentId == -1) { // 没传，
+			for (S_department department : departments) {
+				if (department.getId() != 0) {
+					selDepartmentId = department.getId();
+					break;
+				}
+			}
+
+		}
+		ugroup = departmentService.getUsersByDepartmentId(cid, Integer.parseInt(uid), selDepartmentId);
+
+		String selectedMonth = request.getParameter("selectedMonth");
+		if (StringUtil.trimToEmpty(selectedMonth).equals("")) {
+			selectedMonth = DateKit.monthlyToStr(DateKit.getDate());
+		}
+		List<Map<String, Object>> materialStatInfos = fieldDataService.getMaterialDatas(cid, selectedMonth, ugroup, selDepartmentId);
+		request.setAttribute("materialStatInfos", materialStatInfos);
+		request.setAttribute("selectedMonth", selectedMonth);
+		request.setAttribute("selDepartmentId", selDepartmentId);
+		if (departments.size()>1) {
+			request.setAttribute("departments", departments);
+		}
+
+		return "/app/analysis/materialStatReport";
+	}
 }

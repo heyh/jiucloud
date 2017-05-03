@@ -67,6 +67,10 @@ public class UserController extends BaseController {
     @Autowired
     private ParamService paramService;
 
+    @Autowired
+	private PriceServiceI priceService;
+
+
 	// 获得token 同步操作
 	private final String token = SynchronizationController.getToken();
 
@@ -177,7 +181,6 @@ public class UserController extends BaseController {
                 sessionInfo.setDepartmentIds(s); // 隶属多部门
 				sessionInfo.setDgroup(dgroup);
 				sessionInfo.setUgroup(ugroup);
-                sessionInfo.setProjectInfos(projectService.getProjectInfos(String.valueOf(c.getId())));
                 List<Integer> departmentIds = new ArrayList<Integer>();
                 if (s != null && s.size() > 0) {
                     for (S_department department : s) {
@@ -185,8 +188,15 @@ public class UserController extends BaseController {
                     }
                 }
 
+                // 增加默认费用类型配置
+				costService.initDefaultCost(String.valueOf(c.getId()));
+				priceService.initPrice(String.valueOf(c.getId()));
+
+
+				sessionInfo.setProjectInfos(projectService.getProjectInfos(String.valueOf(c.getId()), departmentIds));
 				Map<String, List<Map<String, Object>>> costInfos = costService.getCostTypeInfos(departmentIds, cid);
 				List<Map<String, Object>> dataCostList = costInfos.get("dataCostInfos");
+				List<Map<String, Object>> docCostList = costInfos.get("docCostInfos");
 				List<Map<String, Object>> _dataCostList = new ArrayList<Map<String, Object>>();
 				Map<String, Object> _dataCost = new HashMap<String, Object>();
 				for (Map<String, Object> dataCost : dataCostList) {
@@ -196,9 +206,20 @@ public class UserController extends BaseController {
 					_dataCost.put("pid", dataCost.get("pid"));
 					_dataCostList.add(_dataCost);
 				}
-				sessionInfo.setCostTypeInfos(costInfos);
 				sessionInfo.setCostTree(Utility.treeList(_dataCostList, "-1"));
 
+				List<Map<String, Object>> _docCostList = new ArrayList<Map<String, Object>>();
+				Map<String, Object> _docCost = new HashMap<String, Object>();
+				for (Map<String, Object> docCost : docCostList) {
+					_docCost = new HashMap<String, Object>();
+					_docCost.put("text", docCost.get("costType"));
+					_docCost.put("id", docCost.get("nid"));
+					_docCost.put("pid", docCost.get("pid"));
+					_docCostList.add(_docCost);
+				}
+				sessionInfo.setDocCostTree(Utility.treeList(_docCostList, "-1"));
+
+				sessionInfo.setCostTypeInfos(costInfos);
                 sessionInfo.setUnitParams((List<Param>) paramService.getParams("UP", ""));
                 sessionInfo.setRightList(departmentService.getAllRight(cid, Integer.parseInt(u.getId())));
                 sessionInfo.setParentId(departmentService.getParentId(cid, Integer.parseInt(u.getId())));
@@ -206,6 +227,9 @@ public class UserController extends BaseController {
 
 				System.out.println(sessionInfo);
 				j.setObj(sessionInfo);
+
+
+
 			} else if (u == null) {
 				j.setMsg("用户名或密码错误！");
 			}

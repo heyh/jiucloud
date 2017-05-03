@@ -217,27 +217,26 @@
             }
         });
 
-        <!-- 消息通知 -->
-        setTimeout(function () {
+        $(function () {
             getNeedApproveList();
-        }, 200);
-        setInterval(function () {
-            getNeedApproveList();
-        }, 1000 * 100);
+        });
+
+        setInterval(getNeedApproveList, 30000);
+
         function getNeedApproveList() {
             $.ajax({
                 url: '${pageContext.request.contextPath}/fieldDataController/securi_getNeedApproveList',
-                data: {currentApprovedUser: <%= uid %>},
+                data: {currentApprovedUser: <%= uid %>, cid: <%= cid %>},
                 type: 'post',
                 dataType: 'json',
                 contentType: "application/x-www-form-urlencoded; charset=utf-8",
                 success: function (data) {
                     if (data.success) {
                         console.log(data.obj)
-                        $('.notice_num').text(data.obj.length);
+                        $('.notice_num').text(data.obj.needApproveList.length);
 
                         var htmlStr = '';
-                        $.each(data.obj, function(index, item) {
+                        $.each(data.obj.needApproveList, function(index, item) {
                             htmlStr +=
                             '<div class="con_list_item clearfix">' +
                             '   <div class="span4">' +
@@ -250,6 +249,9 @@
                             '</div>'
                         })
                         $('#noticeDiv').html(htmlStr);
+
+                        $('#comp').text('企业名称: ' + data.obj.compName);
+                        $('#userName').text('欢迎您, ' + data.obj.userName);
                     }
                 }
             });
@@ -296,14 +298,16 @@
 
 <div id="index_layout">
     <!-- class="logo" -->
-    <div data-options="region:'north'"
-         style="height: 40px; overflow: hidden;">
+    <div data-options="region:'north'" style="height: 40px; overflow: hidden;">
         <div class="fixed-top" id="header" style="height: 40px;">
             <nav role="navigation" id="nav">
                 <a class="logo" href="http://www.9393915.com">氿上网</a>
                 <ul class="top-nav fr">
-                    <li class="menu-item"><a target="_blank"
-                                             href="http://www.9393915.com/user/base/profile">账号</a></li>
+
+                    <li class="menu-item"><a id="comp"></a></li>
+                    <li class="menu-item"><a id="userName"></a></li>
+                    <li class="menu-item"><div style="padding-top:3px; height:15px; width:1px; border-left:1px #fff solid"></div></li>
+                    <li class="menu-item"><a target="_blank" href="http://www.9393915.com/user/base/profile">账号</a></li>
                     <!-- <li class="menu-item"><a href="javascript:logoutFun()">退出</a></li> -->
                     <li class="menu-item"><a href="http://www.9393915.com/department">退出</a></li>
                 </ul>
@@ -322,7 +326,6 @@
                             <div class="notice_con_til"><a style="font-size: 14px;">站内消息通知</a></div>
                             <div class="notice_con_list">
                                 <div class="row" id="noticeDiv">
-
                                 </div>
                             </div>
                         </div>

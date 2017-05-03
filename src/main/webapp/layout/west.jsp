@@ -15,7 +15,7 @@
 					parentField : 'pid',
 					//lines : true,
 					onClick : function(node) {
-						if (node.attributes && node.attributes.url) {
+                        if (node.attributes && node.attributes.url) {
 							var url;
 							if (node.attributes.url.indexOf('/') == 0) {/*如果url第一位字符是"/"，那么代表打开的是本地的资源*/
 								url = '${pageContext.request.contextPath}'

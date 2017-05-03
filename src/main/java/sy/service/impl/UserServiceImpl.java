@@ -78,7 +78,9 @@ public class UserServiceImpl implements UserServiceI {
 		params.put("id", id);
 		Tuser t = userDao.get(" from Tuser t  where t.id = :id", params);
 		User u = new User();
-		BeanUtils.copyProperties(t, u);
+		if (t != null) {
+			BeanUtils.copyProperties(t, u);
+		}
 		return u;
 	}
 

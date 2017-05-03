@@ -50,8 +50,47 @@ public class FieldData {
     private String approvedUser;
     private String currentApprovedUser;
     private String approvedOption;
+    private String section;
 
-    public String getApprovedOption() {
+    private String supplier;
+
+    private String relId;
+
+	public String getRelId() {
+		return relId;
+	}
+
+	public void setRelId(String relId) {
+		this.relId = relId;
+	}
+
+	public String getSupplier() {
+		return supplier;
+	}
+
+	public void setSupplier(String supplier) {
+		this.supplier = supplier;
+	}
+
+	public String getSectionName() {
+		return sectionName;
+	}
+
+	public void setSectionName(String sectionName) {
+		this.sectionName = sectionName;
+	}
+
+	private String sectionName;
+
+	public String getSection() {
+		return section;
+	}
+
+	public void setSection(String section) {
+		this.section = section;
+	}
+
+	public String getApprovedOption() {
         return approvedOption;
     }
 

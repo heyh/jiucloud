@@ -78,6 +78,7 @@
     });
 
     function openClose(id,  curObj, trIndex) {
+        debugger;
         var txt = $(curObj).text();
         if (txt == "详情") {
             $(curObj).text("折叠");
@@ -91,9 +92,11 @@
             var url = "${pageContext.request.contextPath}/analysisController/securi_showDetailByItemCode?startDate=" + startDate + "&endDate=" + endDate + "&itemCode=" + id + "&projectName=" + projectName;
             $.get(url, function (data) {
                 data = data.obj;
+
                 if (data.length > 0) {
                     var html = "";
                     $.each(data, function (i, item) {
+                        debugger;
                         html = "<tr style='height:20px;line-height:20px;' name='subTr" + id + "'>";
                         html += "<td></td>";
                         html += "<td><span style='width:80px;display:inline-block;'></span>";

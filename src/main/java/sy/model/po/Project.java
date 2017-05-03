@@ -71,6 +71,18 @@ public class Project {
 	@Column(name = "gczt")
 	private String gczt;// 工程状态
 
+	public String getBelongDeparts() {
+		return belongDeparts;
+	}
+
+	public void setBelongDeparts(String belongDeparts) {
+		this.belongDeparts = belongDeparts;
+	}
+
+	@Column(name = "belongDeparts")
+	private String belongDeparts;
+
+
 	// 施工信息
 	@Column(name = "manager")
 	private String manager;// 实际项目经理

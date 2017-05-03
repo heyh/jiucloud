@@ -56,7 +56,7 @@
     <%--<script type="text/javascript"--%>
     <%--src="${pageContext.request.contextPath}/jslib/bootstrap-datepicker/js/locales/bootstrap-datepicker.zh-CN.js"--%>
     <%--charset="UTF-8"></script>--%>
-
+    <script type="text/javascript" src="${pageContext.request.contextPath }/jslib/layer-v3.0.3/layer/layer.js"></script>
 
     <script type="text/javascript">
         var flag = 0;
@@ -160,6 +160,8 @@
 //            var itemCode = $("#itemCode").val();
             var needApproved = document.getElementById("needApproved").value;
             var approvedUser = document.getElementById("approvedUser").value;
+            var section = $('#section').val();
+            var supplier = $('#supplier').val();
 
             if (projectName == '') {
                 alert("项目名称不能为空");
@@ -173,13 +175,15 @@
                 alert("现场数据名称不能为空");
                 return;
             }
-            if (price == ''
-                    && document.getElementById("costTypeName").value != '纯附件') {
+            if (section == '') {
+                alert("标段不能为空");
+                return;
+            }
+            if (price == '') {
                 alert("价格不能为空");
                 return;
             }
-            if (count == ''
-                    && document.getElementById("costTypeName").value != '纯附件') {
+            if (count == '') {
                 alert("数量不能为空");
                 return;
             }
@@ -195,7 +199,9 @@
                 'unit': unit,
 //                'itemCode': itemCode,
                 'needApproved': needApproved,
-                'approvedUser': approvedUser
+                'approvedUser': approvedUser,
+                'section': section,
+                'supplier': supplier
             }
 
             $.ajax(cfg);
@@ -282,6 +288,14 @@
                 placeholder: "请选择",
                 allowClear: true
             });
+            $("#projectName").select2({
+                placeholder: "请选择项目",
+                allowClear: true
+            });
+            $("#section").select2({
+                placeholder: "请选择标段",
+                allowClear: true
+            });
 
             $('.easyui-combotree').combotree({
                 data: <%= costTree %>,
@@ -293,7 +307,6 @@
                 },
                 //选择树节点触发事件
                 onSelect : function(node) {
-                    debugger;
                     //返回树对象
                     var tree = $(this).tree;
                     //选中的节点是否为叶子节点,如果不是叶子节点,清除选中
@@ -302,18 +315,122 @@
                         //清除选中
                         $('.easyui-combotree').treegrid("unselect");
                     }
+                },
+                onChange: function (node) {
+                    debugger;
+                    var _nid = node;
+
+                    $.ajax({
+                        url: '${pageContext.request.contextPath}/fieldDataController/securi_getCostInfo',
+                        data: {nid: _nid},
+                        type: 'post',
+                        dataType: 'json',
+                        contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                        success: function (data) {
+                            if (data.success) {
+                                if (data.obj != null && data.obj != '' && data.obj.itemCode.substring(0, 3) == '700') {
+                                    $("#supplierDiv").show();
+                                } else {
+                                    $("#supplierDiv").hide();
+                                }
+                            }
+                        }
+                    });
                 }
             });
         });
 
         $.getJSON('${pageContext.request.contextPath}/projectController/securi_getProjects', function (data) {
-            $('#projectName').select2({
-                placeholder: "可以模糊查询",
-                data: [{id: '', text: ''}].concat(data.obj),
-                allowClear: true
-            });
-        })
+            var optionstring = "";
+            var projectInfos = data.obj;
+            for (var i in projectInfos) {
+                if ($('#maxProjectId').val() == projectInfos[i].id) {
+                    optionstring += "<option value=\"" + projectInfos[i].id + "\" selected = 'selected'>" + projectInfos[i].text + "</option>";
+                } else {
+                    optionstring += "<option value=\"" + projectInfos[i].id + "\" >" + projectInfos[i].text + "</option>";
+                }
 
+            }
+            $("#projectName").html("<option value=''>请选择项目</option> "+optionstring);
+            changeProject();
+        });
+
+        function changeProject() {
+            $.ajax({
+                url: '${pageContext.request.contextPath }/itemController/securi_getSelectItems',
+                type: 'post',
+                data: {'projectId': $('#projectName').val()},
+                dataType: 'json',
+                contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                success: function (data) {
+
+                    if (data.success) {
+                        var _section = data.obj.section;
+                        var sectionInfos = data.obj.itemList;
+                        var optionstring = "";
+                        for (var i in sectionInfos) {
+                            if (_section == sectionInfos[i].id) {
+                                optionstring += "<option value=\"" + sectionInfos[i].id + "\" selected = 'selected'>" + sectionInfos[i].text + "</option>";
+
+                            } else {
+                                optionstring += "<option value=\"" + sectionInfos[i].id + "\" >" + sectionInfos[i].text + "</option>";
+                            }
+
+                        }
+                        $("#section").html("<option value=''>请选择标段</option> "+optionstring);
+
+                        changeSection();
+                    }
+
+                }
+            });
+        };
+
+        function changeSection() {
+            if ($('#projectName').val() == '' || $('#section').val() == '') {
+                $("#supInfos").hide();
+                return;
+            }
+
+            $.ajax({
+                url: '${pageContext.request.contextPath}/itemController/securi_getSupInfo',
+                data: {projectId: $('#projectName').val(), section: $('#section').val()},
+                type: 'post',
+                dataType: 'json',
+                contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                success: function (data) {
+                    if (data.success) {
+                        if (data.obj == null || data.obj == '') {
+                            $("#supInfos").hide();
+                            return;
+                        }
+                        $("#supInfos").show();
+                        var htmlStr = '';
+                        var optionstring = "";
+                        var supInfos = data.obj;
+                        for (var i in supInfos) {
+                            optionstring += "<option value=\"" + supInfos[i] + "\" >" + supInfos[i] + "</option>";
+                        }
+                        $("#supInfoSel").html("<option value=''>请选择</option> "+optionstring);
+                    }
+                }
+            });
+        }
+
+        function chooseSupInfos() {
+            layer.open({
+                type: 1,
+                title: '附加信息',
+                closeBtn: 0,
+                shadeClose: true,
+                content: $('#supInfosDiv') //这里content是一个DOM，注意：最好该元素要存放在body最外层，否则可能被其它的相对元素所影响
+            });
+        }
+        
+        function selectSupInfo() {
+            $('#dataName').val($("#supInfoSel").val());
+
+        }
     </script>
 
     <style>
@@ -354,6 +471,7 @@
 
 <div class="container-fluid">
     <form class="form-horizontal basic-grey" name="form" id="form" method="post" enctype="multipart/form-data" role="form">
+        <input type="hidden" id = "maxProjectId" name="maxProjectId" value="${maxProjectId}"/>
         <fieldset>
             <legend>添加数据</legend>
             <div class="row-fluid">
@@ -362,29 +480,47 @@
                         <label class="control-label" for="projectName">工程名称:</label>
 
                         <div class="controls">
-                            <select style="width:250px;" id="projectName" name="projectName">
+                            <select style="width:250px;" id="projectName" name="projectName" onchange="changeProject()">
                             </select>
                         </div>
                     </div>
                     <div class="control-group">
-                        <label class="control-label" for="dataName">名称:</label>
+                        <label class="control-label" for="section">标段:</label>
 
                         <div class="controls">
-                            <input type="text" name="dataName" id="dataName" class="easyui-textbox" style="width:236px">
+                            <select style="width:250px;" id="section" name="section" onchange="changeSection()">
+                            </select>
                         </div>
                     </div>
                     <div class="control-group">
-                        <label class="control-label" for="price">单价:</label>
+                        <label class="control-label" for="unit">单位:</label>
 
                         <div class="controls">
-                            <input type="text" name="price" id="price" class="easyui-numberbox" precision="2" style="width:236px" onblur="cal()">
+                            <select style="width:250px" name="unit" id="unit">
+                                <option></option>
+                                <c:forEach var="unitParam" items="<%= unitParams %>" varStatus="index">
+                                    <c:if test="${unitParam.parentCode == ''}">
+                                        <optgroup label="${unitParam.paramValue}"></optgroup>
+                                    </c:if>
+                                    <c:if test="${unitParam.parentCode != ''}">
+                                        <option value="${unitParam.paramValue}">&nbsp;&nbsp;&nbsp;&nbsp;${unitParam.paramValue}</option>
+                                    </c:if>
+                                </c:forEach>
+                            </select>
                         </div>
                     </div>
                     <div class="control-group">
-                        <label class="control-label" for="sumprice">金额:</label>
+                        <label class="control-label" for="count">数量:</label>
 
                         <div class="controls">
-                            <input type="text" name="sumprice" id="sumprice" class="easyui-numberbox" precision="2" style="width:236px" onblur="cal()">
+                            <input type="text" name="count" id="count" class="easyui-numberbox" precision="4" style="width:236px" onblur="cal()">
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="specifications">规格型号:</label>
+
+                        <div class="controls">
+                            <input type="text" name="specifications" id="specifications" class="easyui-textbox" style="width:236px" onblur="cal()">
                         </div>
                     </div>
                     <div class="control-group">
@@ -417,34 +553,34 @@
                         </div>
                     </div>
                     <div class="control-group">
-                        <label class="control-label" for="unit">单位:</label>
+                        <label class="control-label" for="dataName">名称:</label>
 
                         <div class="controls">
-                            <select style="width:250px" name="unit" id="unit">
-                                <option></option>
-                                <c:forEach var="unitParam" items="<%= unitParams %>" varStatus="index">
-                                    <c:if test="${unitParam.parentCode == ''}">
-                                        <optgroup label="${unitParam.paramValue}"></optgroup>
-                                    </c:if>
-                                    <c:if test="${unitParam.parentCode != ''}">
-                                        <option value="${unitParam.paramValue}">&nbsp;&nbsp;&nbsp;&nbsp;${unitParam.paramValue}</option>
-                                    </c:if>
-                                </c:forEach>
-                            </select>
+                            <input type="text" name="dataName" id="dataName" class="easyui-textbox" style="width:236px">
+                            <a style="display: none;" id="supInfos" onclick="chooseSupInfos()" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'add_new'"></a>
+                        </div>
+
+                    </div>
+
+                    <div class="control-group">
+                        <label class="control-label" for="price">单价:</label>
+
+                        <div class="controls">
+                            <input type="text" name="price" id="price" class="easyui-numberbox" precision="2" style="width:236px" onblur="cal()">
                         </div>
                     </div>
                     <div class="control-group">
-                        <label class="control-label" for="count">数量:</label>
+                        <label class="control-label" for="sumprice">金额:</label>
 
                         <div class="controls">
-                            <input type="text" name="count" id="count" class="easyui-numberbox" precision="0" style="width:236px" onblur="cal()">
+                            <input type="text" name="sumprice" id="sumprice" class="easyui-numberbox" precision="2" style="width:236px" onblur="cal()">
                         </div>
                     </div>
-                    <div class="control-group">
-                        <label class="control-label" for="specifications">规格型号:</label>
+                    <div class="control-group" id="supplierDiv" style="display: none;">
+                        <label class="control-label" for="supplier">供应商:</label>
 
                         <div class="controls">
-                            <input type="text" name="specifications" id="specifications" class="easyui-textbox" style="width:236px" onblur="cal()">
+                            <input type="text" name="supplier" id="supplier" class="easyui-textbox" style="width:236px">
                         </div>
                     </div>
                     <div class="control-group">
@@ -465,6 +601,7 @@
                             <input name="approvedUser" id="approvedUser" type="text" style="display: none">
                         </div>
                     </div>
+
                 </div>
 
                 <div class="span12" style="text-align:center">
@@ -504,5 +641,10 @@
         </div>
     </form>
 </div>
+
 </body>
+<div id="supInfosDiv" style="display:none; width: 300px;height:150px;">
+    <select style="margin: 30px" id="supInfoSel" onchange="selectSupInfo()">
+    </select>
+</div>
 </html>

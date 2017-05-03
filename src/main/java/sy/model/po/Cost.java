@@ -1,10 +1,6 @@
 package sy.model.po;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
+import javax.persistence.*;
 
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -20,6 +16,7 @@ import org.hibernate.annotations.DynamicUpdate;
 public class Cost {
 	@Id
 	@Column(name = "ID", nullable = false, length = 36)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
 	// 费用类型名称

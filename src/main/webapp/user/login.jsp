@@ -63,29 +63,49 @@
 													}
 												});
 									}
-									var url = '${pageContext.request.contextPath}/fieldDataController/fieldDataShow';
-//									var text = "现场数据管理";
-                                    var text = "项目数据管理";
-									var params = {
-										url : url,
-										title : text,
-										iconCls : 'prodatamng'
-									}
-									window.parent.ac(params);
-									parent.$.modalDialog.handler
-											.dialog('close');
-									$('#loginDialog').dialog('close');
-									$('#sessionInfoDiv')
-											.html(
-													$
-															.formatString(
-																	'[<strong>{0}:{1}</strong>]，欢迎你！',
-																	result.obj.compName,
-																	result.obj.name));
+
+									// 增加跳转判断
+                                    var params = {};
+                                    $.post('${pageContext.request.contextPath}/projectController/securi_getAllProjects', function (data) {
+                                        debugger;
+                                        var projectList = data;
+                                        if (projectList == null || $.parseJSON(projectList).length == 0 || ($.parseJSON(projectList).length == 1 && ($.parseJSON(projectList)[0].proName == '样本工程'))) {
+                                            var url = '${pageContext.request.contextPath}/projectController/recProList';
+                                            var text = "项目登记管理";
+											params = {
+                                                url : url,
+                                                title : text,
+                                                iconCls : 'proregmng'
+                                            }
+										} else {
+                                            var url = '${pageContext.request.contextPath}/fieldDataController/fieldDataShow';
+                                            var text = "项目数据管理";
+                                            params = {
+                                                url : url,
+                                                title : text,
+                                                iconCls : 'prodatamng'
+                                            }
+                                        }
+
+                                        window.parent.ac(params);
+                                        parent.$.modalDialog.handler
+                                            .dialog('close');
+                                        $('#loginDialog').dialog('close');
+                                        $('#sessionInfoDiv')
+                                            .html(
+                                                $
+                                                    .formatString(
+                                                        '[<strong>{0}:{1}</strong>]，欢迎你！',
+                                                        result.obj.compName,
+                                                        result.obj.name));
+                                    });
+									//
+
+
 								} else {
 									layout_west_tree = null;
 							        $.messager.alert('错误',result.msg,null,function(){
-							        	window.location.href="http://www.9393915.com/department"; 
+							        	window.location.href="http://www.9393915.com/department";
 							        });
 									//$.messager.alert('错误', result.msg, 'error');
 									//window.location.href="http://www.9393915.com/department";

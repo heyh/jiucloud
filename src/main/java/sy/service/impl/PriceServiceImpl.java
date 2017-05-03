@@ -7,11 +7,8 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import sy.dao.CostDaoI;
-import sy.dao.PriceDaoI;
-import sy.dao.Price_CostDaoI;
-import sy.model.po.Price;
-import sy.model.po.Price_Cost;
+import sy.dao.*;
+import sy.model.po.*;
 import sy.pageModel.DataGrid;
 import sy.pageModel.PageHelper;
 import sy.service.PriceServiceI;
@@ -27,6 +24,9 @@ public class PriceServiceImpl implements PriceServiceI {
 
 	@Autowired
 	CostDaoI costDao;
+
+	@Autowired
+	PriceModelDaoI priceModelDao;
 
 	@Override
 	public DataGrid dataGrid(int cid, String name, PageHelper ph) {
@@ -110,11 +110,32 @@ public class PriceServiceImpl implements PriceServiceI {
 	}
 
 	@Override
+	public void initPrice(String cid) {
+
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("cid", Integer.parseInt(cid));
+		long count = priceDao.count("select count(*) from Price where cid=:cid", params);
+		if (count != 0) {
+			return;
+		}
+
+		Price price = new Price();
+		List<PriceModel> list = priceModelDao.find("from PriceModel");
+		for (PriceModel tem : list) {
+			price = new Price(tem);
+			price.setCid(Integer.parseInt(cid));
+			this.add(price);
+		}
+
+	}
+
+	@Override
 	public List<Price> getpPrices(int cid) {
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("cid", cid);
 		String hql = " from Price where cid=:cid";
 		return priceDao.find(hql, params);
 	}
+
 
 }

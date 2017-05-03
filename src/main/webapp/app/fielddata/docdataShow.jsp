@@ -3,6 +3,7 @@
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Map" %>
+<%@ page import="net.sf.json.JSONArray" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -12,7 +13,8 @@
     String userId = null;
 //    String underlingUsers = null;
     String projectInfos = null;
-    List<Map<String, Object>> docCostInfos = new ArrayList<Map<String, Object>>();
+//    List<Map<String, Object>> docCostInfos = new ArrayList<Map<String, Object>>();
+	JSONArray docCostTree = new JSONArray();
     SessionInfo sessionInfo = (SessionInfo) session.getAttribute(ConfigUtil.getSessionInfoName());
     if (sessionInfo == null) {
         response.sendRedirect(request.getContextPath());
@@ -20,7 +22,8 @@
         userId = sessionInfo.getId();
 //        underlingUsers = sessionInfo.getUnderlingUsers();
         projectInfos = sessionInfo.getProjectInfos();
-        docCostInfos = sessionInfo.getCostTypeInfos().get("docCostInfos");
+//        docCostInfos = sessionInfo.getCostTypeInfos().get("docCostInfos");
+		docCostTree = sessionInfo.getDocCostTree();
     }
 
 %>
@@ -40,7 +43,7 @@
 						{
 							url : '${pageContext.request.contextPath}/fieldDataController/dataGrid?source=doc',
 							fit : true,
-							fitColumns : true,
+                            fitColumns : false,
 							border : false,
 							pagination : true,
 							idField : 'id',
@@ -65,6 +68,11 @@
 
 									},
 									{
+										field : 'sectionName',
+										title : '标段',
+										width : 100
+									},
+									{
 										field : 'costType',
 										title : '类型',
 										width : 100
@@ -72,7 +80,7 @@
 									{
 										field : 'dataName',
 										title : '名称',
-										width : 100
+										width : 350
 									},
 									/*{
 										field : 'unit',
@@ -152,6 +160,11 @@
                                         width : 100
                                     },
 									{
+										field : 'remark',
+										title : '备注',
+										width : 100
+									},
+									{
 										field : 'action',
 										title : '操作',
 										width : 100,
@@ -187,7 +200,15 @@
 															' <img onclick="FileFun(\'{0}\');" src="{1}" title="附件管理"/>',
 															row.id,
 															'${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/fujianguanli-blue.png');
-											return str;
+
+                                            str += '&nbsp;';
+                                            str += $
+                                                .formatString(
+                                                    '<img onclick="discussFun(\'{0}\');" src="{1}" title="交流"/>',
+                                                    row.id,
+                                                    '${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/discuss-blue.png');
+
+                                            return str;
 										}
 									} ] ],
 							toolbar : '#toolbar',
@@ -198,6 +219,26 @@
 							}
                         });
     });
+
+	// 交流
+    function discussFun(id) {
+
+        if (id == undefined) {
+            var rows = dataGrid.datagrid('getSelections');
+            id = rows[0].id;
+        } else {
+            dataGrid.datagrid('unselectAll').datagrid('uncheckAll');
+        }
+
+        var url = '${pageContext.request.contextPath}/discussController/securi_discussShow?discussId=' + id + '&discussType=0';
+        var text = "交流讨论区";
+        var params = {
+            url : url,
+            title : text,
+            iconCls : 'wrench'
+        };
+        window.parent.ac(params);
+    }
 
 	//删除
 	function deleteFun(id) {
@@ -394,6 +435,7 @@
             $('#startTime').val($('#startTime').val().substring(0, 10) + ' 00:00:00');
             $('#endTime').val($('#endTime').val().substring(0, 10) + ' 23:59:59');
         }
+        $('#costType').val($('.combo-text').val());
 		dataGrid.datagrid('load', $.serializeObject($('#searchForm')));
 	}
 	//清除条件
@@ -435,14 +477,74 @@
             allowClear: true,
             data:<%=projectInfos%>
         });
-        $("#costType").select2({
-            tags: "true",
-            placeholder: "可以模糊查询",
-            allowClear: true,
-            <%--data:<%=costTypeInfos%>--%>
+        <%--$("#costType").select2({--%>
+            <%--tags: "true",--%>
+            <%--placeholder: "可以模糊查询",--%>
+            <%--allowClear: true,--%>
+            <%--&lt;%&ndash;data:<%=costTypeInfos%>&ndash;%&gt;--%>
+        <%--});--%>
+
+        $('#costTypeRef').combotree({
+            data: <%= docCostTree %>,
+            lines: true,
+            editable:true,
+            onLoadSuccess: function () {
+                $('#costTypeRef').combotree('tree').tree("collapseAll");
+            },
+            //选择树节点触发事件
+//			onSelect : function(node) {
+//				debugger;
+//				//返回树对象
+//				var tree = $(this).tree;
+//				//选中的节点是否为叶子节点,如果不是叶子节点,清除选中
+//				var isLeaf = tree('isLeaf', node.target);
+//				if (!isLeaf) {
+//					//清除选中
+//					$('.easyui-combotree').treegrid("unselect");
+//				}
+//			}
         });
     });
 
+    (function(){
+        $.fn.combotree.defaults.editable = true;
+        $.extend($.fn.combotree.defaults.keyHandler,{
+            up:function(){
+                console.log('up');
+            },
+            down:function(){
+                console.log('down');
+            },
+            enter:function(){
+                console.log('enter');
+            },
+            query:function(q){
+                var t = $(this).combotree('tree');
+                var nodes = t.tree('getChildren');
+                for(var i=0; i<nodes.length; i++){
+                    var node = nodes[i];
+                    if (node.text.indexOf(q) >= 0){
+                        $(node.target).show();
+                    } else {
+                        $(node.target).hide();
+                    }
+                }
+                var opts = $(this).combotree('options');
+                if (!opts.hasSetEvents){
+                    opts.hasSetEvents = true;
+                    var onShowPanel = opts.onShowPanel;
+                    opts.onShowPanel = function(){
+                        var nodes = t.tree('getChildren');
+                        for(var i=0; i<nodes.length; i++){
+                            $(nodes[i].target).show();
+                        }
+                        onShowPanel.call(this);
+                    };
+                    $(this).combo('options').onShowPanel = opts.onShowPanel;
+                }
+            }
+        });
+    })(jQuery);
 </script>
 </head>
 <body>
@@ -453,7 +555,7 @@
 				<table class="table table-hover table-condensed"
 					style="display: none;">
 					<tr>
-						<td>搜索关键字:&nbsp;
+						<td>关键字搜索:&nbsp;
                             <%--<input name="uname" id='uname' placeholder="可以模糊查询" class="span2" />--%>
                             <%--<select  style="width: 136px" name="uname" id="uname">--%>
                                 <%--<option ></option>--%>
@@ -466,23 +568,10 @@
                                 <option ></option>
                             </select>
                         </td>
-						<td>资料类型:&nbsp;
-                            <%--<input name="costType" id='costType' placeholder="可以模糊查询" class="span2" />--%>
-                            <select style="width: 136px" name="costType" id="costType">
-                                <option></option>
-                                <c:forEach var="costTypeInfo" items="<%= docCostInfos %>" varStatus="index">
-                                    <%--<c:if test="${costTypeInfo.isSend == '0'}">--%>
-                                        <%--<optgroup label="${costTypeInfo.costType}"> " " </optgroup>--%>
-                                    <%--</c:if>--%>
-                                    <c:if test="${costTypeInfo.isSend == '0'}">
-                                        <option value="${costTypeInfo.costType}">${costTypeInfo.costType}</option>
-                                    </c:if>
-                                    <c:if test="${costTypeInfo.isSend == '1'}">
-                                        <option value="${costTypeInfo.costType}">&nbsp;&nbsp;&nbsp;&nbsp;${costTypeInfo.costType}</option>
-                                    </c:if>
-                                </c:forEach>
-                            </select>
-                        </td>
+						<td>费用类型:&nbsp;
+							<input class="easyui-combotree" name="costTypeRef" id="costTypeRef" style="width:180px;" placeholder="请选择">
+							<input type="hidden" name="costType" id="costType">
+						</td>
 						<td>起止时间:&nbsp;<input class="span2" name="startTime"
 							id='startTime' placeholder="点击选择时间"
 							onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})"
@@ -494,7 +583,7 @@
 				</table>
 			</form>
 		</div>
-		<div data-options="region:'center',border:false">
+		<div style="overflow-x:auto; " data-options="region:'center',border:false">
 			<table id="dataGrid"></table>
 		</div>
 	</div>

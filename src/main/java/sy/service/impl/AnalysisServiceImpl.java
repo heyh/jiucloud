@@ -56,7 +56,7 @@ public class AnalysisServiceImpl implements AnalysisServiceI {
 		params.put("price_id", price_id);
 		params.put("project_id", project_id);
 
-		String hql = "select c.costType,sum(f.count*f.price),c.isend,c.itemCode,f.price,f.unit,sum(f.count), c.id from TCost c LEFT JOIN TFieldData f on f.itemCode=c.itemCode and f.projectName=:project_id  and f.isDelete=0";
+		String hql = "select c.costType,sum(f.count*f.price),c.isend,c.itemCode,f.price,f.unit,sum(f.count), c.id from TCost c LEFT JOIN TFieldData f on f.itemCode=c.itemCode and f.projectName=:project_id  and f.isDelete=0 and f.count>0";
 		if (date != null && date.length() > 0) {
 			hql += " and f.creatTime>='" + date + "'";
 		}
@@ -284,7 +284,14 @@ public class AnalysisServiceImpl implements AnalysisServiceI {
         for (Object[] field : list) {
             String tmpItemCode = String.valueOf(field[4]);
             String tmpRoot = tmpItemCode.substring(0, 3);
+            if (field[0] == null) {
+				continue;
+			}
             String money = decimalFormat.format(field[0]);
+            if (Double.parseDouble(money) <= 0) {
+				continue;
+			}
+
             totalMoney += Double.parseDouble(money); // 总额
             if (cata.containsKey(tmpRoot) ) {
                 cata.put(tmpRoot, cata.get(tmpRoot) + Double.parseDouble(money));
@@ -319,7 +326,7 @@ public class AnalysisServiceImpl implements AnalysisServiceI {
                 "AND proj.isdel = '0'\n" +
                 "AND proj.uids IN (" + StringUtils.join(ugroup, ",") + ") ) a\n" +
                 "LEFT JOIN TFieldData f \n" +
-                "ON f.itemCode = a.itemCode and f.isDelete = '0' \n" +
+                "ON f.itemCode = a.itemCode and f.isDelete = '0' and f.count>0 \n" +
                 "and f.projectName = a.ID and f.cid = " + cid + ") base\n" +
                 "group by base.projectId, base.proName, base.price_id, base.name";
 
@@ -369,17 +376,21 @@ public class AnalysisServiceImpl implements AnalysisServiceI {
             a.setDataName(item.getDataName());
             a.setUnit(item.getUnit());
 
+			String itemPrice = "0.00";
             DecimalFormat decimalFormat = new DecimalFormat("###.00");
             if (item.getPrice() != null && !item.getPrice().equals("") && StringUtil.isNum(item.getPrice())) {
-                price = decimalFormat.format(Double.parseDouble(item.getPrice()));
+				itemPrice = decimalFormat.format(Double.parseDouble(item.getPrice()));
             }
-            a.setPrice(price);
+            a.setPrice(itemPrice);
+
             a.setCount(item.getCount());
+
             Double money = new Double("0.00");
             if (item.getCount() != null && !item.equals("") && StringUtil.isNum(item.getCount()) && item.getPrice() != null && !item.getPrice().equals("") && StringUtil.isNum(item.getPrice())) {
                 money = Double.parseDouble(item.getCount()) * Double.parseDouble(item.getPrice());
              }
             a.setMoney(money);
+
             result.add(a);
         }
         return result;

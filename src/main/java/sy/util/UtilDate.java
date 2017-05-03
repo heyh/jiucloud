@@ -40,7 +40,7 @@ public class UtilDate {
 		return df.format(date);
 	}
 
-	public String getOrderNums() {
+	public static String getOrderNums() {
 		Date date = new Date();
 		DateFormat df = new SimpleDateFormat(dtLong);
 		return df.format(date);

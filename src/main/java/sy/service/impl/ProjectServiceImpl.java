@@ -4,11 +4,14 @@ import com.alibaba.fastjson.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sy.dao.ProjectDaoI;
+import sy.model.po.Cost;
+import sy.model.po.CostModel;
 import sy.model.po.Project;
 import sy.pageModel.DataGrid;
 import sy.pageModel.PageHelper;
 import sy.pageModel.ProjectSearch;
 import sy.service.ProjectServiceI;
+import sy.util.StringUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,7 +34,7 @@ public class ProjectServiceImpl implements ProjectServiceI {
 	// 加载页面list
 	@Override
 	public DataGrid dataGrid(ProjectSearch app, PageHelper ph,
-			List<Integer> ugroup) {
+			List<Integer> ugroup, List<Integer> departmentIds) {
 		DataGrid dg = new DataGrid();
 		Map<String, Object> params = new HashMap<String, Object>();
 		String hql = " from Project p  where 1=1 ";
@@ -170,16 +173,29 @@ public class ProjectServiceImpl implements ProjectServiceI {
 	}
 
     @Override
-    public String getProjectInfos(String cid) {
+    public String getProjectInfos(String cid, List<Integer> departmentIds) {
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("cid", cid);
         String hql = " from Project where isdel=0 and compId=:cid";
         List<Project> proList = projectDao.find(hql, params);
         List<Map<String, Object>> tmpList = new ArrayList<Map<String, Object>>();
         Map<String, Object> tmpMap = new HashMap<String, Object>();
+        boolean belongFlag = false;
         for (Project pro : proList) {
             tmpMap = new HashMap<String, Object>();
-//            tmpMap.put("id", pro.getProjectId());
+            if (pro.getBelongDeparts() != null && pro.getBelongDeparts().split(",").length>0) {
+                for (String belongDepart : pro.getBelongDeparts().split(",")) {
+                    for (Integer departmentId : departmentIds) {
+                        if (belongDepart.equals(StringUtil.trimToEmpty(departmentId))) {
+                            belongFlag = true;
+                        }
+                    }
+                }
+                if (!belongFlag) {
+                    continue;
+                }
+            }
+
             tmpMap.put("id", pro.getProName());
             tmpMap.put("text", pro.getProName());
             tmpList.add(tmpMap);
@@ -188,15 +204,28 @@ public class ProjectServiceImpl implements ProjectServiceI {
     }
 
     @Override
-    public List<Map<String, Object>> getProjects(String cid) {
+    public List<Map<String, Object>> getProjects(String cid,List<Integer> departmentIds) {
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("cid", cid);
         String hql = " from Project where isdel=0 and compId=:cid and isLock = '0' order by id desc ";
         List<Project> proList = projectDao.find(hql, params);
         List<Map<String, Object>> tmpList = new ArrayList<Map<String, Object>>();
         Map<String, Object> tmpMap = new HashMap<String, Object>();
+        boolean belongFlag = false;
         for (Project pro : proList) {
             tmpMap = new HashMap<String, Object>();
+            if (pro.getBelongDeparts() != null && pro.getBelongDeparts().split(",").length>0) {
+                for (String belongDepart : pro.getBelongDeparts().split(",")) {
+                    for (Integer departmentId : departmentIds) {
+                        if (belongDepart.equals(StringUtil.trimToEmpty(departmentId))) {
+                            belongFlag = true;
+                        }
+                    }
+                }
+                if (!belongFlag) {
+                    continue;
+                }
+            }
             tmpMap.put("id", pro.getId());
             tmpMap.put("text", pro.getProName());
             tmpList.add(tmpMap);
@@ -232,6 +261,26 @@ public class ProjectServiceImpl implements ProjectServiceI {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public List<Project> getProjectByProjectId(String cid, String projectId) {
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("cid", cid);
+        params.put("projectId", projectId);
+        String hql = " from Project where isdel=0 and compId=:cid and projectId = :projectId";
+        List<Project> proList = projectDao.find(hql, params);
+        return proList;
+    }
+
+    @Override
+    public List<Project> getProjectByProjectName(String cid, String projectName) {
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("cid", cid);
+        params.put("proName", projectName);
+        String hql = " from Project where isdel=0 and compId=:cid and proName = :proName";
+        List<Project> proList = projectDao.find(hql, params);
+        return proList;
     }
 
     // add by heyh
@@ -351,6 +400,27 @@ public class ProjectServiceImpl implements ProjectServiceI {
 
         return hql.toString();
 
+    }
+
+    @Override
+    public List<Project> initDefaultProject(String cid, String uid) {
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("cid", cid);
+        List<Project> projectList = projectDao.find("from Project where compId=:cid", params);
+        if (projectList == null || projectList.size() == 0) {
+            Project project = new Project();
+            project.setCompId(cid);
+            project.setProName("样本工程");
+            project.setShortname("工程");
+            project.setProjectId("001");
+            project.setUid(uid);
+            project.setProvice("全国");
+            project.setIsdel(0);
+            project.setIsLock(0);
+            projectDao.save(project);
+        }
+
+        return projectList;
     }
 
 }

@@ -1,5 +1,6 @@
 package sy.util;
 
+import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -20,7 +21,12 @@ public class DateKit {
 		return new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	    }
 	};
-	
+
+	private final static ThreadLocal<SimpleDateFormat> monthlyFormat = new ThreadLocal<SimpleDateFormat>(){
+		protected SimpleDateFormat initialValue() {
+			return new SimpleDateFormat("yyyy-MM");
+		}
+	};
 	/**  
 	 * 获取当前时间:Date
 	 */
@@ -33,6 +39,12 @@ public class DateKit {
 	 */
 	public static Calendar getCal(){
 		return Calendar.getInstance();
+	}
+
+	public static String monthlyToStr(Date date){
+		if(date != null)
+			return monthlyFormat.get().format(date);
+		return null;
 	}
 
 	/**  
@@ -157,8 +169,34 @@ public class DateKit {
         }
         return null;
     }
+
+	public static String StringToDate(String str) {
+
+		SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+		SimpleDateFormat sdf2 = new SimpleDateFormat("yyyyMMddHHmmss");
+		try {
+			str = sdf1.format(sdf2.parse(str));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return str;
+	}
+
+	public static long strDateToTimeStemp(String strDate) {
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+		long timeStemp = -1;
+		try {
+			Date date = new SimpleDateFormat("yyyy-MM-dd").parse(strDate);
+			timeStemp = date.getTime()/1000;
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		return timeStemp;
+
+	}
+
 	public static void main(String[] args) {
-		System.err.println(friendlyFormat("2013-09-16 11:27:19"));
+		System.out.println(monthlyToStr(getDate()));
 	}
 
 }

@@ -36,14 +36,45 @@
 							}
 						});
 	});
+
+    $.ajax({
+        url: '${pageContext.request.contextPath }/itemController/securi_getSelectItems?projectId=${pid}',
+        type: 'post',
+        <%--data: {'projectId': ${pid},--%>
+        dataType: 'json',
+        contentType: "application/x-www-form-urlencoded; charset=utf-8",
+        success: function (data) {
+            if (data.success) {
+                var _section = data.obj.section;
+                var sectionInfos = data.obj.itemList;
+                var optionstring = "";
+                for (var i in sectionInfos) {
+                    if (_section == sectionInfos[i].id) {
+                        optionstring += "<option value=\"" + sectionInfos[i].id + "\" selected = 'selected'>" + sectionInfos[i].text + "</option>";
+                    }
+                    optionstring += "<option value=\"" + sectionInfos[i].id + "\" >" + sectionInfos[i].text + "</option>";
+                }
+                $("#section").html("<option value=''>请选择标段</option> "+optionstring);
+            }
+
+        }
+    });
+
 </script>
 
 <div class="easyui-layout" data-options="fit:true,border:false">
 	<div data-options="region:'center',border:false" title=""
 		style="overflow: hidden;">
 		<form id="form" method="post">
-			<table class="table table-hover table-condensed"
-				style="font-size: 12px;">
+			<table class="table table-hover table-condensed" style="font-size: 12px;">
+				<tr>
+					<td>标段</td>
+					<td>
+						<select id="section" name="section">
+							<option>请选择标段</option>
+						</select>
+					</td>
+				</tr>
 				<tr>
 					<td>单位名称</td>
 					<td><input type="text" name="name" style="width: 208px;" /></td>
@@ -82,7 +113,7 @@
 				</tr>
 				<tr>
 					<td>公司介绍</td>
-					<td><textarea rows="" cols="" name="remark"></textarea></td>
+					<td><textarea rows="" cols="" name="remark" style="width:220px"></textarea></td>
 				</tr>
 			</table>
 		</form>

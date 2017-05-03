@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import sy.dao.DepartmentDaoI;
 import sy.model.S_department;
 import sy.model.po.Department;
+import sy.model.po.TFieldData;
 import sy.pageModel.User;
 import sy.service.DepartmentServiceI;
 import sy.service.UserServiceI;
@@ -488,5 +489,42 @@ public class DepartmentServiceImpl implements DepartmentServiceI {
         }
 
         return parentNodes;
+    }
+
+    @Override
+    public List<Object[]> getAllDepartmentList(String cid) {
+        List<Object[]> objects = departmentDaoI.findBySql("select id, parent_id pId, name from jsw_corporation_department where company_id= " + cid);
+        return objects;
+    }
+
+    @Override
+    public List<Integer> getUsersByDepartmentId(String cid, Integer uid, Integer departmentId) {
+        List<Integer> uids = new ArrayList<Integer>();
+        List<Object[]> objects = new ArrayList<Object[]>();
+        objects = departmentDaoI.findBySql("select id, parent_id, user_id, company_id from jsw_corporation_department where company_id= " +cid);
+        List<Node> departments = new ArrayList<Node>();
+        for (Object[] object : objects) {
+            List<String> tmpUid = Arrays.asList(String.valueOf(object[2]).split(","));
+            for (String tmp : tmpUid) {
+                Node department = new Node();
+                department.setId(Integer.parseInt(String.valueOf(object[0])));
+                department.setParentId(Integer.parseInt(String.valueOf(object[1])));
+                if (tmp.equals("")) {
+                    continue;
+                }
+                department.setUserId(Integer.parseInt(tmp));
+                departments.add(department);
+
+            }
+        }
+
+        NodeUtil nodeUtil = new NodeUtil();
+        List<Integer> tmpUids = nodeUtil.getChildNodes(departments, departmentId);
+        if (tmpUids != null && tmpUids.size()>0) {
+            uids.addAll(tmpUids);
+        }
+
+
+        return uids;
     }
 }

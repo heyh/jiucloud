@@ -55,4 +55,9 @@ public interface DepartmentServiceI {
     public List<Integer> getAllParents(String cid, int uid);
 
     public List<Node> getParentNodes(String cid, int uid);
+
+	public List<Object[]> getAllDepartmentList(String cid);
+
+	public List<Integer> getUsersByDepartmentId(String cid, Integer uid, Integer departmentId);
 }
+

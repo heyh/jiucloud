@@ -113,7 +113,7 @@
 									{
 										field : 'coll',
 										title : '协作单位',
-										width : 100,
+										width : 80,
 										formatter : function(value, row, index) {
 											var str = '';
 											str += $
@@ -127,7 +127,7 @@
 									{
 										field : 'action',
 										title : '操作',
-										width : 100,
+										width : 150,
 										formatter : function(value, row, index) {
 											var str = '';
 											str += $
@@ -163,6 +163,27 @@
                                                             ' <img onclick="lockFun(\'{0}\');" src="{1}" title="锁定"/>',
                                                             row.id,
                                                             '${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/lock-blue.png');
+
+													str += '&nbsp;';
+													str += $
+															.formatString(
+																	' <img onclick="assignedFun(\'{0}\');" src="{1}" title="项目分配"/>',
+																	row.id,
+																	'${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/assigned.png');
+                                                    str += '&nbsp;';
+                                                    str += $
+                                                        .formatString(
+                                                            ' <img onclick="sectionFun(\'{0}\');" src="{1}" title="合同标段维护"/>',
+                                                            row.id,
+                                                            '${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/section-blue.png');
+
+                                                    str += '&nbsp;';
+                                                    str += $
+                                                        .formatString(
+                                                            '<img onclick="discussFun(\'{0}\');" src="{1}" title="交流"/>',
+                                                            row.id,
+                                                            '${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/discuss-blue.png');
+
                                                 }
                                             }
 											return str;
@@ -428,6 +449,33 @@
                 });
     };
 
+	function assignedFun(id) {
+		if (<%= parentId != 0 && !rightList.contains("3") && !rightList.contains("4") && !rightList.contains("5") && !rightList.contains("6")%>) {
+			return;
+		}
+		if (id == undefined) {
+			var rows = dataGrid.datagrid('getSelections');
+			id = rows[0].id;
+		} else {
+			dataGrid.datagrid('unselectAll').datagrid('uncheckAll');
+		}
+		parent.$
+				.modalDialog({
+					title: '项目分配',
+					width: 300,
+					height: 400,
+					href: '${pageContext.request.contextPath}/projectController/securi_goAssigned?proId=' + id,
+					buttons: [{
+						text: '分配',
+						handler: function () {
+							parent.$.modalDialog.openner_dataGrid = dataGrid;//因为添加成功之后，需要刷新这个dataGrid，所以先预定义好
+							var f = parent.$.modalDialog.handler.find('#form');
+							f.submit();
+						}
+					}]
+				});
+	}
+
     function searchAllProject() {
         var o = {};
         o['keyword'] = null;
@@ -478,6 +526,36 @@
         });
     });
 
+    function sectionFun(projectId) {
+        var url = '${pageContext.request.contextPath}/itemController/SectionList?projectId=' + projectId;
+        var text = "标段维护";
+        var params = {
+            url : url,
+            title : text,
+            iconCls : 'wrench'
+        }
+        window.parent.ac(params);
+        parent.$.modalDialog.handler.dialog('close');
+    }
+
+    function discussFun(id) {
+
+        if (id == undefined) {
+            var rows = dataGrid.datagrid('getSelections');
+            id = rows[0].id;
+        } else {
+            dataGrid.datagrid('unselectAll').datagrid('uncheckAll');
+        }
+
+        var url = '${pageContext.request.contextPath}/discussController/securi_discussShow?discussId=' + id + '&discussType=1';
+        var text = "交流讨论区";
+        var params = {
+            url : url,
+            title : text,
+            iconCls : 'wrench'
+        };
+        window.parent.ac(params);
+    }
 </script>
 
 

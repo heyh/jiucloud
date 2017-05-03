@@ -25,7 +25,7 @@ public class TFieldData implements java.io.Serializable {
 			String costType, String dataName, String price, String company,
 			String count, String specifications, String remark, String cid,
 			String uname, String unit, String needApproved, String approvedUser,
-            String currentApprovedUser, String itemCode, String approvedOption) {
+            String currentApprovedUser, String itemCode, String approvedOption, String section, String supplier, String relId) {
 		super();
 		this.projectName = projectName;
 		this.uid = uid;
@@ -45,6 +45,9 @@ public class TFieldData implements java.io.Serializable {
         this.currentApprovedUser = currentApprovedUser;
         this.itemCode = itemCode;
         this.approvedOption = approvedOption;
+        this.section = section;
+        this.supplier = supplier;
+        this.relId = relId;
 
 	}
 
@@ -120,18 +123,52 @@ public class TFieldData implements java.io.Serializable {
     @Column(name = "currentApprovedUser")
     private String currentApprovedUser;
 
-    public String getApprovedOption() {
-        return approvedOption;
-    }
-
-    public void setApprovedOption(String approvedOption) {
-        this.approvedOption = approvedOption;
-    }
 
     @Column(name = "approvedOption")
     private String approvedOption;
 
-    public String getCurrentApprovedUser() {
+    @Column(name = "section")
+	private String section;
+
+    @Column(name = "supplier")
+	private String supplier;
+
+    @Column(name = "relId")
+	private String relId;
+
+	public String getRelId() {
+		return relId;
+	}
+
+	public void setRelId(String relId) {
+		this.relId = relId;
+	}
+
+	public String getSupplier() {
+		return supplier;
+	}
+
+	public void setSupplier(String supplier) {
+		this.supplier = supplier;
+	}
+
+	public String getApprovedOption() {
+		return approvedOption;
+	}
+
+	public void setApprovedOption(String approvedOption) {
+		this.approvedOption = approvedOption;
+	}
+
+	public String getSection() {
+		return section;
+	}
+
+	public void setSection(String section) {
+		this.section = section;
+	}
+
+	public String getCurrentApprovedUser() {
         return currentApprovedUser;
     }
 

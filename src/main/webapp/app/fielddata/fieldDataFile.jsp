@@ -149,9 +149,7 @@
 	}
 
 	function viewFun(id) {
-		window
-				.open('${pageContext.request.contextPath}/fieldDataController/securi_showfile?id='
-						+ id);
+		window.open('${pageContext.request.contextPath}/fieldDataController/securi_showfile?id=' + id);
 	}
 
 	//批量下载

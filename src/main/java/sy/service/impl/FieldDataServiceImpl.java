@@ -4,18 +4,19 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import sy.dao.CostDaoI;
-import sy.dao.FieldDataDaoI;
-import sy.dao.ProjectDaoI;
-import sy.dao.UserDaoI;
+import sy.dao.*;
+import sy.model.Item;
 import sy.model.po.Cost;
 import sy.model.po.Project;
 import sy.model.po.TFieldData;
 import sy.pageModel.DataGrid;
 import sy.pageModel.FieldData;
 import sy.pageModel.PageHelper;
+import sy.service.CostServiceI;
 import sy.service.FieldDataServiceI;
+import sy.service.ItemServiceI;
 import sy.util.DateKit;
+import sy.util.ObjectExcelRead;
 import sy.util.StringUtil;
 
 import java.text.DateFormat;
@@ -37,6 +38,12 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
 
     @Autowired
     private UserDaoI userDao;
+
+    @Autowired
+    private ItemServiceI itemService;
+
+    @Autowired
+    private CostServiceI costService;
 
     @Override
     public TFieldData add(TFieldData tFieldData) {
@@ -88,6 +95,14 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
             f.setApprovedUser(tem.getApprovedUser());
             f.setCurrentApprovedUser(tem.getCurrentApprovedUser());
             f.setApprovedOption(tem.getApprovedOption());
+            Item sectionItem = itemService.getSingleItem(tem.getCid(), tem.getProjectName(), tem.getSection());
+            if (sectionItem == null) {
+                f.setSectionName("标段1");
+            } else {
+                f.setSectionName(sectionItem.getName());
+            }
+
+            f.setSupplier(tem.getSupplier());
 
             Cost cost = costDao.get("from Cost where isDelete=0 and id='" + tem.getCostType() + "'");
             if (cost == null) {
@@ -208,8 +223,15 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
             hql += " or (select costType from Cost where id=t.costType) like :costName ";
             params.put("costName", "%%" + keyword + "%%");
 
-            hql += " or dataName like :dataName )";
+            hql += " or dataName like :dataName ";
             params.put("dataName", "%%" + keyword + "%%");
+
+            hql += " or (select name from Item where cid = t.cid and projectId = t.projectName and value=t.section) like :section ";
+            params.put("section", "%%" + keyword + "%%");
+
+            hql += " or supplier like :supplier )";
+            params.put("supplier", "%%" + keyword + "%%");
+
         }
         // add by heyh end
 
@@ -220,8 +242,11 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
 //            }
 //            hql += ") ";
 //        }
-        String uids = StringUtils.join(ugroup, ",");
-        hql += " and uid in (" + uids + ")";
+        if (null == cmodel.getNeedApproved() ) {
+            String uids = StringUtils.join(ugroup, ",");
+            hql += " and (uid in (" + uids + ") or ( (substring(itemcode , 1 , 3) = '700' or substring(itemcode , 1 , 3) = '800') and cid = :cid))";
+            params.put("cid", String.valueOf(cmodel.getCid()));
+        }
 
         if ( cmodel.getId() != 0) {
             hql += " and projectName = :id ";
@@ -340,7 +365,8 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
         paramMap.put("price", fieldData.getPrice());
         paramMap.put("unit", fieldData.getUnit());
         paramMap.put("itemCode", fieldData.getItemCode());
-        String hql = "from TFieldData where isDelete=0 and cid = :cid and projectName = :projectName and dataName = :dataName and price = :price and unit = :unit and itemCode = :itemCode";
+        paramMap.put("section", fieldData.getSection());
+        String hql = "from TFieldData where isDelete=0 and cid = :cid and projectName = :projectName and dataName = :dataName and price = :price and unit = :unit and itemCode = :itemCode and section = :section";
         List<TFieldData> fieldDataList = fieldDataDaoI.find(hql, paramMap);
         if (fieldDataList != null && fieldDataList.size() > 0) {
             return true;
@@ -498,6 +524,125 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
 
         dg.setRows(list);
         return dg;
+    }
+
+    @Override
+    public TFieldData getMaxFieldByCidUid(String cid, String uid) {
+        TFieldData rtnFieldData = new TFieldData();
+
+        Map<String, Object> paramMap = new HashMap<String, Object>();
+        paramMap.put("cid", cid);
+        paramMap.put("uid", uid);
+
+        String hql= "FROM TFieldData where id = (select max(id) from TFieldData a where isDelete=0 and cid = :cid and uid = :uid)";
+        List<TFieldData> fieldDataList = fieldDataDaoI.find(hql, paramMap);
+
+        if (fieldDataList != null && fieldDataList.size()>0) {
+            rtnFieldData = fieldDataList.get(0);
+        }
+        return rtnFieldData;
+    }
+
+    @Override
+    public TFieldData getFieldByMaxId(String cid, String uid, String projectId) {
+        TFieldData rtnFieldData = new TFieldData();
+
+        Map<String, Object> paramMap = new HashMap<String, Object>();
+        paramMap.put("cid", cid);
+        paramMap.put("uid", uid);
+        paramMap.put("projectName",projectId);
+
+        String hql= "FROM TFieldData where id = (select max(id) from TFieldData a where isDelete=0 and cid = :cid and uid = :uid and projectName = :projectName)";
+        List<TFieldData> fieldDataList = fieldDataDaoI.find(hql, paramMap);
+
+        if (fieldDataList != null && fieldDataList.size()>0) {
+            rtnFieldData = fieldDataList.get(0);
+        }
+        return rtnFieldData;
+    }
+
+    @Override
+    public List<TFieldData> getOutFieldByRelId(String relId) {
+
+        Map<String, Object> paramMap = new HashMap<String, Object>();
+        paramMap.put("relId", relId);
+
+        String hql= "FROM TFieldData where isDelete = '0' and relId = :relId";
+        List<TFieldData> outFieldDataList = fieldDataDaoI.find(hql, paramMap);
+        return  outFieldDataList;
+    }
+
+    @Override
+    public List<Map<String, Object>> getMaterialDatas(String cid, String statDate, List<Integer> ugroup, Integer selDepartmentId) {
+        Map<String, Object> param = new HashMap<String, Object>();
+        param.put("cid", cid);
+        param.put("statDate", statDate);
+        String uids = StringUtils.join(ugroup, ",");
+        String sql1 = " SELECT a.itemCode, " +
+                " SUM(if(a.count > 0, a.count * IF(ISNULL(a.price) or a.price='', 0, a.price), 0)) as inComeMonthly, " +
+                " ABS(SUM(if(a.count < 0, a.count * IF(ISNULL(a.price) or a.price='', 0, a.price), 0))) as consumeMonthly " +
+                " FROM TFieldData a " +
+                " WHERE a.cid = :cid  " +
+                " AND a.isDelete = '0' " +
+                " AND LEFT(a.itemCode , 3) = '800'  " +
+                " AND date_format(a.creatTime , '%Y-%m') = :statDate " +
+                " AND uid in (" + uids + ")" +
+                " GROUP BY a.itemCode ";
+        List<Object[]> list1 = fieldDataDaoI.findBySql(sql1, param);
+
+        String sql2 = " SELECT a.itemCode, " +
+                " SUM(a.count * IF(ISNULL(a.price) or a.price='', 0, a.price)) as monthEndCarry " +
+                " FROM TFieldData a " +
+                " WHERE a.cid = :cid " +
+                " AND a.isDelete = '0' " +
+                " AND LEFT(a.itemCode , 3) = '800' " +
+                " AND date_format(a.creatTime , '%Y-%m') <= :statDate " +
+                " AND uid in (" + uids + ")" +
+                " GROUP BY a.itemCode";
+        List<Object[]> list2 = fieldDataDaoI.findBySql(sql2, param);
+
+
+        String sql3 = " SELECT a.itemCode, " +
+                " SUM(a.count * IF(ISNULL(a.price) or a.price='', 0, a.price)) as lastMonthCarryover " +
+                " FROM TFieldData a " +
+                " WHERE a.cid = :cid " +
+                " AND a.isDelete = '0' " +
+                " AND LEFT(a.itemCode , 3) = '800' " +
+                " AND date_format(a.creatTime , '%Y-%m') < :statDate " +
+                " AND uid in (" + uids + ")" +
+                " GROUP BY a.itemCode";
+        List<Object[]> list3 = fieldDataDaoI.findBySql(sql3, param);
+
+        List<Map<String, Object>> materialStatInfos = new ArrayList<Map<String, Object>>();
+        Map<String, Object> materialStatInfo = new HashMap<String, Object>();
+        List<Cost> costList = costService.getMatrialsCostList(cid, selDepartmentId);
+        if (costList != null && costList.size() > 0) {
+            for (Cost cost : costList) {
+                materialStatInfo = new HashMap<String, Object>();
+                materialStatInfo.put("costType", cost.getCostType());
+                for (Object[] temp : list1) {
+                    if (cost.getItemCode().equals(temp[0])) {
+                        materialStatInfo.put("inComeMonthly", temp[1]);
+                        materialStatInfo.put("consumeMonthly", temp[2]);
+                    }
+                }
+
+                for (Object[] temp : list2) {
+                    if (cost.getItemCode().equals(temp[0])) {
+                        materialStatInfo.put("monthEndCarry", temp[1]);
+                    }
+                }
+
+                for (Object[] temp : list3) {
+                    if (cost.getItemCode().equals(temp[0])) {
+                        materialStatInfo.put("lastMonthCarryover", temp[1]);
+                    }
+                }
+
+                materialStatInfos.add(materialStatInfo);
+            }
+        }
+        return materialStatInfos;
     }
 
     private Date string2date(String str) {

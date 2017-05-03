@@ -56,32 +56,37 @@
             $('.easyui-validatebox').removeAttr('disabled');
         }
     });
-	//上传文件
+
+    var sectionId = document.getElementById('sectionId').value;
+    for (var i = 0; i < document.getElementById('section').options.length; i++) {
+        if (document.getElementById('section').options[i].value == sectionId) {
+            document.getElementById('section').options[i].selected = true;
+            break;
+        }
+    }
 </script>
 <div class="easyui-layout" data-options="fit:true,border:false">
 	<div data-options="region:'center',border:false" title=""
 		style="overflow: hidden;">
         <input class="priview" value="${preview}" style="display: none;"/>
 		<form id="form" method="post" enctype="multipart/form-data">
+			<input type="hidden" id="id" name="id" value="${tfielddata.id}" />
+			<input type="hidden" id="itemCode" name="itemCode" value="${tfielddata.itemCode}" />
+			<input type="hidden" id="creatTime" name="creatTime" value="${tfielddata.creatTime}" />
+			<input type="hidden" id="cid" name="cid" value="${tfielddata.cid}" />
+			<input type="hidden" id="uid" name="uid" value="${tfielddata.uid}" />
+			<input type="hidden" id="uname" name="uname" value="${tfielddata.uname}" />
+			<input type="hidden" id="company" name="company" value="${tfielddata.company}" />
+			<input type="hidden" id="costType" name="costType" value="${tfielddata.costType}" />
+			<input type="hidden" id="projectName" name="projectName" value="${tfielddata.projectName}" />
+			<input type="hidden" id="sectionId" value="${tfielddata.section}"/>
 			<table class="table table-hover table-condensed">
 				<tr>
 					<td style="width: 80px;">工程名称</td>
-					<td><input type="hidden" id="id" name="id"
-						value="${tfielddata.id}" /><input type="hidden" id="itemCode"
-						name="itemCode" value="${tfielddata.itemCode}" /><input type="hidden"
-						id="creatTime" name="creatTime" value="${tfielddata.creatTime}" />
-						<input type="hidden" id="cid" name="cid" value="${tfielddata.cid}" />
-						<input type="hidden" id="uid" name="uid" value="${tfielddata.uid}" />
-						<input type="hidden" id="uname" name="uname"
-						value="${tfielddata.uname}" /> <input type="hidden" id="company"
-						name="company" value="${tfielddata.company}" /><input
-						type="hidden" id="costType" name="costType"
-						value="${tfielddata.costType}" /><input type="hidden"
-						id="projectName" name="projectName"
-						value="${tfielddata.projectName}" /> <input type="text"
-						placeholder="工程名称" style="width: 250px;"
-						class="easyui-validatebox span2" data-options="required:true"
-						value="${project.proName}" readonly='readonly'></td>
+					<td>
+						<input type="text" placeholder="工程名称" style="width: 250px;" class="easyui-validatebox span2"
+							   data-options="required:true" value="${project.proName}" readonly='readonly'>
+					</td>
 				</tr>
 				<tr>
 					<td style="width: 80px;">费用类型</td>
@@ -91,11 +96,22 @@
 						readonly='readonly'></td>
 				</tr>
 				<tr>
+					<td style="width: 80px;">标段</td>
+					<td>
+						<select id="section" name="section" style="width: 264px;">
+							<c:forEach items="${selectItems}" var="tem">
+								<option value="${tem.id}">${tem.text}</option>
+							</c:forEach>
+						</select>
+					</td>
+
+				</tr>
+				<tr>
 					<td style="width: 80px;">名称</td>
 					<td><input name="dataName" id="dataName" type="text"
-						style="width: 250px;" placeholder="名称"
-						class="easyui-validatebox span2" data-options="required:true"
-						value="${tfielddata.dataName}"></td>
+							   style="width: 250px;" placeholder="名称"
+							   class="easyui-validatebox span2" data-options="required:true"
+							   value="${tfielddata.dataName}"></td>
 				</tr>
 				<%--<tr>--%>
 					<%--<td style="width: 80px;">单价</td>--%>

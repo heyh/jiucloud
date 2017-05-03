@@ -3,6 +3,7 @@
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Map" %>
+<%@ page import="net.sf.json.JSONArray" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -14,7 +15,11 @@
 //    String underlingUsers = null;
     String projectInfos = null;
     List<Map<String, Object>> dataCostInfos = new ArrayList<Map<String, Object>>();
-    
+	JSONArray costTree = new JSONArray();
+	boolean hasOnlyReadRight = false;
+	boolean hasReadEditRight = false;
+	boolean hasOutRight = false;
+
     SessionInfo sessionInfo = (SessionInfo) session.getAttribute(ConfigUtil.getSessionInfoName());
     if (sessionInfo == null) {
         response.sendRedirect(request.getContextPath());
@@ -23,7 +28,11 @@
 //        underlingUsers = sessionInfo.getUnderlingUsers();
         projectInfos = sessionInfo.getProjectInfos();
         dataCostInfos = sessionInfo.getCostTypeInfos().get("dataCostInfos");
-    }
+		costTree = sessionInfo.getCostTree();
+		hasOnlyReadRight = sessionInfo.getRightList().contains("16") && 0 != sessionInfo.getParentId();
+		hasReadEditRight = sessionInfo.getRightList().contains("15") || 0 == sessionInfo.getParentId();
+		hasOutRight = sessionInfo.getRightList().contains("17");
+	}
 
 %>
 
@@ -44,7 +53,7 @@
 						{
 							url : '${pageContext.request.contextPath}/fieldDataController/dataGrid?source=data',
 							fit : true,
-							fitColumns : true,
+							fitColumns : false,
 							border : false,
 							pagination : true,
 							idField : 'id',
@@ -69,6 +78,11 @@
 
 									},
 									{
+										field : 'sectionName',
+										title : '标段',
+										width : 100
+									},
+									{
 										field : 'costType',
 										title : '类型',
 										width : 100
@@ -76,7 +90,7 @@
 									{
 										field : 'dataName',
 										title : '名称',
-										width : 100
+										width : 350
 									},
 									{
 										field : 'unit',
@@ -86,7 +100,21 @@
 									{
 										field : 'price',
 										title : '单价',
-										width : 100
+										width : 100,
+										formatter: function (value, row, index) {
+										    var str = '';
+										    var strHasOutRight = <%=hasOutRight%>;
+										    var hasReadEditRight = <%= hasOnlyReadRight %> || <%= hasReadEditRight %>;
+											if (strHasOutRight && row.itemCode.substring(0, 3) == '800') {
+                                                str = '***';
+											} else if(row.itemCode.substring(0, 3) == '700' && !hasReadEditRight) {
+                                                str = '***';
+											} else {
+                                                str = row.price;
+                                            }
+                                            return str;
+											<%--return row.itemCode.substring(0, 3) != '700' || <%= hasOnlyReadRight %> || <%= hasReadEditRight %> ? row.price : '***';--%>
+                                        }
 									},
 									{
 										field : 'count',
@@ -98,15 +126,29 @@
 										title : '金额',
 										width : 100,
 										formatter : function(value, row, index) {
-											return (row.count * row.price)
-													.toFixed(2);
+                                            var str = '';
+                                            var strHasOutRight = <%=hasOutRight%>;
+                                            var hasReadEditRight = <%= hasOnlyReadRight %> || <%= hasReadEditRight %>;
+                                            if (strHasOutRight && row.itemCode.substring(0, 3) == '800') {
+                                                str = '***';
+                                            } else if(row.itemCode.substring(0, 3) == '700' && !hasReadEditRight) {
+                                                str = '***';
+                                            } else {
+                                                str = (row.count * ((row.price==null || row.price=='') ? 0 : row.price)).toFixed(2);
+                                            }
+                                            return str;
+											<%--return row.itemCode.substring(0, 3) != '700' || <%= hasOnlyReadRight %> || <%= hasReadEditRight %> ? (row.count * ((row.price==null || row.price=='') ? 0 : row.price)).toFixed(2) : '***';--%>
 										}
-
 									},
 									{
 										field : 'specifications',
 										title : '规格类型',
 										width : 100
+									},
+									{
+										field : 'supplier',
+										title : '供应商',
+										width: 100
 									},
 									{
 										field : 'uname',
@@ -156,6 +198,11 @@
                                         width : 100
                                     },
 									{
+										field : 'remark',
+										title : '备注',
+										width : 150
+									},
+									{
 										field : 'action',
 										title : '操作',
 										width : 100,
@@ -163,9 +210,8 @@
 											var str = '';
                                             // modify by heyh 当数据填报之后，在当日内23:59分内均可以修改自己填报数据
                                             var userId = <%= userId%>;
-                                            if(compareDate(getCurrentDate(), row.creatTime.substring(0, 10)) == 0 && userId == row.uid
-                                                    && '0' == row.isLock && '2' != row.needApproved) {
-//                                                if ('0' == row.isLock && '2' != row.needApproved) {
+                                            var strHasOutRight = <%=hasOutRight%>;
+                                            if((compareDate(getCurrentDate(), row.creatTime.substring(0, 10)) == 0 && userId == row.uid  && '0' == row.isLock && '2' != row.needApproved) || (row.itemCode.substring(0, 3) == '700' && <%= hasReadEditRight %> )) {
                                                     str += $
                                                             .formatString(
                                                             '<img onclick="editFun(\'{0}\');" src="{1}" title="编辑" />',
@@ -177,7 +223,6 @@
                                                             '<img onclick="deleteFun(\'{0}\');" src="{1}" title="删除"/>',
                                                             row.id,
                                                             '${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/delete-blue.png');
-//                                                }
                                             } else {
                                                 str += $
                                                         .formatString(
@@ -191,7 +236,32 @@
 															' <img onclick="FileFun(\'{0}\');" src="{1}" title="附件管理"/>',
 															row.id,
 															'${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/fujianguanli-blue.png');
-											return str;
+											if(row.remark != null && (row.remark.indexOf('氿上云导入') != '-1' || row.remark.indexOf('execl导入') != '-1')) {
+                                                str += '&nbsp;';
+                                                str += $
+                                                    .formatString(
+                                                        '<img onclick="overviewFun(\'{0}\');" src="{1}" title="查看明细"/>',
+                                                        row.id,
+                                                        '${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/overview-blue.png');
+                                            }
+
+                                            str += '&nbsp;';
+                                            str += $
+                                                .formatString(
+                                                    '<img onclick="discussFun(\'{0}\');" src="{1}" title="交流"/>',
+                                                    row.id,
+                                                    '${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/discuss-blue.png');
+
+                                            if (strHasOutRight && row.itemCode.substring(0, 3) == '800' && row.count >=0) {
+												str += '&nbsp;';
+												str += $
+													.formatString(
+														'<img onclick="outStorageFun(\'{0}\');" src="{1}" title="出库"/>',
+														row.id,
+														'${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/out.png');
+											}
+
+                                            return str;
 										}
 									} ] ],
 							toolbar : '#toolbar',
@@ -202,6 +272,64 @@
 							}
                         });
     });
+
+    //查看
+    function overviewFun(id) {
+
+        if (id == undefined) {
+            var rows = dataGrid.datagrid('getSelections');
+            id = rows[0].id;
+        } else {
+            dataGrid.datagrid('unselectAll').datagrid('uncheckAll');
+        }
+
+        var url = '${pageContext.request.contextPath}/projectOverviewController/securi_projectOverview?id=' + id;
+        var text = "查看明细";
+        var params = {
+            url : url,
+            title : text,
+            iconCls : 'wrench'
+        };
+        window.parent.ac(params);
+    }
+
+    function discussFun(id) {
+
+        if (id == undefined) {
+            var rows = dataGrid.datagrid('getSelections');
+            id = rows[0].id;
+        } else {
+            dataGrid.datagrid('unselectAll').datagrid('uncheckAll');
+        }
+
+        var url = '${pageContext.request.contextPath}/discussController/securi_discussShow?discussId=' + id + '&discussType=0';
+        var text = "交流讨论区";
+        var params = {
+            url : url,
+            title : text,
+            iconCls : 'wrench'
+        };
+        window.parent.ac(params);
+    }
+
+    //出库
+    function outStorageFun(id) {
+        parent.$
+            .modalDialog({
+                title : '出库',
+                width : 900,
+                height : 450,
+                href : '${pageContext.request.contextPath}/fieldDataController/outStorage?id=' + id,
+                buttons : [ {
+                    text : '确定',
+                    handler : function() {
+                        parent.$.modalDialog.openner_dataGrid = dataGrid;//因为添加成功之后，需要刷新这个dataGrid，所以先预定义好
+                        var f = parent.$.modalDialog.handler.find('#form');
+                        f.submit();
+                    }
+                } ]
+            });
+    }
 
 	//删除
 	function deleteFun(id) {
@@ -385,7 +513,7 @@
 				.modalDialog({
 					title : '附件管理',
 					width : 800,
-					height : 600,
+					height : 700,
 					href : '${pageContext.request.contextPath}/fieldDataController/securi_fieldDataFile?id='
 							+ id,
 					buttons : [ {
@@ -419,6 +547,7 @@
             $('#endTime').val($('#endTime').val().substring(0, 10) + ' 23:59:59');
         }
 
+		$('#costType').val($('.combo-text').val());
 		dataGrid.datagrid('load', $.serializeObject($('#searchForm')));
 	}
 	//清除条件
@@ -460,54 +589,151 @@
             allowClear: true,
             data:<%=projectInfos%>
         });
-        $("#costType").select2({
-            tags: "true",
-            placeholder: "可以模糊查询",
-            allowClear: true,
-            <%--data:<%=costTypeInfos%>--%>
-        });
+        <%--$("#costType").select2({--%>
+            <%--tags: "true",--%>
+            <%--placeholder: "可以模糊查询",--%>
+            <%--allowClear: true,--%>
+            <%--&lt;%&ndash;data:<%=costTypeInfos%>&ndash;%&gt;--%>
+        <%--});--%>
+
+		$('#costTypeRef').combotree({
+			data: <%= costTree %>,
+			lines: true,
+			editable:true,
+			onLoadSuccess: function () {
+				$('#costTypeRef').combotree('tree').tree("collapseAll");
+			},
+			//选择树节点触发事件
+//			onSelect : function(node) {
+//				debugger;
+//				//返回树对象
+//				var tree = $(this).tree;
+//				//选中的节点是否为叶子节点,如果不是叶子节点,清除选中
+//				var isLeaf = tree('isLeaf', node.target);
+//				if (!isLeaf) {
+//					//清除选中
+//					$('.easyui-combotree').treegrid("unselect");
+//				}
+//			}
+		});
     });
 
+	(function(){
+		$.fn.combotree.defaults.editable = true;
+		$.extend($.fn.combotree.defaults.keyHandler,{
+			up:function(){
+				console.log('up');
+			},
+			down:function(){
+				console.log('down');
+			},
+			enter:function(){
+				console.log('enter');
+			},
+			query:function(q){
+				var t = $(this).combotree('tree');
+				var nodes = t.tree('getChildren');
+				for(var i=0; i<nodes.length; i++){
+					var node = nodes[i];
+					if (node.text.indexOf(q) >= 0){
+						$(node.target).show();
+					} else {
+						$(node.target).hide();
+					}
+				}
+				var opts = $(this).combotree('options');
+				if (!opts.hasSetEvents){
+					opts.hasSetEvents = true;
+					var onShowPanel = opts.onShowPanel;
+					opts.onShowPanel = function(){
+						var nodes = t.tree('getChildren');
+						for(var i=0; i<nodes.length; i++){
+							$(nodes[i].target).show();
+						}
+						onShowPanel.call(this);
+					};
+					$(this).combo('options').onShowPanel = opts.onShowPanel;
+				}
+			}
+		});
+	})(jQuery);
+
+	//云导入
+	function cloudImportFun() {
+		parent.$
+				.modalDialog({
+					title: '项目选择',
+					width: 900,
+					height: 610,
+					href: '${pageContext.request.contextPath}/fieldDataController/securi_cloudProjects',
+					buttons: [{
+                        text : '关闭',
+                        handler : function() {
+                            parent.$.modalDialog.handler.dialog('destroy');
+                            parent.$.modalDialog.handler = undefined;
+                        }
+                    }, {
+						text: '导入',
+						handler: function () {
+							parent.$.modalDialog.openner_dataGrid = dataGrid;//因为添加成功之后，需要刷新这个dataGrid，所以先预定义好
+							var f = parent.$.modalDialog.handler.find('#form');
+							f.submit();
+						}
+					}
+                    ]
+				});
+	};
+
+	function execlImportFun(id) {
+		parent.$
+				.modalDialog({
+					title : 'execl导入',
+					width : 450,
+					height : 400,
+					href : '${pageContext.request.contextPath}/fieldDataController/securi_execlProjects',
+					buttons : [{
+                        text : '关闭',
+                        handler : function() {
+                            parent.$.modalDialog.handler.dialog('destroy');
+                            parent.$.modalDialog.handler = undefined;
+                        }
+                    }, {
+						text : '导入',
+						handler : function() {
+							parent.$.modalDialog.openner_dataGrid = dataGrid;//因为添加成功之后，需要刷新这个dataGrid，所以先预定义好
+							var f = parent.$.modalDialog.handler.find('#form');
+							f.submit();
+						}
+					}
+					]
+				});
+	};
 </script>
 </head>
 <body>
 	<div class="easyui-layout" data-options="fit : true,border : false">
-		<div data-options="region:'north',title:'查询条件',border:false"
-			style="height: 75px; overflow: hidden;">
+		<div data-options="region:'north',title:'查询条件',border:false" style="height: 75px; overflow: hidden;">
 			<form id="searchForm">
 				<table class="table table-hover table-condensed"
 					style="display: none;">
 					<tr>
-						<td>搜索关键字:&nbsp;
+						<td>关键字搜索:&nbsp;
                             <%--<input name="uname" id='uname' placeholder="可以模糊查询" class="span2" />--%>
                             <%--<select  style="width: 136px" name="uname" id="uname">--%>
                                 <%--<option ></option>--%>
                             <%--</select>--%>
-                            <input name="keyword" id="keyword" placeholder="可以模糊查询" class="span2" />
+                            <input name="keyword" id="keyword" placeholder="可以模糊查询" class="span2" style="width: 180px;"/>
                         </td>
 						<td>工程名称:&nbsp;
                             <%--<input name="projectName" id="projectName" placeholder="可以模糊查询" class="span2" />--%>
-                            <select  style="width: 136px" name="projectName" id="projectName">
+                            <select  style="width: 180px" name="projectName" id="projectName">
                                 <option ></option>
 
                             </select>
                         </td>
 						<td>费用类型:&nbsp;
-                            <%--<input name="costType" id='costType' placeholder="可以模糊查询" class="span2" />--%>
-                            <select style="width: 136px" name="costType" id="costType">
-                                <option></option>
-                                <c:forEach var="costTypeInfo" items="<%= dataCostInfos %>" varStatus="index">
-                                    <%--<c:if test="${costTypeInfo.isSend == '0'}">--%>
-                                        <%--<optgroup label="${costTypeInfo.costType}"> " " </optgroup>--%>
-                                    <%--</c:if>--%>
-                                    <c:if test="${costTypeInfo.isSend == '0'}">
-                                        <option value="${costTypeInfo.costType}">${costTypeInfo.costType}</option>
-                                    </c:if>
-                                    <c:if test="${costTypeInfo.isSend == '1'}">
-                                        <option value="${costTypeInfo.costType}">&nbsp;&nbsp;&nbsp;&nbsp;${costTypeInfo.costType}</option>
-                                    </c:if>
-                                </c:forEach>
-                            </select>
+							<input class="easyui-combotree" name="costTypeRef" id="costTypeRef" style="width:180px;" placeholder="请选择">
+							<input type="hidden" name="costType" id="costType">
                         </td>
 						<td>起止时间:&nbsp;<input class="span2" name="startTime"
 							id='startTime' placeholder="点击选择时间"
@@ -542,6 +768,15 @@
 			href="javascript:void(0);" class="easyui-linkbutton"
 			data-options="iconCls:'zhongzhiguolvtiaojian_new',plain:true"
 			onclick="cleanFun();">清空条件</a>
+
+		<a onclick="cloudImportFun();" href="javascript:void(0);"
+		   class="easyui-linkbutton"
+		   data-options="plain:true,iconCls:'cloud_in'">氿上云导入</a>
+
+		<a onclick="execlImportFun();" href="javascript:void(0);"
+		   class="easyui-linkbutton"
+		   data-options="plain:true,iconCls:'execl_in'">execl导入</a>
+
 	</div>
 
 	<div id="menu" class="easyui-menu" style="width: 120px; display: none;">

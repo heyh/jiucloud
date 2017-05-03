@@ -152,8 +152,7 @@
     <div class="section" id="projectInfo">
 
         <%--<h4>项目详情</h4>--%>
-        <img src="${pageContext.request.contextPath}/images/verticalLine.png"
-             style="padding-top:20px; padding-bottom:20px; vertical-align:middle"/>
+        <img src="${pageContext.request.contextPath}/images/verticalLine.png" style="padding-top:20px; padding-bottom:20px; vertical-align:middle"/>
         <span style="vertical-align:middle; font-family:SimSun; margin-left: 4px"><b>项目详情</b></span>
         <input name="id" type="hidden" class="span2" value="${pro.id}" readonly="readonly"/>
         <fieldset class="showBase">
@@ -341,7 +340,7 @@
         <table id="dataGridCost" class="easyui-datagrid" width="100%">
         </table>
         <div id="toolbar" class="fee_detail" style="display: none;">
-            <span>操作人:</span>
+            <span>关键字搜索:</span>
             <input class="easyui-textbox"  style="margin-top:9px; width: 150px; height: 17px" type="text" name="keywordCost" id="keywordCost" data-options=""/>
             <%--<select  style="width: 150px" name="uname" id="uname">--%>
                 <%--<option ></option>--%>
@@ -385,7 +384,7 @@
         <table id="dataGridDoc" class="easyui-datagrid" width="100%">
         </table>
         <div id="toolbarDoc" class="fee_detail" style="display: none;">
-            <span>操作人:</span>
+            <span>关键字搜索:</span>
             <input style="margin-top:9px; width: 150px; height: 17px" class="easyui-textbox"  type="text" name="keywordDoc" id="keywordDoc" data-options=""/>
             <%--<select  style="width: 150px" name="unameDoc" id="unameDoc">--%>
                 <%--<option ></option>--%>
@@ -476,6 +475,11 @@
 
                         },
                         {
+                            field : 'section',
+                            title : '标段',
+                            width : 100
+                        },
+                        {
                             field : 'costType',
                             title : '类型',
                             width : 100
@@ -508,8 +512,7 @@
                                 if(value != undefined) {
                                     return value.toFixed(2);
                                 }
-                                return (row.count * row.price)
-                                        .toFixed(2);
+                                return (row.count * ((row.price==null || row.price=='') ? 0 : row.price)).toFixed(2)
                             }
 
                         },
@@ -615,6 +618,11 @@
                             title : '工程名称',
                             width : 250
 
+                        },
+                        {
+                            field : 'section',
+                            title : '标段',
+                            width : 100
                         },
                         {
                             field : 'costType',
@@ -927,7 +935,7 @@
                 // table end
             },
             error:function(e){
-                alert(e);
+//                alert(e);
             }
         });
 

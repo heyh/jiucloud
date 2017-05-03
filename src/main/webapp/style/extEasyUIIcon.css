@@ -554,6 +554,9 @@ img {
 .approve {background: url('images/extjs_icons/jswicon/approve.png') no-repeat center center;}
 .procostmng {background: url('images/extjs_icons/jswicon/procostmng.png') no-repeat center center;}
 .procostadd {background: url('images/extjs_icons/jswicon/procostadd.png') no-repeat center center;}
+.transfee {background: url('images/extjs_icons/jswicon/transfee.png') no-repeat center center;}
+.materialStatReport {background: url('images/extjs_icons/jswicon/materialStatReport.png') no-repeat center center;}
+.queryapprove {background: url('images/extjs_icons/jswicon/queryapprove.png') no-repeat center center;}
 
 .add_new {background: url('images/extjs_icons/add_new.png') no-repeat center center;}
 .add_quick {background: url('images/extjs_icons/add_quick.png') no-repeat center center;}
@@ -565,3 +568,5 @@ img {
 .tree_new {background: url('images/extjs_icons/tree_new.png') no-repeat center center;}
 .download_new {background: url('images/extjs_icons/download_new.png') no-repeat center center;}
 .upload_new {background: url('images/extjs_icons/upload_new.png') no-repeat center center;}
+.cloud_in {background: url('images/extjs_icons/rxy16.png') no-repeat center center;}
+.execl_in {background: url('images/extjs_icons/execl_in.png') no-repeat center center;}

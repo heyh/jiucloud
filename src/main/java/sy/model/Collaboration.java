@@ -30,6 +30,15 @@ public class Collaboration implements java.io.Serializable {
 	private String remark;
 	private String email;
 	private int pid;
+	private String section;
+
+	public String getSection() {
+		return section;
+	}
+
+	public void setSection(String section) {
+		this.section = section;
+	}
 
 	public int getId() {
 		return id;

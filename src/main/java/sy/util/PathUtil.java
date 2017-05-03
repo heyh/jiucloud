@@ -1,5 +1,7 @@
 package sy.util;
 
+import java.io.File;
+
 public class PathUtil {
 	
 	
@@ -18,6 +20,17 @@ public class PathUtil {
 		}*/
 		///return pathStr.substring(0,pathStr.indexOf("WEB-INF"));
 		return "D:/workspacea/yuxt/WebContent/upload/chatsource/";
+	}
+
+	/*
+	 * 获取classpath1
+	 */
+	public static String getClasspath(){
+		String path = (String.valueOf(Thread.currentThread().getContextClassLoader().getResource(""))+"../../").replaceAll("file:/", "").replaceAll("%20", " ").trim();
+		if(path.indexOf(":") != 1){
+			path = File.separator + path;
+		}
+		return path;
 	}
 
 }

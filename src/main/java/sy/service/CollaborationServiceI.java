@@ -15,7 +15,7 @@ import sy.pageModel.PageHelper;
 @Repository
 public interface CollaborationServiceI {
 
-	public DataGrid dataGrid(String pid, PageHelper ph);
+	public DataGrid dataGrid(String cid, String pid, PageHelper ph);
 
 	public void delete(Collaboration tem);
 
