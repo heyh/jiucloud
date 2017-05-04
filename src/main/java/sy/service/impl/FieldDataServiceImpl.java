@@ -192,22 +192,21 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
                 hql += " and (select proName from Project where id=t.projectName) like :proName ";
                 params.put("proName", "%%" + cmodel.getProjectName() + "%%");
             }
-            if (cmodel.getCostType() != null
-                    && cmodel.getCostType().length() > 0) {
-                hql += " and (select costType from Cost where id=t.costType) like :costName ";
-                params.put("costName", "%%" + cmodel.getCostType() + "%%");
+//            if (cmodel.getCostType() != null
+//                    && cmodel.getCostType().length() > 0) {
+//                hql += " and (select costType from Cost where id=t.costType) like :costName ";
+//                params.put("costName", "%%" + cmodel.getCostType() + "%%");
+//            }
+            if (cmodel.getItemCode() != null) {
+                hql += " and itemCode like :itemCode ";
+                params.put("itemCode", cmodel.getItemCode() + "%%");
             }
-            if (cmodel.getStartTime() != null
-                    && cmodel.getStartTime().length() > 0) {
+            if (cmodel.getStartTime() != null && cmodel.getStartTime().length() > 0) {
                 hql += " and t.creatTime >= :startTime";
-                // modify by heyh
-//                params.put("startTime", this.string2date(cmodel.getStartTime()));
                 params.put("startTime", DateKit.strToDateOrTime(cmodel.getStartTime()));
             }
             if (cmodel.getEndTime() != null && cmodel.getEndTime().length() > 0) {
                 hql += " and t.creatTime <= :endTime";
-                // modify by heyh
-//                params.put("endTime", this.string2date(cmodel.getEndTime()));
                 params.put("endTime", DateKit.strToDateOrTime(cmodel.getEndTime()));
             }
         }
@@ -643,6 +642,54 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
             }
         }
         return materialStatInfos;
+    }
+
+    @Override
+    public List<FieldData> getBoq(String cid, String startDate, String endDate, List<Integer> ugroup) {
+        Map<String, Object> params = new HashMap<String, Object>();
+        String hql = "";
+        hql = " from TFieldData t  where isDelete=0 and substring(itemcode,1,3)='700' and cid=:cid ";
+        params.put("cid", cid);
+
+        if (!StringUtil.trimToEmpty(startDate).equals("")) {
+            hql += " and t.creatTime >= :startTime ";
+            params.put("startTime", DateKit.strToDateOrTime(startDate));
+        }
+        if (!StringUtil.trimToEmpty(endDate).equals("")) {
+            hql += " and t.creatTime <= :endTime ";
+            params.put("endTime", DateKit.strToDateOrTime(endDate));
+        }
+
+        String uids = StringUtils.join(ugroup, ",");
+        hql += " and  uid in (" + uids + ") ";
+
+        List<TFieldData> l = fieldDataDaoI.find(hql, params);
+        List<FieldData> boq = new ArrayList<FieldData>();
+        for (TFieldData tem : l) {
+            FieldData f = new FieldData();
+            f.setId(tem.getId());
+            f.setDataName(tem.getDataName());
+            f.setItemCode(tem.getItemCode());
+            f.setCount(tem.getCount());
+            f.setUnit(tem.getUnit());
+            f.setSpecifications(tem.getSpecifications());
+            f.setRemark(tem.getRemark());
+            Cost cost = costDao.get("from Cost where isDelete=0 and itemCode='" + tem.getItemCode() + "'");
+            if (cost == null) {
+                f.setCostType("该费用类型可能已经被删除");
+            } else {
+                f.setCostType(cost.getCostType());
+            }
+            f.setProject_id(Integer.parseInt(tem.getProjectName()));
+            Project project = projectDao.get("from Project where isdel=0 and id='" + tem.getProjectName() + "'");
+            if (project == null) {
+                continue; // 工程删除，记录不显示
+            } else {
+                f.setProjectName(project.getProName());
+            }
+            boq.add(f);
+        }
+        return boq;
     }
 
     private Date string2date(String str) {

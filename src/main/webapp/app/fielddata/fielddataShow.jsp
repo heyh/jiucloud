@@ -4,6 +4,7 @@
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Map" %>
 <%@ page import="net.sf.json.JSONArray" %>
+<%@ page import="net.sf.json.JSONObject" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
@@ -15,6 +16,7 @@
 //    String underlingUsers = null;
     String projectInfos = null;
     List<Map<String, Object>> dataCostInfos = new ArrayList<Map<String, Object>>();
+	JSONArray jsonArray = new JSONArray();
 	JSONArray costTree = new JSONArray();
 	boolean hasOnlyReadRight = false;
 	boolean hasReadEditRight = false;
@@ -28,6 +30,10 @@
 //        underlingUsers = sessionInfo.getUnderlingUsers();
         projectInfos = sessionInfo.getProjectInfos();
         dataCostInfos = sessionInfo.getCostTypeInfos().get("dataCostInfos");
+		for (Map<String, Object> nodeMap : dataCostInfos) {
+			JSONObject nodeJson = JSONObject.fromObject(nodeMap);
+			jsonArray.add(nodeJson);
+		}
 		costTree = sessionInfo.getCostTree();
 		hasOnlyReadRight = sessionInfo.getRightList().contains("16") && 0 != sessionInfo.getParentId();
 		hasReadEditRight = sessionInfo.getRightList().contains("15") || 0 == sessionInfo.getParentId();
@@ -604,8 +610,14 @@
 				$('#costTypeRef').combotree('tree').tree("collapseAll");
 			},
 			//选择树节点触发事件
-//			onSelect : function(node) {
-//				debugger;
+			onSelect : function(node) {
+				var _jsonArray = <%= jsonArray %>;
+				for (var i=0; i<_jsonArray.length; i++) {
+				    if (_jsonArray[i].nid == node.id) {
+                        $('#itemCode').val(_jsonArray[i].itemCode);
+                        break;
+					}
+				}
 //				//返回树对象
 //				var tree = $(this).tree;
 //				//选中的节点是否为叶子节点,如果不是叶子节点,清除选中
@@ -614,7 +626,7 @@
 //					//清除选中
 //					$('.easyui-combotree').treegrid("unselect");
 //				}
-//			}
+			}
 		});
     });
 
@@ -734,6 +746,7 @@
 						<td>费用类型:&nbsp;
 							<input class="easyui-combotree" name="costTypeRef" id="costTypeRef" style="width:180px;" placeholder="请选择">
 							<input type="hidden" name="costType" id="costType">
+							<input type="hidden" name="itemCode" id="itemCode">
                         </td>
 						<td>起止时间:&nbsp;<input class="span2" name="startTime"
 							id='startTime' placeholder="点击选择时间"

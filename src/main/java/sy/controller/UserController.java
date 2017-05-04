@@ -204,6 +204,7 @@ public class UserController extends BaseController {
 					_dataCost.put("text", dataCost.get("costType"));
 					_dataCost.put("id", dataCost.get("nid"));
 					_dataCost.put("pid", dataCost.get("pid"));
+					_dataCost.put("itemCode", dataCost.get("itemCode"));
 					_dataCostList.add(_dataCost);
 				}
 				sessionInfo.setCostTree(Utility.treeList(_dataCostList, "-1"));
@@ -215,6 +216,7 @@ public class UserController extends BaseController {
 					_docCost.put("text", docCost.get("costType"));
 					_docCost.put("id", docCost.get("nid"));
 					_docCost.put("pid", docCost.get("pid"));
+					_docCost.put("itemCode", docCost.get("itemCode"));
 					_docCostList.add(_docCost);
 				}
 				sessionInfo.setDocCostTree(Utility.treeList(_docCostList, "-1"));

@@ -352,4 +352,43 @@ public class analysisController extends BaseController {
 
 		return "/app/analysis/materialStatReport";
 	}
+
+	@RequestMapping("/boqPage")
+	public String boqPage(HttpServletRequest request) {
+		SessionInfo sessionInfo = (SessionInfo) request.getSession().getAttribute(ConfigUtil.getSessionInfoName());
+		String cid = sessionInfo.getCompid();
+		String uid = sessionInfo.getId();
+		List<Integer> ugroup = sessionInfo.getUgroup();
+		String startDate = StringUtil.trimToEmpty(request.getParameter("startDate"));
+		String endDate = StringUtil.trimToEmpty(request.getParameter("endDate"));
+		if (startDate.equals("")) {
+			startDate = UtilDate.getshortFirst() + " 00:00:00";
+		}
+		if (endDate.equals("")) {
+			endDate = UtilDate.getshortLast() + " 23:59:59";
+		}
+
+		List<FieldData> boq = fieldDataService.getBoq(cid, startDate, endDate, ugroup);
+
+		List<Map<String, Object>> projects = new ArrayList<Map<String, Object>>();
+		for (FieldData item : boq) {
+			boolean hasProj = false;
+			for (Map<String, Object> project : projects) {
+				if (project.get("projectId").equals(StringUtil.trimToEmpty(item.getProject_id()))) {
+					hasProj = true;
+				}
+			}
+			if (!hasProj) {
+				Map<String, Object> project = new HashMap<String, Object>();
+				project.put("projectId", item.getProject_id());
+				project.put("projectName", item.getProjectName());
+				projects.add(project);
+			}
+		}
+		request.setAttribute("boq", boq);
+		request.setAttribute("projects", projects);
+		request.setAttribute("first", startDate.substring(0, 10));
+		request.setAttribute("last", endDate.substring(0, 10));
+		return "/app/analysis/boq";
+	}
 }

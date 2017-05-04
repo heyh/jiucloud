@@ -517,7 +517,7 @@
                         </div>
                     </div>
                     <div class="control-group">
-                        <label class="control-label" for="specifications">规格型号:</label>
+                        <label class="control-label" for="specifications">规格型号(或桥段、路段):</label>
 
                         <div class="controls">
                             <input type="text" name="specifications" id="specifications" class="easyui-textbox" style="width:236px" onblur="cal()">
@@ -527,7 +527,8 @@
                         <label class="control-label" for="remark">备注:</label>
 
                         <div class="controls">
-                            <input type="text" name="remark" id="remark" class="easyui-textbox" style="width:236px">
+                            <textarea type="text" name="remark" id="remark" style="width:236px"></textarea>
+                            <%--<input type="text" name="remark" id="remark" class="easyui-textbox" style="width:236px">--%>
                         </div>
                     </div>
                     <div class="control-group" style="display:none" id="chooseApproveDiv">

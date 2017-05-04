@@ -82,4 +82,6 @@ public interface FieldDataServiceI {
     public List<TFieldData> getOutFieldByRelId(String relId);
 
     public List<Map<String, Object>> getMaterialDatas(String cid, String statDate, List<Integer> ugroup, Integer selDepartmentId);
+
+    public List<FieldData> getBoq(String cid, String startDate, String endDate, List<Integer> ugroup);
 }
