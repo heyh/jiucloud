@@ -49,11 +49,37 @@
                 allowClear: true,
             });
 
+            var optionstring = '';
+            var arr =  <%= departments %>;
+            if (arr.length < 2) {
+                $("#selDepartmentId").hide();
+            } else {
+                $("#selDepartmentId").show();
+            }
+
+            for (var i in arr) {
+                if ("${selDepartmentId}" == arr[i].id) {
+                    optionstring += "<option value=" + arr[i].id + " selected = 'selected' >" + arr[i].name + "</option>";
+                } else {
+                    optionstring += "<option value=" + arr[i].id + ">" + arr[i].name + "</option>";
+                }
+
+            }
+            $("#selDepartmentId").html(optionstring);
 
         });
 
         function searchFun() {
             $('#searchForm').submit();
+        }
+
+        function exportFun(objTab) {
+            var str = '';
+            str += '&startDate=' + $('#startDate').val();
+            str += '&endDate=' + $('#endDate').val();
+            str += '&selDepartmentId=' + $('#selDepartmentId').val();
+            var url = "${pageContext.request.contextPath}/analysisController/securi_boqExecl?" + str;
+            window.open(url);
         }
     </script>
 
@@ -74,13 +100,16 @@
                             <input type="text" name="endDate" id='endDate' placeholder="结束时间"
                                    onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" readonly="readonly"
                                    value='${last}'/>
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            <select id="selDepartmentId" name="selDepartmentId" >
+                            </select>
                         </div>
                     </td>
                 </tr>
                 <tr>
                     <td style="text-align: center" colspan=3>
-                        <a href="javascript:void(0);" class="easyui-linkbutton"
-                           data-options="iconCls:'search_new',plain:true" onclick="searchFun();">查询</a>
+                        <a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'search_new',plain:true" onclick="searchFun();">查询</a>
+                        <a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'out_new',plain:true" onclick="exportFun();">execl导出</a>
                     </td>
                 </tr>
 
@@ -89,8 +118,7 @@
     </div>
 
     <div id="toolbar" style="display: none;">
-        <a href="javascript:void(0);" class="easyui-linkbutton"
-           data-options="iconCls:'brick_add',plain:true" onclick="searchFun();">列表展示</a>
+        <a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'brick_add',plain:true" onclick="searchFun();">列表展示</a>
     </div>
 
     <!-- 显示表格内容，list -->
@@ -123,7 +151,7 @@
                             <tr>
                                 <th style="text-align: center; width: 50px">${status.index+1}</th>
                                 <td style="text-align: center">${item.itemCode}</td>
-                                <td style="text-align: center">${item.costType}</td>
+                                <td style="text-align: center">${item.dataName}</td>
                                 <td style="text-align: center">${item.remark}</td>
                                 <td style="text-align: center">${item.unit}</td>
                                 <td style="text-align: center">${item.count}</td>
