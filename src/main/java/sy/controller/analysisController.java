@@ -365,10 +365,14 @@ public class analysisController extends BaseController {
 		String endDate = StringUtil.trimToEmpty(request.getParameter("endDate"));
 		if (startDate.equals("")) {
 			startDate = UtilDate.getshortFirst() + " 00:00:00";
-		}
+		} else {
+            startDate = startDate + " 00:00:00";
+        }
 		if (endDate.equals("")) {
 			endDate = UtilDate.getshortLast() + " 23:59:59";
-		}
+		} else {
+            endDate = endDate + " 23:59:59";
+        }
 
 		List<S_department> departments = sessionInfo.getDepartmentIds();
 		List<Integer> ugroup = new ArrayList<Integer>();
@@ -412,85 +416,120 @@ public class analysisController extends BaseController {
 		return "/app/analysis/boq";
 	}
 
-	@RequestMapping("/securi_boqExecl")
-	public ModelAndView exportExcel(@RequestParam(value = "startDate", required = false) String startDate,
-									@RequestParam(value = "endDate", required = false) String endDate,
-									@RequestParam(value = "selDepartmentId", required = false) int selDepartmentId,
-									HttpServletResponse response, HttpServletRequest request) {
-		ModelAndView mv = new ModelAndView();
-		try {
-			response.setContentType("text/html;charset=utf8");
-			SessionInfo sessionInfo = (SessionInfo) request.getSession().getAttribute(ConfigUtil.getSessionInfoName());
-			String cid = sessionInfo.getCompid();
-			String uid = sessionInfo.getId();
-			if (startDate.equals("")) {
-				startDate = UtilDate.getshortFirst() + " 00:00:00";
-			}
-			if (endDate.equals("")) {
-				endDate = UtilDate.getshortLast() + " 23:59:59";
-			}
+    @RequestMapping("/securi_boqExecl")
+    public ModelAndView exportExcel(@RequestParam(value = "startDate", required = false) String startDate,
+                                    @RequestParam(value = "endDate", required = false) String endDate,
+                                    @RequestParam(value = "selDepartmentId", required = false) int selDepartmentId,
+                                    HttpServletResponse response, HttpServletRequest request) {
+        ModelAndView mv = new ModelAndView();
+        try {
+            response.setContentType("text/html;charset=utf8");
+            SessionInfo sessionInfo = (SessionInfo) request.getSession().getAttribute(ConfigUtil.getSessionInfoName());
+            String cid = sessionInfo.getCompid();
+            String uid = sessionInfo.getId();
+            if (startDate.equals("")) {
+                startDate = UtilDate.getshortFirst() + " 00:00:00";
+            } else {
+                startDate = startDate + " 00:00:00";
+            }
+            if (endDate.equals("")) {
+                endDate = UtilDate.getshortLast() + " 23:59:59";
+            } else {
+                endDate = endDate + " 23:59:59";
+            }
 
-			List<S_department> departments = sessionInfo.getDepartmentIds();
-			List<Integer> ugroup = new ArrayList<Integer>();
-			selDepartmentId = request.getParameter("selDepartmentId") == null ? -1 : Integer.parseInt(request.getParameter("selDepartmentId"));
-			if (selDepartmentId == -1) { // 没传，
-				for (S_department department : departments) {
-					if (department.getId() != 0) {
-						selDepartmentId = department.getId();
-						break;
-					}
-				}
+            List<S_department> departments = sessionInfo.getDepartmentIds();
+            List<Integer> ugroup = new ArrayList<Integer>();
+            selDepartmentId = request.getParameter("selDepartmentId") == null ? -1 : Integer.parseInt(request.getParameter("selDepartmentId"));
+            if (selDepartmentId == -1) { // 没传
+                for (S_department department : departments) {
+                    if (department.getId() != 0) {
+                        selDepartmentId = department.getId();
+                        break;
+                    }
+                }
 
-			}
-			ugroup = departmentService.getUsersByDepartmentId(cid, Integer.parseInt(uid), selDepartmentId);
+            }
+            ugroup = departmentService.getUsersByDepartmentId(cid, Integer.parseInt(uid), selDepartmentId);
 
-			List<FieldData> datas = fieldDataService.getBoq(cid, startDate, endDate, ugroup);
+            List<FieldData> datas = fieldDataService.getBoq(cid, startDate, endDate, ugroup);
 
-			List<Map<String, Object>> projects = new ArrayList<Map<String, Object>>();
-			for (FieldData item : datas) {
-				boolean hasProj = false;
-				for (Map<String, Object> project : projects) {
-					if (project.get("projectId").equals(StringUtil.trimToEmpty(item.getProject_id()))) {
-						hasProj = true;
-					}
-				}
-				if (!hasProj) {
-					Map<String, Object> project = new HashMap<String, Object>();
-					project.put("projectId", item.getProject_id());
-					project.put("projectName", item.getProjectName());
-					projects.add(project);
-				}
-			}
+            List<Map<String, Object>> projects = new ArrayList<Map<String, Object>>();
+            for (FieldData item : datas) {
+                boolean hasProj = false;
+                for (Map<String, Object> project : projects) {
+                    if (project.get("projectId").equals(StringUtil.trimToEmpty(item.getProject_id()))) {
+                        hasProj = true;
+                    }
+                }
+                if (!hasProj) {
+                    Map<String, Object> project = new HashMap<String, Object>();
+                    project.put("projectId", item.getProject_id());
+                    project.put("projectName", item.getProjectName());
+                    projects.add(project);
+                }
+            }
 
-			Map<String, Object> dataMap = new HashMap<String, Object>();
-			List<String> titles = new ArrayList<String>();
+            Map<String, Object> dataMap = new HashMap<String, Object>();
 
-			titles.add("序号");
-			titles.add("项目编码");
-			titles.add("项目名称");
-			titles.add("项目特征描述");
-			titles.add("计量单位");
-			titles.add("工程量");
-			dataMap.put("titles", titles);
+            List<String> titles = new ArrayList<String>();
+            titles.add("市政养护工程清单一览表");
+            titles.add("");
+            titles.add("");
+            titles.add("");
+            titles.add("");
+            titles.add("");
+            dataMap.put("titles", titles);
 
-			List<PageData> varList = new ArrayList<PageData>();
-			for (int i = 0; i < datas.size(); i++) {
-				PageData vpd = new PageData();
+            List<PageData> varList = new ArrayList<PageData>();
+            PageData vpd = new PageData();
+            for (Map<String, Object> project : projects) {
+                vpd = new PageData();
+                vpd.put("var1", "");
+                vpd.put("var2", "");
+                vpd.put("var3", "");
+                vpd.put("var4", "");
+                vpd.put("var5", "");
+                vpd.put("var6", "");
+                varList.add(vpd);
 
-				vpd.put("var1", StringUtil.trimToEmpty(i+1));
-				vpd.put("var2", datas.get(i).getItemCode());
-				vpd.put("var3", datas.get(i).getDataName());
-				vpd.put("var4", datas.get(i).getRemark());
-				vpd.put("var5", datas.get(i).getUnit());
-				vpd.put("var6", datas.get(i).getCount());
-				varList.add(vpd);
-			}
-			dataMap.put("varList", varList);
-			ObjectExcelView erv = new ObjectExcelView();
-			mv = new ModelAndView(erv, dataMap);
-		} catch (Exception e) {
-			logger.error(e.toString(), e);
-		}
-		return mv;
-	}
+                vpd = new PageData();
+                vpd.put("var1", "工程名称:" + project.get("projectName"));
+                vpd.put("var2", "");
+                vpd.put("var3", "");
+                vpd.put("var4", "");
+                vpd.put("var5", "");
+                vpd.put("var6", "");
+                varList.add(vpd);
+
+                vpd = new PageData();
+                vpd.put("var1", "序号");
+                vpd.put("var2", "项目编码");
+                vpd.put("var3", "项目名称");
+                vpd.put("var4", "项目特征描述");
+                vpd.put("var5", "计量单位");
+                vpd.put("var6", "工程量");
+                varList.add(vpd);
+
+                for (int i = 0; i < datas.size(); i++) {
+                    if (Integer.parseInt(StringUtil.trimToEmpty(project.get("projectId"))) == datas.get(i).getProject_id()) {
+                        vpd = new PageData();
+                        vpd.put("var1", StringUtil.trimToEmpty(i + 1));
+                        vpd.put("var2", datas.get(i).getItemCode());
+                        vpd.put("var3", datas.get(i).getDataName());
+                        vpd.put("var4", datas.get(i).getRemark());
+                        vpd.put("var5", datas.get(i).getUnit());
+                        vpd.put("var6", datas.get(i).getCount());
+                        varList.add(vpd);
+                    }
+                }
+            }
+            dataMap.put("varList", varList);
+            ObjectExcelView erv = new ObjectExcelView();
+            mv = new ModelAndView(erv, dataMap);
+        } catch (Exception e) {
+            logger.error(e.toString(), e);
+        }
+        return mv;
+    }
 }
