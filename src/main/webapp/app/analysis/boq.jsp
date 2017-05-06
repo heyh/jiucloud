@@ -125,16 +125,16 @@
     <!-- 显示表格内容，list -->
     <div data-options="region:'center',border:false">
         <table style="width: 100%">
-            <thead>
-            <tr>
-                <th colspan="6" style="font-size: medium">市政养护工程清单一览表</th>
-            </tr>
-            </thead>
-            <tbody></tbody>
+            <%--<thead>--%>
+            <%--<tr>--%>
+                <%--<th colspan="6" style="font-size: medium">市政养护工程清单一览表</th>--%>
+            <%--</tr>--%>
+            <%--</thead>--%>
+            <%--<tbody></tbody>--%>
             <c:forEach items="${projects}" var="project" varStatus="status">
                 <thead>
                 <tr>
-                    <th colspan="6" style="text-align: left;">工程名称：${project.projectName}</th>
+                    <th colspan="7" style="text-align: left;">工程名称：${project.projectName}</th>
                 </tr>
                 <tr>
                     <th scope="col">序号</th>
@@ -143,6 +143,7 @@
                     <th scope="col">项目特征描述</th>
                     <th scope="col">计量单位</th>
                     <th scope="col">工程量</th>
+                    <th scope="col">备注</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -156,6 +157,7 @@
                                 <td style="text-align: center">${item.remark}</td>
                                 <td style="text-align: center">${item.unit}</td>
                                 <td style="text-align: center">${item.count}</td>
+                                <td style="text-align: center"></td>
                             </tr>
                         </c:when>
                     </c:choose>

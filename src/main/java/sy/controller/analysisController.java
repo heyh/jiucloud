@@ -1,5 +1,6 @@
 package sy.controller;
 
+import freemarker.ext.beans.HashAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -472,58 +473,63 @@ public class analysisController extends BaseController {
 
             Map<String, Object> dataMap = new HashMap<String, Object>();
 
-            List<String> titles = new ArrayList<String>();
-            titles.add("市政养护工程清单一览表");
-            titles.add("");
-            titles.add("");
-            titles.add("");
-            titles.add("");
-            titles.add("");
-            dataMap.put("titles", titles);
+            String largeTitleContent = "市政养护工程清单一览表";
+            int cellCount = 7;
+            Map<String, Object> largeTitle = new HashMap<String, Object>();
+            largeTitle.put("largeTitleContent", largeTitleContent);
+            largeTitle.put("cellCount", cellCount);
+            dataMap.put("largeTitle", largeTitle);
+
 
             List<PageData> varList = new ArrayList<PageData>();
             PageData vpd = new PageData();
-            for (Map<String, Object> project : projects) {
-                vpd = new PageData();
-                vpd.put("var1", "");
-                vpd.put("var2", "");
-                vpd.put("var3", "");
-                vpd.put("var4", "");
-                vpd.put("var5", "");
-                vpd.put("var6", "");
-                varList.add(vpd);
+            for (int i=0; i<projects.size(); i++) {
+            	if (i > 0) {
+					vpd = new PageData();
+					vpd.put("var1", "");
+					vpd.put("var2", "");
+					vpd.put("var3", "");
+					vpd.put("var4", "");
+					vpd.put("var5", "");
+					vpd.put("var6", "");
+					vpd.put("var7", "");
+					varList.add(vpd);
+				}
 
-                vpd = new PageData();
-                vpd.put("var1", "工程名称:" + project.get("projectName"));
-                vpd.put("var2", "");
-                vpd.put("var3", "");
-                vpd.put("var4", "");
-                vpd.put("var5", "");
-                vpd.put("var6", "");
-                varList.add(vpd);
+				vpd = new PageData();
+				vpd.put("var1", "工程名称:" + projects.get(i).get("projectName"));
+				vpd.put("var2", "");
+				vpd.put("var3", "");
+				vpd.put("var4", "");
+				vpd.put("var5", "");
+				vpd.put("var6", "");
+				vpd.put("var7", "");
+				varList.add(vpd);
 
-                vpd = new PageData();
-                vpd.put("var1", "序号");
-                vpd.put("var2", "项目编码");
-                vpd.put("var3", "项目名称");
-                vpd.put("var4", "项目特征描述");
-                vpd.put("var5", "计量单位");
-                vpd.put("var6", "工程量");
-                varList.add(vpd);
+				vpd = new PageData();
+				vpd.put("var1", "序号");
+				vpd.put("var2", "项目编码");
+				vpd.put("var3", "项目名称");
+				vpd.put("var4", "项目特征描述");
+				vpd.put("var5", "计量单位");
+				vpd.put("var6", "工程量");
+				vpd.put("var7", "备注");
+				varList.add(vpd);
 
-                for (int i = 0; i < datas.size(); i++) {
-                    if (Integer.parseInt(StringUtil.trimToEmpty(project.get("projectId"))) == datas.get(i).getProject_id()) {
-                        vpd = new PageData();
-                        vpd.put("var1", StringUtil.trimToEmpty(i + 1));
-                        vpd.put("var2", datas.get(i).getItemCode());
-                        vpd.put("var3", datas.get(i).getDataName());
-                        vpd.put("var4", datas.get(i).getRemark());
-                        vpd.put("var5", datas.get(i).getUnit());
-                        vpd.put("var6", datas.get(i).getCount());
-                        varList.add(vpd);
-                    }
-                }
-            }
+				for (int j = 0; j < datas.size(); j++) {
+					if (Integer.parseInt(StringUtil.trimToEmpty(projects.get(i).get("projectId"))) == datas.get(j).getProject_id()) {
+						vpd = new PageData();
+						vpd.put("var1", StringUtil.trimToEmpty(j + 1));
+						vpd.put("var2", datas.get(j).getItemCode());
+						vpd.put("var3", datas.get(j).getDataName());
+						vpd.put("var4", datas.get(j).getRemark());
+						vpd.put("var5", datas.get(j).getUnit());
+						vpd.put("var6", datas.get(j).getCount());
+						vpd.put("var7", "");
+						varList.add(vpd);
+					}
+				}
+			}
             dataMap.put("varList", varList);
             ObjectExcelView erv = new ObjectExcelView();
             mv = new ModelAndView(erv, dataMap);
