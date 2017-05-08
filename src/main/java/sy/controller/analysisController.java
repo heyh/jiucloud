@@ -395,7 +395,7 @@ public class analysisController extends BaseController {
 		for (FieldData item : boq) {
 			boolean hasProj = false;
 			for (Map<String, Object> project : projects) {
-				if (project.get("projectId").equals(StringUtil.trimToEmpty(item.getProject_id()))) {
+				if (StringUtil.trimToEmpty(project.get("projectId")).equals(StringUtil.trimToEmpty(item.getProject_id()))) {
 					hasProj = true;
 				}
 			}
@@ -459,7 +459,7 @@ public class analysisController extends BaseController {
             for (FieldData item : datas) {
                 boolean hasProj = false;
                 for (Map<String, Object> project : projects) {
-                    if (project.get("projectId").equals(StringUtil.trimToEmpty(item.getProject_id()))) {
+                    if (StringUtil.trimToEmpty(project.get("projectId")).equals(StringUtil.trimToEmpty(item.getProject_id()))) {
                         hasProj = true;
                     }
                 }
