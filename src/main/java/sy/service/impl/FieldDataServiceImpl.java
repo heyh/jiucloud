@@ -231,6 +231,12 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
             hql += " or supplier like :supplier )";
             params.put("supplier", "%%" + keyword + "%%");
 
+            hql += " or remark like :remark ";
+            params.put("remark", "%%" + keyword + "%%");
+
+            hql += " or specifications like :specifications ";
+            params.put("specifications", "%%" + keyword + "%%");
+
         }
         // add by heyh end
 
