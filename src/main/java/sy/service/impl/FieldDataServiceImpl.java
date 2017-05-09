@@ -647,41 +647,44 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
     @Override
     public List<FieldData> getBoq(String cid, String startDate, String endDate, List<Integer> ugroup) {
         Map<String, Object> params = new HashMap<String, Object>();
-        String hql = "";
-        hql = " from TFieldData t  where isDelete=0 and substring(itemcode,1,3)='700' and cid=:cid ";
+        String sql = "";
+        sql = "select itemCode, dataName, unit, remark, specifications, projectName, sum(count) from TFieldData t  where isDelete=0 and substring(itemcode,1,3)='700' and cid=:cid ";
         params.put("cid", cid);
 
         if (!StringUtil.trimToEmpty(startDate).equals("")) {
-            hql += " and t.creatTime >= :startTime ";
+            sql += " and t.creatTime >= :startTime ";
             params.put("startTime", DateKit.strToDateOrTime(startDate));
         }
         if (!StringUtil.trimToEmpty(endDate).equals("")) {
-            hql += " and t.creatTime <= :endTime ";
+            sql += " and t.creatTime <= :endTime ";
             params.put("endTime", DateKit.strToDateOrTime(endDate));
         }
 
         String uids = StringUtils.join(ugroup, ",");
-        hql += " and  uid in (" + uids + ") ";
+        sql += " and  uid in (" + uids + ") ";
 
-        List<TFieldData> l = fieldDataDaoI.find(hql, params);
+        sql += " group by itemCode, dataName, unit, remark, specifications, projectName";
+
+        List<Object[]> l = fieldDataDaoI.findBySql(sql, params);
         List<FieldData> boq = new ArrayList<FieldData>();
-        for (TFieldData tem : l) {
+        for (Object[] tem : l) {
             FieldData f = new FieldData();
-            f.setId(tem.getId());
-            f.setDataName(tem.getDataName());
-            f.setItemCode(tem.getItemCode());
-            f.setCount(tem.getCount());
-            f.setUnit(tem.getUnit());
-            f.setSpecifications(tem.getSpecifications());
-            f.setRemark(tem.getRemark());
-            Cost cost = costDao.get("from Cost where isDelete=0 and itemCode='" + tem.getItemCode() + "'");
+//            f.setId(tem.getId());
+            f.setItemCode(StringUtil.trimToEmpty(tem[0]));
+            f.setDataName(StringUtil.trimToEmpty(tem[1]));
+            f.setUnit(StringUtil.trimToEmpty(tem[2]));
+            f.setRemark(StringUtil.trimToEmpty(tem[3]));
+            f.setSpecifications(StringUtil.trimToEmpty(tem[4]));
+            f.setProject_id(Integer.parseInt(StringUtil.trimToEmpty(tem[5])));
+            f.setCount(StringUtil.trimToEmpty(tem[6]));
+            Cost cost = costDao.get("from Cost where isDelete=0 and itemCode='" + StringUtil.trimToEmpty(tem[0]) + "'");
             if (cost == null) {
                 f.setCostType("该费用类型可能已经被删除");
             } else {
                 f.setCostType(cost.getCostType());
             }
-            f.setProject_id(Integer.parseInt(tem.getProjectName()));
-            Project project = projectDao.get("from Project where isdel=0 and id='" + tem.getProjectName() + "'");
+            f.setProject_id(Integer.parseInt(StringUtil.trimToEmpty(tem[5])));
+            Project project = projectDao.get("from Project where isdel=0 and id='" + Integer.parseInt(StringUtil.trimToEmpty(tem[5])) + "'");
             if (project == null) {
                 continue; // 工程删除，记录不显示
             } else {
