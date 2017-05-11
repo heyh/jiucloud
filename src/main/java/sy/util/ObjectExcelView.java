@@ -39,9 +39,9 @@ public class ObjectExcelView extends AbstractExcelView {
 		headerStyle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
 		HSSFFont headerFont = workbook.createFont();	//标题字体
 		headerFont.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
-		headerFont.setFontHeightInPoints((short)15);
+		headerFont.setFontHeightInPoints((short)30);
 		headerStyle.setFont(headerFont);
-		short width = 30,height=25*20;
+		short width = 30, headerHeight=25*40, contentHeight=25*20;
 		sheet.setDefaultColumnWidth(width);
 
 		headerStyle.setBorderLeft(HSSFCellStyle.BORDER_THIN);
@@ -69,11 +69,15 @@ public class ObjectExcelView extends AbstractExcelView {
 				cell.setCellStyle(headerStyle);
 				setText(cell, title);
 			}
-			sheet.getRow(0).setHeight(height);
+			sheet.getRow(0).setHeight(headerHeight);
 		}
 
 		// 内容
 		HSSFCellStyle contentStyle = workbook.createCellStyle(); //内容样式
+		HSSFFont contentFont = workbook.createFont();	//标题字体
+		contentFont.setBoldweight((short)200);
+		contentFont.setFontHeightInPoints((short)15);
+		contentStyle.setFont(contentFont);
 		contentStyle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
 		contentStyle.setBorderLeft(HSSFCellStyle.BORDER_THIN);
 		contentStyle.setBorderRight(HSSFCellStyle.BORDER_THIN);
@@ -90,7 +94,7 @@ public class ObjectExcelView extends AbstractExcelView {
 				cell.setCellStyle(contentStyle);
 				setText(cell,varstr);
 			}
-			
+			sheet.getRow(i+1).setHeight(contentHeight);
 		}
 		
 	}

@@ -5,7 +5,9 @@
 <%@ page import="java.util.List" %>
 <%@ page import="net.sf.json.JSONArray" %>
 <%@ page import="sy.pageModel.SessionInfo" %>
-<%@ page import="sy.util.ConfigUtil" %><%--
+<%@ page import="sy.util.ConfigUtil" %>
+<%@ page import="net.sf.json.JSONObject" %>
+<%--
   Created by IntelliJ IDEA.
   User: heyh
   Date: 16/7/10
@@ -17,13 +19,19 @@
 <%
     List<Param> unitParams = new ArrayList<Param>();
     JSONArray costTree = new JSONArray();
-
+    List<Map<String, Object>> dataCostInfos = new ArrayList<Map<String, Object>>();
+    JSONArray jsonArray = new JSONArray();
     SessionInfo sessionInfo = (SessionInfo) session.getAttribute(ConfigUtil.getSessionInfoName());
     if (sessionInfo == null) {
         response.sendRedirect(request.getContextPath());
     } else {
         unitParams = sessionInfo.getUnitParams();
         costTree = sessionInfo.getCostTree();
+        dataCostInfos = sessionInfo.getCostTypeInfos().get("dataCostInfos");
+        for (Map<String, Object> nodeMap : dataCostInfos) {
+            JSONObject nodeJson = JSONObject.fromObject(nodeMap);
+            jsonArray.add(nodeJson);
+        }
     }
 
 %>
@@ -315,10 +323,18 @@
                         //清除选中
                         $('.easyui-combotree').treegrid("unselect");
                     } else {
-                        var arr =  <%= costTree %>;
-                        for (var i in arr) {
-                            if (arr[i].itemCode.substring(0, 3) == '700') {
+                        debugger;
+                        var _jsonArray =  <%= jsonArray %>;
+                        for (var i=0; i<_jsonArray.length; i++) {
+                            console.log(_jsonArray[i].itemCode)
+                            console.log(_jsonArray[i].nid)
+                            console.log(node.id)
+                            console.log(node)
+                            if (_jsonArray[i].itemCode.substring(0, 3) == '700' && _jsonArray[i].nid == node.id) {
                                 $('#dataName').val(node.text);
+                                break;
+                            } else {
+                                $('#dataName').val('');
                             }
                         }
                     }
