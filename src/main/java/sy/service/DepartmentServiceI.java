@@ -59,5 +59,7 @@ public interface DepartmentServiceI {
 	public List<Object[]> getAllDepartmentList(String cid);
 
 	public List<Integer> getUsersByDepartmentId(String cid, Integer uid, Integer departmentId);
+
+	public List<S_department> getFirstLevelUnderDepByUid(String cid, String uid);
 }
 

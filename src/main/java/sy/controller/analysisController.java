@@ -1,6 +1,7 @@
 package sy.controller;
 
 import freemarker.ext.beans.HashAdapter;
+import net.sf.json.JSONArray;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -327,7 +328,8 @@ public class analysisController extends BaseController {
 		SessionInfo sessionInfo = (SessionInfo) request.getSession().getAttribute(ConfigUtil.getSessionInfoName());
 		String cid = sessionInfo.getCompid();
 		String uid = sessionInfo.getId();
-		List<S_department> departments = sessionInfo.getDepartmentIds();
+//		List<S_department> departments = sessionInfo.getDepartmentIds();
+		List<S_department> departments = departmentService.getFirstLevelUnderDepByUid(cid, uid);
 
 		List<Integer> ugroup = new ArrayList<Integer>();
 		Integer selDepartmentId = request.getParameter("selDepartmentId") == null ? -1 : Integer.parseInt(request.getParameter("selDepartmentId"));
@@ -351,7 +353,7 @@ public class analysisController extends BaseController {
 		request.setAttribute("selectedMonth", selectedMonth);
 		request.setAttribute("selDepartmentId", selDepartmentId);
 		if (departments.size()>1) {
-			request.setAttribute("departments", departments);
+			request.setAttribute("departments", JSONArray.fromObject(departments));
 		}
 
 		return "/app/analysis/materialStatReport";
@@ -375,7 +377,9 @@ public class analysisController extends BaseController {
             endDate = endDate + " 23:59:59";
         }
 
-		List<S_department> departments = sessionInfo.getDepartmentIds();
+//		List<S_department> departments = sessionInfo.getDepartmentIds();
+		List<S_department> departments = departmentService.getFirstLevelUnderDepByUid(cid, uid);
+
 		List<Integer> ugroup = new ArrayList<Integer>();
 		Integer selDepartmentId = request.getParameter("selDepartmentId") == null ? -1 : Integer.parseInt(request.getParameter("selDepartmentId"));
 		if (selDepartmentId == -1) { // 没传，
@@ -412,7 +416,7 @@ public class analysisController extends BaseController {
 		request.setAttribute("last", endDate.substring(0, 10));
 		request.setAttribute("selDepartmentId", selDepartmentId);
 		if (departments.size()>1) {
-			request.setAttribute("departments", departments);
+			request.setAttribute("departments", JSONArray.fromObject(departments));
 		}
 		return "/app/analysis/boq";
 	}
@@ -439,8 +443,10 @@ public class analysisController extends BaseController {
                 endDate = endDate + " 23:59:59";
             }
 
-            List<S_department> departments = sessionInfo.getDepartmentIds();
-            List<Integer> ugroup = new ArrayList<Integer>();
+//            List<S_department> departments = sessionInfo.getDepartmentIds();
+			List<S_department> departments = departmentService.getFirstLevelUnderDepByUid(cid, uid);
+
+			List<Integer> ugroup = new ArrayList<Integer>();
             selDepartmentId = request.getParameter("selDepartmentId") == null ? -1 : Integer.parseInt(request.getParameter("selDepartmentId"));
             if (selDepartmentId == -1) { // 没传
                 for (S_department department : departments) {
@@ -473,7 +479,7 @@ public class analysisController extends BaseController {
 
             Map<String, Object> dataMap = new HashMap<String, Object>();
 
-            String largeTitleContent = "市政养护工程清单一览表";
+            String largeTitleContent = "工程量清单";
             int cellCount = 7;
             Map<String, Object> largeTitle = new HashMap<String, Object>();
             largeTitle.put("largeTitleContent", largeTitleContent);

@@ -527,4 +527,29 @@ public class DepartmentServiceImpl implements DepartmentServiceI {
 
         return uids;
     }
+
+    @Override
+    public List<S_department> getFirstLevelUnderDepByUid(String cid, String uid) {
+	    List<S_department> departments = new ArrayList<S_department>();
+        S_department department = new S_department();
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("cid", cid);
+        params.put("uid", uid);
+        String sql = "SELECT DISTINCT a.id, a.name, a.parent_id " +
+                "  FROM jsw_corporation_department a, jsw_corporation_department b " +
+                "  WHERE " +
+                "  a.company_id = :cid " +
+                "  AND find_in_set(:uid, a.user_id) " +
+                "  AND (b.id = a.id OR b.parent_id = a.id) " +
+                "  AND a.endnode = '0' " +
+                "  AND b.endnode = '0' ";
+        List<Object[]> deps = departmentDaoI.findBySql(sql, params);
+        for (Object[] tem : deps) {
+            department = new S_department();
+            department.setId((Integer) tem[0]);
+            department.setName((String) tem[1]);
+            departments.add(department);
+        }
+        return departments;
+    }
 }

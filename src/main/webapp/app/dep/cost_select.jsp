@@ -38,7 +38,16 @@
 								$('#searchForm table').show();
 								parent.$.messager.progress('close');
 								$(this).datagrid('tooltip');
-							}
+							},
+//                            onCheck: function (rowIndex,rowData) {
+//                                var rows = $("#dataGrid").datagrid("getRows");
+//
+//
+//                                for(var i=0;i<rows.length;i++) {
+//                                    $("#dataGrid").datagrid('checkedRow', i);
+//                                }
+//
+//                            }
 						});
 	});
 

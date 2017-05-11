@@ -13,14 +13,14 @@
 
 <%
     String userId = null;
-    JSONArray departments = new JSONArray();
+//    JSONArray departments = new JSONArray();
 
     SessionInfo sessionInfo = (SessionInfo) session.getAttribute(ConfigUtil.getSessionInfoName());
     if (sessionInfo == null) {
         response.sendRedirect(request.getContextPath());
     } else {
         userId = sessionInfo.getId();
-        departments = JSONArray.fromObject(sessionInfo.getDepartmentIds());
+//        departments = JSONArray.fromObject(sessionInfo.getDepartmentIds());
     }
 
 %>
@@ -50,7 +50,9 @@
             });
 
             var optionstring = '';
-            var arr =  <%= departments %>;
+            debugger
+            var arr =  ${departments};
+            debugger
             if (arr.length < 2) {
                 $("#selDepartmentId").hide();
             } else {

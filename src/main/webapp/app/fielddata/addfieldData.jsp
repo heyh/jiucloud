@@ -314,6 +314,13 @@
                     if (!isLeaf) {
                         //清除选中
                         $('.easyui-combotree').treegrid("unselect");
+                    } else {
+                        var arr =  <%= costTree %>;
+                        for (var i in arr) {
+                            if (arr[i].itemCode.substring(0, 3) == '700') {
+                                $('#dataName').val(node.text);
+                            }
+                        }
                     }
                 },
                 onChange: function (node) {
@@ -517,10 +524,10 @@
                         </div>
                     </div>
                     <div class="control-group">
-                        <label class="control-label" for="specifications">规格型号(或桥段、路段):</label>
+                        <label class="control-label" for="price">单价:</label>
 
                         <div class="controls">
-                            <input type="text" name="specifications" id="specifications" class="easyui-textbox" style="width:236px" onblur="cal()">
+                            <input type="text" name="price" id="price" class="easyui-numberbox" precision="2" style="width:236px" onblur="cal()">
                         </div>
                     </div>
                     <div class="control-group">
@@ -564,12 +571,13 @@
                     </div>
 
                     <div class="control-group">
-                        <label class="control-label" for="price">单价:</label>
+                        <label class="control-label" for="specifications">规格型号(或桥段、路段):</label>
 
                         <div class="controls">
-                            <input type="text" name="price" id="price" class="easyui-numberbox" precision="2" style="width:236px" onblur="cal()">
+                            <input type="text" name="specifications" id="specifications" class="easyui-textbox" style="width:236px" onblur="cal()">
                         </div>
                     </div>
+
                     <div class="control-group">
                         <label class="control-label" for="sumprice">金额:</label>
 
