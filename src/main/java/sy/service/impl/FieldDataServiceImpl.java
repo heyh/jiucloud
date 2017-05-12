@@ -676,18 +676,24 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
             FieldData f = new FieldData();
             f.setId(Integer.parseInt(StringUtil.trimToEmpty(tem[0])));
             f.setItemCode(StringUtil.trimToEmpty(tem[1]));
-            f.setDataName(StringUtil.trimToEmpty(tem[2]));
-            f.setUnit(StringUtil.trimToEmpty(tem[3]));
-            f.setRemark(StringUtil.trimToEmpty(tem[4]));
-            f.setSpecifications(StringUtil.trimToEmpty(tem[5]));
-            f.setProject_id(Integer.parseInt(StringUtil.trimToEmpty(tem[6])));
-            f.setCount(StringUtil.trimToEmpty(tem[7]));
             Cost cost = costDao.get("from Cost where isDelete=0 and itemCode='" + StringUtil.trimToEmpty(tem[1]) + "'");
             if (cost == null) {
                 f.setCostType("该费用类型可能已经被删除");
             } else {
                 f.setCostType(cost.getCostType());
             }
+            String dataName = StringUtil.trimToEmpty(tem[2]);
+            if (!dataName.contains(f.getCostType())) {
+                dataName += dataName + "-" + f.getCostType();
+            }
+            f.setDataName(dataName);
+
+            f.setUnit(StringUtil.trimToEmpty(tem[3]));
+            f.setRemark(StringUtil.trimToEmpty(tem[4]));
+            f.setSpecifications(StringUtil.trimToEmpty(tem[5]));
+            f.setProject_id(Integer.parseInt(StringUtil.trimToEmpty(tem[6])));
+            f.setCount(StringUtil.trimToEmpty(tem[7]));
+
             f.setProject_id(Integer.parseInt(StringUtil.trimToEmpty(tem[6])));
             Project project = projectDao.get("from Project where isdel=0 and id='" + Integer.parseInt(StringUtil.trimToEmpty(tem[6])) + "'");
             if (project == null) {

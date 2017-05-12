@@ -156,7 +156,7 @@
                                 <td style="text-align: center">${item.itemCode}</td>
                                 <td style="text-align: center">${item.dataName}</td>
                                 <td style="text-align: center">${item.remark}</td>
-                                <td style="text-align: center">${item.unit}</td>
+                                <td style="text-align: center; width: 50px" >${item.unit}</td>
                                 <td style="text-align: center">${item.count}</td>
                                 <td style="text-align: center">${item.id}</td>
                             </tr>
