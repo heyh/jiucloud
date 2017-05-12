@@ -191,9 +191,24 @@
                 alert("价格不能为空");
                 return;
             }
-            if (count == '') {
+            if (count == '' || count == '0') {
                 alert("数量不能为空");
                 return;
+            }
+
+            var _jsonArray =  <%= jsonArray %>;
+            for (var i=0; i<_jsonArray.length; i++) {
+                if (_jsonArray[i].itemCode.substring(0, 3) == '700' && _jsonArray[i].nid == costType) {
+                    if (unit == '') {
+                        alert("单位不能为空");
+                        return;
+                    }
+                    if (specifications == '') {
+                        alert("规格（设施名称）不能为空");
+                        return;
+                    }
+                }
+
             }
 
             cfg.data = {
@@ -323,13 +338,8 @@
                         //清除选中
                         $('.easyui-combotree').treegrid("unselect");
                     } else {
-                        debugger;
                         var _jsonArray =  <%= jsonArray %>;
                         for (var i=0; i<_jsonArray.length; i++) {
-                            console.log(_jsonArray[i].itemCode)
-                            console.log(_jsonArray[i].nid)
-                            console.log(node.id)
-                            console.log(node)
                             if (_jsonArray[i].itemCode.substring(0, 3) == '700' && _jsonArray[i].nid == node.id) {
                                 $('#dataName').val(node.text);
                                 break;
@@ -340,7 +350,6 @@
                     }
                 },
                 onChange: function (node) {
-                    debugger;
                     var _nid = node;
 
                     $.ajax({
@@ -508,11 +517,10 @@
                         </div>
                     </div>
                     <div class="control-group">
-                        <label class="control-label" for="section">标段(属性):</label>
+                        <label class="control-label" for="specifications">规格型号(设施名称):</label>
 
                         <div class="controls">
-                            <select style="width:250px;" id="section" name="section" onchange="changeSection()">
-                            </select>
+                            <input type="text" name="specifications" id="specifications" class="easyui-textbox" style="width:236px" onblur="cal()">
                         </div>
                     </div>
                     <div class="control-group">
@@ -532,13 +540,7 @@
                             </select>
                         </div>
                     </div>
-                    <div class="control-group">
-                        <label class="control-label" for="count">数量:</label>
 
-                        <div class="controls">
-                            <input type="text" name="count" id="count" class="easyui-numberbox" precision="4" style="width:236px" onblur="cal()">
-                        </div>
-                    </div>
                     <div class="control-group">
                         <label class="control-label" for="price">单价:</label>
 
@@ -554,13 +556,11 @@
                             <%--<input type="text" name="remark" id="remark" class="easyui-textbox" style="width:236px">--%>
                         </div>
                     </div>
-                    <div class="control-group" style="display:none" id="chooseApproveDiv">
-                        <label class="control-label" for="chooseApprove">审批人选择:</label>
+                    <div class="control-group">
+                        <label class="control-label" for="section">标段(属性):</label>
 
                         <div class="controls">
-                            <select onchange="isChooseApprove(this.options[this.options.selectedIndex].value)" style="width:250px;margin-bottom: 20px" id="chooseApprove" name="chooseApprove">
-                                <option value="0" selected = "selected">默认</option>
-                                <option value="1">自定义</option>
+                            <select style="width:250px;" id="section" name="section" onchange="changeSection()">
                             </select>
                         </div>
                     </div>
@@ -585,16 +585,14 @@
                         </div>
 
                     </div>
-
                     <div class="control-group">
-                        <label class="control-label" for="specifications">规格型号(设施名称):</label>
+                        <label class="control-label" for="count">数量:</label>
 
                         <div class="controls">
-                            <input type="text" name="specifications" id="specifications" class="easyui-textbox" style="width:236px" onblur="cal()">
+                            <input type="text" name="count" id="count" class="easyui-numberbox" precision="4" style="width:236px" onblur="cal()">
                         </div>
                     </div>
-
-                    <div class="control-group">
+                    <div class="control-group" style="display: none">
                         <label class="control-label" for="sumprice">金额:</label>
 
                         <div class="controls">
@@ -615,6 +613,16 @@
                             <select onchange="isNeedApprove(this.options[this.options.selectedIndex].value)" style="width:250px;" id="needApproved" name="needApproved">
                                 <option value="0" selected = "selected">不需要</option>
                                 <option value="1">需要</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="control-group" style="display:none" id="chooseApproveDiv">
+                        <label class="control-label" for="chooseApprove">审批人选择:</label>
+
+                        <div class="controls">
+                            <select onchange="isChooseApprove(this.options[this.options.selectedIndex].value)" style="width:250px;margin-bottom: 20px" id="chooseApprove" name="chooseApprove">
+                                <option value="0" selected = "selected">默认</option>
+                                <option value="1">自定义</option>
                             </select>
                         </div>
                     </div>

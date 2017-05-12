@@ -158,7 +158,7 @@
                                 <td style="text-align: center">${item.remark}</td>
                                 <td style="text-align: center">${item.unit}</td>
                                 <td style="text-align: center">${item.count}</td>
-                                <td style="text-align: center"></td>
+                                <td style="text-align: center">${item.id}</td>
                             </tr>
                         </c:when>
                     </c:choose>
