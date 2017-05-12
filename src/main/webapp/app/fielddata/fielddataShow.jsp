@@ -99,6 +99,11 @@
 										width : 350
 									},
 									{
+										field : 'specifications',
+										title : '规格型号(或桥段、路段)',
+										width : 200
+									},
+									{
 										field : 'unit',
 										title : '单位',
 										width : 100
@@ -145,11 +150,6 @@
                                             return str;
 											<%--return row.itemCode.substring(0, 3) != '700' || <%= hasOnlyReadRight %> || <%= hasReadEditRight %> ? (row.count * ((row.price==null || row.price=='') ? 0 : row.price)).toFixed(2) : '***';--%>
 										}
-									},
-									{
-										field : 'specifications',
-										title : '规格型号(或桥段、路段)',
-										width : 100
 									},
 									{
 										field : 'supplier',

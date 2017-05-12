@@ -535,20 +535,35 @@ public class DepartmentServiceImpl implements DepartmentServiceI {
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("cid", cid);
         params.put("uid", uid);
-        String sql = "SELECT DISTINCT a.id, a.name, a.parent_id " +
-                "  FROM jsw_corporation_department a, jsw_corporation_department b " +
-                "  WHERE " +
-                "  a.company_id = :cid " +
-                "  AND find_in_set(:uid, a.user_id) " +
-                "  AND (b.id = a.id OR b.parent_id = a.id) " +
-                "  AND a.endnode = '0' " +
-                "  AND b.endnode = '0' ";
-        List<Object[]> deps = departmentDaoI.findBySql(sql, params);
-        for (Object[] tem : deps) {
+
+        String sql = "SELECT DISTINCT a.id, a.name, a.parent_id FROM jsw_corporation_department a WHERE a.company_id = :cid AND find_in_set(:uid, a.user_id)";
+        List<Object[]> myDeps = departmentDaoI.findBySql(sql, params);
+        for (Object[] tem : myDeps) {
             department = new S_department();
             department.setId((Integer) tem[0]);
             department.setName((String) tem[1]);
             departments.add(department);
+        }
+
+        for (Object[] myDep : myDeps) {
+            params = new HashMap<String, Object>();
+            params.put("parent_id", myDep[0]);
+            sql = "SELECT DISTINCT id, name, parent_id FROM jsw_corporation_department a WHERE parent_id = :parent_id AND endnode = '0'";
+            List<Object[]> underDeps = departmentDaoI.findBySql(sql, params);
+            for (Object[] tem : underDeps) {
+                department = new S_department();
+                department.setId((Integer) tem[0]);
+                department.setName((String) tem[1]);
+                departments.add(department);
+            }
+        }
+
+        for(int i=0;i<departments.size();i++){
+            for(int j=departments.size()-1;j>i;j--){
+                if(StringUtil.trimToEmpty(departments.get(i).getId()).equals(StringUtil.trimToEmpty(departments.get(j).getId()))){
+                    departments.remove(j);
+                }
+            }
         }
         return departments;
     }
