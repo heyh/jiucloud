@@ -148,7 +148,7 @@
 									},
 									{
 										field : 'specifications',
-										title : '规格类型',
+										title : '规格型号(或桥段、路段)',
 										width : 100
 									},
 									{
