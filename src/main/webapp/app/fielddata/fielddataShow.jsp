@@ -84,10 +84,11 @@
 
 									},
 									{
-										field : 'sectionName',
-										title : '标段(属性)',
-										width : 100
+										field : 'specifications',
+										title : '规格型号(设施名称)',
+										width : 200
 									},
+
 									{
 										field : 'costType',
 										title : '类型',
@@ -99,9 +100,9 @@
 										width : 350
 									},
 									{
-										field : 'specifications',
-										title : '规格型号(设施名称)',
-										width : 200
+										field : 'remark',
+										title : '备注(特征)',
+										width : 150
 									},
 									{
 										field : 'unit',
@@ -150,6 +151,11 @@
                                             return str;
 											<%--return row.itemCode.substring(0, 3) != '700' || <%= hasOnlyReadRight %> || <%= hasReadEditRight %> ? (row.count * ((row.price==null || row.price=='') ? 0 : row.price)).toFixed(2) : '***';--%>
 										}
+									},
+									{
+										field : 'sectionName',
+										title : '标段(属性)',
+										width : 100
 									},
 									{
 										field : 'supplier',
@@ -203,11 +209,7 @@
                                         title : '当前审批人',
                                         width : 100
                                     },
-									{
-										field : 'remark',
-										title : '备注(特征)',
-										width : 150
-									},
+
 									{
 										field : 'action',
 										title : '操作',
