@@ -52,7 +52,6 @@
             var optionstring = '';
             debugger
             var arr =  ${departments};
-            debugger
             if (arr.length < 2) {
                 $("#selDepartmentId").hide();
             } else {

@@ -80,9 +80,6 @@
 
         });
 
-//        function selDepartment() {
-//            $("#selDepartmentId").val($("#departmentId").val());
-//        }
         function searchFun() {
             $('#searchForm').submit();
         }

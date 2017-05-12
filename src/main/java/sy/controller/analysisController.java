@@ -352,9 +352,9 @@ public class analysisController extends BaseController {
 		request.setAttribute("materialStatInfos", materialStatInfos);
 		request.setAttribute("selectedMonth", selectedMonth);
 		request.setAttribute("selDepartmentId", selDepartmentId);
-		if (departments.size()>1) {
+//		if (departments.size()>1) {
 			request.setAttribute("departments", JSONArray.fromObject(departments));
-		}
+//		}
 
 		return "/app/analysis/materialStatReport";
 	}
@@ -415,9 +415,9 @@ public class analysisController extends BaseController {
 		request.setAttribute("first", startDate.substring(0, 10));
 		request.setAttribute("last", endDate.substring(0, 10));
 		request.setAttribute("selDepartmentId", selDepartmentId);
-		if (departments.size()>1) {
+//		if (departments.size()>1) {
 			request.setAttribute("departments", JSONArray.fromObject(departments));
-		}
+//		}
 		return "/app/analysis/boq";
 	}
 
