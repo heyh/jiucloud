@@ -508,7 +508,7 @@
                         </div>
                     </div>
                     <div class="control-group">
-                        <label class="control-label" for="section">标段:</label>
+                        <label class="control-label" for="section">标段(属性):</label>
 
                         <div class="controls">
                             <select style="width:250px;" id="section" name="section" onchange="changeSection()">
@@ -547,7 +547,7 @@
                         </div>
                     </div>
                     <div class="control-group">
-                        <label class="control-label" for="remark">备注:</label>
+                        <label class="control-label" for="remark">备注(特征):</label>
 
                         <div class="controls">
                             <textarea type="text" name="remark" id="remark" style="width:236px"></textarea>
@@ -587,7 +587,7 @@
                     </div>
 
                     <div class="control-group">
-                        <label class="control-label" for="specifications">规格型号(或桥段、路段):</label>
+                        <label class="control-label" for="specifications">规格型号(设施名称):</label>
 
                         <div class="controls">
                             <input type="text" name="specifications" id="specifications" class="easyui-textbox" style="width:236px" onblur="cal()">

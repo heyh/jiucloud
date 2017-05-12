@@ -176,7 +176,7 @@
 						</div>
 					</div>
 					<div class="control-group">
-						<label class="control-label" for="proName">标段:</label>
+						<label class="control-label" for="proName">标段(属性):</label>
 
 						<div class="controls">
 							<select id="section" name="section" readonly="true">
@@ -239,7 +239,7 @@
 						<%--</div>--%>
 					<%--</div>--%>
 					<div class="control-group">
-						<label class="control-label" for="dataName">规格型号:</label>
+						<label class="control-label" for="dataName">规格型号(设施名称):</label>
 
 						<div class="controls">
 							<input type="text" name="specifications" id="specifications" value="${tfielddata.specifications}" readonly="true">
