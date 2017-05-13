@@ -531,7 +531,7 @@ public class analysisController extends BaseController {
 						vpd.put("var4", datas.get(j).getRemark());
 						vpd.put("var5", datas.get(j).getUnit());
 						vpd.put("var6", datas.get(j).getCount());
-						vpd.put("var7", datas.get(j).getId());
+						vpd.put("var7", StringUtil.trimToEmpty(datas.get(j).getId()));
 						varList.add(vpd);
 					}
 				}
