@@ -1661,11 +1661,11 @@ public class FieldDataController extends BaseController {
                 }
             }
 
-            List<Map<String, Object>> datas = SqliteHelper.query(mdbPath, "select hid, zhdj from qianfeiyongbiao where jdh=5");
+            List<Map<String, Object>> datas = SqliteHelper.query(mdbPath, "select bz, zhdj from qianfeiyongbiao where nodeid=5");
 
             if (datas != null && datas.size()>0) {
                 for (Map<String, Object> data : datas) {
-                    String id = StringUtil.trimToEmpty(data.get("hid"));
+                    String id = StringUtil.trimToEmpty(data.get("bz"));
                     String price = StringUtil.trimToEmpty(data.get("zhdj"));
                     fieldDataServiceI.backFill(Integer.parseInt(id), price);
                 }

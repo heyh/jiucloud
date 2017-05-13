@@ -359,7 +359,7 @@ public class Api extends BaseController {
 
         TFieldData fieldData = new TFieldData(projectName, uid, new Date(),
                 costType, dataName, price, companyName, count, specifications,
-                remark, cid, uname, unit, needApproved, approvedUser, currentApprovedUser, itemCode, "", section, supplier, relId);
+                remark, cid, uname, unit, needApproved, approvedUser, currentApprovedUser, itemCode, "", section, supplier, relId, "", "");
         try {
             fieldDataService.add(fieldData);
         } catch (Exception e) {

@@ -25,7 +25,8 @@ public class TFieldData implements java.io.Serializable {
 			String costType, String dataName, String price, String company,
 			String count, String specifications, String remark, String cid,
 			String uname, String unit, String needApproved, String approvedUser,
-            String currentApprovedUser, String itemCode, String approvedOption, String section, String supplier, String relId) {
+            String currentApprovedUser, String itemCode, String approvedOption, String section, String supplier, String relId, String price_sj,
+					  String price_ys) {
 		super();
 		this.projectName = projectName;
 		this.uid = uid;
@@ -48,6 +49,8 @@ public class TFieldData implements java.io.Serializable {
         this.section = section;
         this.supplier = supplier;
         this.relId = relId;
+        this.price_sj = price_sj;
+        this.price_ys = price_ys;
 
 	}
 
@@ -135,6 +138,28 @@ public class TFieldData implements java.io.Serializable {
 
     @Column(name = "relId")
 	private String relId;
+
+	@Column(name = "price_ys")
+	private String price_ys;
+
+	@Column(name = "price_sj")
+	private String price_sj;
+
+	public String getPrice_ys() {
+		return price_ys;
+	}
+
+	public void setPrice_ys(String price_ys) {
+		this.price_ys = price_ys;
+	}
+
+	public String getPrice_sj() {
+		return price_sj;
+	}
+
+	public void setPrice_sj(String price_sj) {
+		this.price_sj = price_sj;
+	}
 
 	public String getRelId() {
 		return relId;

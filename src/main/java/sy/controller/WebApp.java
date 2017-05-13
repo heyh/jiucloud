@@ -385,7 +385,7 @@ public class WebApp extends BaseController {
 //		fieldData.setItemCode(cost.getItemCode());
 		TFieldData fieldData = new TFieldData(projectName, uid, new Date(),
 				costType, dataName, price, company, count, specifications,
-				remark, cid, uname, unit, needApproved, approvedUser, cost.getItemCode(), currentApprovedUser, "", section, supplier, "");
+				remark, cid, uname, unit, needApproved, approvedUser, cost.getItemCode(), currentApprovedUser, "", section, supplier, "", "","");
 
 		System.out.println(fieldData);
 		try {
