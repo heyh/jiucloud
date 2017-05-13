@@ -706,6 +706,19 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
         return boq;
     }
 
+    @Override
+    public void backFill(Integer id, String price) {
+        try {
+            TFieldData tFieldData = fieldDataDaoI.get("from TFieldData t where t.id = " + id);
+            if (tFieldData != null ) {
+                tFieldData.setPrice(price);
+                fieldDataDaoI.update(tFieldData);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     private Date string2date(String str) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date = null;

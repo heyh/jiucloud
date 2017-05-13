@@ -1598,5 +1598,87 @@ public class FieldDataController extends BaseController {
     }
 
 
+    @RequestMapping("/securi_backFillPage")
+    public String backFillPage(HttpServletRequest request) {
+        request.setAttribute("first", UtilDate.getshortFirst());
+        request.setAttribute("last", UtilDate.getshortLast());
+        return "/app/fielddata/backFill";
+    }
 
+    @RequestMapping("/securi_backFill")
+    @ResponseBody
+    public Json backFill(@RequestParam(value = "projectId", required = false) String projectId,
+                            @RequestParam(value = "fileName", required = false) String fileName,
+                            @RequestParam(value = "userId", required = false) String userId,
+                            HttpServletRequest request) {
+        Json j = new Json();
+        SessionInfo sessionInfo = (SessionInfo) request.getSession().getAttribute(ConfigUtil.getSessionInfoName());
+        String uid = sessionInfo.getId();
+        String cid = sessionInfo.getCompid();
+        SimpleDateFormat sdf =   new SimpleDateFormat("yyyyMMddHHmmss");
+        String strDate = sdf.format(new Date());
+
+        try {
+            // 路径: jsw/projectId/uid-section-yyyyMMddHHmmss
+            String remoteBaseUrl = "http://114.55.55.167:8080/project/";
+            String localBaseDir = PropertyUtil.getFileRealPath() + "/jsw/";
+            String downloadDir = localBaseDir + "download/";
+            String unzipDir = localBaseDir + "/" + projectId + "/temp/";
+            String strFileName = uid + "-" + strDate;
+            String mdbPath = localBaseDir + "/" + projectId + "/" + strFileName + ".mdb";
+
+            File file = new File(unzipDir);
+            File[] tempList = file.listFiles();
+            if (tempList != null && tempList.length>0) {
+                for (File tmpFile : tempList) {
+                    tmpFile.delete();
+                }
+            }
+
+            String filePath = ZipUtil.downloadRemoteFile(remoteBaseUrl, downloadDir , userId, fileName);
+            File zipFile = new File(filePath);
+            ZipUtil.unzip(zipFile, unzipDir, "njrxy_+7804");
+
+            try {
+                sleep(100);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            file = new File(unzipDir);
+            tempList = file.listFiles();
+
+            if (tempList == null) {
+                j.setSuccess(true);
+                j.setMsg("无氿上云工程数据,请联系管理员！");
+                return j;
+            }
+
+            for (File temp : tempList) {
+                if (temp.getName().endsWith("mdb")) {
+                    temp.renameTo(new File(mdbPath));
+                    break;
+                }
+            }
+
+            List<Map<String, Object>> datas = SqliteHelper.query(mdbPath, "select hid, zhdj from qianfeiyongbiao where jdh=5");
+
+            if (datas != null && datas.size()>0) {
+                for (Map<String, Object> data : datas) {
+                    String id = StringUtil.trimToEmpty(data.get("hid"));
+                    String price = StringUtil.trimToEmpty(data.get("zhdj"));
+                    fieldDataServiceI.backFill(Integer.parseInt(id), price);
+                }
+            }
+
+            j.setSuccess(true);
+            j.setMsg("回填成功！");
+        } catch (NumberFormatException ex) {
+            ex.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+            j.setMsg(e.getMessage());
+        }
+        return j;
+    }
 }

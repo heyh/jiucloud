@@ -722,6 +722,32 @@
 					]
 				});
 	};
+	
+	function backFillFun() {
+        parent.$
+            .modalDialog({
+                title: '项目选择',
+                width: 900,
+                height: 610,
+                href: '${pageContext.request.contextPath}/fieldDataController/securi_backFillPage',
+                buttons: [{
+                    text : '关闭',
+                    handler : function() {
+                        parent.$.modalDialog.handler.dialog('destroy');
+                        parent.$.modalDialog.handler = undefined;
+                    }
+                }, {
+                    text: '回填',
+                    handler: function () {
+                        parent.$.modalDialog.openner_dataGrid = dataGrid;//因为添加成功之后，需要刷新这个dataGrid，所以先预定义好
+                        var f = parent.$.modalDialog.handler.find('#form');
+                        f.submit();
+                    }
+                }
+                ]
+            });
+    }
+
 </script>
 </head>
 <body>
@@ -791,6 +817,10 @@
 		<a onclick="execlImportFun();" href="javascript:void(0);"
 		   class="easyui-linkbutton"
 		   data-options="plain:true,iconCls:'execl_in'">execl导入</a>
+
+		<a onclick="backFillFun();" href="javascript:void(0);"
+		   class="easyui-linkbutton"
+		   data-options="plain:true,iconCls:'backfill'">单价回填</a>
 
 	</div>
 
