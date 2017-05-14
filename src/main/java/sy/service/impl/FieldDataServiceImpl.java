@@ -707,11 +707,15 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
     }
 
     @Override
-    public void backFill(Integer id, String price) {
+    public void backFill(Integer id, String price, String feeType) {
         try {
             TFieldData tFieldData = fieldDataDaoI.get("from TFieldData t where t.id = " + id);
             if (tFieldData != null ) {
-                tFieldData.setPrice(price);
+                if (feeType.equals("0")) {
+                    tFieldData.setPrice_sj(price);
+                } else {
+                    tFieldData.setPrice_ys(price);
+                }
                 fieldDataDaoI.update(tFieldData);
             }
         } catch (Exception e) {

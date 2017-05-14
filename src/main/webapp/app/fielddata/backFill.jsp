@@ -155,6 +155,15 @@
     <form class="form-horizontal" name="form" id="form" method="post" enctype="multipart/form-data" role="form">
         <div class="row-fluid" style="margin-top: 5px">
             <div class="span6">
+                <div class="control-group">
+                    <label class="control-label" for="feeType">费用类型:</label>
+                    <div class="controls">
+                        <select id="feeType" name="feeType">
+                            <option value="0">审计</option>
+                            <option value="1">预算</option>
+                        </select>
+                    </div>
+                </div>
 
                 <div class="control-group">
                     <label class="control-label" for="projectName">单位工程:</label>
@@ -170,7 +179,9 @@
                 </div>
             </div>
             <div class="span6">
+
             </div>
+
         </div>
     </form>
 

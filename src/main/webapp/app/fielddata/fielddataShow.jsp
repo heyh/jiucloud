@@ -728,7 +728,7 @@
             .modalDialog({
                 title: '项目选择',
                 width: 900,
-                height: 610,
+                height: 580,
                 href: '${pageContext.request.contextPath}/fieldDataController/securi_backFillPage',
                 buttons: [{
                     text : '关闭',

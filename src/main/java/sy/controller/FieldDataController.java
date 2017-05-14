@@ -1608,34 +1608,35 @@ public class FieldDataController extends BaseController {
     @RequestMapping("/securi_backFill")
     @ResponseBody
     public Json backFill(@RequestParam(value = "projectId", required = false) String projectId,
-                            @RequestParam(value = "fileName", required = false) String fileName,
-                            @RequestParam(value = "userId", required = false) String userId,
-                            HttpServletRequest request) {
+                         @RequestParam(value = "fileName", required = false) String fileName,
+                         @RequestParam(value = "userId", required = false) String userId,
+                         @RequestParam(value = "feeType", required = false) String feeType,
+                         HttpServletRequest request) {
         Json j = new Json();
         SessionInfo sessionInfo = (SessionInfo) request.getSession().getAttribute(ConfigUtil.getSessionInfoName());
         String uid = sessionInfo.getId();
         String cid = sessionInfo.getCompid();
-        SimpleDateFormat sdf =   new SimpleDateFormat("yyyyMMddHHmmss");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
         String strDate = sdf.format(new Date());
 
         try {
             // 路径: jsw/projectId/uid-section-yyyyMMddHHmmss
-            String remoteBaseUrl = "http://114.55.55.167:8080/project/";
-            String localBaseDir = PropertyUtil.getFileRealPath() + "/jsw/";
-            String downloadDir = localBaseDir + "download/";
-            String unzipDir = localBaseDir + "/" + projectId + "/temp/";
+            String remoteBaseUrl = "http://114.55.55.167:8080/project/" ;
+            String localBaseDir = PropertyUtil.getFileRealPath() + "/jsw/" ;
+            String downloadDir = localBaseDir + "download/" ;
+            String unzipDir = localBaseDir + "/" + projectId + "/temp/" ;
             String strFileName = uid + "-" + strDate;
-            String mdbPath = localBaseDir + "/" + projectId + "/" + strFileName + ".mdb";
+            String mdbPath = localBaseDir + "/" + projectId + "/" + strFileName + ".mdb" ;
 
             File file = new File(unzipDir);
             File[] tempList = file.listFiles();
-            if (tempList != null && tempList.length>0) {
+            if (tempList != null && tempList.length > 0) {
                 for (File tmpFile : tempList) {
                     tmpFile.delete();
                 }
             }
 
-            String filePath = ZipUtil.downloadRemoteFile(remoteBaseUrl, downloadDir , userId, fileName);
+            String filePath = ZipUtil.downloadRemoteFile(remoteBaseUrl, downloadDir, userId, fileName);
             File zipFile = new File(filePath);
             ZipUtil.unzip(zipFile, unzipDir, "njrxy_+7804");
 
@@ -1663,11 +1664,11 @@ public class FieldDataController extends BaseController {
 
             List<Map<String, Object>> datas = SqliteHelper.query(mdbPath, "select bz, zhdj from qianfeiyongbiao where nodeid=5");
 
-            if (datas != null && datas.size()>0) {
+            if (datas != null && datas.size() > 0) {
                 for (Map<String, Object> data : datas) {
                     String id = StringUtil.trimToEmpty(data.get("bz"));
                     String price = StringUtil.trimToEmpty(data.get("zhdj"));
-                    fieldDataServiceI.backFill(Integer.parseInt(id), price);
+                    fieldDataServiceI.backFill(Integer.parseInt(id), price, feeType);
                 }
             }
 

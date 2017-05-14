@@ -85,5 +85,5 @@ public interface FieldDataServiceI {
 
     public List<FieldData> getBoq(String cid, String startDate, String endDate, List<Integer> ugroup);
 
-	public void backFill(Integer id, String price);
+	public void backFill(Integer id, String price, String feeType);
 }
