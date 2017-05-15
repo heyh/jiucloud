@@ -655,7 +655,7 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
     public List<FieldData> getBoq(String cid, String startDate, String endDate, List<Integer> ugroup) {
         Map<String, Object> params = new HashMap<String, Object>();
         String sql = "";
-        sql = "select id, itemCode, dataName, unit, remark, specifications, projectName, count from TFieldData t  where isDelete=0 and substring(itemcode,1,3)='700' and cid=:cid ";
+        sql = "select id, itemCode, dataName, unit, remark, specifications, projectName, count from TFieldData t  where isDelete=0 and substring(itemcode,1,3)='700' and cid=:cid and (needApproved ='0' or needApproved ='2') ";
         params.put("cid", cid);
 
         if (!StringUtil.trimToEmpty(startDate).equals("")) {
