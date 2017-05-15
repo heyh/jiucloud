@@ -361,9 +361,9 @@
                         success: function (data) {
                             if (data.success) {
                                 if (data.obj != null && data.obj != '' && data.obj.itemCode.substring(0, 3) == '700') {
-                                    $("#supplierDiv").show();
-                                } else {
                                     $("#supplierDiv").hide();
+                                } else {
+                                    $("#supplierDiv").show();
                                 }
                             }
                         }
