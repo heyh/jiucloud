@@ -21,6 +21,7 @@
 	boolean hasOnlyReadRight = false;
 	boolean hasReadEditRight = false;
 	boolean hasOutRight = false;
+	boolean hasBackFillRight = false;
 
     SessionInfo sessionInfo = (SessionInfo) session.getAttribute(ConfigUtil.getSessionInfoName());
     if (sessionInfo == null) {
@@ -38,6 +39,7 @@
 		hasOnlyReadRight = sessionInfo.getRightList().contains("16") && 0 != sessionInfo.getParentId();
 		hasReadEditRight = sessionInfo.getRightList().contains("15") || 0 == sessionInfo.getParentId();
 		hasOutRight = sessionInfo.getRightList().contains("17");
+		hasBackFillRight = sessionInfo.getRightList().contains("18");
 	}
 
 %>
@@ -817,10 +819,14 @@
 		<a onclick="execlImportFun();" href="javascript:void(0);"
 		   class="easyui-linkbutton"
 		   data-options="plain:true,iconCls:'execl_in'">execl导入</a>
+		<c:choose>
+			<c:when test="<%=hasBackFillRight%>">
+				<a onclick="backFillFun();" href="javascript:void(0);"
+				   class="easyui-linkbutton"
+				   data-options="plain:true,iconCls:'backfill'">单价回填</a>
+			</c:when>
+		</c:choose>
 
-		<a onclick="backFillFun();" href="javascript:void(0);"
-		   class="easyui-linkbutton"
-		   data-options="plain:true,iconCls:'backfill'">单价回填</a>
 
 	</div>
 
