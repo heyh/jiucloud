@@ -652,10 +652,14 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
     }
 
     @Override
-    public List<FieldData> getBoq(String cid, String startDate, String endDate, List<Integer> ugroup) {
+    public List<FieldData> getBoq(String cid, String startDate, String endDate, List<Integer> ugroup, String type) {
         Map<String, Object> params = new HashMap<String, Object>();
         String sql = "";
-        sql = "select id, itemCode, dataName, unit, remark, specifications, projectName, count from TFieldData t  where isDelete=0 and substring(itemcode,1,3)='700' and cid=:cid and (needApproved ='0' or needApproved ='2') ";
+        if (type.equals("show")) {
+            sql = "select id, itemCode, dataName, unit, remark, specifications, projectName, count, needApproved from TFieldData t  where isDelete=0 and substring(itemcode,1,3)='700' and cid=:cid ";
+        } else {
+            sql = "select id, itemCode, dataName, unit, remark, specifications, projectName, count, needApproved from TFieldData t  where isDelete=0 and substring(itemcode,1,3)='700' and cid=:cid and (needApproved ='0' or needApproved ='2') ";
+        }
         params.put("cid", cid);
 
         if (!StringUtil.trimToEmpty(startDate).equals("")) {
@@ -701,6 +705,8 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
             } else {
                 f.setProjectName(project.getProName());
             }
+            f.setNeedApproved(StringUtil.trimToEmpty(tem[8]));
+
             boq.add(f);
         }
         return boq;

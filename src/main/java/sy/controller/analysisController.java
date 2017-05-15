@@ -393,7 +393,7 @@ public class analysisController extends BaseController {
 		}
 		ugroup = departmentService.getUsersByDepartmentId(cid, Integer.parseInt(uid), selDepartmentId);
 
-		List<FieldData> boq = fieldDataService.getBoq(cid, startDate, endDate, ugroup);
+		List<FieldData> boq = fieldDataService.getBoq(cid, startDate, endDate, ugroup, "show");
 
 		List<Map<String, Object>> projects = new ArrayList<Map<String, Object>>();
 		for (FieldData item : boq) {
@@ -459,7 +459,7 @@ public class analysisController extends BaseController {
             }
             ugroup = departmentService.getUsersByDepartmentId(cid, Integer.parseInt(uid), selDepartmentId);
 
-            List<FieldData> datas = fieldDataService.getBoq(cid, startDate, endDate, ugroup);
+            List<FieldData> datas = fieldDataService.getBoq(cid, startDate, endDate, ugroup, "execl");
 
             List<Map<String, Object>> projects = new ArrayList<Map<String, Object>>();
             for (FieldData item : datas) {

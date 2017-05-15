@@ -135,7 +135,7 @@
             <c:forEach items="${projects}" var="project" varStatus="status">
                 <thead>
                 <tr>
-                    <th colspan="7" style="text-align: left;">工程名称：${project.projectName}</th>
+                    <th colspan="8" style="text-align: left;">工程名称：${project.projectName}</th>
                 </tr>
                 <tr>
                     <th scope="col">序号</th>
@@ -144,6 +144,7 @@
                     <th scope="col">项目特征描述</th>
                     <th scope="col">计量单位</th>
                     <th scope="col">工程量</th>
+                    <th scope="col">审批状态</th>
                     <th scope="col">备注</th>
                 </tr>
                 </thead>
@@ -154,10 +155,27 @@
                             <tr>
                                 <th style="text-align: center; width: 50px">${status.index+1}</th>
                                 <td style="text-align: center">${item.itemCode}</td>
-                                <td style="text-align: center">${item.dataName}</td>
-                                <td style="text-align: center">${item.remark}</td>
+                                <td style="text-align: left">${item.dataName}</td>
+                                <td style="text-align: left">${item.remark}</td>
                                 <td style="text-align: center; width: 50px" >${item.unit}</td>
                                 <td style="text-align: center">${item.count}</td>
+                                <c:choose>
+                                    <c:when test="${item.needApproved == '0'}">
+                                        <td style="text-align: center; width: 50px">不需审批</td>
+                                    </c:when>
+                                    <c:when test="${item.needApproved == '1'}">
+                                        <td style="text-align: center; width: 50px">未审批</td>
+                                    </c:when>
+                                    <c:when test="${item.needApproved == '2'}">
+                                        <td style="text-align: center; width: 50px">审批通过</td>
+                                    </c:when>
+                                    <c:when test="${item.needApproved == '8'}">
+                                        <td style="text-align: center; width: 50px">审批中</td>
+                                    </c:when>
+                                    <c:when test="${item.needApproved == '9'}">
+                                        <td style="text-align: center; width: 50px;color: #ff0000">审批未通过</td>
+                                    </c:when>
+                                </c:choose>
                                 <td style="text-align: center">${item.id}</td>
                             </tr>
                         </c:when>
