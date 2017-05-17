@@ -360,10 +360,10 @@
                         contentType: "application/x-www-form-urlencoded; charset=utf-8",
                         success: function (data) {
                             if (data.success) {
-                                if (data.obj != null && data.obj != '' && data.obj.itemCode.substring(0, 3) == '700') {
-                                    $("#supplierDiv").hide();
-                                } else {
+                                if (data.obj != null && data.obj != '' && data.obj.itemCode.substring(0, 3) == '800') {
                                     $("#supplierDiv").show();
+                                } else {
+                                    $("#supplierDiv").hide();
                                 }
                             }
                         }
