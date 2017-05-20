@@ -533,22 +533,26 @@ public class FieldDataController extends BaseController {
         }
 
         // add by heyh begin
-        if (fieldData.getApprovedUser() == null || fieldData.getApprovedUser().equals("")) {
-            List<Integer> approvedUserList = new ArrayList<Integer>();
-            if (fieldData.getNeedApproved().equals("1")) {
-                approvedUserList = departmentService.getAllParents(fieldData.getCid(), Integer.parseInt(fieldData.getUid()));
-                if (approvedUserList == null || approvedUserList.size() == 0) {
-                    approvedUserList.add(Integer.parseInt(fieldData.getUid())); // 如果为空说明是超级管理员，自己审批
-                }
-                fieldData.setApprovedUser(StringUtils.join(approvedUserList, ",")); // 所有审批人
-                fieldData.setCurrentApprovedUser(String.valueOf(approvedUserList.get(0))); // 当前审批人
+//        if (fieldData.getApprovedUser() == null || fieldData.getApprovedUser().equals("")) {
+//            List<Integer> approvedUserList = new ArrayList<Integer>();
+//            if (fieldData.getNeedApproved().equals("1")) {
+//                approvedUserList = departmentService.getAllParents(fieldData.getCid(), Integer.parseInt(fieldData.getUid()));
+//                if (approvedUserList == null || approvedUserList.size() == 0) {
+//                    approvedUserList.add(Integer.parseInt(fieldData.getUid())); // 如果为空说明是超级管理员，自己审批
+//                }
+//                fieldData.setApprovedUser(StringUtils.join(approvedUserList, ",")); // 所有审批人
+//                fieldData.setCurrentApprovedUser(String.valueOf(approvedUserList.get(0))); // 当前审批人
+//
+//            }
+//        } else {
+//            List<String> approvedUsers = Arrays.asList(fieldData.getApprovedUser().split(","));
+//            if (approvedUsers != null && approvedUsers.size() > 0) {
+//                fieldData.setCurrentApprovedUser(approvedUsers.get(0)); // 当前审批人
+//            }
+//        }
 
-            }
-        } else {
-            List<String> approvedUsers = Arrays.asList(fieldData.getApprovedUser().split(","));
-            if (approvedUsers != null && approvedUsers.size() > 0) {
-                fieldData.setCurrentApprovedUser(approvedUsers.get(0)); // 当前审批人
-            }
+        if (fieldData.getNeedApproved().equals("1")) {
+            fieldData.setApprovedUser(fieldData.getCurrentApprovedUser());
         }
         // add by heyh end
 
@@ -911,10 +915,10 @@ public class FieldDataController extends BaseController {
 
     @RequestMapping("/securi_approvedField")
     @ResponseBody
-    public Json approvedField(Integer id, String approvedState, String approvedOption, HttpServletResponse response, HttpServletRequest request) {
+    public Json approvedField(Integer id, String approvedState, String approvedOption, String currentApprovedUser, HttpServletResponse response, HttpServletRequest request) {
         Json j = new Json();
         if (id != null) {
-            fieldDataServiceI.approvedField(id, approvedState, approvedOption);
+            fieldDataServiceI.approvedField(id, approvedState, approvedOption, currentApprovedUser);
         }
         j.setMsg("审批成功！");
         j.setSuccess(true);
@@ -973,9 +977,54 @@ public class FieldDataController extends BaseController {
         return json;
     }
 
+//    @RequestMapping("securi_chooseApprove")
+//    public String chooseApprove() {
+//        return "/app/fielddata/chooseApprove";
+//    }
+
     @RequestMapping("securi_chooseApprove")
-    public String chooseApprove() {
-        return "/app/fielddata/chooseApprove";
+    @ResponseBody
+    public Json chooseApprove(HttpServletResponse response, HttpServletRequest request) {
+        Json json = new Json();
+        SessionInfo sessionInfo = (SessionInfo) request.getSession().getAttribute(ConfigUtil.getSessionInfoName());
+        String uid = sessionInfo.getId();
+        String cid = sessionInfo.getCompid();
+        List<User> users = departmentService.getFirstLevelParentDepByUid(cid, uid);
+        List<Map<String, Object>> userList = new ArrayList<Map<String, Object>>();
+        Map<String, Object> userMap = new HashMap<String, Object>();
+        if (users != null && users.size()>0) {
+            for (User user : users) {
+                userMap = new HashMap<String, Object>();
+                userMap.put("id", user.getId());
+                userMap.put("username", !user.getRealname().equals("") ? user.getRealname() : user.getUsername());
+                userList.add(userMap);
+            }
+        }
+        json.setObj(userList);
+        json.setSuccess(true);
+        return json;
+    }
+
+    @RequestMapping("/securi_chooseApprovePage")
+    public String chooseApprovePage(HttpServletRequest request, HttpServletResponse response) throws IOException {
+
+        SessionInfo sessionInfo = (SessionInfo) request.getSession().getAttribute(ConfigUtil.getSessionInfoName());
+        String uid = sessionInfo.getId();
+        String cid = sessionInfo.getCompid();
+        List<User> users = departmentService.getFirstLevelParentDepByUid(cid, uid);
+        List<Map<String, Object>> userList = new ArrayList<Map<String, Object>>();
+        Map<String, Object> userMap = new HashMap<String, Object>();
+        if (users != null && users.size()>0) {
+            for (User user : users) {
+                userMap = new HashMap<String, Object>();
+                userMap.put("id", user.getId());
+                userMap.put("username", !user.getRealname().equals("") ? user.getRealname() : user.getUsername());
+                userList.add(userMap);
+            }
+        }
+        request.setAttribute("id", request.getParameter("id"));
+        request.setAttribute("userList", userList);
+        return "/app/pro/chooseApprove";
     }
 
     @RequestMapping("securi_getParentNodes")

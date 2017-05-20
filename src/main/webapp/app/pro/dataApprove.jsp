@@ -27,6 +27,8 @@
 <jsp:include page="../../inc.jsp"></jsp:include>
     <link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1-rc.1/css/select2.min.css" rel="stylesheet" />
     <script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1-rc.1/js/select2.min.js"></script>
+
+    <script type="text/javascript" src="${pageContext.request.contextPath }/jslib/layer-v3.0.3/layer/layer.js"></script>
 <script type="text/javascript">
 
     formatterFirstDate = function(date) {
@@ -157,7 +159,7 @@
                                             row.id,
                                             '${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/approved-true.png');
 
-                                    if (row.currentApprovedUser != row.approvedUser.split(',')[row.approvedUser.split(',').length -1 ]) {
+//                                    if (row.currentApprovedUser != row.approvedUser.split(',')[row.approvedUser.split(',').length -1 ]) {
 
                                         str += '&nbsp;';
                                         str += $
@@ -165,7 +167,7 @@
                                                 '<img style="cursor:pointer" onclick="approvedFun(\'{0}\', 8);" src="{1}" title="继续审批"/>',
                                                 row.id,
                                                 '${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/approved-jixu.png');
-                                    }
+//                                    }
 
                                     str += '&nbsp;';
                                     str += $
@@ -203,36 +205,81 @@
             approvedTip = '确认打回当前记录?';
         }
 
-        parent.$.messager
+        if (approvedState == '2' || approvedState == '9') {
+            parent.$.messager
                 .confirm(
-                '询问',
-                approvedTip,
-                function(b) {
-                    if (b) {
-                        if(approvedState == '9') {
-                            approvedOption = prompt("审批意见","")
-                        }
-                        parent.$.messager.progress({
-                            title : '提示',
-                            text : '数据处理中，请稍后....'
-                        });
-                        $.ajax({
-                            type : "post",
-                            url : '${pageContext.request.contextPath}/fieldDataController/securi_approvedField',
-                            data : {
-                                id : id,
-                                approvedState: approvedState,
-                                approvedOption: approvedOption
-                            },
-                            dataType : "json",
-                            success : function(data) {
-                                if (data.success == true) {
-                                    searchFunData();
-                                }
+                    '询问',
+                    approvedTip,
+                    function(b) {
+                        if (b) {
+                            if(approvedState == '9') {
+                                approvedOption = prompt("审批意见","")
                             }
-                        });
-                    }
-                });
+
+                            parent.$.messager.progress({
+                                title : '提示',
+                                text : '数据处理中，请稍后....'
+                            });
+                            $.ajax({
+                                type : "post",
+                                url : '${pageContext.request.contextPath}/fieldDataController/securi_approvedField',
+                                data : {
+                                    id : id,
+                                    approvedState: approvedState,
+                                    approvedOption: approvedOption
+                                },
+                                dataType : "json",
+                                success : function(data) {
+                                    if (data.success == true) {
+                                        searchFunData();
+                                    }
+                                }
+                            });
+                        }
+                    });
+        } else if (approvedState == '8') {
+            parent.$.messager
+                .confirm(
+                    '询问',
+                    approvedTip,
+                    function(b) {
+                        if (b) {
+                            $.ajax({
+                                url: '${pageContext.request.contextPath}/fieldDataController/securi_chooseApprove',
+                                type: 'post',
+                                dataType: 'json',
+                                contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                                success: function (data) {
+
+                                    if (data.success) {
+                                        var str = '';
+                                        var users = data.obj;
+                                        for (var i in users) {
+                                            str += "<label><input type='radio' value=" + users[i].id + "/>" + users[i].username + "</label>"
+                                        }
+                                        parent.$
+                                            .modalDialog({
+                                                title: '选择审批人',
+                                                width: 250,
+                                                height: 150,
+                                                href: '${pageContext.request.contextPath}/fieldDataController/securi_chooseApprovePage?id=' + id,
+                                                buttons: [{
+                                                    text: '确定',
+                                                    handler: function () {
+                                                        parent.$.modalDialog.openner_dataGrid = dataGrid;//因为添加成功之后，需要刷新这个dataGrid，所以先预定义好
+                                                        var f = parent.$.modalDialog.handler.find('#form');
+                                                        f.submit();
+                                                    }
+                                                }]
+                                            });
+                                    }
+                                }
+                            });
+                        }
+                    });
+        }
+
+
     };
 
     $(document).ready(function() {
@@ -321,5 +368,11 @@
         </div>
     </div>
 
+
 </body>
+    <div id="approveDiv" style="display:none; width: 300px;height:150px;">
+        <div id="approveRadioDiv" style="margin: 20px">
+
+        </div>
+    </div>
 </html>

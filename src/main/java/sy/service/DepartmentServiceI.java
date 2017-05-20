@@ -3,6 +3,7 @@ package sy.service;
 import org.springframework.stereotype.Repository;
 import sy.model.S_department;
 import sy.model.po.Department;
+import sy.pageModel.User;
 import sy.util.Node;
 
 import java.util.List;
@@ -61,5 +62,8 @@ public interface DepartmentServiceI {
 	public List<Integer> getUsersByDepartmentId(String cid, Integer uid, Integer departmentId);
 
 	public List<S_department> getFirstLevelUnderDepByUid(String cid, String uid);
+
+	public List<User> getFirstLevelParentDepByUid(String cid, String uid);
+
 }
 

@@ -670,9 +670,10 @@ public class Api extends BaseController {
     public JSONObject approvedField(@RequestParam(value = "id", required = true) int id,
                                     @RequestParam(value = "approvedState", required = true) String approvedState,
                                     @RequestParam(value = "approvedOption", required = true) String approvedOption,
+                                    @RequestParam(value = "currentApprovedUser", required = false) String currentApprovedUser,
                                     HttpServletResponse response, HttpServletRequest request) {
 
-        fieldDataService.approvedField(id, approvedState, approvedOption);
+        fieldDataService.approvedField(id, approvedState, approvedOption, currentApprovedUser);
         return new WebResult().ok().setMessage("审批成功");
     }
 

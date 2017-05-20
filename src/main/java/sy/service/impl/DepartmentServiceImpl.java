@@ -488,7 +488,21 @@ public class DepartmentServiceImpl implements DepartmentServiceI {
             parentNode.setName(user.getRealname() == null ? user.getUsername() : user.getRealname());
         }
 
-        return parentNodes;
+        List<Node> _parentNodes = new ArrayList<Node>();
+
+        for (Node parentNode : parentNodes) {
+            boolean hasNode = false;
+            for (Node _parentNode : _parentNodes) {
+                if (_parentNode.getId() == parentNode.getId() && _parentNode.getUserId() == parentNode.getUserId()) {
+                    hasNode = true;
+                }
+            }
+            if (!hasNode) {
+                _parentNodes.add(parentNode);
+            }
+        }
+
+        return _parentNodes;
     }
 
     @Override
@@ -566,5 +580,38 @@ public class DepartmentServiceImpl implements DepartmentServiceI {
             }
         }
         return departments;
+    }
+
+    @Override
+    public List<User> getFirstLevelParentDepByUid(String cid, String uid) {
+        List<User> users = new ArrayList<User>();
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("cid", cid);
+        params.put("uid", uid);
+
+        String sql = "SELECT DISTINCT a.id, a.parent_id FROM jsw_corporation_department a WHERE a.company_id = :cid AND find_in_set(:uid, a.user_id)";
+        List<Object[]> deps = departmentDaoI.findBySql(sql, params);
+
+        Set<String> parentUids = new HashSet<String>();
+        for (Object[] dep : deps) {
+            params = new HashMap<String, Object>();
+            params.put("id", Integer.parseInt(StringUtil.trimToEmpty(dep[1])));
+            sql = "SELECT DISTINCT a.id, a.user_id FROM jsw_corporation_department a WHERE id = :id AND endnode = '0'";
+            List<Object[]> parentDeps = departmentDaoI.findBySql(sql, params);
+            for (Object[] tem : parentDeps) {
+                if (tem[1] != null) {
+                    parentUids.addAll(Arrays.asList(StringUtil.trimToEmpty(tem[1]).split(",")));
+                }
+            }
+        }
+
+        for (String parentUid : parentUids) {
+            User user = userService.getUser(parentUid);
+            if (user != null) {
+                users.add(user);
+            }
+        }
+
+        return users;
     }
 }

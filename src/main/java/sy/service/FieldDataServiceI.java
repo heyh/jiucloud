@@ -56,7 +56,9 @@ public interface FieldDataServiceI {
 
 	public Object getId(TFieldData fieldData);
 
-    public void approvedField(Integer id, String approvedState, String approvedOption);
+//    public void approvedField(Integer id, String approvedState, String approvedOption);
+
+	public void approvedField(Integer id, String approvedState, String approvedOption, String currentApprovedUser);
 
     public List<TFieldData> getNeedApproveList(String currentApprovedUser);
 

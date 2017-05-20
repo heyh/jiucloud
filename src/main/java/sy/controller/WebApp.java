@@ -765,10 +765,10 @@ public class WebApp extends BaseController {
 
     @RequestMapping("/securi_approvedField")
     @ResponseBody
-    public Json approvedField(Integer id, String approvedState, String approvedOption, HttpServletResponse response, HttpServletRequest request) {
+    public Json approvedField(Integer id, String approvedState, String approvedOption, String currentApprovedUser, HttpServletResponse response, HttpServletRequest request) {
         Json j = new Json();
         if (id != null) {
-            fieldDataServiceI.approvedField(id, approvedState, approvedOption);
+            fieldDataServiceI.approvedField(id, approvedState, approvedOption, currentApprovedUser);
         }
         j.setMsg("审批成功！");
         j.setSuccess(true);
