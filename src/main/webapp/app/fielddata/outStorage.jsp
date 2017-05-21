@@ -148,6 +148,24 @@
             alert("系统异常，请联系管理员！");
         }
     });
+
+    $.ajax({
+        url: '${pageContext.request.contextPath}/fieldDataController/securi_chooseApprove',
+        type: 'post',
+        dataType: 'json',
+        contentType: "application/x-www-form-urlencoded; charset=utf-8",
+        success: function (data) {
+
+            if (data.success) {
+                var optionstring = '';
+                var users = data.obj;
+                for (var i in users) {
+                    optionstring += "<option value=\"" + users[i].id + "\" >" + users[i].username + "</option>";
+                }
+                $("#currentApprovedUser").html(optionstring);
+            }
+        }
+    });
 </script>
 
 <div class="container-fluid">
@@ -270,6 +288,19 @@
 
 						<div class="controls">
 							<input type="text" name="outCount" id="outCount" required="true" class="easyui-numberbox" precision="4">
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="row-fluid">
+				<div class="span6">
+					<div class="control-group">
+						<label class="control-label" for="dataName">审批人选择:</label>
+
+						<div class="controls">
+							<select id="currentApprovedUser" name="currentApprovedUser">
+
+							</select>
 						</div>
 					</div>
 				</div>

@@ -354,6 +354,7 @@ public class FieldDataController extends BaseController {
     public com.alibaba.fastjson.JSONObject saveFieldData(@RequestParam(value = "outProId", required = true) String outProId,
                                                          @RequestParam(value = "outCount", required = true) String outCount,
                                                          @RequestParam(value = "id", required = true) String id,
+                                                         @RequestParam(value = "currentApprovedUser", required = true) String currentApprovedUser,
                                                          HttpServletRequest request) {
         SessionInfo sessionInfo = (SessionInfo) request.getSession().getAttribute(ConfigUtil.getSessionInfoName());
         TFieldData tFieldData = fieldDataServiceI.detail(id);
@@ -372,7 +373,9 @@ public class FieldDataController extends BaseController {
         outFieldData.setItemCode(tFieldData.getItemCode());
         outFieldData.setSpecifications(tFieldData.getSpecifications());
         outFieldData.setRemark("出库");
-        outFieldData.setNeedApproved("0");
+        outFieldData.setNeedApproved("1");
+        outFieldData.setApprovedUser(currentApprovedUser);
+        outFieldData.setCurrentApprovedUser(currentApprovedUser);
         outFieldData.setUname((sessionInfo.getName() != null && !sessionInfo.getName().equals("")) ? sessionInfo.getName() : sessionInfo.getUsername());
         outFieldData.setUnit(tFieldData.getUnit());
 

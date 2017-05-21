@@ -328,7 +328,7 @@
             .modalDialog({
                 title : '出库',
                 width : 900,
-                height : 450,
+                height : 520,
                 href : '${pageContext.request.contextPath}/fieldDataController/outStorage?id=' + id,
                 buttons : [ {
                     text : '确定',
