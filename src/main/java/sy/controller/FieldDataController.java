@@ -81,7 +81,7 @@ public class FieldDataController extends BaseController {
      * @return
      */
     @RequestMapping("/fieldDataShow")
-    public String manager(HttpServletRequest req) {
+    public String fieldDataShow(HttpServletRequest req) {
         req.setAttribute("first", UtilDate.getshortFirst());
         req.setAttribute("last", UtilDate.getshortLast());
         return "/app/fielddata/fielddataShow";
@@ -93,10 +93,24 @@ public class FieldDataController extends BaseController {
      * @return
      */
     @RequestMapping("/docDataShow")
-    public String docManager(HttpServletRequest req) {
+    public String docDataShow(HttpServletRequest req) {
         req.setAttribute("first", UtilDate.getshortFirst());
         req.setAttribute("last", UtilDate.getshortLast());
         return "/app/fielddata/docdataShow";
+    }
+
+    @RequestMapping("/billDataShow")
+    public String billDataShow(HttpServletRequest req) {
+        req.setAttribute("first", UtilDate.getshortFirst());
+        req.setAttribute("last", UtilDate.getshortLast());
+        return "/app/fielddata/billdataShow";
+    }
+
+    @RequestMapping("/materialDataShow")
+    public String materialDataShow(HttpServletRequest req) {
+        req.setAttribute("first", UtilDate.getshortFirst());
+        req.setAttribute("last", UtilDate.getshortLast());
+        return "/app/fielddata/materialdataShow";
     }
 
     /**
