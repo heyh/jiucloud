@@ -607,7 +607,7 @@ public class DepartmentServiceImpl implements DepartmentServiceI {
 
         for (String parentUid : parentUids) {
             User user = userService.getUser(parentUid);
-            if (user != null) {
+            if (user != null && !user.getId().equals(uid)) {
                 users.add(user);
             }
         }
