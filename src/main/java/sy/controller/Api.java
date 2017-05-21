@@ -339,22 +339,25 @@ public class Api extends BaseController {
         String costType = String.valueOf(cost.getId());
         String itemCode = cost.getItemCode();
 
+//        if (approvedUser == null || approvedUser.equals("")) {
+//            List<Integer> approvedUserList = new ArrayList<Integer>();
+//            if (needApproved.equals("1")) {
+//                approvedUserList = departmentService.getAllParents(cid, Integer.parseInt(uid));
+//                if (approvedUserList == null || approvedUserList.size() == 0) {
+//                    approvedUserList.add(Integer.parseInt(uid)); // 如果为空说明是超级管理员，自己审批
+//                }
+//                approvedUser = StringUtils.join(approvedUserList, ","); // 所有审批人
+//                currentApprovedUser = String.valueOf(approvedUserList.get(0)); // 当前审批人
+//
+//            }
+//        } else {
+//            List<String> approvedUsers = Arrays.asList(approvedUser.split(","));
+//            if (approvedUsers != null && approvedUsers.size() > 0) {
+//                currentApprovedUser = approvedUsers.get(0); // 当前审批人
+//            }
+//        }
         if (approvedUser == null || approvedUser.equals("")) {
-            List<Integer> approvedUserList = new ArrayList<Integer>();
-            if (needApproved.equals("1")) {
-                approvedUserList = departmentService.getAllParents(cid, Integer.parseInt(uid));
-                if (approvedUserList == null || approvedUserList.size() == 0) {
-                    approvedUserList.add(Integer.parseInt(uid)); // 如果为空说明是超级管理员，自己审批
-                }
-                approvedUser = StringUtils.join(approvedUserList, ","); // 所有审批人
-                currentApprovedUser = String.valueOf(approvedUserList.get(0)); // 当前审批人
-
-            }
-        } else {
-            List<String> approvedUsers = Arrays.asList(approvedUser.split(","));
-            if (approvedUsers != null && approvedUsers.size() > 0) {
-                currentApprovedUser = approvedUsers.get(0); // 当前审批人
-            }
+            approvedUser = currentApprovedUser;
         }
 
         TFieldData fieldData = new TFieldData(projectName, uid, new Date(),
@@ -675,6 +678,26 @@ public class Api extends BaseController {
 
         fieldDataService.approvedField(id, approvedState, approvedOption, currentApprovedUser);
         return new WebResult().ok().setMessage("审批成功");
+    }
+
+    @RequestMapping("/securi_chooseApprove")
+    @ResponseBody
+    public JSONObject chooseApprove(@RequestParam(value = "cid", required = true) String cid,
+                                    @RequestParam(value = "uid", required = true) String uid,
+                                    HttpServletResponse response, HttpServletRequest request) {
+
+        List<User> users = departmentService.getFirstLevelParentDepByUid(cid, uid);
+        List<Map<String, Object>> userList = new ArrayList<Map<String, Object>>();
+        Map<String, Object> userMap = new HashMap<String, Object>();
+        if (users != null && users.size()>0) {
+            for (User user : users) {
+                userMap = new HashMap<String, Object>();
+                userMap.put("id", user.getId());
+                userMap.put("username", !user.getRealname().equals("") ? user.getRealname() : user.getUsername());
+                userList.add(userMap);
+            }
+        }
+        return new WebResult().ok().set("approveUserList", userList);
     }
 
     @RequestMapping("/securi_getAd")
