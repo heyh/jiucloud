@@ -17,7 +17,7 @@
     String projectInfos = null;
     List<Map<String, Object>> dataCostInfos = new ArrayList<Map<String, Object>>();
 	JSONArray jsonArray = new JSONArray();
-	JSONArray costTree = new JSONArray();
+	JSONArray materialCostTree = new JSONArray();
 	boolean hasOnlyReadRight = false;
 	boolean hasReadEditRight = false;
 	boolean hasOutRight = false;
@@ -35,7 +35,7 @@
 			JSONObject nodeJson = JSONObject.fromObject(nodeMap);
 			jsonArray.add(nodeJson);
 		}
-		costTree = sessionInfo.getCostTree();
+		materialCostTree = sessionInfo.getMaterialCostTree();
 		hasOnlyReadRight = sessionInfo.getRightList().contains("16") && 0 != sessionInfo.getParentId();
 		hasReadEditRight = sessionInfo.getRightList().contains("15") || 0 == sessionInfo.getParentId();
 		hasOutRight = sessionInfo.getRightList().contains("17");
@@ -487,8 +487,8 @@
 
 	// 添加
 	function addFun() {
-		var url = '${pageContext.request.contextPath}/fieldDataController/addMaterialData';
-		var text = "添加费用数据";
+		var url = '${pageContext.request.contextPath}/fieldDataController/securi_addMaterialData';
+		var text = "添加材料数据";
 		var params = {
 			url : url,
 			title : text,
@@ -607,7 +607,7 @@
         <%--});--%>
 
 		$('#costTypeRef').combotree({
-			data: <%= costTree %>,
+			data: <%= materialCostTree %>,
 			lines: true,
 			editable:true,
 			onLoadSuccess: function () {

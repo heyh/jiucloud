@@ -465,7 +465,7 @@ public class FieldDataController extends BaseController {
      * @return
      */
     @RequestMapping("/addDocData")
-    public String addDocPage(HttpServletRequest request, String proid) {
+    public String addDocDataPage(HttpServletRequest request, String proid) {
         SessionInfo sessionInfo = (SessionInfo) request.getSession().getAttribute(ConfigUtil.getSessionInfoName());
         String cost_id = sessionInfo.getLast_cost_id();
         Cost cost = null;
@@ -500,6 +500,82 @@ public class FieldDataController extends BaseController {
         request.setAttribute("proid", proid);
         request.setAttribute("proName", proName);
         return "/app/fielddata/addDocData";
+    }
+
+    @RequestMapping("/securi_addBillData")
+    public String addBillDataPage(HttpServletRequest request, String proid) {
+        SessionInfo sessionInfo = (SessionInfo) request.getSession().getAttribute(ConfigUtil.getSessionInfoName());
+        String cost_id = sessionInfo.getLast_cost_id();
+        Cost cost = null;
+        String proName = "";
+
+        if (cost_id != null && cost_id.length() > 0) {
+            cost = costServiceI.findById(cost_id);
+        }
+
+        if (proid != null && proid.length() > 0) {
+            Project project = projectServiceI.findOneView(Integer
+                    .parseInt(proid));
+            proName = project.getProName();
+        } else {
+            proid = sessionInfo.getLast_project_id();
+            if (proid != null && proid.length() > 0) {
+                proName = projectServiceI.findOneView(Integer.parseInt(proid))
+                        .getProName();
+            }
+        }
+
+        String cid = sessionInfo.getCompid();
+        String uid = sessionInfo.getId();
+        TFieldData tFieldData = fieldDataServiceI.getMaxFieldByCidUid(cid, uid);
+        String maxProjectId = null;
+        if (tFieldData != null) {
+            maxProjectId = tFieldData.getProjectName();
+        }
+        request.setAttribute("maxProjectId", maxProjectId);
+
+        request.setAttribute("cost", cost);
+        request.setAttribute("proid", proid);
+        request.setAttribute("proName", proName);
+        return "/app/fielddata/addBillData";
+    }
+
+    @RequestMapping("/securi_addMaterialData")
+    public String addMaterialDataPage(HttpServletRequest request, String proid) {
+        SessionInfo sessionInfo = (SessionInfo) request.getSession().getAttribute(ConfigUtil.getSessionInfoName());
+        String cost_id = sessionInfo.getLast_cost_id();
+        Cost cost = null;
+        String proName = "";
+
+        if (cost_id != null && cost_id.length() > 0) {
+            cost = costServiceI.findById(cost_id);
+        }
+
+        if (proid != null && proid.length() > 0) {
+            Project project = projectServiceI.findOneView(Integer
+                    .parseInt(proid));
+            proName = project.getProName();
+        } else {
+            proid = sessionInfo.getLast_project_id();
+            if (proid != null && proid.length() > 0) {
+                proName = projectServiceI.findOneView(Integer.parseInt(proid))
+                        .getProName();
+            }
+        }
+
+        String cid = sessionInfo.getCompid();
+        String uid = sessionInfo.getId();
+        TFieldData tFieldData = fieldDataServiceI.getMaxFieldByCidUid(cid, uid);
+        String maxProjectId = null;
+        if (tFieldData != null) {
+            maxProjectId = tFieldData.getProjectName();
+        }
+        request.setAttribute("maxProjectId", maxProjectId);
+
+        request.setAttribute("cost", cost);
+        request.setAttribute("proid", proid);
+        request.setAttribute("proName", proName);
+        return "/app/fielddata/addMaterialData";
     }
 
     @RequestMapping("securi_getCostInfo")

@@ -97,9 +97,6 @@ public class UserController extends BaseController {
 
 	/**
 	 * 用户登录
-	 * 
-	 * @param user
-	 *            用户对象
 	 * @param session
 	 * @param request
 	 * @return
@@ -197,6 +194,9 @@ public class UserController extends BaseController {
 				Map<String, List<Map<String, Object>>> costInfos = costService.getCostTypeInfos(departmentIds, cid);
 				List<Map<String, Object>> dataCostList = costInfos.get("dataCostInfos");
 				List<Map<String, Object>> docCostList = costInfos.get("docCostInfos");
+				List<Map<String, Object>> billCostList = costInfos.get("billCostInfos");
+				List<Map<String, Object>> materialCostList = costInfos.get("materialCostInfos");
+
 				List<Map<String, Object>> _dataCostList = new ArrayList<Map<String, Object>>();
 				Map<String, Object> _dataCost = new HashMap<String, Object>();
 				for (Map<String, Object> dataCost : dataCostList) {
@@ -221,6 +221,31 @@ public class UserController extends BaseController {
 				}
 				sessionInfo.setDocCostTree(Utility.treeList(_docCostList, "-1"));
 
+				List<Map<String, Object>> _billCostList = new ArrayList<Map<String, Object>>();
+				Map<String, Object> _billCost = new HashMap<String, Object>();
+				for (Map<String, Object> billCost : billCostList) {
+					_billCost = new HashMap<String, Object>();
+					_billCost.put("text", billCost.get("costType"));
+					_billCost.put("id", billCost.get("nid"));
+					_billCost.put("pid", billCost.get("pid"));
+					_billCost.put("itemCode", billCost.get("itemCode"));
+					_billCostList.add(_billCost);
+				}
+				sessionInfo.setBillCostTree(Utility.treeList(_billCostList, "-1"));
+
+				List<Map<String, Object>> _materialCostList = new ArrayList<Map<String, Object>>();
+				Map<String, Object> _materialCost = new HashMap<String, Object>();
+				for (Map<String, Object> materialCost : materialCostList) {
+					_materialCost = new HashMap<String, Object>();
+					_materialCost.put("text", materialCost.get("costType"));
+					_materialCost.put("id", materialCost.get("nid"));
+					_materialCost.put("pid", materialCost.get("pid"));
+					_materialCost.put("itemCode", materialCost.get("itemCode"));
+					_materialCostList.add(_materialCost);
+				}
+				sessionInfo.setMaterialCostTree(Utility.treeList(_materialCostList, "-1"));
+
+
 				sessionInfo.setCostTypeInfos(costInfos);
                 sessionInfo.setUnitParams((List<Param>) paramService.getParams("UP", ""));
                 sessionInfo.setRightList(departmentService.getAllRight(cid, Integer.parseInt(u.getId())));
@@ -243,42 +268,6 @@ public class UserController extends BaseController {
 		}
 		return j;
 	}
-
-	/**
-	 * 判断是否是服务号 方法表述
-	 * 
-	 * @param u
-	 * @return User
-	 */
-	// private User isFw(User u) {
-	// User user = new User();
-	// user.setName(ConfigUtil.FW_NAME + u.getName());
-	// user.setPwd(u.getPwd());
-	// return userService.login(user);
-	// }
-
-	// /**
-	// * 用户注册
-	// *
-	// * @param user
-	// * 用户对象
-	// * @return
-	// */
-	// @ResponseBody
-	// @RequestMapping("/reg")
-	// public Json reg(User user) {
-	// Json j = new Json();
-	// try {
-	// userService.reg(user);
-	// j.setSuccess(true);
-	// j.setMsg("注册成功！新注册的用户没有任何权限，请让管理员赋予权限后再使用本系统！");
-	// j.setObj(user);
-	// } catch (Exception e) {
-	// // e.printStackTrace();
-	// j.setMsg(e.getMessage());
-	// }
-	// return j;
-	// }
 
 	/**
 	 * 退出登录
@@ -335,153 +324,6 @@ public class UserController extends BaseController {
 	}
 
 	/**
-	 * 添加用户
-	 * 
-	 * @return
-	 */
-	// @RequestMapping("/add")
-	// @ResponseBody
-	// public Json add(User user, HttpServletRequest request) {
-	// Json j = new Json();
-	// try {
-	// if (user.getIsFw() == 1) {
-	// user.setName(ConfigUtil.FW_NAME + user.getName());
-	// // 同步添加
-	// Integer code = SynchronizationController.saveIMUser(
-	// user.getName(), MD5Util.md5(user.getPwd()),
-	// user.getRealname(), token);
-	// if (!toError(code, j)) {
-	// return j;
-	// }
-	// }
-	// // String filepath = request.getRequestURL().toString();
-	// // filepath = filepath.substring(0,
-	// // filepath.indexOf("imforlan"))+"imforlan";
-	// user.setUariva("/upload/uariva/" + user.getUariva());// 设置头像路径
-	// // uariva
-	// userService.add(user);
-	// j.setSuccess(true);
-	// j.setMsg("添加成功！");
-	// j.setObj(user);
-	// } catch (Exception e) {
-	// j.setMsg(e.getMessage());
-	// }
-	// return j;
-	// }
-
-	/**
-	 * 跳转到用户修改页面
-	 * 
-	 * @return
-	 */
-	// @RequestMapping("/editPage")
-	// public String editPage(HttpServletRequest request, String id) {
-	// User u = userService.get(id);
-	// if (u.getu().startsWith(ConfigUtil.FW_NAME)) {
-	// String name = u.getUser_name().replaceAll(ConfigUtil.FW_NAME, "");
-	// u.setUser_name(name);
-	// u.setIsFw(1);
-	// }
-	// if (u.getUariva() != null) {
-	// // String filepath = request.getRequestURL().toString();
-	// // filepath = filepath.substring(0,
-	// // filepath.indexOf("imforlan"))+"imforlan";
-	// String picPath = u.getUariva().replaceAll("/upload/uariva/", "");
-	// u.setUariva(picPath);
-	// }
-	// request.setAttribute("user", u);
-	// return "/admin/userEdit";
-	// }
-
-	/**
-	 * 修改用户
-	 * 
-	 * @param user
-	 * @return
-	 */
-	// @RequestMapping("/edit")
-	// @ResponseBody
-	// public Json edit(User user, HttpServletRequest request) {
-	// Json j = new Json();
-	// try {
-	// if (user.getIsFw() == 1) {
-	// user.setUser_name((ConfigUtil.FW_NAME + user.getUser_name()));
-	// // 同步 修改昵称
-	// Integer code = SynchronizationController.putIMNickname(
-	// user.getUser_name(), user.getUser_realname(), token);
-	// if (!toError(code, j)) {
-	// return j;
-	// }
-	// }
-	// // String filepath = request.getRequestURL().toString();
-	// // filepath = filepath.substring(0,
-	// // filepath.indexOf("imforlan"))+"imforlan";
-	// user.setUariva("/upload/uariva/" + user.getUariva());// 设置头像路径
-	// // uariva
-	// // userService.edit(user);
-	// j.setSuccess(true);
-	// j.setMsg("编辑成功！");
-	// j.setObj(user);
-	// } catch (Exception e) {
-	// // e.printStackTrace();
-	// j.setMsg(e.getMessage());
-	// }
-	// return j;
-	// }
-
-	/**
-	 * 删除用户
-	 * 
-	 * @param id
-	 * @return
-	 */
-	// @RequestMapping("/delete")
-	// @ResponseBody
-	// public Json delete(String id, HttpSession session) {
-	// SessionInfo sessionInfo = (SessionInfo) session.getAttribute(ConfigUtil
-	// .getSessionInfoName());
-	// Json j = new Json();
-	// if (id != null && !id.equalsIgnoreCase(sessionInfo.getId())) {// 不能删除自己
-	// User user = userService.get(id);
-	// // userService.delete(id);
-	// j.setSuccess(true);
-	// if (user.getUser_name().startsWith(ConfigUtil.FW_NAME)) {
-	// // 同步删除
-	// Integer code = SynchronizationController.deleteIMUser(
-	// user.getUser_name(), token);
-	// if (!toError(code, j)) {
-	// return j;
-	// }
-	// }
-	// }
-	// j.setMsg("删除成功！");
-	// return j;
-	// }
-
-	/**
-	 * 批量删除用户
-	 * 
-	 * @param ids
-	 *            ('0','1','2')
-	 * @return
-	 */
-	// @RequestMapping("/batchDelete")
-	// @ResponseBody
-	// public Json batchDelete(String ids, HttpSession session) {
-	// Json j = new Json();
-	// if (ids != null && ids.length() > 0) {
-	// for (String id : ids.split(",")) {
-	// if (id != null) {
-	// this.delete(id, session);
-	// }
-	// }
-	// }
-	// j.setMsg("批量删除成功！");
-	// j.setSuccess(true);
-	// return j;
-	// }
-
-	/**
 	 * 跳转到用户授权页面
 	 * 
 	 * @return
@@ -496,22 +338,6 @@ public class UserController extends BaseController {
 		return "/admin/userGrant";
 	}
 
-	// /**
-	// * 用户授权
-	// *
-	// * @param ids
-	// * @return
-	// */
-	// @RequestMapping("/grant")
-	// @ResponseBody
-	// public Json grant(String ids, User user) {
-	// Json j = new Json();
-	// userService.grant(ids, user);
-	// j.setSuccess(true);
-	// j.setMsg("授权成功！");
-	// return j;
-	// }
-
 	/**
 	 * 跳转到编辑用户密码页面
 	 * 
@@ -525,30 +351,6 @@ public class UserController extends BaseController {
 		request.setAttribute("user", u);
 		return "/admin/userEditPwd";
 	}
-
-	/**
-	 * 编辑用户密码
-	 * 
-	 * @param user
-	 * @return
-	 */
-	// @RequestMapping("/editPwd")
-	// @ResponseBody
-	// public Json editPwd(User user) {
-	// Json j = new Json();
-	// if (user.getUser_name().startsWith(ConfigUtil.FW_NAME)) {
-	// // 同步修改密码
-	// Integer code = SynchronizationController.putIMUserPwd(
-	// user.getUser_name(), MD5Util.md5(user.getUser_pw()), token);
-	// if (!toError(code, j)) {
-	// return j;
-	// }
-	// }
-	// // userService.editPwd(user);
-	// j.setSuccess(true);
-	// j.setMsg("编辑成功！");
-	// return j;
-	// }
 
 	/**
 	 * 跳转到编辑自己的密码页面
@@ -644,8 +446,9 @@ public class UserController extends BaseController {
 
 	/**
 	 * 上传头像
-	 * 
-	 * @param id
+	 * @param session
+	 * @param req
+	 * @param rt
 	 * @return
 	 */
 	@RequestMapping("/uploaduariva")
@@ -701,27 +504,9 @@ public class UserController extends BaseController {
 		return "/admin/fwuser";
 	}
 
-	// /**
-	// * 服务号登录显示dataGrid信息
-	// *
-	// * @param q
-	// * @param ph
-	// * @return
-	// */
-	// @RequestMapping("/fwdataGrid")
-	// @ResponseBody
-	// public DataGrid fwData(User user, HttpSession session, PageHelper ph) {
-	// SessionInfo sessionInfo = (SessionInfo) session.getAttribute(ConfigUtil
-	// .getSessionInfoName());
-	// String q = sessionInfo.getName();
-	// return userService.fwData(q, user, ph);
-	// }
-
 	/**
 	 * 服务号登录显示dataGrid信息
-	 * 
-	 * @param q
-	 * @param ph
+	 * @param id
 	 * @return
 	 */
 	@RequestMapping("/findUser")
@@ -735,171 +520,6 @@ public class UserController extends BaseController {
 		}
 		return j;
 	}
-
-	/**
-	 * 查看所有服务号信息
-	 */
-	// @ResponseBody
-	// @RequestMapping(value = "/securi_findAllFW")
-	// public Json findAllFW(HttpServletRequest req) {
-	// Json j = sy.util.Constant.convertJson(req);
-	// if (!j.isSuccess()) {
-	// return j;
-	// }
-	// try {
-	// JSONObject o = (JSONObject) j.getObj();
-	// j.setObj(null);
-	// String username = o.getString("username");
-	// String pwd = o.getString("pwd");
-	// String page = o.getString("curpage");
-	// String rows = o.getString("rows");
-	// pwd = MD5.encodePassword(pwd);// 加密
-	// User u = new User();
-	// u.setUser_name((username));
-	// u.setUser_pw(pwd);
-	//
-	// if (imuserService.findPuserByNameAndPwd(username, pwd) == null) {
-	// j.setSuccess(false);
-	// j.setCode(1006);
-	// j.setMsg("账号登录异常");
-	// j.setObj(null);
-	// return j;
-	// }
-	// List<User> list = null;// userService.findAllFW(Integer.parseInt(page),
-	// // Integer.parseInt(rows));
-	// if (list.size() > 0) {
-	// j.setSuccess(true);
-	// j.setCode(2000);
-	// j.setMsg("查询成功");
-	// j.setObj(list);
-	// return j;
-	// } else {
-	// j.setSuccess(false);
-	// j.setCode(1004);
-	// j.setMsg("查询失败");
-	// return j;
-	// }
-	// } catch (Exception ex) {
-	// ex.printStackTrace();
-	// j.setMsg("参数非法...");
-	// j.setSuccess(false);
-	// j.setObj(null);
-	// j.setCode(1002);
-	// return j;
-	// }
-	// }
-
-	/**
-	 * 查看指定服务号信息
-	 */
-	// @ResponseBody
-	// @RequestMapping(value = "/securi_findFWByName")
-	// public Json findFWByName(HttpServletRequest req) {
-	// Json j = sy.util.Constant.convertJson(req);
-	// if (!j.isSuccess()) {
-	// return j;
-	// }
-	// try {
-	// JSONObject o = (JSONObject) j.getObj();
-	// j.setObj(null);
-	// String username = o.getString("username");
-	// String pwd = o.getString("pwd");
-	// pwd = MD5.encodePassword(pwd);// 加密
-	// User u = new User();
-	// u.setUser_name((username));
-	// u.setUser_pw(pwd);
-	// if (imuserService.findPuserByNameAndPwd(username, pwd) == null) {
-	// j.setSuccess(false);
-	// j.setCode(1006);
-	// j.setMsg("账号登录异常");
-	// j.setObj(null);
-	// return j;
-	// }
-	// String fwName = o.getString("fwName");// 服务号名称
-	// User user = null;// userService.findFWByName(fwName);
-	// if (user != null) {
-	// j.setSuccess(true);
-	// j.setCode(2000);
-	// j.setMsg("查询成功");
-	// j.setObj(user);
-	// return j;
-	// } else {
-	// j.setSuccess(false);
-	// j.setCode(1004);
-	// j.setMsg("查询失败");
-	// return j;
-	// }
-	// } catch (Exception ex) {
-	// ex.printStackTrace();
-	// j.setMsg("参数非法...");
-	// j.setSuccess(false);
-	// j.setObj(null);
-	// j.setCode(1002);
-	// return j;
-	// }
-	// }
-
-	/**
-	 * 查看当前用户下所有服务号信息
-	 */
-	// @ResponseBody
-	// @RequestMapping(value = "/securi_findAllFWByUser")
-	// public Json findAllFWByUser(HttpServletRequest req) {
-	// Json j = sy.util.Constant.convertJson(req);
-	// if (!j.isSuccess()) {
-	// return j;
-	// }
-	// try {
-	// JSONObject o = (JSONObject) j.getObj();
-	// j.setObj(null);
-	// String username = o.getString("username");
-	// String pwd = o.getString("pwd");
-	// pwd = MD5.encodePassword(pwd);// 加密
-	// User u = new User();
-	// u.setUser_name((username));
-	// u.setUser_pw(pwd);
-	// if (imuserService.findPuserByNameAndPwd(username, pwd) == null) {
-	// j.setSuccess(false);
-	// j.setCode(1006);
-	// j.setMsg("账号登录异常");
-	// j.setObj(null);
-	// return j;
-	// }
-	// // 查看好友信息
-	// JSONArray arr = SynchronizationController.getFriend(username,
-	// SynchronizationController.getToken());
-	// List<User> list = new ArrayList<User>();
-	// if (arr.size() > 0) {
-	// for (int i = 0; i < arr.size(); i++) {
-	// if (arr.getString(i).indexOf(ConfigUtil.FW_NAME) == -1) {
-	// continue;
-	// }
-	// User user = null;// userService.findFWByName(arr.getString(i));
-	// list.add(user);
-	// }
-	// }
-	// if (list.size() > 0) {
-	// j.setSuccess(true);
-	// j.setCode(2000);
-	// j.setMsg("查询成功");
-	// j.setObj(list);
-	// return j;
-	// } else {
-	// j.setSuccess(false);
-	// j.setCode(1004);
-	// j.setMsg("查询失败");
-	// return j;
-	// }
-	// } catch (Exception ex) {
-	// ex.printStackTrace();
-	// j.setMsg("参数非法...");
-	// j.setSuccess(false);
-	// j.setObj(null);
-	// j.setCode(1002);
-	// return j;
-	// }
-	//
-	// }
 
 	/**
 	 * 跳转至我的购买信息
@@ -919,8 +539,9 @@ public class UserController extends BaseController {
 
 	/**
 	 * 获取我的购买信息数据表格
-	 * 
-	 * @param user
+	 * @param app
+	 * @param ph
+	 * @param request
 	 * @return
 	 */
 	@RequestMapping("/orderDataGrid")
@@ -935,8 +556,9 @@ public class UserController extends BaseController {
 
 	/**
 	 * 获取购买预警信息数据表格
-	 * 
-	 * @param user
+	 * @param app
+	 * @param ph
+	 * @param request
 	 * @return
 	 */
 	@RequestMapping("/warnOrderDataGrid")
@@ -975,16 +597,4 @@ public class UserController extends BaseController {
 		String result = sb.toString();
 		return result;
 	}
-
-//    @RequestMapping("/securi_getSessionUser")
-//    @ResponseBody
-//    public JSONObject getSessionUser(HttpServletRequest req, HttpSession session) {
-//        SessionInfo sessionInfo = (SessionInfo) session.getAttribute(ConfigUtil.getSessionInfoName());
-//        String uid = sessionInfo.getId();
-//        String name = sessionInfo.getName();
-//        JSONObject userInfo = new JSONObject();
-//        userInfo.put("uid", uid);
-//        userInfo.put("name", name);
-//        return userInfo;
-//    }
 }

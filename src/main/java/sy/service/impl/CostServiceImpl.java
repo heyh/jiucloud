@@ -14,6 +14,7 @@ import sy.model.po.Department_Cost;
 import sy.pageModel.DataGrid;
 import sy.pageModel.PageHelper;
 import sy.service.CostServiceI;
+import sy.util.ObjectExcelRead;
 import sy.util.Utility;
 
 import java.util.ArrayList;
@@ -550,6 +551,8 @@ public class CostServiceImpl implements CostServiceI {
         Map<String, List<Map<String, Object>>> costTypeInfos = new HashMap<String, List<Map<String, Object>>>();
         List<Map<String, Object>> dataCostInfos = new ArrayList<Map<String, Object>>();
         List<Map<String, Object>> docCostInfos = new ArrayList<Map<String, Object>>();
+        List<Map<String, Object>> billCostInfos = new ArrayList<Map<String, Object>>();
+        List<Map<String, Object>> materialCostInfos = new ArrayList<Map<String, Object>>();
 
         for (Cost cost : l) {
             Map<String, Object> tmp = new HashMap<String, Object>();
@@ -561,14 +564,20 @@ public class CostServiceImpl implements CostServiceI {
             tmp.put("pid", cost.getPid());
             tmp.put("itemCode", cost.getItemCode());
             tmp.put("isSend", cost.getIsend());
-            if (!itemCode.substring(0, 3).equals("000") && Integer.parseInt(itemCode.substring(0, 3)) <= 900) {
+            if (!itemCode.substring(0, 3).equals("000") && !itemCode.substring(0, 3).equals("700") && !itemCode.substring(0, 3).equals("800") && Integer.parseInt(itemCode.substring(0, 3)) <= 900) {
                 dataCostInfos.add(tmp);
             } else if (itemCode.substring(0, 3).equals("000") || Integer.parseInt(itemCode.substring(0, 3)) > 900){
                 docCostInfos.add(tmp);
-            }
+            } else if (itemCode.substring(0, 3).equals("700")) {
+            	billCostInfos.add(tmp);
+			} else if (itemCode.substring(0, 3).equals("800")) {
+            	materialCostInfos.add(tmp);
+			}
         }
         costTypeInfos.put("dataCostInfos", dataCostInfos);
         costTypeInfos.put("docCostInfos", docCostInfos);
+		costTypeInfos.put("billCostInfos", billCostInfos);
+		costTypeInfos.put("materialCostInfos", materialCostInfos);
         return costTypeInfos;
     }
 

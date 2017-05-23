@@ -18,7 +18,7 @@
 
 <%
     List<Param> unitParams = new ArrayList<Param>();
-    JSONArray costTree = new JSONArray();
+    JSONArray billCostTree = new JSONArray();
     List<Map<String, Object>> dataCostInfos = new ArrayList<Map<String, Object>>();
     JSONArray jsonArray = new JSONArray();
     SessionInfo sessionInfo = (SessionInfo) session.getAttribute(ConfigUtil.getSessionInfoName());
@@ -26,7 +26,7 @@
         response.sendRedirect(request.getContextPath());
     } else {
         unitParams = sessionInfo.getUnitParams();
-        costTree = sessionInfo.getCostTree();
+        billCostTree = sessionInfo.getBillCostTree();
         dataCostInfos = sessionInfo.getCostTypeInfos().get("dataCostInfos");
         for (Map<String, Object> nodeMap : dataCostInfos) {
             JSONObject nodeJson = JSONObject.fromObject(nodeMap);
@@ -344,7 +344,7 @@
             });
 
             $('.easyui-combotree').combotree({
-                data: <%= costTree %>,
+                data: <%= billCostTree %>,
                 lines: true,
                 valueField: 'id',
                 textField: 'text',
