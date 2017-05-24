@@ -86,25 +86,14 @@
 
 									},
 									{
-										field : 'specifications',
-										title : '规格型号(设施名称)',
-										width : 200
-									},
-
-									{
 										field : 'costType',
-										title : '类型',
+										title : '费用类型',
 										width : 100
 									},
 									{
 										field : 'dataName',
-										title : '名称',
+										title : '材料名称',
 										width : 350
-									},
-									{
-										field : 'remark',
-										title : '备注(特征)',
-										width : 150
 									},
 									{
 										field : 'unit',
@@ -155,14 +144,24 @@
 										}
 									},
 									{
-										field : 'sectionName',
-										title : '标段(属性)',
-										width : 100
+										field : 'specifications',
+										title : '规格型号',
+										width : 200
 									},
+//									{
+//										field : 'sectionName',
+//										title : '标段(属性)',
+//										width : 100
+//									},
 									{
 										field : 'supplier',
 										title : '供应商',
 										width: 100
+									},
+									{
+										field : 'remark',
+										title : '备注',
+										width : 150
 									},
 									{
 										field : 'uname',
@@ -812,20 +811,20 @@
 			data-options="iconCls:'zhongzhiguolvtiaojian_new',plain:true"
 			onclick="cleanFun();">清空条件</a>
 
-		<a onclick="cloudImportFun();" href="javascript:void(0);"
-		   class="easyui-linkbutton"
-		   data-options="plain:true,iconCls:'cloud_in'">氿上云导入</a>
+		<%--<a onclick="cloudImportFun();" href="javascript:void(0);"--%>
+		   <%--class="easyui-linkbutton"--%>
+		   <%--data-options="plain:true,iconCls:'cloud_in'">氿上云导入</a>--%>
 
-		<a onclick="execlImportFun();" href="javascript:void(0);"
-		   class="easyui-linkbutton"
-		   data-options="plain:true,iconCls:'execl_in'">execl导入</a>
-		<c:choose>
-			<c:when test="<%=hasBackFillRight%>">
-				<a onclick="backFillFun();" href="javascript:void(0);"
-				   class="easyui-linkbutton"
-				   data-options="plain:true,iconCls:'backfill'">单价回填</a>
-			</c:when>
-		</c:choose>
+		<%--<a onclick="execlImportFun();" href="javascript:void(0);"--%>
+		   <%--class="easyui-linkbutton"--%>
+		   <%--data-options="plain:true,iconCls:'execl_in'">execl导入</a>--%>
+		<%--<c:choose>--%>
+			<%--<c:when test="<%=hasBackFillRight%>">--%>
+				<%--<a onclick="backFillFun();" href="javascript:void(0);"--%>
+				   <%--class="easyui-linkbutton"--%>
+				   <%--data-options="plain:true,iconCls:'backfill'">单价回填</a>--%>
+			<%--</c:when>--%>
+		<%--</c:choose>--%>
 
 
 	</div>

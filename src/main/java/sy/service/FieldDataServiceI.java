@@ -15,7 +15,8 @@ public interface FieldDataServiceI {
 	 */
 	public DataGrid dataGrid(FieldData fieldData, PageHelper ph,
                              List<Integer> ugroup, String source, String keyword);
-
+	public DataGrid dataGridForMobile(FieldData fieldData, PageHelper ph,
+							 List<Integer> ugroup, String source, String keyword);
 	/**
 	 * 
 	 * 删除

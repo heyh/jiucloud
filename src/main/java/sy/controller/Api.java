@@ -139,7 +139,7 @@ public class Api extends BaseController {
         pageHelper.setRows(limitSize);
         try {
             List<Integer> ugroup = departmentService.getUsers(cid, Integer.parseInt(uid));
-            dataGrid = fieldDataService.dataGrid(fieldData, pageHelper, ugroup, type, keyword);
+            dataGrid = fieldDataService.dataGridForMobile(fieldData, pageHelper, ugroup, type, keyword);
 
             List<FieldData> fieldDatas = dataGrid.getRows();
             if (fieldDatas != null && fieldDatas.size() > 0) {
@@ -226,7 +226,7 @@ public class Api extends BaseController {
                 departmentIds.add(department.getId());
             }
         }
-        Map<String, List<Map<String, Object>>> costInfos = costService.getCostTypeInfos(departmentIds, cid);
+        Map<String, List<Map<String, Object>>> costInfos = costService.getCostTypeInfosForMobile(departmentIds, cid);
         List<Map<String, Object>> costList = new ArrayList<Map<String, Object>>();
         if (type.equals("data")) {
             costList = costInfos.get("dataCostInfos");

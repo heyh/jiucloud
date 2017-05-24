@@ -476,7 +476,7 @@
             layer.open({
                 type: 1,
                 title: '附加信息',
-                closeBtn: 0,
+                closeBtn: 2,
                 shadeClose: true,
                 content: $('#supInfosDiv') //这里content是一个DOM，注意：最好该元素要存放在body最外层，否则可能被其它的相对元素所影响
             });
@@ -540,13 +540,6 @@
                         </div>
                     </div>
                     <div class="control-group">
-                        <label class="control-label" for="specifications">规格型号(设施名称):</label>
-
-                        <div class="controls">
-                            <input type="text" name="specifications" id="specifications" class="easyui-textbox" style="width:236px" onblur="cal()">
-                        </div>
-                    </div>
-                    <div class="control-group">
                         <label class="control-label" for="unit">单位:</label>
 
                         <div class="controls">
@@ -572,14 +565,21 @@
                         </div>
                     </div>
                     <div class="control-group">
-                        <label class="control-label" for="remark">备注(特征):</label>
+                        <label class="control-label" for="specifications">规格型号:</label>
+
+                        <div class="controls">
+                            <input type="text" name="specifications" id="specifications" class="easyui-textbox" style="width:236px" onblur="cal()">
+                        </div>
+                    </div>
+                    <div class="control-group">
+                        <label class="control-label" for="remark">备注:</label>
 
                         <div class="controls">
                             <textarea type="text" name="remark" id="remark" style="width:236px"></textarea>
                             <%--<input type="text" name="remark" id="remark" class="easyui-textbox" style="width:236px">--%>
                         </div>
                     </div>
-                    <div class="control-group">
+                    <div class="control-group" style="display: none">
                         <label class="control-label" for="section">标段(属性):</label>
 
                         <div class="controls">
@@ -600,7 +600,7 @@
                         </div>
                     </div>
                     <div class="control-group">
-                        <label class="control-label" for="dataName">名称:</label>
+                        <label class="control-label" for="dataName">材料名称:</label>
 
                         <div class="controls">
                             <input type="text" name="dataName" id="dataName" class="easyui-textbox" style="width:236px">
@@ -622,7 +622,7 @@
                             <input type="text" name="sumprice" id="sumprice" class="easyui-numberbox" precision="2" style="width:236px" onblur="cal()">
                         </div>
                     </div>
-                    <div class="control-group" id="supplierDiv" style="display: none;">
+                    <div class="control-group" id="supplierDiv">
                         <label class="control-label" for="supplier">供应商:</label>
 
                         <div class="controls">

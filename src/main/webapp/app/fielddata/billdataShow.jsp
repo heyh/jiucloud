@@ -87,7 +87,7 @@
 									},
 									{
 										field : 'specifications',
-										title : '规格型号(设施名称)',
+										title : '设施名称',
 										width : 200
 									},
 
@@ -103,7 +103,7 @@
 									},
 									{
 										field : 'remark',
-										title : '备注(特征)',
+										title : '项目特征',
 										width : 150
 									},
 									{
@@ -112,58 +112,48 @@
 										width : 100
 									},
 									{
-										field : 'price',
-										title : '单价',
-										width : 100,
-										formatter: function (value, row, index) {
-										    var str = '';
-										    var strHasOutRight = <%=hasOutRight%>;
-										    var hasReadEditRight = <%= hasOnlyReadRight %> || <%= hasReadEditRight %>;
-											if (strHasOutRight && row.itemCode.substring(0, 3) == '800') {
-                                                str = '***';
-											} else if(row.itemCode.substring(0, 3) == '700' && !hasReadEditRight) {
-                                                str = '***';
-											} else {
-                                                str = row.price;
-                                            }
-                                            return str;
-											<%--return row.itemCode.substring(0, 3) != '700' || <%= hasOnlyReadRight %> || <%= hasReadEditRight %> ? row.price : '***';--%>
-                                        }
-									},
-									{
 										field : 'count',
 										title : '数量',
 										width : 100
 									},
 									{
-										field : 'moeny',
-										title : '金额',
+										field : 'price_ys',
+										title : '预算单价',
+										width : 100
+									},
+									{
+										field : 'moeny_ys',
+										title : '预算合计',
 										width : 100,
 										formatter : function(value, row, index) {
-                                            var str = '';
-                                            var strHasOutRight = <%=hasOutRight%>;
-                                            var hasReadEditRight = <%= hasOnlyReadRight %> || <%= hasReadEditRight %>;
-                                            if (strHasOutRight && row.itemCode.substring(0, 3) == '800') {
-                                                str = '***';
-                                            } else if(row.itemCode.substring(0, 3) == '700' && !hasReadEditRight) {
-                                                str = '***';
-                                            } else {
-                                                str = (row.count * ((row.price==null || row.price=='') ? 0 : row.price)).toFixed(2);
-                                            }
+                                            var str = (row.count * ((row.price_ys==null || row.price_ys=='') ? 0 : row.price_ys)).toFixed(2);
                                             return str;
-											<%--return row.itemCode.substring(0, 3) != '700' || <%= hasOnlyReadRight %> || <%= hasReadEditRight %> ? (row.count * ((row.price==null || row.price=='') ? 0 : row.price)).toFixed(2) : '***';--%>
+										}
+									},
+									{
+										field : 'price_sj',
+										title : '审计单价',
+										width : 100
+									},
+									{
+										field : 'moeny_ys',
+										title : '审计合计',
+										width : 100,
+										formatter : function(value, row, index) {
+											var str = (row.count * ((row.price_sj==null || row.price_sj=='') ? 0 : row.price_sj)).toFixed(2);
+											return str;
 										}
 									},
 									{
 										field : 'sectionName',
-										title : '标段(属性)',
+										title : '工程属性',
 										width : 100
 									},
-									{
-										field : 'supplier',
-										title : '供应商',
-										width: 100
-									},
+//									{
+//										field : 'supplier',
+//										title : '供应商',
+//										width: 100
+//									},
 									{
 										field : 'uname',
 										title : '操作人',
@@ -171,7 +161,7 @@
 									},
 									{
 										field : 'creatTime',
-										title : '入库时间',
+										title : '录入时间',
 										width : 100
 									},
                                     {
@@ -812,13 +802,13 @@
 			data-options="iconCls:'zhongzhiguolvtiaojian_new',plain:true"
 			onclick="cleanFun();">清空条件</a>
 
-		<a onclick="cloudImportFun();" href="javascript:void(0);"
-		   class="easyui-linkbutton"
-		   data-options="plain:true,iconCls:'cloud_in'">氿上云导入</a>
+		<%--<a onclick="cloudImportFun();" href="javascript:void(0);"--%>
+		   <%--class="easyui-linkbutton"--%>
+		   <%--data-options="plain:true,iconCls:'cloud_in'">氿上云导入</a>--%>
 
-		<a onclick="execlImportFun();" href="javascript:void(0);"
-		   class="easyui-linkbutton"
-		   data-options="plain:true,iconCls:'execl_in'">execl导入</a>
+		<%--<a onclick="execlImportFun();" href="javascript:void(0);"--%>
+		   <%--class="easyui-linkbutton"--%>
+		   <%--data-options="plain:true,iconCls:'execl_in'">execl导入</a>--%>
 		<c:choose>
 			<c:when test="<%=hasBackFillRight%>">
 				<a onclick="backFillFun();" href="javascript:void(0);"

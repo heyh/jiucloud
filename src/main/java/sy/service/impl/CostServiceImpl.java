@@ -582,6 +582,56 @@ public class CostServiceImpl implements CostServiceI {
     }
 
 	@Override
+	public Map<String, List<Map<String, Object>>> getCostTypeInfosForMobile(List<Integer> departmentIds, String cid) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("cid", cid);
+		String hql="";
+
+		hql = " from Cost t  where cid=:cid and isdelete=0";
+		if (departmentIds != null && departmentIds.size()>0) {
+			hql += " and id in (select cost_id from Department_Cost where department_id in (";
+			for (int i=0; i<departmentIds.size(); i++) {
+				if (i < departmentIds.size() - 1) {
+					hql += departmentIds.get(i) + ",";
+				} else {
+					hql += departmentIds.get(i) + "))";
+				}
+			}
+		}
+		hql += " order by t.itemCode, t.sort asc ";
+		List<Cost> l = costDaoI.find(hql, params);
+		if (l.size() == 0) {
+			params.remove("department_id");
+			hql = "from Cost t  where cid=:cid and isdelete=0 order by t.itemCode, t.sort asc";
+			l = costDaoI.find(hql, params);
+		}
+
+		Map<String, List<Map<String, Object>>> costTypeInfos = new HashMap<String, List<Map<String, Object>>>();
+		List<Map<String, Object>> dataCostInfos = new ArrayList<Map<String, Object>>();
+		List<Map<String, Object>> docCostInfos = new ArrayList<Map<String, Object>>();
+
+		for (Cost cost : l) {
+			Map<String, Object> tmp = new HashMap<String, Object>();
+			String itemCode = cost.getItemCode();
+			tmp = new HashMap<String, Object>();
+			tmp.put("costType", cost.getCostType());
+			tmp.put("id", cost.getId());
+			tmp.put("nid", cost.getNid());
+			tmp.put("pid", cost.getPid());
+			tmp.put("itemCode", cost.getItemCode());
+			tmp.put("isSend", cost.getIsend());
+			if (!itemCode.substring(0, 3).equals("000") && Integer.parseInt(itemCode.substring(0, 3)) <= 900) {
+				dataCostInfos.add(tmp);
+			} else if (itemCode.substring(0, 3).equals("000") || Integer.parseInt(itemCode.substring(0, 3)) > 900){
+				docCostInfos.add(tmp);
+			}
+		}
+		costTypeInfos.put("dataCostInfos", dataCostInfos);
+		costTypeInfos.put("docCostInfos", docCostInfos);
+		return costTypeInfos;
+	}
+
+	@Override
 	public void initDefaultCost(String cid) {
 		Map<String, Object> params = new HashMap<String, Object>();
 		params.put("cid", cid);
