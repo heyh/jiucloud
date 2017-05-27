@@ -121,6 +121,8 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
                 f.setProjectName(project.getProName());
                 f.setIsLock(project.getIsLock());
             }
+            f.setPrice_ys(tem.getPrice_ys());
+            f.setPrice_sj(tem.getPrice_sj());
             list.add(f);
         }
         // 0 不需要审批； 1 需要审批（显示未审批）

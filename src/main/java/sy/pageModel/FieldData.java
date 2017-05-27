@@ -56,6 +56,25 @@ public class FieldData {
 
     private String relId;
 
+    private String price_ys;
+    private String price_sj;
+
+	public String getPrice_ys() {
+		return price_ys;
+	}
+
+	public void setPrice_ys(String price_ys) {
+		this.price_ys = price_ys;
+	}
+
+	public String getPrice_sj() {
+		return price_sj;
+	}
+
+	public void setPrice_sj(String price_sj) {
+		this.price_sj = price_sj;
+	}
+
 	public String getRelId() {
 		return relId;
 	}

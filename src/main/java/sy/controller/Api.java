@@ -139,7 +139,7 @@ public class Api extends BaseController {
         pageHelper.setRows(limitSize);
         try {
             List<Integer> ugroup = departmentService.getUsers(cid, Integer.parseInt(uid));
-            dataGrid = fieldDataService.dataGridForMobile(fieldData, pageHelper, ugroup, type, keyword);
+            dataGrid = fieldDataService.dataGrid(fieldData, pageHelper, ugroup, type, keyword);
 
             List<FieldData> fieldDatas = dataGrid.getRows();
             if (fieldDatas != null && fieldDatas.size() > 0) {
@@ -226,12 +226,16 @@ public class Api extends BaseController {
                 departmentIds.add(department.getId());
             }
         }
-        Map<String, List<Map<String, Object>>> costInfos = costService.getCostTypeInfosForMobile(departmentIds, cid);
+        Map<String, List<Map<String, Object>>> costInfos = costService.getCostTypeInfos(departmentIds, cid);
         List<Map<String, Object>> costList = new ArrayList<Map<String, Object>>();
         if (type.equals("data")) {
             costList = costInfos.get("dataCostInfos");
         } else if (type.equals("doc")) {
             costList = costInfos.get("docCostInfos");
+        } else if (type.equals("bill")) {
+            costList = costInfos.get("billCostInfos");
+        } else if (type.equals("material")) {
+            costList = costInfos.get("materialCostInfos");
         }
         List<Map<String, Object>> _costList = new ArrayList<Map<String, Object>>();
         Map<String, Object> _cost = new HashMap<String, Object>();
@@ -281,13 +285,21 @@ public class Api extends BaseController {
                                      @RequestParam(value = "uid", required = true) String uid,
                                      HttpServletRequest request, HttpServletResponse response) {
         TFieldData maxFieldData = fieldDataService.getMaxFieldByCidUid(cid, uid);
-        Project project = projectService.findOneView(Integer.parseInt(maxFieldData.getProjectName()));
+        Project project = new Project();
+        if (maxFieldData.getProjectName() != null) {
+            project = projectService.findOneView(Integer.parseInt(maxFieldData.getProjectName()));
+        }
+
         String proName = "";
         String sectionName = "";
         if (project != null) {
             proName = project.getProName();
         }
-        Item sectionItem = itemService.getSingleItem(cid, maxFieldData.getProjectName(), maxFieldData.getSection());
+        Item sectionItem = new Item();
+        if (maxFieldData.getProjectName() != null) {
+            sectionItem = itemService.getSingleItem(cid, maxFieldData.getProjectName(), maxFieldData.getSection());
+        }
+
         if (sectionItem == null) {
             sectionName = "标段1";
         } else {
