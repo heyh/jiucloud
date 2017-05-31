@@ -219,7 +219,7 @@
 						</div>
 					</div>
 					<div class="control-group">
-						<label class="control-label" for="dataName">名称:</label>
+						<label class="control-label" for="dataName">材料名称:</label>
 
 						<div class="controls">
 							<input type="text" name="dataName" id="dataName" value="${tfielddata.dataName}" readonly="true">
