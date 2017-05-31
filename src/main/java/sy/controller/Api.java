@@ -1497,6 +1497,7 @@ public class Api extends BaseController {
                                        @RequestParam(value = "outCount", required = true) String outCount,
                                        @RequestParam(value = "id", required = true) String id,
                                        @RequestParam(value = "uid", required = true) String uid,
+                                       @RequestParam(value = "currentApprovedUser", required = false) String currentApprovedUser,
                                        HttpServletRequest request) {
         TFieldData tFieldData = fieldDataService.detail(id);
 
@@ -1514,7 +1515,14 @@ public class Api extends BaseController {
         outFieldData.setItemCode(tFieldData.getItemCode());
         outFieldData.setSpecifications(tFieldData.getSpecifications());
         outFieldData.setRemark("出库");
-        outFieldData.setNeedApproved("0");
+        if (!StringUtil.trimToEmpty(currentApprovedUser).equals("")) {
+            outFieldData.setNeedApproved("1");
+            outFieldData.setCurrentApprovedUser(currentApprovedUser);
+            outFieldData.setApprovedUser(currentApprovedUser);
+        } else {
+            outFieldData.setNeedApproved("0");
+        }
+
         User user = userService.getUser(uid);
 
         String realName = user.getRealname();
