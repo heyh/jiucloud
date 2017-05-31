@@ -15,7 +15,7 @@
     String userId = null;
 //    String underlingUsers = null;
     String projectInfos = null;
-    List<Map<String, Object>> dataCostInfos = new ArrayList<Map<String, Object>>();
+    List<Map<String, Object>> materialCostInfos = new ArrayList<Map<String, Object>>();
 	JSONArray jsonArray = new JSONArray();
 	JSONArray materialCostTree = new JSONArray();
 	boolean hasOnlyReadRight = false;
@@ -30,8 +30,8 @@
         userId = sessionInfo.getId();
 //        underlingUsers = sessionInfo.getUnderlingUsers();
         projectInfos = sessionInfo.getProjectInfos();
-        dataCostInfos = sessionInfo.getCostTypeInfos().get("dataCostInfos");
-		for (Map<String, Object> nodeMap : dataCostInfos) {
+		materialCostInfos = sessionInfo.getCostTypeInfos().get("materialCostInfos");
+		for (Map<String, Object> nodeMap : materialCostInfos) {
 			JSONObject nodeJson = JSONObject.fromObject(nodeMap);
 			jsonArray.add(nodeJson);
 		}

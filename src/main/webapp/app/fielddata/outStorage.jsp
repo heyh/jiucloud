@@ -117,13 +117,13 @@
 
     });
 
-    var sectionId = document.getElementById('sectionId').value;
-    for (var i = 0; i < document.getElementById('section').options.length; i++) {
-        if (document.getElementById('section').options[i].value == sectionId) {
-            document.getElementById('section').options[i].selected = true;
-            break;
-        }
-    }
+//    var sectionId = document.getElementById('sectionId').value;
+//    for (var i = 0; i < document.getElementById('section').options.length; i++) {
+//        if (document.getElementById('section').options[i].value == sectionId) {
+//            document.getElementById('section').options[i].selected = true;
+//            break;
+//        }
+//    }
 
     $.ajax({
         url: '${pageContext.request.contextPath}/projectController/securi_getProjects',    //后台webservice里的方法名称
@@ -194,35 +194,18 @@
 						</div>
 					</div>
 					<div class="control-group">
-						<label class="control-label" for="proName">标段(属性):</label>
+						<label class="control-label" for="dataName">规格型号:</label>
 
 						<div class="controls">
-							<select id="section" name="section" readonly="true">
-								<c:forEach items="${selectItems}" var="tem">
-									<option value="${tem.id}">${tem.text}</option>
-								</c:forEach>
-							</select>
+							<input type="text" name="specifications" id="specifications" value="${tfielddata.specifications}" readonly="true">
 						</div>
 					</div>
-					<div class="control-group">
-						<label class="control-label" for="costTypeName">单位:</label>
-
-						<div class="controls">
-							<input type="text" name="unit" id="unit" value="${tfielddata.unit}" readonly="true">
-						</div>
-					</div>
-					<%--<div class="control-group">--%>
-						<%--<label class="control-label" for="costTypeName">数量:</label>--%>
-
-						<%--<div class="controls">--%>
-							<%--<input type="text" name="count" id="count" value="${tfielddata.count}" readonly="true">--%>
-						<%--</div>--%>
-					<%--</div>--%>
 					<div class="control-group">
 						<label class="control-label" for="costTypeName">库存数量:</label>
 
 						<div class="controls">
-							<input type="text" name="storageCount" id="storageCount" value="${storageCount}" readonly="true">
+							<%--<input type="text" name="storageCount" id="storageCount" value="${storageCount}" readonly="true">--%>
+							<span><input type="text" name="storageCount" id="storageCount" value="${storageCount}" readonly="true"><span style="color: #00a0e9">${tfielddata.unit}</span></span>
 						</div>
 					</div>
 				</div>
@@ -246,23 +229,11 @@
 						<label class="control-label" for="costTypeName">数量:</label>
 
 						<div class="controls">
-							<input type="text" name="count" id="count" value="${tfielddata.count}" readonly="true">
+							<%--<input type="text" name="count" id="count" value="${tfielddata.count}" readonly="true">--%>
+							<span><input type="text" name="count" id="count" value="${tfielddata.count}" readonly="true"><span style="color: #00a0e9">${tfielddata.unit}</span></span>
 						</div>
 					</div>
-					<%--<div class="control-group">--%>
-						<%--<label class="control-label" for="dataName">单价:</label>--%>
 
-						<%--<div class="controls">--%>
-							<%--<input type="text" name="price" id="price" value="${tfielddata.price}" readonly="true">--%>
-						<%--</div>--%>
-					<%--</div>--%>
-					<div class="control-group">
-						<label class="control-label" for="dataName">规格型号(设施名称):</label>
-
-						<div class="controls">
-							<input type="text" name="specifications" id="specifications" value="${tfielddata.specifications}" readonly="true">
-						</div>
-					</div>
 				</div>
 
 
