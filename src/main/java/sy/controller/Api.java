@@ -103,6 +103,7 @@ public class Api extends BaseController {
                                        @RequestParam(value = "limitSize", required = true) int limitSize,
                                        @RequestParam(value = "advancedSearchProjectName", required = false) String advancedSearchProjectName,
                                        @RequestParam(value = "advancedSearchCostType", required = false) String advancedSearchCostType,
+                                       @RequestParam(value = "advancedSearchItemCode", required = false) String advancedSearchItemCode,
                                        @RequestParam(value = "advancedSearchStartTime", required = false) String advancedSearchStartTime,
                                        @RequestParam(value = "advancedSearchEndTime", required = false) String advancedSearchEndTime,
                                        HttpServletRequest request, HttpServletResponse response) {
@@ -120,7 +121,9 @@ public class Api extends BaseController {
         if (advancedSearchCostType != null && !advancedSearchCostType.equals("")) {
             fieldData.setCostType(advancedSearchCostType);
         }
-
+        if (advancedSearchItemCode != null && !advancedSearchItemCode.equals("")) {
+            fieldData.setItemCode(advancedSearchItemCode);
+        }
         if (advancedSearchStartTime != null && !advancedSearchStartTime.equals("")) {
             fieldData.setStartTime(advancedSearchStartTime + " 00:00:00");
         }
