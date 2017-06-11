@@ -926,14 +926,27 @@ public class FieldDataController extends BaseController {
 
         List<FieldData> datas = fieldDataServiceI.dataGrid(fieldData, ph, ugroup, source, keyword).getRows();
 
-        List<Map<String, Object>> map = createExcelRecord(datas);
+        List<Map<String, Object>> map = new ArrayList<Map<String, Object>>();
 
         // 填充projects数据
-        String[] columnNames = {"工程名称", "费用类型", "现场数据名称", "单价", "数量", "金额",
-                "单位", "规格", "操作人", "入库时间"};// 列名
-        String[] keys = {"project_name", "costType_name", "name", "price",
-                "count", "money", "unit", "specifications", "uname",
-                "createTime"};// map中的key
+        String[] columnNames = {};
+        String[] keys = {};
+        if (source.equals("bill")) {
+            map = createBillExcelRecord(datas);
+            columnNames = new String[]{"工程名称", "设施名称", "类型", "名称", "项目特征", "单位", "数量", "预算单价",
+                    "审计单价", "操作人", "录入时间"};     // 列名
+            keys = new String[]{"project_name", "specifications", "costType_name", "dataName", "remark", "unit", "count", "price_ys",
+                    "price_sj", "uname", "createTime"};// map中的key
+
+        } else if (source.equals("material")) {
+            map = createMaterialExcelRecord(datas);
+            columnNames = new String[]{"工程名称", "费用类型", "材料名称", "单位", "数量", "单价", "规格型号", "供应商", "操作人", "录入时间"};     // 列名
+            keys = new String[]{"project_name", "costType_name", "dataName", "unit", "count", "price", "specifications", "supplier", "uname", "createTime"};// map中的key
+        } else {
+            map = createExcelRecord(datas);
+            columnNames = new String[]{"工程名称", "费用类型", "现场数据名称", "单价", "数量", "金额", "单位", "规格", "操作人", "入库时间"}; // 列名
+            keys = new String[]{"project_name", "costType_name", "name", "price", "count", "money", "unit", "specifications", "uname", "createTime"};// map中的key
+        }
 
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         BufferedInputStream bis = null;
@@ -1003,6 +1016,57 @@ public class FieldDataController extends BaseController {
         mapValue.put("project_name", "合计");
         mapValue.put("money", result2 / 100.0);
         listmap.add(mapValue);
+        return listmap;
+    }
+
+    private List<Map<String, Object>> createBillExcelRecord(List<FieldData> list) {
+        List<Map<String, Object>> listmap = new ArrayList<Map<String, Object>>();
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("sheetName", "data.xls");
+        listmap.add(map);
+        double count = 0;
+
+        for (int i = 0; i < list.size(); i++) {
+            FieldData tem = list.get(i);
+            Map<String, Object> mapValue = new HashMap<String, Object>();
+            mapValue.put("project_name", tem.getProjectName());
+            mapValue.put("specifications", tem.getSpecifications());
+            mapValue.put("costType_name", tem.getCostType());
+            mapValue.put("dataName", tem.getDataName());
+            mapValue.put("remark", tem.getRemark());
+            mapValue.put("unit", tem.getUnit());
+            mapValue.put("count", tem.getCount());
+            mapValue.put("price_ys", tem.getPrice_ys());
+            mapValue.put("price_sj", tem.getPrice_sj());
+            mapValue.put("uname", tem.getUname());
+            mapValue.put("createTime", tem.getCreatTime());
+            listmap.add(mapValue);
+        }
+        return listmap;
+    }
+
+    private List<Map<String, Object>> createMaterialExcelRecord(List<FieldData> list) {
+        List<Map<String, Object>> listmap = new ArrayList<Map<String, Object>>();
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("sheetName", "data.xls");
+        listmap.add(map);
+        double count = 0;
+
+        for (int i = 0; i < list.size(); i++) {
+            FieldData tem = list.get(i);
+            Map<String, Object> mapValue = new HashMap<String, Object>();
+            mapValue.put("project_name", tem.getProjectName());
+            mapValue.put("costType_name", tem.getCostType());
+            mapValue.put("dataName", tem.getDataName());
+            mapValue.put("unit", tem.getUnit());
+            mapValue.put("count", tem.getCount());
+            mapValue.put("price", tem.getPrice());
+            mapValue.put("specifications", tem.getSpecifications());
+            mapValue.put("supplier", tem.getSupplier());
+            mapValue.put("uname", tem.getUname());
+            mapValue.put("createTime", tem.getCreatTime());
+            listmap.add(mapValue);
+        }
         return listmap;
     }
 
