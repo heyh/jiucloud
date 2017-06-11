@@ -533,7 +533,7 @@
 		str += '&costType=' + $('#costType').val();
 		str += '&startTime=' + $('#startTime').val();
 		str += '&endTime=' + $('#endTime').val();
-		var url = "${pageContext.request.contextPath}/fieldDataController/securi_execl?a=1&source=data"
+		var url = "${pageContext.request.contextPath}/fieldDataController/securi_execl?a=1&source=bill"
 				+ str;
 		window.open(url);
 	}
