@@ -59,18 +59,20 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
         DataGrid dg = new DataGrid();
         Map<String, Object> params = new HashMap<String, Object>();
         String hql="";
-        if (source.equals("data")) {
-            hql = " from TFieldData t  where isDelete=0 and (itemcode is not null and itemcode<>'' and substring(itemcode,1,3)<>'000' and substring(itemcode,1,3)<>'700' and substring(itemcode,1,3)<>'800' and substring(itemcode,1,3)<=900) ";
-        } else if(source.equals("doc")) {
-            hql = " from TFieldData t  where isDelete=0 and (itemcode is not null and itemcode<>'' and substring(itemcode,1,3)<>'700' and substring(itemcode,1,3)<>'800' and (substring(itemcode,1,3)='000' or substring(itemcode,1,3)>900)) ";
-        } else if (source.equals("bill")) {
-            hql = " from TFieldData t  where isDelete=0 and (itemcode is not null and itemcode<>'' and substring(itemcode,1,3) ='700') ";
-        } else if (source.equals("material")) {
-            hql = " from TFieldData t  where isDelete=0 and (itemcode is not null and itemcode<>'' and substring(itemcode,1,3) ='800') ";
-        }
-        else
-        {
+        if (fieldData.getNeedApproved() != null && fieldData.getNeedApproved().equals("1")) {
             hql = " from TFieldData t  where isDelete=0  ";
+        } else {
+            if (source.equals("data")) {
+                hql = " from TFieldData t  where isDelete=0 and (itemcode is not null and itemcode<>'' and substring(itemcode,1,3)<>'000' and substring(itemcode,1,3)<>'700' and substring(itemcode,1,3)<>'800' and substring(itemcode,1,3)<=900) ";
+            } else if(source.equals("doc")) {
+                hql = " from TFieldData t  where isDelete=0 and (itemcode is not null and itemcode<>'' and substring(itemcode,1,3)<>'700' and substring(itemcode,1,3)<>'800' and (substring(itemcode,1,3)='000' or substring(itemcode,1,3)>900)) ";
+            } else if (source.equals("bill")) {
+                hql = " from TFieldData t  where isDelete=0 and (itemcode is not null and itemcode<>'' and substring(itemcode,1,3) ='700') ";
+            } else if (source.equals("material")) {
+                hql = " from TFieldData t  where isDelete=0 and (itemcode is not null and itemcode<>'' and substring(itemcode,1,3) ='800') ";
+            } else {
+                hql = " from TFieldData t  where isDelete=0  ";
+            }
         }
 
         hql += whereHql(fieldData, params, ugroup, keyword);

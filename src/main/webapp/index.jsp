@@ -259,18 +259,18 @@
 
         function goApprove(todo) {
             var url = '${pageContext.request.contextPath}/projectStatController/dataApprove';
-            var text = '项目费用审批';
+            var text = '项目数据审批';
             var iconCls = 'approve';
 
-            if(todo == 0) {
-                url = '${pageContext.request.contextPath}/projectStatController/dataApprove';
-                text = '项目费用审批';
-                iconCls = 'approve';
-            } else if (todo == 1) {
-                url = '${pageContext.request.contextPath}/projectStatController/docApprove';
-                text = '项目资料审批';
-                iconCls = 'approve';
-            }
+            <%--if(todo == 0) {--%>
+                <%--url = '${pageContext.request.contextPath}/projectStatController/dataApprove';--%>
+                <%--text = '项目数据审批';--%>
+                <%--iconCls = 'approve';--%>
+            <%--} else if (todo == 1) {--%>
+                <%--url = '${pageContext.request.contextPath}/projectStatController/docApprove';--%>
+                <%--text = '项目数据审批';--%>
+                <%--iconCls = 'approve';--%>
+            <%--}--%>
 
             var params = {
                 url : url,
