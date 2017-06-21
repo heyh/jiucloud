@@ -136,7 +136,7 @@
 										width : 100
 									},
 									{
-										field : 'moeny_ys',
+										field : 'moeny_sj',
 										title : '审计合计',
 										width : 100,
 										formatter : function(value, row, index) {
