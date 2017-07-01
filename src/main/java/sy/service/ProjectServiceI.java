@@ -80,4 +80,6 @@ public interface ProjectServiceI {
 	public List<Project> getProjectByProjectName( String cid, String projectName);
 
 	public List<Project> initDefaultProject(String cid, String uid);
+
+	public int initExperienceProjects(String cid);
 }

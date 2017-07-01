@@ -8,15 +8,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
+import sy.model.Item;
 import sy.model.Param;
 import sy.model.S_department;
-import sy.model.po.Company;
-import sy.model.po.Cost;
-import sy.model.po.Department;
+import sy.model.po.*;
 import sy.pageModel.*;
 import sy.service.*;
-import sy.util.ConfigUtil;
-import sy.util.Utility;
+import sy.util.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -69,6 +67,9 @@ public class UserController extends BaseController {
 
     @Autowired
 	private PriceServiceI priceService;
+
+    @Autowired
+	private FieldDataServiceI fieldDataService;
 
 
 	// 获得token 同步操作
@@ -189,6 +190,60 @@ public class UserController extends BaseController {
 				costService.initDefaultCost(String.valueOf(c.getId()));
 				priceService.initPrice(String.valueOf(c.getId()));
 
+				// 体验帐号拷贝信息
+				if (u.getUsername().startsWith("AT")) {
+					// 拷贝工程
+					if (projectService.getProjects(ugroup) == null || projectService.getProjects(ugroup).size() == 0) {
+						projectService.initExperienceProjects(cid);
+					}
+					// 拷贝数据
+					NodeUtility nodeUtility = new NodeUtility();
+					List<Node> nodeList = departmentService.getAllNodes(cid);
+					List<Node> nodes = nodeUtility.getDepartmentNodeList(nodeList);
+					List<Node> _nodes = new ArrayList<Node>();
+
+
+					nodeUtility = new NodeUtility();
+					List<Node> defaultNodeList = departmentService.getAllNodes("195");
+					List<Node> defaultNodes = nodeUtility.getDepartmentNodeList(defaultNodeList);
+
+					List<TFieldData> defaultFields =  fieldDataService.getDefaultField("195");
+					for (Node defaultNode : defaultNodes) {
+						for (Node node : nodes) {
+							if (StringUtil.trimToEmpty(defaultNode.getLevel()).equals(StringUtil.trimToEmpty(node.getLevel()))) {
+								for (TFieldData defaultField : defaultFields) {
+									if (StringUtil.trimToEmpty(defaultField.getUid()).equals(StringUtil.trimToEmpty(defaultNode.getUserId()))) {
+										TFieldData f = new TFieldData();
+										f.setUid(StringUtil.trimToEmpty(node.getUserId()));
+										f.setUname(userService.getUser(StringUtil.trimToEmpty(node.getUserId())).getUsername());
+										f.setCid(cid);
+										f.setCompany(c.getName());
+										f.setCreatTime(defaultField.getCreatTime());
+										f.setDataName(defaultField.getDataName());
+										f.setPrice(defaultField.getPrice());
+										f.setCount(defaultField.getCount());
+										f.setUnit(defaultField.getUnit());
+										f.setItemCode(defaultField.getItemCode());
+										f.setSpecifications(defaultField.getSpecifications());
+										f.setRemark(defaultField.getRemark());
+										f.setNeedApproved(defaultField.getNeedApproved());
+										f.setApprovedUser(defaultField.getApprovedUser());
+										f.setCurrentApprovedUser(defaultField.getCurrentApprovedUser());
+										f.setApprovedOption(defaultField.getApprovedOption());
+										f.setSection(defaultField.getSection());
+										f.setSupplier(defaultField.getSupplier());
+										f.setCostType(defaultField.getCostType());
+										f.setProjectName(defaultField.getProjectName());
+										f.setPrice_ys(defaultField.getPrice_ys());
+										f.setPrice_sj(defaultField.getPrice_sj());
+
+										fieldDataService.add(f);
+									}
+								}
+							}
+						}
+					}
+				}
 
 				sessionInfo.setProjectInfos(projectService.getProjectInfos(String.valueOf(c.getId()), departmentIds));
 				Map<String, List<Map<String, Object>>> costInfos = costService.getCostTypeInfos(departmentIds, cid);

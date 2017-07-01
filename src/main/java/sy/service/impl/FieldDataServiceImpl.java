@@ -739,6 +739,19 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
     }
 
     @Override
+    public List<TFieldData> getDefaultField(String cid) {
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("cid", cid);
+
+        String hql;
+        hql = " from TFieldData t  where isDelete=0 and cid=:cid ";
+
+        List<TFieldData> l = fieldDataDaoI.find(hql, params);
+
+        return l;
+    }
+
+    @Override
     public DataGrid dataGridForMobile(FieldData fieldData, PageHelper ph,
                              List<Integer> ugroup,String source, String keyword) {
         DataGrid dg = new DataGrid();

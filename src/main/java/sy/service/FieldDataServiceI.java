@@ -89,4 +89,6 @@ public interface FieldDataServiceI {
     public List<FieldData> getBoq(String cid, String startDate, String endDate, List<Integer> ugroup, String type);
 
 	public void backFill(Integer id, String price, String feeType);
+
+	public List<TFieldData> getDefaultField(String cid);
 }

@@ -4,8 +4,6 @@ import com.alibaba.fastjson.JSON;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sy.dao.ProjectDaoI;
-import sy.model.po.Cost;
-import sy.model.po.CostModel;
 import sy.model.po.Project;
 import sy.pageModel.DataGrid;
 import sy.pageModel.PageHelper;
@@ -421,6 +419,25 @@ public class ProjectServiceImpl implements ProjectServiceI {
         }
 
         return projectList;
+    }
+
+    @Override
+    public int initExperienceProjects(String cid) {
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("cid", cid);
+        String sql = "INSERT INTO tgc_Project \n" +
+                "  SELECT null, city, :cid, gclx, isdel, jgrq, jzmjorgm, kgrq, proName,\n" +
+                "  projectId, provice, uids, zjlx, gchtj, gczt, money_state, manager,\n" +
+                "  manager2, shortname, gcaqwmqk, gcdqyjqk, gcfkyd, gcjgrq, gckgrq,\n" +
+                "  gcwhq, gcyjrq, gczbyd, gczlhjqk, htqdrq, htwhjzr, jgbb, jgjss,\n" +
+                "  jgysrq, jgzl, whjssj, whkssj, yhcbr, yhjb, zbtzsrq, zjy, zly, isLock,\n" +
+                "  cse, djdw, djdwlink, financeCode, htyhq, jldw, jldwlink, jsdw,\n" +
+                "  jsdwlink, maintenanceCost, maintenanceManager, managerConfirm,\n" +
+                "  remark, sbe, sje, area, belongDeparts \n" +
+                "  FROM tgc_Project b \n" +
+                "  WHERE compId = '195'";
+
+        return projectDao.executeSql(sql, params);
     }
 
 }

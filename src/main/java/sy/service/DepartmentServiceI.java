@@ -65,5 +65,7 @@ public interface DepartmentServiceI {
 
 	public List<User> getFirstLevelParentDepByUid(String cid, String uid);
 
+	public List<Node> getAllNodes(String cid);
+
 }
 

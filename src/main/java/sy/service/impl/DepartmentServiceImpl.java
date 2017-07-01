@@ -614,4 +614,27 @@ public class DepartmentServiceImpl implements DepartmentServiceI {
 
         return users;
     }
+
+    @Override
+    public List<Node> getAllNodes(String cid) {
+        List<Object[]> objects = new ArrayList<Object[]>();
+        objects = departmentDaoI.findBySql("select id, parent_id, user_id, company_id from jsw_corporation_department where company_id= " + cid);
+        List<Node> departments = new ArrayList<Node>();
+        for (Object[] object : objects) {
+            List<String> tmpUid = Arrays.asList(String.valueOf(object[2]).split(","));
+            for (String tmp : tmpUid) {
+                Node department = new Node();
+                department.setId(Integer.parseInt(String.valueOf(object[0])));
+                department.setParentId(Integer.parseInt(String.valueOf(object[1])));
+                if (tmp.equals("")) {
+                    continue;
+                }
+                department.setUserId(Integer.parseInt(tmp));
+                departments.add(department);
+            }
+
+        }
+
+        return departments;
+    }
 }
