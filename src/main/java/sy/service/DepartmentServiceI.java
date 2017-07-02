@@ -67,5 +67,7 @@ public interface DepartmentServiceI {
 
 	public List<Node> getAllNodes(String cid);
 
+	public List<Node> getFirstNodes(String cid);
+
 }
 

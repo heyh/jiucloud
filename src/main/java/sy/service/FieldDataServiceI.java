@@ -90,5 +90,5 @@ public interface FieldDataServiceI {
 
 	public void backFill(Integer id, String price, String feeType);
 
-	public List<TFieldData> getDefaultField(String cid);
+	public List<TFieldData> getAllField(String cid);
 }

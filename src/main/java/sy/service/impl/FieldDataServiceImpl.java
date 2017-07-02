@@ -739,7 +739,7 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
     }
 
     @Override
-    public List<TFieldData> getDefaultField(String cid) {
+    public List<TFieldData> getAllField(String cid) {
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("cid", cid);
 

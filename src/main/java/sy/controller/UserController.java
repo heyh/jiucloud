@@ -186,64 +186,84 @@ public class UserController extends BaseController {
                     }
                 }
 
+				/////////////////////////////////// 默认添加体验信息 /////////////////////////////////////////
+
                 // 增加默认费用类型配置
 				costService.initDefaultCost(String.valueOf(c.getId()));
 				priceService.initPrice(String.valueOf(c.getId()));
 
 				// 体验帐号拷贝信息
-				if (u.getUsername().startsWith("AT")) {
+				NodeUtility nodeUtility = new NodeUtility();
+				List<Node> nodeList = departmentService.getFirstNodes(cid);
+				List<Node> nodes = nodeUtility.getDepartmentNodeList(nodeList);
+				boolean isTYZH = false;
+				for (Node node : nodes) {
+					isTYZH = userService.getUser(StringUtil.trimToEmpty(node.getUserId())).getUsername().startsWith("AT");
+					if (isTYZH) {
+						break;
+					}
+				}
+				if (isTYZH) {
+
 					// 拷贝工程
 					if (projectService.getProjects(ugroup) == null || projectService.getProjects(ugroup).size() == 0) {
 						projectService.initExperienceProjects(cid);
 					}
-					// 拷贝数据
-					NodeUtility nodeUtility = new NodeUtility();
-					List<Node> nodeList = departmentService.getAllNodes(cid);
-					List<Node> nodes = nodeUtility.getDepartmentNodeList(nodeList);
-					List<Node> _nodes = new ArrayList<Node>();
 
+					List<TFieldData> allTFD = fieldDataService.getAllField(cid);
+					if (allTFD == null || allTFD.size()==0) {
+						// 拷贝数据
+						nodeUtility = new NodeUtility();
+						List<Node> defaultNodeList = departmentService.getAllNodes("195");
+						List<Node> defaultNodes = nodeUtility.getDepartmentNodeList(defaultNodeList);
 
-					nodeUtility = new NodeUtility();
-					List<Node> defaultNodeList = departmentService.getAllNodes("195");
-					List<Node> defaultNodes = nodeUtility.getDepartmentNodeList(defaultNodeList);
+						List<TFieldData> defaultFields =  fieldDataService.getAllField("195");
+						List<Integer> hasInsertFields = new ArrayList<Integer>();
+						for (Node defaultNode : defaultNodes) {
+							for (Node node : nodes) {
+								if (StringUtil.trimToEmpty(defaultNode.getLevel()).equals(StringUtil.trimToEmpty(node.getLevel()))) {
+									for (TFieldData defaultField : defaultFields) {
+										if (StringUtil.trimToEmpty(defaultField.getUid()).equals(StringUtil.trimToEmpty(defaultNode.getUserId()))) {
+											if (hasInsertFields.contains(defaultField.getId())) {
+												continue;
+											}
 
-					List<TFieldData> defaultFields =  fieldDataService.getDefaultField("195");
-					for (Node defaultNode : defaultNodes) {
-						for (Node node : nodes) {
-							if (StringUtil.trimToEmpty(defaultNode.getLevel()).equals(StringUtil.trimToEmpty(node.getLevel()))) {
-								for (TFieldData defaultField : defaultFields) {
-									if (StringUtil.trimToEmpty(defaultField.getUid()).equals(StringUtil.trimToEmpty(defaultNode.getUserId()))) {
-										TFieldData f = new TFieldData();
-										f.setUid(StringUtil.trimToEmpty(node.getUserId()));
-										f.setUname(userService.getUser(StringUtil.trimToEmpty(node.getUserId())).getUsername());
-										f.setCid(cid);
-										f.setCompany(c.getName());
-										f.setCreatTime(defaultField.getCreatTime());
-										f.setDataName(defaultField.getDataName());
-										f.setPrice(defaultField.getPrice());
-										f.setCount(defaultField.getCount());
-										f.setUnit(defaultField.getUnit());
-										f.setItemCode(defaultField.getItemCode());
-										f.setSpecifications(defaultField.getSpecifications());
-										f.setRemark(defaultField.getRemark());
-										f.setNeedApproved(defaultField.getNeedApproved());
-										f.setApprovedUser(defaultField.getApprovedUser());
-										f.setCurrentApprovedUser(defaultField.getCurrentApprovedUser());
-										f.setApprovedOption(defaultField.getApprovedOption());
-										f.setSection(defaultField.getSection());
-										f.setSupplier(defaultField.getSupplier());
-										f.setCostType(defaultField.getCostType());
-										f.setProjectName(defaultField.getProjectName());
-										f.setPrice_ys(defaultField.getPrice_ys());
-										f.setPrice_sj(defaultField.getPrice_sj());
+											TFieldData f = new TFieldData();
+											f.setUid(StringUtil.trimToEmpty(node.getUserId()));
+											f.setUname(userService.getUser(StringUtil.trimToEmpty(node.getUserId())).getUsername());
+											f.setCid(cid);
+											f.setCompany(c.getName());
+											f.setCreatTime(defaultField.getCreatTime());
+											f.setDataName(defaultField.getDataName());
+											f.setPrice(defaultField.getPrice());
+											f.setCount(defaultField.getCount());
+											f.setUnit(defaultField.getUnit());
+											f.setItemCode(defaultField.getItemCode());
+											f.setSpecifications(defaultField.getSpecifications());
+											f.setRemark(defaultField.getRemark());
+											f.setNeedApproved(defaultField.getNeedApproved());
+											f.setApprovedUser(defaultField.getApprovedUser());
+											f.setCurrentApprovedUser(defaultField.getCurrentApprovedUser());
+											f.setApprovedOption(defaultField.getApprovedOption());
+											f.setSection(defaultField.getSection());
+											f.setSupplier(defaultField.getSupplier());
+											f.setCostType(defaultField.getCostType());
+											f.setProjectName(defaultField.getProjectName());
+											f.setPrice_ys(defaultField.getPrice_ys());
+											f.setPrice_sj(defaultField.getPrice_sj());
 
-										fieldDataService.add(f);
+											fieldDataService.add(f);
+
+											hasInsertFields.add(defaultField.getId());
+										}
 									}
 								}
 							}
 						}
 					}
+
 				}
+                ////////////////////////////////////////////////////////////////////////////
 
 				sessionInfo.setProjectInfos(projectService.getProjectInfos(String.valueOf(c.getId()), departmentIds));
 				Map<String, List<Map<String, Object>>> costInfos = costService.getCostTypeInfos(departmentIds, cid);
