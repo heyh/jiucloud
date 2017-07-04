@@ -206,7 +206,7 @@ public class UserController extends BaseController {
 				if (isTYZH) {
 
 					// 拷贝工程
-					if (projectService.getProjects(ugroup) == null || projectService.getProjects(ugroup).size() == 0) {
+					if (projectService.getAllProjects(cid) == null || projectService.getAllProjects(cid).size() == 0) {
 						projectService.initExperienceProjects(cid);
 					}
 

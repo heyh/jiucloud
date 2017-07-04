@@ -82,4 +82,6 @@ public interface ProjectServiceI {
 	public List<Project> initDefaultProject(String cid, String uid);
 
 	public int initExperienceProjects(String cid);
+
+	public List<Project> getAllProjects(String cid);
 }

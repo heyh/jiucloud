@@ -440,4 +440,13 @@ public class ProjectServiceImpl implements ProjectServiceI {
         return projectDao.executeSql(sql, params);
     }
 
+    @Override
+    public List<Project> getAllProjects(String cid) {
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("cid", cid);
+        String hql = " from Project where isdel=0 and compId=:cid ";
+
+        return projectDao.find(hql, params);
+    }
+
 }
