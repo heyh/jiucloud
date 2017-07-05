@@ -165,7 +165,7 @@
 											var str = '';
                                             // modify by heyh 当数据填报之后，在当日内23:59分内均可以修改自己填报数据
                                             var userId = <%= userId%>;
-                                            if(compareDate(getCurrentDate(), row.creatTime.substring(0, 10)) == 0 && userId == row.uid) {
+                                            if((compareDate(getCurrentDate(), row.creatTime.substring(0, 10)) == 0 || '9' == row.needApproved) && userId == row.uid) {
                                                 if ('0' == row.isLock && '2' != row.needApproved) {
                                                     str += $
                                                             .formatString(

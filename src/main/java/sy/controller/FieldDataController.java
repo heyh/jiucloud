@@ -682,19 +682,10 @@ public class FieldDataController extends BaseController {
         try {
             Cost tem = costServiceI.findById(fieldData.getCostType());
 
-            if (!Constant.isSameDate(fieldData.getCreatTime(), new Date())) {
+            if (!Constant.isSameDate(fieldData.getCreatTime(), new Date()) && !fieldData.getNeedApproved().equals("9")) {
                 j.setMsg("只能修改当天录入的信息!!");
                 return j;
             }
-//            String itemCode = tem.getItemCode();
-//            if (!itemCode.substring(0, 3).equals("000") && Integer.parseInt(itemCode.substring(0, 3)) <= 900) {
-//                Double.parseDouble(fieldData.getPrice());
-//                Integer.parseInt(fieldData.getCount());
-//            }
-//			if (!"纯附件".equals(tem.getCostType())) {
-//				Double.parseDouble(fieldData.getPrice());
-//				Integer.parseInt(fieldData.getCount());
-//			}
 
             // add by heyh begin 修改后重新设置审批状态和当前审批人
             if (fieldData.getNeedApproved() != null && !fieldData.getNeedApproved().equals("0")) {

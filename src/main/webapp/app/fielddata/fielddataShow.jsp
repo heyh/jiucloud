@@ -220,7 +220,7 @@
                                             // modify by heyh 当数据填报之后，在当日内23:59分内均可以修改自己填报数据
                                             var userId = <%= userId%>;
                                             var strHasOutRight = <%=hasOutRight%>;
-                                            if((compareDate(getCurrentDate(), row.creatTime.substring(0, 10)) == 0 && userId == row.uid  && '0' == row.isLock && '2' != row.needApproved) || (row.itemCode.substring(0, 3) == '700' && <%= hasReadEditRight %> )) {
+                                            if(((compareDate(getCurrentDate(), row.creatTime.substring(0, 10)) == 0 || '9' == row.needApproved) && userId == row.uid  && '0' == row.isLock && '2' != row.needApproved) || (row.itemCode.substring(0, 3) == '700' && <%= hasReadEditRight %> )) {
                                                     str += $
                                                             .formatString(
                                                             '<img onclick="editFun(\'{0}\');" src="{1}" title="编辑" />',
