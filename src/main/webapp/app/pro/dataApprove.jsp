@@ -70,15 +70,26 @@
                     rownumbers: true,
                     columns : [ [
                         {
+                            field : 'id',
+                            title : '多选框',
+                            width : 100,
+                            checkbox : true
+                        },
+                        {
                             field : 'projectName',
                             title : '工程名称',
-                            width : 200
+                            width : 250
 
+                        },
+                        {
+                            field : 'sectionName',
+                            title : '标段',
+                            width : 100
                         },
                         {
                             field : 'dataName',
                             title : '名称',
-                            width : 150
+                            width : 350
                         },
                         {
                             field : 'costType',
@@ -105,10 +116,19 @@
                             title : '金额',
                             width : 100,
                             formatter : function(value, row, index) {
-                                return (row.count * row.price)
-                                        .toFixed(2);
+                                return (row.count * row.price).toFixed(2);
                             }
 
+                        },
+                        {
+                            field : 'specifications',
+                            title : '规格型号',
+                            width : 200
+                        },
+                        {
+                            field : 'remark',
+                            title : '备注',
+                            width : 150
                         },
                         {
                             field : 'uname',
@@ -117,8 +137,20 @@
                         },
                         {
                             field : 'creatTime',
-                            title : '入库时间',
+                            title : '录入时间',
                             width : 100
+                        },
+                        {
+                            field : 'uid',
+                            title : '用户ID',
+                            width : 100,
+                            hidden: true
+                        },
+                        {
+                            field : 'isLock',
+                            title : '工程锁定标志',
+                            width : 100,
+                            hidden: true
                         },
                         {
                             field : 'needApproved',
@@ -132,10 +164,10 @@
                                     str = '<span style="color: #ff0000">' + '未审批' + '</span>';
                                 } else if ('2' == value) {
                                     str = '审批通过';
-                                }  else if ('8' == value) {
+                                } else if ('8' == value) {
                                     str = '<span style="color: #ff0000">' + '审批中' + '</span>';
                                 } else if ('9' == value) {
-                                    str = '审批未通过'
+                                    str = '<span style="color: #ff0000">' + '审批未通过' + '</span>';
                                 }
                                 return str;
                             }
