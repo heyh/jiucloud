@@ -104,7 +104,8 @@
 //			var specifications = document.getElementById("specifications").value;
 			var remark = document.getElementById("remark").value;
 			var needApproved = document.getElementById("needApproved").value;
-			var approvedUser = document.getElementById("approvedUser").value;
+//			var approvedUser = document.getElementById("approvedUser").value;
+            var currentApprovedUser = document.getElementById("currentApprovedUser").value;
             var section = $('#section').val();
 
 			if (projectName == '') {
@@ -134,7 +135,8 @@
 				'unit': '',
 //                'itemCode': itemCode,
 				'needApproved': needApproved,
-				'approvedUser': approvedUser,
+//				'approvedUser': approvedUser,
+                'currentApprovedUser': currentApprovedUser,
                 'section': section
 			}
 
@@ -160,52 +162,39 @@
 			})
 		}
 
-		function isNeedApprove(isNeedApprove) {
-			$('#approvedUser').value = '';
-			$('#chooseApproveName').value = '';
-			if (isNeedApprove == '0') {
-				$('#chooseApproveDiv').hide();
-				$('#approvedUserLabel').hide();
-			} else if (isNeedApprove == '1') {
-				$('#chooseApproveDiv').show();
-			}
-		}
+        function isNeedApprove(isNeedApprove) {
+            $('#approvedUser').value = '';
+            $('#chooseApproveName').value = '';
+            if (isNeedApprove == '0') {
+                $('#chooseApproveDiv').hide();
+                $('#approvedUserLabel').hide();
+            } else if (isNeedApprove == '1') {
+                $('#chooseApproveDiv').show();
+                chooseApprove();
+            }
+        }
 
-		function isChooseApprove(isChooseApprove) {
-			$('#approvedUser').value = '';
-			$('#chooseApproveName').value = '';
-			if (isChooseApprove == '1') {
-				parent.$
-						.modalDialog({
-							title: '选择审批人',
-							width: 450,
-							height: 500,
-							href: '${pageContext.request.contextPath }/fieldDataController/securi_chooseApprove',
-							buttons: [{
-								text: '确认',
-								handler: function () {
-									var chooseNodes = parent.$.modalDialog.handler.find(".chooseNode");
-									console.log(chooseNodes);
-									var approveUids = [];
-									var approveNames = [];
-									$.each(chooseNodes, function (index, chooseNode) {
-										if (chooseNode.firstChild.id != '-1' && $.inArray(chooseNode.firstChild.id, approveUids) == '-1') {
-											approveUids.push(chooseNode.firstChild.id);
-											approveNames.push(chooseNode.innerText);
-										}
-									});
-									document.getElementById("chooseApproveName").value = approveNames.reverse().join(',');
-									document.getElementById("approvedUser").value = approveUids.reverse().join(',');
-									parent.$.modalDialog.handler.dialog('close');
+        function chooseApprove() {
+            $.ajax({
+                url: '${pageContext.request.contextPath}/fieldDataController/securi_chooseApprove',
+                type: 'post',
+                dataType: 'json',
+                contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                success: function (data) {
 
-									$('#approvedUserLabel').show();
-								}
-							}]
-						});
-			} else {
-				$('#approvedUserLabel').hide();
-			}
-		}
+                    if (data.success) {
+                        var optionstring = '';
+                        var users = data.obj;
+                        for (var i in users) {
+                            optionstring += "<option value=\"" + users[i].id + "\" >" + users[i].username + "</option>";
+                        }
+                        $("#currentApprovedUser").html(optionstring);
+                    }
+                }
+            });
+
+
+        }
 
 		$(document).ready(function () {
 
@@ -405,16 +394,6 @@
 							<a style="display: none" id="supInfos" onclick="chooseSupInfos()" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'add_new'"></a>
 						</div>
 					</div>
-					<div class="control-group" style="display:none" id="chooseApproveDiv">
-						<label class="control-label" for="chooseApprove">审批人选择:</label>
-
-						<div class="controls">
-							<select onchange="isChooseApprove(this.options[this.options.selectedIndex].value)" style="width:250px;margin-bottom: 20px" id="chooseApprove" name="chooseApprove">
-								<option value="0" selected = "selected">默认</option>
-								<option value="1">自定义</option>
-							</select>
-						</div>
-					</div>
 				</div>
 
 				<div class="span6">
@@ -443,12 +422,13 @@
 							</select>
 						</div>
 					</div>
-					<div class="control-group" id="approvedUserLabel" style="display:none">
-						<label class="control-label" for="chooseApproveName">审批人:</label>
+					<div class="control-group" style="display:none" id="chooseApproveDiv">
+						<label class="control-label" for="currentApprovedUser">审批人选择:</label>
 
 						<div class="controls">
-							<input type="text" name="chooseApproveName" id="chooseApproveName" class="easyui-textbox" style="width:236px" readonly>
-							<input name="approvedUser" id="approvedUser" type="text" style="display: none">
+							<select style="width:250px;margin-bottom: 20px" id="currentApprovedUser" name="currentApprovedUser">
+
+							</select>
 						</div>
 					</div>
 

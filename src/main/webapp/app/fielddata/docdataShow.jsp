@@ -74,7 +74,7 @@
 									},
 									{
 										field : 'costType',
-										title : '类型',
+										title : '资料类型',
 										width : 100
 									},
 									{
@@ -568,7 +568,7 @@
                                 <option ></option>
                             </select>
                         </td>
-						<td>费用类型:&nbsp;
+						<td>资料类型:&nbsp;
 							<input class="easyui-combotree" name="costTypeRef" id="costTypeRef" style="width:180px;" placeholder="请选择">
 							<input type="hidden" name="costType" id="costType">
 						</td>

@@ -89,7 +89,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td style="width: 80px;">费用类型</td>
+					<td style="width: 80px;">资料类型</td>
 					<td><input type="text" style="width: 250px;"
 						placeholder="费用类型" class="easyui-validatebox span2"
 						data-options="required:true" value="${cost.costType}"
