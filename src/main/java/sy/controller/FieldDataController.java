@@ -302,12 +302,17 @@ public class FieldDataController extends BaseController {
         request.setAttribute("cost", cost);
         request.setAttribute("preview", preview == null ? false : true);
         request.setAttribute("selectItems", selectItems);
+        request.setAttribute("unitParams", sessionInfo.getUnitParams());
 
         // modify by heyh begin
         String fj = tFieldData.getItemCode().substring(0, 3);
-        if (fj.equals("000") || Integer.parseInt(fj) > 900) {
+        if (fj.equals("000") || Integer.parseInt(fj) > 900) { // 资料
             return "/app/fielddata/updatefieldData4Doc";
-        } else {
+        } else if (fj.equals("700")) { // 清单
+            return "/app/fielddata/updatefieldData4Bill";
+        } else if (fj.equals("800")) { // 材料
+            return "/app/fielddata/updatefieldData4Material";
+        } else{ // 数据
             return "/app/fielddata/updatefieldData";
         }
 

@@ -77,6 +77,15 @@
             break;
         }
     }
+
+    var unitRef = document.getElementById('unitRef').value;
+    for (var i = 0; i < document.getElementById('unit').options.length; i++) {
+        if (document.getElementById('unit').options[i].value == unitRef) {
+            document.getElementById('unit').options[i].selected = true;
+            break;
+        }
+    }
+
 </script>
 <div class="easyui-layout" data-options="fit:true,border:false">
 	<div data-options="region:'center',border:false" title=""
@@ -95,6 +104,7 @@
                         <input type="hidden" id="company" name="company" value="${tfielddata.company}" />
                         <input type="hidden" id="costType" name="costType" value="${tfielddata.costType}" />
                         <input type="hidden" id="projectName" name="projectName" value="${tfielddata.projectName}" />
+						<input type="hidden" id="unitRef" name="unitRef" value="${tfielddata.unit}" />
 						<input type="hidden" id="sectionId" value="${tfielddata.section}"/>
                         <input type="text" placeholder="工程名称" style="width: 250px;"
                                class="easyui-validatebox span2" data-options="required:true"
@@ -154,7 +164,16 @@
 				<tr>
 					<td style="width: 80px;">单位</td>
 					<td>
-						<input name="unit" style="width: 250px;" type="text" placeholder="单位" class="easyui-validatebox span2" data-options="required:true" value="${tfielddata.unit}">
+						<select id="unit" name="unit" style="width: 264px;">
+							<c:forEach items="${unitParams}" var="unitParam" varStatus="index">
+								<c:if test="${unitParam.parentCode == ''}">
+									<optgroup label="${unitParam.paramValue}"></optgroup>
+								</c:if>
+								<c:if test="${unitParam.parentCode != ''}">
+									<option value="${unitParam.paramValue}">&nbsp;&nbsp;&nbsp;&nbsp;${unitParam.paramValue}</option>
+								</c:if>
+							</c:forEach>
+						</select>
 					</td>
 				</tr>
 				<tr>

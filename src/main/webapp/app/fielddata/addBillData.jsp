@@ -185,7 +185,7 @@
                 return;
             }
             if (section == '') {
-                alert("标段不能为空");
+                alert("工程属性不能为空");
                 return;
             }
             if (price == '') {
