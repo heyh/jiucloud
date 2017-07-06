@@ -8,17 +8,18 @@
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%
-//    String underlingUsers = null;
     List<Map<String, Object>> dataCostInfos = new ArrayList<Map<String, Object>>();
     List<Map<String, Object>> docCostInfos = new ArrayList<Map<String, Object>>();
-
+    List<Map<String, Object>> billCostInfos = new ArrayList<Map<String, Object>>();
+    List<Map<String, Object>> materialCostInfos = new ArrayList<Map<String, Object>>();
     SessionInfo sessionInfo = (SessionInfo) session.getAttribute(ConfigUtil.getSessionInfoName());
     if (sessionInfo == null) {
         response.sendRedirect(request.getContextPath());
     } else {
-//        underlingUsers = sessionInfo.getUnderlingUsers();
         dataCostInfos = sessionInfo.getCostTypeInfos().get("dataCostInfos");
         docCostInfos = sessionInfo.getCostTypeInfos().get("docCostInfos");
+        billCostInfos = sessionInfo.getCostTypeInfos().get("billCostInfos");
+        materialCostInfos = sessionInfo.getCostTypeInfos().get("materialCostInfos");
     }
 
 %>
@@ -154,6 +155,30 @@
         <span style="vertical-align:middle; font-family:SimSun; margin-left: 4px"><b>项目数据</b></span>
         <table id="dataGrid4Data" class="easyui-datagrid" width="100%">
         </table>
+        <div id="toolbar4Data" class="fee_detail" style="display: none;">
+            <span>关键字搜索:</span>
+            <input style="margin-top:9px; width: 150px; height: 17px" class="easyui-textbox"  type="text" name="keyword4Data" id="keyword4Data" data-options=""/>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <span>费用类型:</span>
+            <select style="width: 150px"  name="costType4Data" id="costType4Data">
+                <option></option>
+                <c:forEach var="dataCostInfo" items="<%= dataCostInfos %>" varStatus="index">
+                    <c:if test="${dataCostInfo.isSend == '0'}">
+                        <option value="${dataCostInfo.costType}">${dataCostInfo.costType}</option>
+                    </c:if>
+                    <c:if test="${dataCostInfo.isSend == '1'}">
+                        <option value="${dataCostInfo.costType}">&nbsp;&nbsp;&nbsp;&nbsp;${dataCostInfo.costType}</option>
+                    </c:if>
+                </c:forEach>
+            </select>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <span>起止时间:</span>
+            <input style="width: 150px" class="easyui-datebox" name="startTime4Data" id='startTime4Data' editable="false" placeholder="点击选择时间"  value='${first }' />
+            - <input style="width: 150px" class="easyui-datebox"  name="endTime4Data" id='endTime4Data' editable="false" placeholder="点击选择时间"  value='${last }' />
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="javascript:void(0);" class="easyui-button" data-options="plain:true" onclick="searchFun4Data();">过滤条件</a>
+            <a href="javascript:void(0);" class="easyui-button" data-options="plain:true" onclick="cleanFun4Data();">清空条件</a>
+        </div>
     </div>
 
     <div class="section" id="doc">
@@ -161,6 +186,30 @@
         <span style="vertical-align:middle; font-family:SimSun; margin-left: 4px"><b>项目资料</b></span>
         <table id="dataGrid4Doc" class="easyui-datagrid" width="100%">
         </table>
+        <div id="toolbar4Doc" class="fee_detail" style="display: none;">
+            <span>关键字搜索:</span>
+            <input style="margin-top:9px; width: 150px; height: 17px" class="easyui-textbox"  type="text" name="keyword4Doc" id="keyword4Doc" data-options=""/>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <span>资料类型:</span>
+            <select style="width: 150px"  name="costType4Doc" id="costType4Doc">
+                <option></option>
+                <c:forEach var="docCostInfo" items="<%= docCostInfos %>" varStatus="index">
+                    <c:if test="${docCostInfo.isSend == '0'}">
+                        <option value="${docCostInfo.costType}">${docCostInfo.costType}</option>
+                    </c:if>
+                    <c:if test="${docCostInfo.isSend == '1'}">
+                        <option value="${docCostInfo.costType}">&nbsp;&nbsp;&nbsp;&nbsp;${docCostInfo.costType}</option>
+                    </c:if>
+                </c:forEach>
+            </select>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <span>起止时间:</span>
+            <input style="width: 150px" class="easyui-datebox" name="startTime4Doc" id='startTime4Doc' editable="false" placeholder="点击选择时间"  value='${first }' />
+            - <input style="width: 150px" class="easyui-datebox"  name="endTime4Doc" id='endTime4Doc' editable="false" placeholder="点击选择时间"  value='${last }' />
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="javascript:void(0);" class="easyui-button" data-options="plain:true" onclick="searchFun4Doc();">过滤条件</a>
+            <a href="javascript:void(0);" class="easyui-button" data-options="plain:true" onclick="cleanFun4Doc();">清空条件</a>
+        </div>
     </div>
 
     <div class="section" id="bill" style="padding-bottom:20px;">
@@ -168,7 +217,30 @@
         <span style="vertical-align:middle; font-family:SimSun; margin-left: 4px"><b>清单项量</b></span>
         <table id="dataGrid4Bill" class="easyui-datagrid" width="100%">
         </table>
-
+        <div id="toolbar4Bill" class="fee_detail" style="display: none;">
+            <span>关键字搜索:</span>
+            <input style="margin-top:9px; width: 150px; height: 17px" class="easyui-textbox"  type="text" name="keyword4Doc" id="keyword4Bill" data-options=""/>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <span>费用类型:</span>
+            <select style="width: 150px"  name="costType4Bill" id="costType4Bill">
+                <option></option>
+                <c:forEach var="billCostInfo" items="<%= billCostInfos %>" varStatus="index">
+                    <c:if test="${billCostInfo.isSend == '0'}">
+                        <option value="${billCostInfo.costType}">${billCostInfo.costType}</option>
+                    </c:if>
+                    <c:if test="${billCostInfo.isSend == '1'}">
+                        <option value="${billCostInfo.costType}">&nbsp;&nbsp;&nbsp;&nbsp;${billCostInfo.costType}</option>
+                    </c:if>
+                </c:forEach>
+            </select>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <span>起止时间:</span>
+            <input style="width: 150px" class="easyui-datebox" name="startTime4Bill" id='startTime4Bill' editable="false" placeholder="点击选择时间"  value='${first }' />
+            - <input style="width: 150px" class="easyui-datebox"  name="endTime4Bill" id='endTime4Bill' editable="false" placeholder="点击选择时间"  value='${last }' />
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="javascript:void(0);" class="easyui-button" data-options="plain:true" onclick="searchFun4Bill();">过滤条件</a>
+            <a href="javascript:void(0);" class="easyui-button" data-options="plain:true" onclick="cleanFun4Bill();">清空条件</a>
+        </div>
     </div>
 
     <div class="section" id="material" style="padding-bottom:20px;">
@@ -176,7 +248,30 @@
         <span style="vertical-align:middle; font-family:SimSun; margin-left: 4px"><b>项目材料</b></span>
         <table id="dataGrid4Material" class="easyui-datagrid" width="100%">
         </table>
-
+        <div id="toolbar4Material" class="fee_detail" style="display: none;">
+            <span>关键字搜索:</span>
+            <input style="margin-top:9px; width: 150px; height: 17px" class="easyui-textbox"  type="text" name="keyword4Doc" id="keyword4Material" data-options=""/>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <span>费用类型:</span>
+            <select style="width: 150px"  name="costType4Material" id="costType4Material">
+                <option></option>
+                <c:forEach var="materialCostInfo" items="<%= materialCostInfos %>" varStatus="index">
+                    <c:if test="${materialCostInfo.isSend == '0'}">
+                        <option value="${materialCostInfo.costType}">${materialCostInfo.costType}</option>
+                    </c:if>
+                    <c:if test="${materialCostInfo.isSend == '1'}">
+                        <option value="${materialCostInfo.costType}">&nbsp;&nbsp;&nbsp;&nbsp;${materialCostInfo.costType}</option>
+                    </c:if>
+                </c:forEach>
+            </select>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <span>起止时间:</span>
+            <input style="width: 150px" class="easyui-datebox" name="startTime4Material" id='startTime4Material' editable="false" placeholder="点击选择时间"  value='${first }' />
+            - <input style="width: 150px" class="easyui-datebox"  name="endTime4Material" id='endTime4Material' editable="false" placeholder="点击选择时间"  value='${last }' />
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <a href="javascript:void(0);" class="easyui-button" data-options="plain:true" onclick="searchFun4Material();">过滤条件</a>
+            <a href="javascript:void(0);" class="easyui-button" data-options="plain:true" onclick="cleanFun4Material();">清空条件</a>
+        </div>
     </div>
 
 </div>
@@ -345,21 +440,21 @@
                                     str += '&nbsp;';
                                     str += $
                                         .formatString(
-                                            '<img style="cursor:pointer" onclick="approvedFun(\'{0}\', 2, dataGrid4Data);" src="{1}" title="结束审批"/>',
+                                            '<img style="cursor:pointer" onclick="approvedFun(\'{0}\', 2, dataGrid4Data, \'data\');" src="{1}" title="结束审批"/>',
                                             row.id,
                                             '${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/approved-true.png');
 
                                     str += '&nbsp;';
                                     str += $
                                         .formatString(
-                                            '<img style="cursor:pointer" onclick="approvedFun(\'{0}\', 8, dataGrid4Data);" src="{1}" title="继续审批"/>',
+                                            '<img style="cursor:pointer" onclick="approvedFun(\'{0}\', 8, dataGrid4Data, \'data\');" src="{1}" title="继续审批"/>',
                                             row.id,
                                             '${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/approved-jixu.png');
 
                                     str += '&nbsp;';
                                     str += $
                                         .formatString(
-                                            '<img style="cursor:pointer" onclick="approvedFun(\'{0}\', 9, dataGrid4Data);" src="{1}" title="审批不通过"/>',
+                                            '<img style="cursor:pointer" onclick="approvedFun(\'{0}\', 9, dataGrid4Data, \'data\');" src="{1}" title="审批不通过"/>',
                                             row.id,
                                             '${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/approved-false.png');
                                 }
@@ -367,7 +462,7 @@
                             }
                         }
                     ] ],
-                    toolbar : '#toolbar',
+                    toolbar : '#toolbar4Data',
                     onLoadSuccess : function() {
                         parent.$.messager.progress('close');
 
@@ -478,21 +573,21 @@
                                     str += '&nbsp;';
                                     str += $
                                         .formatString(
-                                            '<img style="cursor:pointer" onclick="approvedFun(\'{0}\', 2, dataGrid4Doc);" src="{1}" title="结束审批"/>',
+                                            '<img style="cursor:pointer" onclick="approvedFun(\'{0}\', 2, dataGrid4Doc, \'doc\');" src="{1}" title="结束审批"/>',
                                             row.id,
                                             '${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/approved-true.png');
 
                                     str += '&nbsp;';
                                     str += $
                                         .formatString(
-                                            '<img style="cursor:pointer" onclick="approvedFun(\'{0}\', 8, dataGrid4Doc);" src="{1}" title="继续审批"/>',
+                                            '<img style="cursor:pointer" onclick="approvedFun(\'{0}\', 8, dataGrid4Doc, \'doc\');" src="{1}" title="继续审批"/>',
                                             row.id,
                                             '${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/approved-jixu.png');
 
                                     str += '&nbsp;';
                                     str += $
                                         .formatString(
-                                            '<img style="cursor:pointer" onclick="approvedFun(\'{0}\', 9, dataGrid4Doc);" src="{1}" title="审批不通过"/>',
+                                            '<img style="cursor:pointer" onclick="approvedFun(\'{0}\', 9, dataGrid4Doc, \'doc\');" src="{1}" title="审批不通过"/>',
                                             row.id,
                                             '${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/approved-false.png');
                                 }
@@ -500,7 +595,7 @@
                             }
                         }
                     ] ],
-                    toolbar : '#toolbar',
+                    toolbar : '#toolbar4Doc',
                     onLoadSuccess : function() {
                         parent.$.messager.progress('close');
                     }
@@ -658,21 +753,21 @@
                                     str += '&nbsp;';
                                     str += $
                                         .formatString(
-                                            '<img style="cursor:pointer" onclick="approvedFun(\'{0}\', 2, dataGrid4Bill);" src="{1}" title="结束审批"/>',
+                                            '<img style="cursor:pointer" onclick="approvedFun(\'{0}\', 2, dataGrid4Bill, \'bill\');" src="{1}" title="结束审批"/>',
                                             row.id,
                                             '${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/approved-true.png');
 
                                     str += '&nbsp;';
                                     str += $
                                         .formatString(
-                                            '<img style="cursor:pointer" onclick="approvedFun(\'{0}\', 8, dataGrid4Bill);" src="{1}" title="继续审批"/>',
+                                            '<img style="cursor:pointer" onclick="approvedFun(\'{0}\', 8, dataGrid4Bill, \'bill\');" src="{1}" title="继续审批"/>',
                                             row.id,
                                             '${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/approved-jixu.png');
 
                                     str += '&nbsp;';
                                     str += $
                                         .formatString(
-                                            '<img style="cursor:pointer" onclick="approvedFun(\'{0}\', 9, dataGrid4Bill);" src="{1}" title="审批不通过"/>',
+                                            '<img style="cursor:pointer" onclick="approvedFun(\'{0}\', 9, dataGrid4Bill, \'bill\');" src="{1}" title="审批不通过"/>',
                                             row.id,
                                             '${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/approved-false.png');
                                 }
@@ -680,7 +775,7 @@
                             }
                         }
                     ] ],
-                    toolbar : '#toolbar',
+                    toolbar : '#toolbar4Bill',
                     onLoadSuccess : function() {
                         parent.$.messager.progress('close');
                     }
@@ -843,21 +938,21 @@
                                     str += '&nbsp;';
                                     str += $
                                         .formatString(
-                                            '<img style="cursor:pointer" onclick="approvedFun(\'{0}\', 2, dataGrid4Material);" src="{1}" title="结束审批"/>',
+                                            '<img style="cursor:pointer" onclick="approvedFun(\'{0}\', 2, dataGrid4Material, \'material\');" src="{1}" title="结束审批"/>',
                                             row.id,
                                             '${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/approved-true.png');
 
                                     str += '&nbsp;';
                                     str += $
                                         .formatString(
-                                            '<img style="cursor:pointer" onclick="approvedFun(\'{0}\', 8, dataGrid4Material);" src="{1}" title="继续审批"/>',
+                                            '<img style="cursor:pointer" onclick="approvedFun(\'{0}\', 8, dataGrid4Material, \'material\');" src="{1}" title="继续审批"/>',
                                             row.id,
                                             '${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/approved-jixu.png');
 
                                     str += '&nbsp;';
                                     str += $
                                         .formatString(
-                                            '<img style="cursor:pointer" onclick="approvedFun(\'{0}\', 9, dataGrid4Material);" src="{1}" title="审批不通过"/>',
+                                            '<img style="cursor:pointer" onclick="approvedFun(\'{0}\', 9, dataGrid4Material, \'material\');" src="{1}" title="审批不通过"/>',
                                             row.id,
                                             '${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/approved-false.png');
                                 }
@@ -865,7 +960,7 @@
                             }
                         }
                     ] ],
-                    toolbar : '#toolbar',
+                    toolbar : '#toolbar4Material',
                     onLoadSuccess : function() {
                         parent.$.messager.progress('close');
                     }
@@ -874,7 +969,7 @@
 
 
     // 审批资料
-    function approvedFun(id, approvedState, dg) {
+    function approvedFun(id, approvedState, dg, flag) {
         if (id == undefined) {//点击右键菜单才会触发这个
             var rows = dg.datagrid('getSelections');
             id = rows[0].id;
@@ -916,6 +1011,15 @@
                                 dataType : "json",
                                 success : function(data) {
                                     if (data.success == true) {
+                                        if (flag == 'data') {
+                                            searchFun4Data();
+                                        } else if (flag == 'doc') {
+                                            searchFun4Doc();
+                                        } else if (flag == 'bill') {
+                                            searchFun4Bill();
+                                        } else if (flag == 'material') {
+                                            searchFun4Material();
+                                        }
                                         searchFunData();
                                     }
                                 }
@@ -983,6 +1087,59 @@
 
 
     };
+
+
+    //过滤条件查询
+    function searchFun4Data() {
+        var startTime = $('#startTime4Data').datebox('getValue').substring(0, 10) + ' 00:00:00';
+        var endTime = $('#endTime4Data').datebox('getValue').substring(0, 10) + ' 23:59:59';
+        $('#dataGrid4Data').datagrid('reload',{keyword:$('#keyword4Data').val(),costType:$('#costType4Data').val(),
+            startTime:startTime,endTime:endTime});
+    }
+    //清除条件
+    function cleanFun4Data() {
+        $('#toolbar4Data input').val('');
+        $('#dataGrid4Data').datagrid('reload', {});
+    }
+
+    //过滤条件查询
+    function searchFun4Doc() {
+        var startTime = $('#startTime4Doc').datebox('getValue').substring(0, 10) + ' 00:00:00';
+        var endTime = $('#endTime4Doc').datebox('getValue').substring(0, 10) + ' 23:59:59';
+        $('#dataGrid4Doc').datagrid('reload',{keyword:$('#keyword4Doc').val(),costType:$('#costType4Doc').val(),
+            startTime:startTime,endTime:endTime});
+    }
+    //清除条件
+    function cleanFun4Doc() {
+        $('#toolbar4Doc input').val('');
+        $('#dataGrid4Doc').datagrid('reload', {});
+    }
+
+    //过滤条件查询
+    function searchFun4Bill() {
+        var startTime = $('#startTime4Bill').datebox('getValue').substring(0, 10) + ' 00:00:00';
+        var endTime = $('#endTime4Bill').datebox('getValue').substring(0, 10) + ' 23:59:59';
+        $('#dataGrid4Bill').datagrid('reload',{keyword:$('#keyword4Bill').val(),costType:$('#costType4Bill').val(),
+            startTime:startTime,endTime:endTime});
+    }
+    //清除条件
+    function cleanFun4Bill() {
+        $('#toolbar4Bill input').val('');
+        $('#dataGrid4Bill').datagrid('reload', {});
+    }
+
+    //过滤条件查询
+    function searchFun4Material() {
+        var startTime = $('#startTime4Material').datebox('getValue').substring(0, 10) + ' 00:00:00';
+        var endTime = $('#endTime4Material').datebox('getValue').substring(0, 10) + ' 23:59:59';
+        $('#dataGrid4Material').datagrid('reload',{keyword:$('#keyword4Material').val(),costType:$('#costType4Material').val(),
+            startTime:startTime,endTime:endTime});
+    }
+    //清除条件
+    function cleanFun4Material() {
+        $('#toolbar4Material input').val('');
+        $('#dataGrid4Material').datagrid('reload', {});
+    }
 
 </script>
 </body>
