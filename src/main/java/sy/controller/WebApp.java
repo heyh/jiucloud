@@ -736,7 +736,7 @@ public class WebApp extends BaseController {
 //			List<Integer> ugroup = departmentService.getUserGroup(d, uid,cid);
             Company c = companyService.findOneView(u.getId(),cid);
             List<Integer> ugroup = departmentService.getUsers(String.valueOf(c.getId()), Integer.parseInt(u.getId()));
-            dataGrid = fieldDataServiceI.myApproveDataGrid(ph, uid);
+            dataGrid = fieldDataServiceI.myApproveDataGrid(ph, uid, "");
 
             // add by heyh begin
             List<FieldData> fieldDatas = dataGrid.getRows();

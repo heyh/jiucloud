@@ -621,6 +621,7 @@ public class Api extends BaseController {
                                              @RequestParam(value = "cid", required = true) String cid,
                                              @RequestParam(value = "currentPage", required = true) int currentPage,
                                              @RequestParam(value = "limitSize", required = true) int limitSize,
+                                             @RequestParam(value = "source", required = true) String source,
                                              HttpServletRequest request, HttpServletResponse response) {
         DataGrid dataGrid = null;
         PageHelper pageHelper = new PageHelper();
@@ -628,7 +629,7 @@ public class Api extends BaseController {
         pageHelper.setRows(limitSize);
         try {
             List<Integer> ugroup = departmentService.getUsers(String.valueOf(cid), Integer.parseInt(uid));
-            dataGrid = fieldDataService.myApproveDataGrid(pageHelper, uid);
+            dataGrid = fieldDataService.myApproveDataGrid(pageHelper, uid, StringUtil.trimToEmpty(source));
             List<FieldData> fieldDatas = dataGrid.getRows();
             if (fieldDatas != null && fieldDatas.size() > 0) {
                 for (int i = fieldDatas.size() - 1; i >= 0; i--) {

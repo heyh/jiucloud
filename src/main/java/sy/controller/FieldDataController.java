@@ -1206,7 +1206,8 @@ public class FieldDataController extends BaseController {
     public DataGrid securi_myApproveDataGrid(PageHelper ph, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
         SessionInfo sessionInfo = (SessionInfo) session.getAttribute(ConfigUtil.getSessionInfoName());
         String uid = sessionInfo.getId();
-        DataGrid dataGrid = fieldDataServiceI.myApproveDataGrid(ph, uid);
+        String source = StringUtil.trimToEmpty(request.getParameter("source"));
+        DataGrid dataGrid = fieldDataServiceI.myApproveDataGrid(ph, uid, source);
 
         // add by heyh begin
         List<FieldData> fieldDatas = dataGrid.getRows();

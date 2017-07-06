@@ -462,10 +462,22 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
     }
 
     @Override
-    public DataGrid myApproveDataGrid(PageHelper ph, String uid) {
+    public DataGrid myApproveDataGrid(PageHelper ph, String uid, String source) {
         DataGrid dg = new DataGrid();
         Map<String, Object> params = new HashMap<String, Object>();
-        String hql= " from TFieldData t  where isDelete=0 and  needApproved != '0' and uid = :uid order by t.id desc";
+        String hql = "";
+        if (source.equals("data")) {
+            hql = " from TFieldData t  where isDelete=0 and  needApproved != '0' and uid = :uid and (itemcode is not null and itemcode<>'' and substring(itemcode,1,3)<>'000' and substring(itemcode,1,3)<>'700' and substring(itemcode,1,3)<>'800' and substring(itemcode,1,3)<=900) order by t.id desc";
+        } else if (source.equals("doc")) {
+            hql = " from TFieldData t  where isDelete=0 and  needApproved != '0' and uid = :uid and (itemcode is not null and itemcode<>'' and substring(itemcode,1,3)<>'700' and substring(itemcode,1,3)<>'800' and (substring(itemcode,1,3)='000' or substring(itemcode,1,3)>900)) order by t.id desc";
+        } else if (source.equals("bill")) {
+            hql = " from TFieldData t  where isDelete=0 and  needApproved != '0' and uid = :uid and (itemcode is not null and itemcode<>'' and substring(itemcode,1,3) ='700') order by t.id desc";
+        } else if (source.equals("material")) {
+            hql = " from TFieldData t  where isDelete=0 and  needApproved != '0' and uid = :uid and (itemcode is not null and itemcode<>'' and substring(itemcode,1,3) ='800') order by t.id desc";
+        } else {
+            hql = " from TFieldData t  where isDelete=0 and  needApproved != '0' and uid = :uid order by t.id desc";
+        }
+
         params.put("uid", uid);
         List<TFieldData> l = fieldDataDaoI.find(hql, params, ph.getPage(), ph.getRows());
         dg.setTotal(fieldDataDaoI.count("select count(*) " + hql, params));
