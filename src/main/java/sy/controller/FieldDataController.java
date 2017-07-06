@@ -1149,7 +1149,7 @@ public class FieldDataController extends BaseController {
             for (User user : users) {
                 userMap = new HashMap<String, Object>();
                 userMap.put("id", user.getId());
-                userMap.put("username", !user.getRealname().equals("") ? user.getRealname() : user.getUsername());
+                userMap.put("username", !StringUtil.trimToEmpty(user.getRealname()).equals("") ? user.getRealname() : user.getUsername());
                 userList.add(userMap);
             }
         }
@@ -1171,7 +1171,7 @@ public class FieldDataController extends BaseController {
             for (User user : users) {
                 userMap = new HashMap<String, Object>();
                 userMap.put("id", user.getId());
-                userMap.put("username", !user.getRealname().equals("") ? user.getRealname() : user.getUsername());
+                userMap.put("username", !StringUtil.trimToEmpty(user.getRealname()).equals("") ? user.getRealname() : user.getUsername());
                 userList.add(userMap);
             }
         }

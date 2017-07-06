@@ -59,6 +59,11 @@ public class ProjectStatController {
         return "/app/pro/dataApprove";
     }
 
+    @RequestMapping("/approve")
+    public String approve(HttpServletRequest request) {
+        return "/app/pro/approveAll";
+    }
+
     /**
      * 获取附件管理页面数据
      */
