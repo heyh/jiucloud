@@ -1198,7 +1198,8 @@ public class FieldDataController extends BaseController {
     public String myApproveShow(HttpServletRequest req) {
         req.setAttribute("first", UtilDate.getshortFirst());
         req.setAttribute("last", UtilDate.getshortLast());
-        return "/app/fielddata/myApproveShow";
+//        return "/app/fielddata/myApproveShow";
+        return "/app/pro/myApproveShow";
     }
 
     @RequestMapping("/securi_myApproveDataGrid")

@@ -85,7 +85,7 @@
         }
 
         #nav li {
-                margin-bottom: 2px;
+            margin-bottom: 2px;
         }
 
         #nav a {
@@ -131,7 +131,7 @@
         .subtotal { font-weight: bold; }/*合计单元格样式*/
 
         /*fieldset {*/
-            /*margin-top: 20px;*/
+        /*margin-top: 20px;*/
         /*}*/
 
         legend {
@@ -285,15 +285,37 @@
     formatterFirstDate = function(date) {
         var day = date.getDate() > 9 ? date.getDate() : "0" + date.getDate();
         var month = (date.getMonth() + 1) > 9 ? (date.getMonth() + 1) : "0"
-        + (date.getMonth() + 1);
+            + (date.getMonth() + 1);
         return date.getFullYear() + '-' + month + '-' + '01';
     };
     formatterCurrentDate = function(date) {
         var day = date.getDate() > 9 ? date.getDate() : "0" + date.getDate();
         var month = (date.getMonth() + 1) > 9 ? (date.getMonth() + 1) : "0"
-        + (date.getMonth() + 1);
+            + (date.getMonth() + 1);
         return date.getFullYear() + '-' + month + '-' + day;
     };
+
+    // 获取当前日期
+    function getCurrentDate() {
+        var date = new Date();
+        var seperator = "-";
+        var year = date.getFullYear();
+        var month = date.getMonth() + 1;
+        var strDate = date.getDate();
+        if (month >= 1 && month <= 9) {
+            month = "0" + month;
+        }
+        if (strDate >= 0 && strDate <= 9) {
+            strDate = "0" + strDate;
+        }
+        var currentdate = year + seperator + month + seperator + strDate;
+        return currentdate;
+    }
+
+    // yyyy-MM-dd 日期比较
+    function compareDate(dateA, dateB) {
+        return new Date(dateA.replace(/-/g, "/")) - new Date(dateB.replace(/-/g, "/"));
+    }
 
     window.onload = function () {
         $('#startTime').datebox('setValue', formatterFirstDate(new Date()));
@@ -307,7 +329,7 @@
     var dataGrid4Material;
     $(function() {
         dataGrid4Data = $('#dataGrid4Data')
-                .datagrid(
+            .datagrid(
                 {
                     url : '${pageContext.request.contextPath}/fieldDataController/securi_myApproveDataGrid?source=data',
                     fit : true,
