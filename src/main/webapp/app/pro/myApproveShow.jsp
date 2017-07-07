@@ -282,18 +282,6 @@
 <script type="text/javascript" src="${pageContext.request.contextPath}/jslib/jquery.nav.js"></script>
 
 <script>
-    formatterFirstDate = function(date) {
-        var day = date.getDate() > 9 ? date.getDate() : "0" + date.getDate();
-        var month = (date.getMonth() + 1) > 9 ? (date.getMonth() + 1) : "0"
-            + (date.getMonth() + 1);
-        return date.getFullYear() + '-' + month + '-' + '01';
-    };
-    formatterCurrentDate = function(date) {
-        var day = date.getDate() > 9 ? date.getDate() : "0" + date.getDate();
-        var month = (date.getMonth() + 1) > 9 ? (date.getMonth() + 1) : "0"
-            + (date.getMonth() + 1);
-        return date.getFullYear() + '-' + month + '-' + day;
-    };
 
     // 获取当前日期
     function getCurrentDate() {
@@ -317,17 +305,14 @@
         return new Date(dateA.replace(/-/g, "/")) - new Date(dateB.replace(/-/g, "/"));
     }
 
-    window.onload = function () {
-        $('#startTime').datebox('setValue', formatterFirstDate(new Date()));
-        $('#endTime').datebox('setValue', formatterCurrentDate(new Date()));
-        $('#startTimeDoc').datebox('setValue', formatterFirstDate(new Date()));
-        $('#endTimeDoc').datebox('setValue', formatterCurrentDate(new Date()));
-    }
     var dataGrid4Data;
     var dataGrid4Doc;
     var dataGrid4Bill;
     var dataGrid4Material;
     $(function() {
+
+        $('#nav').onePageNav();
+
         dataGrid4Data = $('#dataGrid4Data')
             .datagrid(
                 {
@@ -450,6 +435,16 @@
                             }
                         },
                         {
+                            field : 'approvedOption',
+                            title : '审批意见',
+                            width : 100
+                        },
+                        {
+                            field : 'currentApprovedUser',
+                            title : '当前审批人',
+                            width : 100
+                        },
+                        {
                             field : 'action',
                             title : '操作',
                             width : 100,
@@ -461,7 +456,7 @@
                                     if ('0' == row.isLock && '2' != row.needApproved) {
                                         str += $
                                             .formatString(
-                                                '<img onclick="editFun(\'{0}\');" src="{1}" title="编辑" />',
+                                                '<img onclick="editFun(\'{0}\', dataGrid4Data);" src="{1}" title="编辑" />',
                                                 row.id,
                                                 '${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/modify-blue.png');
                                         str += '&nbsp;';
@@ -579,6 +574,16 @@
                             }
                         },
                         {
+                            field : 'approvedOption',
+                            title : '审批意见',
+                            width : 100
+                        },
+                        {
+                            field : 'currentApprovedUser',
+                            title : '当前审批人',
+                            width : 100
+                        },
+                        {
                             field : 'action',
                             title : '操作',
                             width : 100,
@@ -590,7 +595,7 @@
                                     if ('0' == row.isLock && '2' != row.needApproved) {
                                         str += $
                                             .formatString(
-                                                '<img onclick="editFun(\'{0}\');" src="{1}" title="编辑" />',
+                                                '<img onclick="editFun(\'{0}\', dataGrid4Doc);" src="{1}" title="编辑" />',
                                                 row.id,
                                                 '${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/modify-blue.png');
                                         str += '&nbsp;';
@@ -755,6 +760,16 @@
                             }
                         },
                         {
+                            field : 'approvedOption',
+                            title : '审批意见',
+                            width : 100
+                        },
+                        {
+                            field : 'currentApprovedUser',
+                            title : '当前审批人',
+                            width : 100
+                        },
+                        {
                             field : 'action',
                             title : '操作',
                             width : 100,
@@ -766,7 +781,7 @@
                                     if ('0' == row.isLock && '2' != row.needApproved) {
                                         str += $
                                             .formatString(
-                                                '<img onclick="editFun(\'{0}\');" src="{1}" title="编辑" />',
+                                                '<img onclick="editFun(\'{0}\', dataGrid4Bill);" src="{1}" title="编辑" />',
                                                 row.id,
                                                 '${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/modify-blue.png');
                                         str += '&nbsp;';
@@ -916,24 +931,14 @@
                             }
                         },
                         {
-                            field : 'needApproved',
-                            title : '审批状态',
-                            width : 100,
-                            formatter : function(value, row, index) {
-                                var str = '';
-                                if ('0' == value) {
-                                    str = '不需审批'
-                                } else if ('1' == value) {
-                                    str = '<span style="color: #ff0000">' + '未审批' + '</span>';
-                                } else if ('2' == value) {
-                                    str = '审批通过';
-                                } else if ('8' == value) {
-                                    str = '<span style="color: #ff0000">' + '审批中' + '</span>';
-                                } else if ('9' == value) {
-                                    str = '<span style="color: #ff0000">' + '审批未通过' + '</span>';
-                                }
-                                return str;
-                            }
+                            field : 'approvedOption',
+                            title : '审批意见',
+                            width : 100
+                        },
+                        {
+                            field : 'currentApprovedUser',
+                            title : '当前审批人',
+                            width : 100
                         },
                         {
                             field : 'action',
@@ -947,7 +952,7 @@
                                     if ('0' == row.isLock && '2' != row.needApproved) {
                                         str += $
                                             .formatString(
-                                                '<img onclick="editFun(\'{0}\');" src="{1}" title="编辑" />',
+                                                '<img onclick="editFun(\'{0}\', dataGrid4Material);" src="{1}" title="编辑" />',
                                                 row.id,
                                                 '${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/modify-blue.png');
                                         str += '&nbsp;';
@@ -1064,7 +1069,7 @@
     }
 
     //编辑
-    function editFun(id) {
+    function editFun(id, dg) {
         parent.$
             .modalDialog({
                 title: '编辑',
@@ -1075,7 +1080,7 @@
                 buttons: [{
                     text: '下一步',
                     handler: function () {
-                        parent.$.modalDialog.openner_dataGrid = dataGrid;//因为添加成功之后，需要刷新这个dataGrid，所以先预定义好
+                        parent.$.modalDialog.openner_dataGrid = dg;//因为添加成功之后，需要刷新这个dataGrid，所以先预定义好
                         var f = parent.$.modalDialog.handler.find('#form');
                         f.submit();
                     }

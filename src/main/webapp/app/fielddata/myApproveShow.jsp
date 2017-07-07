@@ -36,6 +36,8 @@
 <script type="text/javascript">
 	var dataGrid;
 	$(function() {
+        $('#nav').onePageNav();
+
 		dataGrid = $('#dataGrid')
 				.datagrid(
 						{
