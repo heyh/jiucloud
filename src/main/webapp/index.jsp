@@ -311,7 +311,7 @@
                     <!-- <li class="menu-item"><a href="javascript:logoutFun()">退出</a></li> -->
                     <li class="menu-item"><a href="http://www.9393915.com/department">退出</a></li>
                 </ul>
-                <ul class="sub-nav left">
+                <ul class="sub-nav left" style="padding-left: 10%">
                     <li><a href="http://www.9393915.com">首页</a></li>
                     <li><a href="http://www.9393915.com/user/base/index">个人主页</a></li>
                     <li><a href="http://www.9393915.com/service">业务管理</a></li>
