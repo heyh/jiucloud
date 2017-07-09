@@ -462,22 +462,23 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
     }
 
     @Override
-    public DataGrid myApproveDataGrid(PageHelper ph, String uid, String source) {
+    public DataGrid myApproveDataGrid(PageHelper ph, String uid, String source, FieldData cmodel, String keyword) {
         DataGrid dg = new DataGrid();
         Map<String, Object> params = new HashMap<String, Object>();
         String hql = "";
         if (source.equals("data")) {
-            hql = " from TFieldData t  where isDelete=0 and  needApproved != '0' and uid = :uid and (itemcode is not null and itemcode<>'' and substring(itemcode,1,3)<>'000' and substring(itemcode,1,3)<>'700' and substring(itemcode,1,3)<>'800' and substring(itemcode,1,3)<=900) order by t.id desc";
+            hql = " from TFieldData t  where isDelete=0 and  needApproved != '0' and uid = :uid and (itemcode is not null and itemcode<>'' and substring(itemcode,1,3)<>'000' and substring(itemcode,1,3)<>'700' and substring(itemcode,1,3)<>'800' and substring(itemcode,1,3)<=900) ";
         } else if (source.equals("doc")) {
-            hql = " from TFieldData t  where isDelete=0 and  needApproved != '0' and uid = :uid and (itemcode is not null and itemcode<>'' and substring(itemcode,1,3)<>'700' and substring(itemcode,1,3)<>'800' and (substring(itemcode,1,3)='000' or substring(itemcode,1,3)>900)) order by t.id desc";
+            hql = " from TFieldData t  where isDelete=0 and  needApproved != '0' and uid = :uid and (itemcode is not null and itemcode<>'' and substring(itemcode,1,3)<>'700' and substring(itemcode,1,3)<>'800' and (substring(itemcode,1,3)='000' or substring(itemcode,1,3)>900)) ";
         } else if (source.equals("bill")) {
-            hql = " from TFieldData t  where isDelete=0 and  needApproved != '0' and uid = :uid and (itemcode is not null and itemcode<>'' and substring(itemcode,1,3) ='700') order by t.id desc";
+            hql = " from TFieldData t  where isDelete=0 and  needApproved != '0' and uid = :uid and (itemcode is not null and itemcode<>'' and substring(itemcode,1,3) ='700') ";
         } else if (source.equals("material")) {
-            hql = " from TFieldData t  where isDelete=0 and  needApproved != '0' and uid = :uid and (itemcode is not null and itemcode<>'' and substring(itemcode,1,3) ='800') order by t.id desc";
+            hql = " from TFieldData t  where isDelete=0 and  needApproved != '0' and uid = :uid and (itemcode is not null and itemcode<>'' and substring(itemcode,1,3) ='800') ";
         } else {
-            hql = " from TFieldData t  where isDelete=0 and  needApproved != '0' and uid = :uid order by t.id desc";
+            hql = " from TFieldData t  where isDelete=0 and  needApproved != '0' and uid = :uid ";
         }
 
+        hql += whereHql4MyApprove(cmodel, params, keyword);
         params.put("uid", uid);
         List<TFieldData> l = fieldDataDaoI.find(hql, params, ph.getPage(), ph.getRows());
         dg.setTotal(fieldDataDaoI.count("select count(*) " + hql, params));
@@ -547,6 +548,56 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
 
         dg.setRows(list);
         return dg;
+    }
+
+    private String whereHql4MyApprove(FieldData cmodel, Map<String, Object> params, String keyword) {
+        String hql = " ";
+        if (cmodel != null) {
+
+            if (cmodel.getItemCode() != null) {
+                hql += " and itemCode like :itemCode ";
+                params.put("itemCode", cmodel.getItemCode() + "%%");
+            }
+            if (cmodel.getStartTime() != null && cmodel.getStartTime().length() > 0) {
+                hql += " and t.creatTime >= :startTime";
+                params.put("startTime", DateKit.strToDateOrTime(cmodel.getStartTime()));
+            }
+            if (cmodel.getEndTime() != null && cmodel.getEndTime().length() > 0) {
+                hql += " and t.creatTime <= :endTime";
+                params.put("endTime", DateKit.strToDateOrTime(cmodel.getEndTime()));
+            }
+        }
+
+        // add by heyh begin 模糊查询
+        if (!keyword.equals("")) {
+            hql += " and ( uname like :name ";
+            params.put("name", "%%" + keyword + "%%");
+
+            hql += " or (select proName from Project where id=t.projectName) like :proName ";
+            params.put("proName", "%%" + keyword + "%%");
+
+            hql += " or (select costType from Cost where id=t.costType) like :costName ";
+            params.put("costName", "%%" + keyword + "%%");
+
+            hql += " or dataName like :dataName ";
+            params.put("dataName", "%%" + keyword + "%%");
+
+            hql += " or (select name from Item where cid = t.cid and projectId = t.projectName and value=t.section) like :section ";
+            params.put("section", "%%" + keyword + "%%");
+
+            hql += " or supplier like :supplier )";
+            params.put("supplier", "%%" + keyword + "%%");
+
+            hql += " or remark like :remark ";
+            params.put("remark", "%%" + keyword + "%%");
+
+            hql += " or specifications like :specifications ";
+            params.put("specifications", "%%" + keyword + "%%");
+
+        }
+
+        hql += " order by t.id desc";
+        return hql;
     }
 
     @Override

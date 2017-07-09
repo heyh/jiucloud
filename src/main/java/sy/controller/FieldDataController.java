@@ -1209,11 +1209,12 @@ public class FieldDataController extends BaseController {
 
     @RequestMapping("/securi_myApproveDataGrid")
     @ResponseBody
-    public DataGrid securi_myApproveDataGrid(PageHelper ph, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+    public DataGrid securi_myApproveDataGrid(FieldData fieldData, PageHelper ph, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
         SessionInfo sessionInfo = (SessionInfo) session.getAttribute(ConfigUtil.getSessionInfoName());
         String uid = sessionInfo.getId();
         String source = StringUtil.trimToEmpty(request.getParameter("source"));
-        DataGrid dataGrid = fieldDataServiceI.myApproveDataGrid(ph, uid, source);
+        String keyword = StringUtil.trimToEmpty(request.getParameter("keyword"));
+        DataGrid dataGrid = fieldDataServiceI.myApproveDataGrid(ph, uid, source, fieldData, keyword);
 
         // add by heyh begin
         List<FieldData> fieldDatas = dataGrid.getRows();

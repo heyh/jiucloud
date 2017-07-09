@@ -622,14 +622,33 @@ public class Api extends BaseController {
                                              @RequestParam(value = "currentPage", required = true) int currentPage,
                                              @RequestParam(value = "limitSize", required = true) int limitSize,
                                              @RequestParam(value = "source", required = true) String source,
+                                             @RequestParam(value = "keyword", required = false) String keyword,
+                                             @RequestParam(value = "startTime", required = false) String startTime,
+                                             @RequestParam(value = "endTime", required = false) String endTime,
+                                             @RequestParam(value = "itemCode", required = false) String itemCode,
                                              HttpServletRequest request, HttpServletResponse response) {
         DataGrid dataGrid = null;
         PageHelper pageHelper = new PageHelper();
         pageHelper.setPage(currentPage);
         pageHelper.setRows(limitSize);
+        FieldData fieldData = new FieldData();
+
+        if (StringUtil.trimToEmpty(startTime).equals("")) {
+            fieldData.setStartTime(UtilDate.getshortFirst() + " 00:00:00");
+        } else {
+            fieldData.setStartTime(startTime);
+        }
+        if (StringUtil.trimToEmpty(endTime).equals("")) {
+            fieldData.setEndTime(UtilDate.getshortLast() + " 23:59:59");
+        } else {
+            fieldData.setEndTime(endTime);
+        }
+        if (!StringUtil.trimToEmpty(itemCode).equals("")) {
+            fieldData.setItemCode(StringUtil.trimToEmpty(itemCode));
+        }
+
         try {
-            List<Integer> ugroup = departmentService.getUsers(String.valueOf(cid), Integer.parseInt(uid));
-            dataGrid = fieldDataService.myApproveDataGrid(pageHelper, uid, StringUtil.trimToEmpty(source));
+            dataGrid = fieldDataService.myApproveDataGrid(pageHelper, uid, StringUtil.trimToEmpty(source), fieldData, StringUtil.trimToEmpty(keyword));
             List<FieldData> fieldDatas = dataGrid.getRows();
             if (fieldDatas != null && fieldDatas.size() > 0) {
                 for (int i = fieldDatas.size() - 1; i >= 0; i--) {
