@@ -3,23 +3,59 @@
 <%@ page import="java.util.ArrayList" %>
 <%@ page import="java.util.List" %>
 <%@ page import="java.util.Map" %>
+<%@ page import="net.sf.json.JSONArray" %>
+<%@ page import="net.sf.json.JSONObject" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%
     List<Map<String, Object>> dataCostInfos = new ArrayList<Map<String, Object>>();
+    JSONArray jsonArray4Data = new JSONArray();
+    JSONArray dataCostTree = new JSONArray();
+
     List<Map<String, Object>> docCostInfos = new ArrayList<Map<String, Object>>();
+    JSONArray jsonArray4Doc = new JSONArray();
+    JSONArray docCostTree = new JSONArray();
+
     List<Map<String, Object>> billCostInfos = new ArrayList<Map<String, Object>>();
+    JSONArray jsonArray4Bill = new JSONArray();
+    JSONArray billCostTree = new JSONArray();
+
     List<Map<String, Object>> materialCostInfos = new ArrayList<Map<String, Object>>();
+    JSONArray jsonArray4Material = new JSONArray();
+    JSONArray materialCostTree = new JSONArray();
     SessionInfo sessionInfo = (SessionInfo) session.getAttribute(ConfigUtil.getSessionInfoName());
     if (sessionInfo == null) {
         response.sendRedirect(request.getContextPath());
     } else {
+        dataCostTree = sessionInfo.getCostTree();
         dataCostInfos = sessionInfo.getCostTypeInfos().get("dataCostInfos");
+        for (Map<String, Object> nodeMap : dataCostInfos) {
+            JSONObject nodeJson = JSONObject.fromObject(nodeMap);
+            jsonArray4Data.add(nodeJson);
+        }
+
+        docCostTree = sessionInfo.getDocCostTree();
         docCostInfos = sessionInfo.getCostTypeInfos().get("docCostInfos");
+        for (Map<String, Object> nodeMap : docCostInfos) {
+            JSONObject nodeJson = JSONObject.fromObject(nodeMap);
+            jsonArray4Doc.add(nodeJson);
+        }
+
+        billCostTree = sessionInfo.getBillCostTree();
         billCostInfos = sessionInfo.getCostTypeInfos().get("billCostInfos");
+        for (Map<String, Object> nodeMap : billCostInfos) {
+            JSONObject nodeJson = JSONObject.fromObject(nodeMap);
+            jsonArray4Bill.add(nodeJson);
+        }
+
+        materialCostTree = sessionInfo.getMaterialCostTree();
         materialCostInfos = sessionInfo.getCostTypeInfos().get("materialCostInfos");
+        for (Map<String, Object> nodeMap : materialCostInfos) {
+            JSONObject nodeJson = JSONObject.fromObject(nodeMap);
+            jsonArray4Material.add(nodeJson);
+        }
     }
 
 %>
@@ -160,17 +196,9 @@
             <input style="margin-top:9px; width: 150px; height: 17px" class="easyui-textbox"  type="text" name="keyword4Data" id="keyword4Data" data-options=""/>
             &nbsp;&nbsp;&nbsp;&nbsp;
             <span>费用类型:</span>
-            <select style="width: 150px"  name="costType4Data" id="costType4Data">
-                <option></option>
-                <c:forEach var="dataCostInfo" items="<%= dataCostInfos %>" varStatus="index">
-                    <c:if test="${dataCostInfo.isSend == '0'}">
-                        <option value="${dataCostInfo.costType}">${dataCostInfo.costType}</option>
-                    </c:if>
-                    <c:if test="${dataCostInfo.isSend == '1'}">
-                        <option value="${dataCostInfo.costType}">&nbsp;&nbsp;&nbsp;&nbsp;${dataCostInfo.costType}</option>
-                    </c:if>
-                </c:forEach>
-            </select>
+            <input class="easyui-combotree" name="costType4DataRef" id="costType4DataRef" style="width:180px;" placeholder="请选择">
+            <input type="hidden" name="costType4Material" id="costType4Data">
+            <input type="hidden" name="itemCode4Material" id="itemCode4Data">
             &nbsp;&nbsp;&nbsp;&nbsp;
             <span>起止时间:</span>
             <input style="width: 150px" class="easyui-datebox" name="startTime4Data" id='startTime4Data' editable="false" placeholder="点击选择时间"  value='${first }' />
@@ -191,17 +219,9 @@
             <input style="margin-top:9px; width: 150px; height: 17px" class="easyui-textbox"  type="text" name="keyword4Doc" id="keyword4Doc" data-options=""/>
             &nbsp;&nbsp;&nbsp;&nbsp;
             <span>资料类型:</span>
-            <select style="width: 150px"  name="costType4Doc" id="costType4Doc">
-                <option></option>
-                <c:forEach var="docCostInfo" items="<%= docCostInfos %>" varStatus="index">
-                    <c:if test="${docCostInfo.isSend == '0'}">
-                        <option value="${docCostInfo.costType}">${docCostInfo.costType}</option>
-                    </c:if>
-                    <c:if test="${docCostInfo.isSend == '1'}">
-                        <option value="${docCostInfo.costType}">&nbsp;&nbsp;&nbsp;&nbsp;${docCostInfo.costType}</option>
-                    </c:if>
-                </c:forEach>
-            </select>
+            <input class="easyui-combotree" name="costType4DocRef" id="costType4DocRef" style="width:180px;" placeholder="请选择">
+            <input type="hidden" name="costType4Material" id="costType4Doc">
+            <input type="hidden" name="itemCode4Material" id="itemCode4Doc">
             &nbsp;&nbsp;&nbsp;&nbsp;
             <span>起止时间:</span>
             <input style="width: 150px" class="easyui-datebox" name="startTime4Doc" id='startTime4Doc' editable="false" placeholder="点击选择时间"  value='${first }' />
@@ -222,17 +242,9 @@
             <input style="margin-top:9px; width: 150px; height: 17px" class="easyui-textbox"  type="text" name="keyword4Doc" id="keyword4Bill" data-options=""/>
             &nbsp;&nbsp;&nbsp;&nbsp;
             <span>费用类型:</span>
-            <select style="width: 150px"  name="costType4Bill" id="costType4Bill">
-                <option></option>
-                <c:forEach var="billCostInfo" items="<%= billCostInfos %>" varStatus="index">
-                    <c:if test="${billCostInfo.isSend == '0'}">
-                        <option value="${billCostInfo.costType}">${billCostInfo.costType}</option>
-                    </c:if>
-                    <c:if test="${billCostInfo.isSend == '1'}">
-                        <option value="${billCostInfo.costType}">&nbsp;&nbsp;&nbsp;&nbsp;${billCostInfo.costType}</option>
-                    </c:if>
-                </c:forEach>
-            </select>
+            <input class="easyui-combotree" name="costType4BillRef" id="costType4BillRef" style="width:180px;" placeholder="请选择">
+            <input type="hidden" name="costType4Material" id="costType4Bill">
+            <input type="hidden" name="itemCode4Material" id="itemCode4Bill">
             &nbsp;&nbsp;&nbsp;&nbsp;
             <span>起止时间:</span>
             <input style="width: 150px" class="easyui-datebox" name="startTime4Bill" id='startTime4Bill' editable="false" placeholder="点击选择时间"  value='${first }' />
@@ -253,17 +265,9 @@
             <input style="margin-top:9px; width: 150px; height: 17px" class="easyui-textbox"  type="text" name="keyword4Doc" id="keyword4Material" data-options=""/>
             &nbsp;&nbsp;&nbsp;&nbsp;
             <span>费用类型:</span>
-            <select style="width: 150px"  name="costType4Material" id="costType4Material">
-                <option></option>
-                <c:forEach var="materialCostInfo" items="<%= materialCostInfos %>" varStatus="index">
-                    <c:if test="${materialCostInfo.isSend == '0'}">
-                        <option value="${materialCostInfo.costType}">${materialCostInfo.costType}</option>
-                    </c:if>
-                    <c:if test="${materialCostInfo.isSend == '1'}">
-                        <option value="${materialCostInfo.costType}">&nbsp;&nbsp;&nbsp;&nbsp;${materialCostInfo.costType}</option>
-                    </c:if>
-                </c:forEach>
-            </select>
+            <input class="easyui-combotree" name="costType4MaterialRef" id="costType4MaterialRef" style="width:180px;" placeholder="请选择">
+            <input type="hidden" name="costType4Material" id="costType4Material">
+            <input type="hidden" name="itemCode4Material" id="itemCode4Material">
             &nbsp;&nbsp;&nbsp;&nbsp;
             <span>起止时间:</span>
             <input style="width: 150px" class="easyui-datebox" name="startTime4Material" id='startTime4Material' editable="false" placeholder="点击选择时间"  value='${first }' />
@@ -1075,7 +1079,7 @@
     function searchFun4Data() {
         var startTime = $('#startTime4Data').datebox('getValue').substring(0, 10) + ' 00:00:00';
         var endTime = $('#endTime4Data').datebox('getValue').substring(0, 10) + ' 23:59:59';
-        $('#dataGrid4Data').datagrid('reload',{keyword:$('#keyword4Data').val(),costType:$('#costType4Data').val(),
+        $('#dataGrid4Data').datagrid('reload',{keyword:$('#keyword4Data').val(),itemCode:$('#itemCode4Data').val(),
             startTime:startTime,endTime:endTime});
     }
     //清除条件
@@ -1088,7 +1092,7 @@
     function searchFun4Doc() {
         var startTime = $('#startTime4Doc').datebox('getValue').substring(0, 10) + ' 00:00:00';
         var endTime = $('#endTime4Doc').datebox('getValue').substring(0, 10) + ' 23:59:59';
-        $('#dataGrid4Doc').datagrid('reload',{keyword:$('#keyword4Doc').val(),costType:$('#costType4Doc').val(),
+        $('#dataGrid4Doc').datagrid('reload',{keyword:$('#keyword4Doc').val(),itemCode:$('#itemCode4Doc').val(),
             startTime:startTime,endTime:endTime});
     }
     //清除条件
@@ -1101,7 +1105,7 @@
     function searchFun4Bill() {
         var startTime = $('#startTime4Bill').datebox('getValue').substring(0, 10) + ' 00:00:00';
         var endTime = $('#endTime4Bill').datebox('getValue').substring(0, 10) + ' 23:59:59';
-        $('#dataGrid4Bill').datagrid('reload',{keyword:$('#keyword4Bill').val(),costType:$('#costType4Bill').val(),
+        $('#dataGrid4Bill').datagrid('reload',{keyword:$('#keyword4Bill').val(),itemCode:$('#itemCode4Bill').val(),
             startTime:startTime,endTime:endTime});
     }
     //清除条件
@@ -1114,7 +1118,7 @@
     function searchFun4Material() {
         var startTime = $('#startTime4Material').datebox('getValue').substring(0, 10) + ' 00:00:00';
         var endTime = $('#endTime4Material').datebox('getValue').substring(0, 10) + ' 23:59:59';
-        $('#dataGrid4Material').datagrid('reload',{keyword:$('#keyword4Material').val(),costType:$('#costType4Material').val(),
+        $('#dataGrid4Material').datagrid('reload',{keyword:$('#keyword4Material').val(),itemCode:$('#itemCode4Material').val(),
             startTime:startTime,endTime:endTime});
     }
     //清除条件
@@ -1122,6 +1126,122 @@
         $('#toolbar4Material input').val('');
         $('#dataGrid4Material').datagrid('reload', {});
     }
+
+    $('#costTypeDataRef').combotree({
+        data: <%= dataCostTree %>,
+        lines: true,
+        editable:true,
+        onLoadSuccess: function () {
+            $('#costTypeDataRef').combotree('tree').tree("collapseAll");
+        },
+        //选择树节点触发事件
+        onSelect : function(node) {
+            var _jsonArray = <%= jsonArray4Data %>;
+            for (var i=0; i<_jsonArray.length; i++) {
+                if (_jsonArray[i].nid == node.id) {
+                    $('#itemCode4Data').val(_jsonArray[i].itemCode);
+                    break;
+                }
+            }
+        }
+    });
+
+    $('#costType4DocRef').combotree({
+        data: <%= docCostTree %>,
+        lines: true,
+        editable:true,
+        onLoadSuccess: function () {
+            $('#costType4DocRef').combotree('tree').tree("collapseAll");
+        },
+        //选择树节点触发事件
+        onSelect : function(node) {
+            var _jsonArray = <%= jsonArray4Doc %>;
+            for (var i=0; i<_jsonArray.length; i++) {
+                if (_jsonArray[i].nid == node.id) {
+                    $('#itemCode4Doc').val(_jsonArray[i].itemCode);
+                    break;
+                }
+            }
+        }
+    });
+
+    $('#costType4BillRef').combotree({
+        data: <%= billCostTree %>,
+        lines: true,
+        editable:true,
+        onLoadSuccess: function () {
+            $('#costType4BillRef').combotree('tree').tree("collapseAll");
+        },
+        //选择树节点触发事件
+        onSelect : function(node) {
+            var _jsonArray = <%= jsonArray4Bill %>;
+            for (var i=0; i<_jsonArray.length; i++) {
+                if (_jsonArray[i].nid == node.id) {
+                    $('#itemCode4Bill').val(_jsonArray[i].itemCode);
+                    break;
+                }
+            }
+        }
+    });
+
+    $('#costType4MaterialRef').combotree({
+        data: <%= materialCostTree %>,
+        lines: true,
+        editable:true,
+        onLoadSuccess: function () {
+            $('#costType4MaterialRef').combotree('tree').tree("collapseAll");
+        },
+        //选择树节点触发事件
+        onSelect : function(node) {
+            var _jsonArray = <%= jsonArray4Material %>;
+            for (var i=0; i<_jsonArray.length; i++) {
+                if (_jsonArray[i].nid == node.id) {
+                    $('#itemCode4Material').val(_jsonArray[i].itemCode);
+                    break;
+                }
+            }
+        }
+    });
+
+    (function(){
+        $.fn.combotree.defaults.editable = true;
+        $.extend($.fn.combotree.defaults.keyHandler,{
+            up:function(){
+                console.log('up');
+            },
+            down:function(){
+                console.log('down');
+            },
+            enter:function(){
+                console.log('enter');
+            },
+            query:function(q){
+                var t = $(this).combotree('tree');
+                var nodes = t.tree('getChildren');
+                for(var i=0; i<nodes.length; i++){
+                    var node = nodes[i];
+                    if (node.text.indexOf(q) >= 0){
+                        $(node.target).show();
+                    } else {
+                        $(node.target).hide();
+                    }
+                }
+                var opts = $(this).combotree('options');
+                if (!opts.hasSetEvents){
+                    opts.hasSetEvents = true;
+                    var onShowPanel = opts.onShowPanel;
+                    opts.onShowPanel = function(){
+                        var nodes = t.tree('getChildren');
+                        for(var i=0; i<nodes.length; i++){
+                            $(nodes[i].target).show();
+                        }
+                        onShowPanel.call(this);
+                    };
+                    $(this).combo('options').onShowPanel = opts.onShowPanel;
+                }
+            }
+        });
+    })(jQuery);
 
 </script>
 </body>

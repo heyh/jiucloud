@@ -258,7 +258,7 @@
         };
 
         function goApprove(todo) {
-            var url = '${pageContext.request.contextPath}/projectStatController/dataApprove';
+            var url = '${pageContext.request.contextPath}/projectStatController/approve';
             var text = '项目数据审批';
             var iconCls = 'approve';
 
