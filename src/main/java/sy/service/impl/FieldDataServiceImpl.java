@@ -15,9 +15,11 @@ import sy.pageModel.PageHelper;
 import sy.service.CostServiceI;
 import sy.service.FieldDataServiceI;
 import sy.service.ItemServiceI;
+import sy.service.UserServiceI;
 import sy.util.DateKit;
 import sy.util.ObjectExcelRead;
 import sy.util.StringUtil;
+import sy.util.UtilDate;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import java.text.DateFormat;
@@ -45,6 +47,9 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
 
     @Autowired
     private CostServiceI costService;
+
+    @Autowired
+    private UserServiceI userService;
 
     @Override
     public TFieldData add(TFieldData tFieldData) {
@@ -330,28 +335,24 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
         try {
             TFieldData t = fieldDataDaoI.get("from TFieldData t where t.id = " + id);
             if (!t.getApprovedUser().equals("")) {
-                String[] approvedUser = t.getApprovedUser().split(",");
-//                if (approvedState.equals("8")) { // 需要查看是不是最终审批人，不是改为审批中
-//                    String currentApprovedUser = t.getCurrentApprovedUser();
-//                    if (!approvedUser[approvedUser.length-1].equals(currentApprovedUser)) { // 不是最终审批人
-//                        for (int i=0; i<approvedUser.length; i++) {
-//                            if (approvedUser[i].equals(currentApprovedUser)) {
-//                                t.setCurrentApprovedUser(approvedUser[i+1]);
-//                                break;
-//                            }
-//                        }
-//                    } else {
-//                        approvedState = "2";
-//                    }
-//                }
+                if (approvedState.equals("9")) { // 拒绝
+                    String[] approvedUsers = t.getApprovedUser().split(",");
+                    if (approvedUsers != null && approvedUsers.length>0) {
+                        String lastApprovedUser = approvedUsers[approvedUsers.length-1];
+                        String userName = userService.get(lastApprovedUser).getUsername();
+                        approvedOption = UtilDate.getDateFormatter() + " " + userName + " 审批意见: " + approvedOption;
+                    }
+                }
+
                 if (approvedState.equals("8")) { // 需要查看是不是最终审批人，不是改为审批中
                     t.setApprovedUser(t.getApprovedUser() + "," + currentApprovedUser);
                     t.setCurrentApprovedUser(currentApprovedUser);
                 }
             }
-
             t.setNeedApproved(approvedState);
-            t.setApprovedOption(approvedOption);
+
+
+            t.setApprovedOption(t.getApprovedOption().equals("") ? approvedOption : t.getApprovedOption() + "|" + approvedOption);
             this.fieldDataDaoI.update(t);
         } catch (Exception e) {
             e.printStackTrace();
