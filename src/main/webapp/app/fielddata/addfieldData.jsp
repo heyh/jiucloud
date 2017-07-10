@@ -212,6 +212,10 @@
 
             }
 
+            if (needApproved == '1' && currentApprovedUser == '') {
+                alert('请选择审批人');
+            }
+
             cfg.data = {
                 'projectName': projectName,
                 'costType': costType,

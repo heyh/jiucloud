@@ -181,7 +181,7 @@
                 return;
             }
             if (dataName == '') {
-                alert("现场数据名称不能为空");
+                alert("材料名称不能为空");
                 return;
             }
             if (section == '') {
@@ -205,11 +205,15 @@
                         return;
                     }
                     if (specifications == '') {
-                        alert("规格（设施名称）不能为空");
+                        alert("规格型号不能为空");
                         return;
                     }
                 }
 
+            }
+
+            if (needApproved == '1' && currentApprovedUser == '') {
+                alert('请选择审批人');
             }
 
             cfg.data = {

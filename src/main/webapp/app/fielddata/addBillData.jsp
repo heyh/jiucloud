@@ -181,7 +181,7 @@
                 return;
             }
             if (dataName == '') {
-                alert("现场数据名称不能为空");
+                alert("名称不能为空");
                 return;
             }
             if (section == '') {
@@ -210,6 +210,10 @@
                     }
                 }
 
+            }
+
+            if (needApproved == '1' && currentApprovedUser == '') {
+                alert('请选择审批人');
             }
 
             cfg.data = {
