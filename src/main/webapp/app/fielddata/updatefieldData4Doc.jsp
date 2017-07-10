@@ -11,8 +11,7 @@
 							url : '${pageContext.request.contextPath}/fieldDataController/updatefieldData',
 
 							onSubmit : function() {
-								var dataName = document
-										.getElementById("dataName").value;
+								var dataName = document.getElementById("dataName").value;
 								if (dataName == '') {
 									alert('请输入名称');
 									return false;
@@ -66,8 +65,7 @@
     }
 </script>
 <div class="easyui-layout" data-options="fit:true,border:false">
-	<div data-options="region:'center',border:false" title=""
-		style="overflow: hidden;">
+	<div data-options="region:'center',border:false" title="" style="overflow: hidden;">
         <input class="priview" value="${preview}" style="display: none;"/>
 		<form id="form" method="post" enctype="multipart/form-data">
 			<input type="hidden" id="id" name="id" value="${tfielddata.id}" />
@@ -80,6 +78,16 @@
 			<input type="hidden" id="costType" name="costType" value="${tfielddata.costType}" />
 			<input type="hidden" id="projectName" name="projectName" value="${tfielddata.projectName}" />
 			<input type="hidden" id="sectionId" value="${tfielddata.section}"/>
+
+			<input type="hidden" id="needApproved" name="needApproved" value="${tfielddata.needApproved}"/>
+			<input type="hidden" id="approvedUser" name="approvedUser" value="${tfielddata.approvedUser}"/>
+			<input type="hidden" id="currentApprovedUser" name="currentApprovedUser" value="${tfielddata.currentApprovedUser}"/>
+			<input type="hidden" id="approvedOption" name="approvedOption" value="${tfielddata.approvedOption}"/>
+			<input type="hidden" id="relId" name="relId" value="${tfielddata.relId}"/>
+			<input type="hidden" id="price_sj" name="price_sj" value="${tfielddata.price_sj}"/>
+			<input type="hidden" id="price_ys" name="price_ys" value="${tfielddata.price_ys}"/>
+
+
 			<table class="table table-hover table-condensed">
 				<tr>
 					<td style="width: 80px;">工程名称</td>
@@ -143,7 +151,6 @@
 						placeholder="备注说明" class="easyui-validatebox span2"
 						value="${tfielddata.remark}"></td>
 				</tr>
-                <input name="needApproved" value="${tfielddata.needApproved}" type="hidden"/>
 			</table>
 		</form>
 	</div>

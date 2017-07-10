@@ -710,7 +710,9 @@ public class FieldDataController extends BaseController {
                 }
             }
             // add by heyh end
-
+            if (fieldData.getRelId().equals("")) {
+                fieldData.setRelId(null);
+            }
             fieldDataServiceI.update(fieldData);
             j.setSuccess(true);
             j.setMsg("操作成功！");

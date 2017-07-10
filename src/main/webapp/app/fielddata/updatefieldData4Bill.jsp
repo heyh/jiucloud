@@ -108,6 +108,15 @@
                         <input type="hidden" id="projectName" name="projectName" value="${tfielddata.projectName}" />
 						<input type="hidden" id="unitRef" name="unitRef" value="${tfielddata.unit}" />
 						<input type="hidden" id="sectionId" value="${tfielddata.section}"/>
+
+						<input type="hidden" id="needApproved" name="needApproved" value="${tfielddata.needApproved}"/>
+						<input type="hidden" id="approvedUser" name="approvedUser" value="${tfielddata.approvedUser}"/>
+						<input type="hidden" id="currentApprovedUser" name="currentApprovedUser" value="${tfielddata.currentApprovedUser}"/>
+						<input type="hidden" id="approvedOption" name="approvedOption" value="${tfielddata.approvedOption}"/>
+						<input type="hidden" id="relId" name="relId" value="${tfielddata.relId}"/>
+						<input type="hidden" id="price_sj" name="price_sj" value="${tfielddata.price_sj}"/>
+						<input type="hidden" id="price_ys" name="price_ys" value="${tfielddata.price_ys}"/>
+
                         <input type="text" placeholder="工程名称" style="width: 250px;"
                                class="easyui-validatebox span2" data-options="required:true"
                                value="${project.proName}" readonly='readonly'></td>
@@ -197,7 +206,6 @@
 				</td>
 
 				</tr>
-                <input name="needApproved" value="${tfielddata.needApproved}" type="hidden"/>
 			</table>
 		</form>
 	</div>

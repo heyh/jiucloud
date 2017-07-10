@@ -494,7 +494,6 @@
                     selectOnCheck : false,
                     nowrap : false,
                     rownumbers: true,
-                    showFooter: true,
                     columns : [ [
                         {
                             field : 'id',
@@ -625,7 +624,6 @@
                     selectOnCheck : false,
                     nowrap : false,
                     rownumbers: true,
-                    showFooter: true,
                     columns : [ [
                         {
                             field : 'id',
@@ -805,7 +803,6 @@
                     selectOnCheck : false,
                     nowrap : false,
                     rownumbers: true,
-                    showFooter: true,
                     columns : [ [
                         {
                             field : 'id',
@@ -1013,7 +1010,6 @@
                         }
                     });
         } else if (approvedState == '8') {
-            alert(dg);
             parent.$.messager
                 .confirm(
                     '询问',
