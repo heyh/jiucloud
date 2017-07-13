@@ -236,7 +236,7 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
             hql += " or remark like :remark ";
             params.put("remark", "%%" + keyword + "%%");
 
-            hql += " or specifications like :specifications) ";
+            hql += " or specifications like :specifications ) ";
             params.put("specifications", "%%" + keyword + "%%");
 
         }
