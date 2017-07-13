@@ -530,7 +530,7 @@
 //		str += '&uname=' + $('#uname').val();
         str += '&keyword=' + $('#keyword').val();
 		str += '&projectName=' + $('#projectName').val();
-		str += '&costType=' + $('#costType').val();
+		str += '&itemCode=' + $('#itemCode').val();
 		str += '&startTime=' + $('#startTime').val();
 		str += '&endTime=' + $('#endTime').val();
 		var url = "${pageContext.request.contextPath}/fieldDataController/securi_execl?a=1&source=bill"

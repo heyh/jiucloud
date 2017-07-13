@@ -440,9 +440,24 @@
                             }
                         },
                         {
-                            field : 'approvedOption',
+                            field : 'approvedOption11',
                             title : '审批意见',
-                            width : 100
+                            width : 100,
+                            formatter: function (value, row, index) {
+                                debugger;
+                                var str = '';
+                                if (row.needApproved == '0' || row.needApproved == '1') {
+                                    return str;
+                                } else {
+                                    if (row.approvedOption != '') {
+                                        var approvedOptions= new Array();
+                                        approvedOptions = row.approvedOption.split('\|');
+                                    }
+                                    str += $.formatString('<span>approvedOptions[approvedOptions.length-1]</span>');
+                                }
+
+                                return str;
+                            }
                         },
                         {
                             field : 'currentApprovedUser',
@@ -581,7 +596,23 @@
                         {
                             field : 'approvedOption',
                             title : '审批意见',
-                            width : 100
+                            width : 200,
+                            formatter: function (value, row, index) {
+                                debugger;
+                                var str = '';
+                                if (row.needApproved == '0' || row.needApproved == '1') {
+                                    return str;
+                                } else {
+                                    if (row.approvedOption != '') {
+                                        var approvedOptions= new Array();
+                                        approvedOptions = row.approvedOption.split('|');
+                                        str += $.formatString('<span onmouseover="popupApprovedOptions()">' + approvedOptions[approvedOptions.length-1] + '</span>');
+                                    }
+
+                                }
+
+                                return str;
+                            }
                         },
                         {
                             field : 'currentApprovedUser',
@@ -1227,6 +1258,10 @@
         });
     })(jQuery);
 
+
+    function popupApprovedOptions() {
+        alert(11)
+    }
 </script>
 </body>
 

@@ -199,11 +199,6 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
                 hql += " and (select proName from Project where id=t.projectName) like :proName ";
                 params.put("proName", "%%" + cmodel.getProjectName() + "%%");
             }
-//            if (cmodel.getCostType() != null
-//                    && cmodel.getCostType().length() > 0) {
-//                hql += " and (select costType from Cost where id=t.costType) like :costName ";
-//                params.put("costName", "%%" + cmodel.getCostType() + "%%");
-//            }
             if (cmodel.getItemCode() != null) {
                 hql += " and itemCode like :itemCode ";
                 params.put("itemCode", cmodel.getItemCode() + "%%");
@@ -235,25 +230,16 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
             hql += " or (select name from Item where cid = t.cid and projectId = t.projectName and value=t.section) like :section ";
             params.put("section", "%%" + keyword + "%%");
 
-            hql += " or supplier like :supplier )";
+            hql += " or supplier like :supplier ";
             params.put("supplier", "%%" + keyword + "%%");
 
             hql += " or remark like :remark ";
             params.put("remark", "%%" + keyword + "%%");
 
-            hql += " or specifications like :specifications ";
+            hql += " or specifications like :specifications) ";
             params.put("specifications", "%%" + keyword + "%%");
 
         }
-        // add by heyh end
-
-//        if (ugroup != null && ugroup.size() > 0) {
-//            hql += " and uid in(" + ugroup.get(0).toString();
-//            for (int i = 1; i < ugroup.size(); i++) {
-//                hql += "," + ugroup.get(i).toString();
-//            }
-//            hql += ") ";
-//        }
         if (null == cmodel.getNeedApproved() ) {
             String uids = StringUtils.join(ugroup, ",");
             hql += " and (uid in (" + uids + ") or ( (substring(itemcode , 1 , 3) = '700' or substring(itemcode , 1 , 3) = '800') and cid = :cid))";
@@ -266,7 +252,6 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
         }
         if (null != cmodel.getNeedApproved() ) {
             hql += " and needApproved in ('1', '8')"; // 未审批、审批中
-//            params.put("needApproved", cmodel.getNeedApproved());
         }
         hql += " order by t.id desc";
         return hql;
