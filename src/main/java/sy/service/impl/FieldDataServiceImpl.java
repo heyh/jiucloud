@@ -190,16 +190,15 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
                             List<Integer> ugroup, String keyword) {
         String hql = " ";
         if (cmodel != null) {
-            if (cmodel.getUname() != null && cmodel.getUname().length() > 0) {
+            if (!StringUtil.trimToEmpty(cmodel.getUname()).equals("")) {
                 hql += " and uname like :name ";
                 params.put("name", "%%" + cmodel.getUname() + "%%");
             }
-            if (cmodel.getProjectName() != null
-                    && cmodel.getProjectName().length() > 0) {
+            if (!StringUtil.trimToEmpty(cmodel.getProjectName()).equals("")) {
                 hql += " and (select proName from Project where id=t.projectName) like :proName ";
                 params.put("proName", "%%" + cmodel.getProjectName() + "%%");
             }
-            if (cmodel.getItemCode() != null) {
+            if (!StringUtil.trimToEmpty(cmodel.getItemCode()).equals("")) {
                 hql += " and itemCode like :itemCode ";
                 params.put("itemCode", cmodel.getItemCode() + "%%");
             }
@@ -218,8 +217,8 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
             hql += " and ( uname like :name ";
             params.put("name", "%%" + keyword + "%%");
 
-            hql += " or (select proName from Project where id=t.projectName) like :proName ";
-            params.put("proName", "%%" + keyword + "%%");
+//            hql += " or (select proName from Project where id=t.projectName) like :proName ";
+//            params.put("proName", "%%" + keyword + "%%");
 
             hql += " or (select costType from Cost where id=t.costType) like :costName ";
             params.put("costName", "%%" + keyword + "%%");
@@ -236,14 +235,13 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
             hql += " or remark like :remark ";
             params.put("remark", "%%" + keyword + "%%");
 
-            hql += " or specifications like :specifications ) ";
+            hql += " or specifications like :specifications) ";
             params.put("specifications", "%%" + keyword + "%%");
 
         }
         if (null == cmodel.getNeedApproved() ) {
             String uids = StringUtils.join(ugroup, ",");
-            hql += " and (uid in (" + uids + ") or ( (substring(itemcode , 1 , 3) = '700' or substring(itemcode , 1 , 3) = '800') and cid = :cid))";
-            params.put("cid", String.valueOf(cmodel.getCid()));
+            hql += " and uid in (" + uids + ")";
         }
 
         if ( cmodel.getId() != 0) {
