@@ -925,7 +925,7 @@ public class FieldDataController extends BaseController {
 
         fieldData.setUname(request.getParameter("uname"));
         fieldData.setProjectName(request.getParameter("projectName"));
-        fieldData.setCostType(request.getParameter("costType"));
+        fieldData.setItemCode(request.getParameter("itemCode"));
 
         List<FieldData> datas = fieldDataServiceI.dataGrid(fieldData, ph, ugroup, source, keyword).getRows();
 
