@@ -16,12 +16,12 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @Controller
-@RequestMapping("/userDeviceRel")
+@RequestMapping("/userDeviceRelController")
 public class UserDeviceRelController extends BaseController {
     @Autowired
     UserDeviceRelService userDeviceRelService;
 
-    @RequestMapping("/addOrUpdate")
+    @RequestMapping("/securi_addOrUpdate")
     @ResponseBody
     public JSONObject addOrUpdateUserDeviceRel(@RequestParam(value = "registrationId", required = true) String registrationId,
                                       @RequestParam(value = "userId", required = false) String userId,
