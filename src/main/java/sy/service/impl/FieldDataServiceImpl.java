@@ -1,25 +1,22 @@
 package sy.service.impl;
 
+import net.sf.json.JSONObject;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sy.dao.*;
 import sy.model.Item;
+import sy.model.PushExtra;
 import sy.model.po.Cost;
 import sy.model.po.Project;
 import sy.model.po.TFieldData;
+import sy.model.po.TaskPush;
 import sy.pageModel.DataGrid;
 import sy.pageModel.FieldData;
 import sy.pageModel.PageHelper;
-import sy.service.CostServiceI;
-import sy.service.FieldDataServiceI;
-import sy.service.ItemServiceI;
-import sy.service.UserServiceI;
-import sy.util.DateKit;
-import sy.util.ObjectExcelRead;
-import sy.util.StringUtil;
-import sy.util.UtilDate;
+import sy.service.*;
+import sy.util.*;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import java.text.DateFormat;
@@ -51,10 +48,34 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
     @Autowired
     private UserServiceI userService;
 
+    @Autowired
+    private TaskPushServiceI taskPushService;
+
     @Override
     public TFieldData add(TFieldData tFieldData) {
         tFieldData.setCreatTime(new Date());
         fieldDataDaoI.save(tFieldData);
+
+        // 推送任务
+        if (tFieldData.getNeedApproved().equals("1")) {
+            TaskPush taskPush = new TaskPush();
+            taskPush.setTaskId(StringUtil.trimToEmpty(this.getId(tFieldData)));
+            taskPush.setUserId(tFieldData.getCurrentApprovedUser());
+            taskPush.setTaskType(Constant.TaskType.APPROVE);
+            taskPush.setPushType(Constant.PushType.NOTIFICATION_PUSH);
+            taskPush.setPushState(Constant.PushState.PUSH_INIT);
+
+            JSONObject jsonExtra = new JSONObject();
+            PushExtra pushExtra = new PushExtra();
+            pushExtra.setAlert("您有一个审批任务，请及时处理!");
+            jsonExtra.put("taskId",StringUtil.trimToEmpty(this.getId(tFieldData)));
+            pushExtra.setExtra(jsonExtra);
+            pushExtra.setMessage("您有一个审批任务，请及时处理!");
+            taskPush.setExtra(JSONObject.fromObject(pushExtra).toString());
+
+            taskPushService.addTaskPush(taskPush);
+        }
+
         return tFieldData;
     }
 

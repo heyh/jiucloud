@@ -47,7 +47,7 @@ public class UserDeviceRelServiceImpl implements UserDeviceRelService {
         paramMap.put("REGISTRATION_ID", userDeviceRel.getRegistrationId());
         paramMap.put("USER_ID", StringUtils.isEmpty(userDeviceRel.getUserId()) ? "" : userDeviceRel.getUserId());
 
-        String hql = "from UserDeviceRel a where a.registrationId=:REGISTRATION_ID and a.user_id=:USER_ID";
+        String hql = "from UserDeviceRel a where a.registrationId=:REGISTRATION_ID and a.userId=:USER_ID";
         return userDeviceRelDao.find(hql, paramMap);
     }
 
@@ -61,7 +61,7 @@ public class UserDeviceRelServiceImpl implements UserDeviceRelService {
     public List<UserDeviceRel> selectUserDeviceRelByUserId(UserDeviceRel userDeviceRel) throws Exception {
         Map<String, Object> paramMap = new HashMap<String, Object>();
         paramMap.put("USER_ID", StringUtils.isEmpty(userDeviceRel.getUserId()) ? "" : userDeviceRel.getUserId());
-        String hql = "from UserDeviceRel a where a.user_id=:USER_ID";
+        String hql = "from UserDeviceRel a where a.userId=:USER_ID";
         return userDeviceRelDao.find(hql, paramMap);
     }
 
@@ -81,7 +81,7 @@ public class UserDeviceRelServiceImpl implements UserDeviceRelService {
         }
         Map<String, Object> paramMap = new HashMap<String, Object>();
         paramMap.put("USER_IDS", userDeviceListStr.substring(0, userDeviceListStr.length() - 1));
-        String hql = "select * from UserDeviceRel a where a.user_id IN :USER_IDS and a.is_push = '1' ";
+        String hql = "select * from UserDeviceRel a where a.userId IN :USER_IDS and a.is_push = '1' ";
         return userDeviceRelDao.find(hql, paramMap);
     }
 
@@ -110,7 +110,7 @@ public class UserDeviceRelServiceImpl implements UserDeviceRelService {
         Map<String, Object> paramMap = new HashMap<String, Object>();
         paramMap.put("USER_ID", StringUtils.isEmpty(userDeviceRel.getUserId()) ? "" : userDeviceRel.getUserId());
         paramMap.put("REGISTRATION_ID", userDeviceRel.getRegistrationId());
-        String sql = " UPDATE UserDeviceRel set user_id = :USER_ID where registrationId =:REGISTRATION_ID ";
+        String sql = " UPDATE UserDeviceRel set userId = :USER_ID where registrationId =:REGISTRATION_ID ";
         return userDeviceRelDao.executeSql(sql, paramMap);
     }
 
@@ -121,7 +121,7 @@ public class UserDeviceRelServiceImpl implements UserDeviceRelService {
      */
     @Override
     public List<UserDeviceRel> selectAllUserDeviceRel() throws Exception {
-        String hql = "from UserDeviceRel a where a.is_push = '1'";
+        String hql = "from UserDeviceRel a where a.isPush = '1'";
         return userDeviceRelDao.find(hql);
     }
 

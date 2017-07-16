@@ -37,6 +37,26 @@ public class Constant {
 		public int FENXIANG = 2;// 分享
 	}
 
+	public interface TaskType {
+		public String APPROVE = "0";
+		public String DISCUSS = "1";
+	}
+
+	/*推送类型(0:notification,1:message)*/
+	public interface PushType{
+		String NOTIFICATION_PUSH = "0";
+		String MESSAGE_PUSH = "1";
+	}
+
+	/*推送状态(0:未推送,1:待推送,2:推送中,3:推送成功,4:推送失败)*/
+	public interface PushState{
+		String PUSH_INIT = "0";
+		String WAIT_PUSH = "1";
+		String PUSHING = "2";
+		String PUSH_SUCCESS = "3";
+		String PUSH_FAILED = "4";
+	}
+
 	/**
 	 * @ClassName: VisitEnum
 	 * @Description: 访问类型
