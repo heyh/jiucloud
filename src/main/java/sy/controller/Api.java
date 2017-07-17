@@ -66,6 +66,9 @@ public class Api extends BaseController {
     @Autowired
     private DiscussServiceI discussService;
 
+    @Autowired
+    private TaskPushServiceI taskPushService;
+
     @RequestMapping("/securi_login")
     @ResponseBody
     public JSONObject login(@RequestParam(value = "name", required = true) String name,
@@ -354,23 +357,6 @@ public class Api extends BaseController {
         String costType = String.valueOf(cost.getId());
         String itemCode = cost.getItemCode();
 
-//        if (approvedUser == null || approvedUser.equals("")) {
-//            List<Integer> approvedUserList = new ArrayList<Integer>();
-//            if (needApproved.equals("1")) {
-//                approvedUserList = departmentService.getAllParents(cid, Integer.parseInt(uid));
-//                if (approvedUserList == null || approvedUserList.size() == 0) {
-//                    approvedUserList.add(Integer.parseInt(uid)); // 如果为空说明是超级管理员，自己审批
-//                }
-//                approvedUser = StringUtils.join(approvedUserList, ","); // 所有审批人
-//                currentApprovedUser = String.valueOf(approvedUserList.get(0)); // 当前审批人
-//
-//            }
-//        } else {
-//            List<String> approvedUsers = Arrays.asList(approvedUser.split(","));
-//            if (approvedUsers != null && approvedUsers.size() > 0) {
-//                currentApprovedUser = approvedUsers.get(0); // 当前审批人
-//            }
-//        }
         if (approvedUser == null || approvedUser.equals("")) {
             approvedUser = currentApprovedUser;
         }
@@ -383,7 +369,14 @@ public class Api extends BaseController {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return new WebResult().ok().set("mid", fieldDataService.getId(fieldData));
+
+        int fieldId = Integer.parseInt(StringUtil.trimToEmpty(fieldDataService.getId(fieldData)));
+        if (fieldData.getNeedApproved().equals("1")) {
+            fieldData.setId(fieldId);
+            taskPushService.addFieldTaskPush(fieldData);
+        }
+
+        return new WebResult().ok().set("mid", fieldId);
     }
 
     @RequestMapping("/securi_editFieldData")
@@ -466,7 +459,14 @@ public class Api extends BaseController {
 
         try {
             fieldDataService.update(fieldData);
-            return new WebResult().ok().set("mid", fieldDataService.getId(fieldData));
+
+            int fieldId = Integer.parseInt(StringUtil.trimToEmpty(fieldDataService.getId(fieldData)));
+            if (fieldData.getNeedApproved().equals("1")) {
+                fieldData.setId(fieldId);
+                taskPushService.addFieldTaskPush(fieldData);
+            }
+
+            return new WebResult().ok().set("mid", fieldId);
         } catch (Exception e) {
             e.printStackTrace();
             return new WebResult().fail().setMessage("网络异常,修改失败");
@@ -712,6 +712,7 @@ public class Api extends BaseController {
                                     HttpServletResponse response, HttpServletRequest request) {
 
         fieldDataService.approvedField(id, approvedState, approvedOption, currentApprovedUser);
+
         return new WebResult().ok().setMessage("审批成功");
     }
 

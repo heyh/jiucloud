@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import sy.model.Item;
 import sy.model.ParamTrans;
+import sy.model.PushExtra;
 import sy.model.S_department;
 import sy.model.po.*;
 import sy.pageModel.DataGrid;
@@ -74,6 +75,9 @@ public class FieldDataController extends BaseController {
 
     @Autowired
     private CompanyServiceI companyService;
+
+    @Autowired
+    private TaskPushServiceI taskPushService;
 
     /**
      * 跳转管理页面
@@ -404,6 +408,12 @@ public class FieldDataController extends BaseController {
 
         fieldDataServiceI.add(outFieldData);
 
+        int fieldId = Integer.parseInt(StringUtil.trimToEmpty(fieldDataServiceI.getId(outFieldData)));
+        if (outFieldData.getNeedApproved().equals("1")) {
+            outFieldData.setId(fieldId);
+            taskPushService.addFieldTaskPush(outFieldData);
+        }
+
         return new WebResult().ok();
     }
     /**
@@ -630,36 +640,21 @@ public class FieldDataController extends BaseController {
             fieldData.setItemCode(cost.getItemCode());
         }
 
-        // add by heyh begin
-//        if (fieldData.getApprovedUser() == null || fieldData.getApprovedUser().equals("")) {
-//            List<Integer> approvedUserList = new ArrayList<Integer>();
-//            if (fieldData.getNeedApproved().equals("1")) {
-//                approvedUserList = departmentService.getAllParents(fieldData.getCid(), Integer.parseInt(fieldData.getUid()));
-//                if (approvedUserList == null || approvedUserList.size() == 0) {
-//                    approvedUserList.add(Integer.parseInt(fieldData.getUid())); // 如果为空说明是超级管理员，自己审批
-//                }
-//                fieldData.setApprovedUser(StringUtils.join(approvedUserList, ",")); // 所有审批人
-//                fieldData.setCurrentApprovedUser(String.valueOf(approvedUserList.get(0))); // 当前审批人
-//
-//            }
-//        } else {
-//            List<String> approvedUsers = Arrays.asList(fieldData.getApprovedUser().split(","));
-//            if (approvedUsers != null && approvedUsers.size() > 0) {
-//                fieldData.setCurrentApprovedUser(approvedUsers.get(0)); // 当前审批人
-//            }
-//        }
-
         if (fieldData.getNeedApproved().equals("1")) {
             fieldData.setApprovedUser(fieldData.getCurrentApprovedUser());
         }
-        // add by heyh end
 
         try {
             Cost tem = costServiceI.findById(fieldData.getCostType());
             String fj = tem.getItemCode().substring(0, 3);
 
             fieldDataServiceI.add(fieldData);
-            j.setObj(fieldDataServiceI.getId(fieldData));
+            int fieldId = Integer.parseInt(StringUtil.trimToEmpty(fieldDataServiceI.getId(fieldData)));
+            if (fieldData.getNeedApproved().equals("1")) {
+                fieldData.setId(fieldId);
+                taskPushService.addFieldTaskPush(fieldData);
+            }
+            j.setObj(fieldId);
             sessionInfo.setLast_cost_id(fieldData.getCostType());
             sessionInfo.setLast_project_id(fieldData.getProjectName());
             j.setSuccess(true);
@@ -695,14 +690,6 @@ public class FieldDataController extends BaseController {
             // add by heyh begin 修改后重新设置审批状态和当前审批人
             if (fieldData.getNeedApproved() != null && !fieldData.getNeedApproved().equals("0")) {
                 fieldData.setNeedApproved("1");
-//                List<Integer> approvedUserList = departmentService.getAllParents(fieldData.getCid(), Integer.parseInt(fieldData.getUid()));
-//                if (approvedUserList == null) {
-//                    approvedUserList.add(Integer.parseInt(fieldData.getUid())); // 如果为空说明是超级管理员，自己审批
-//                }
-//                fieldData.setApprovedUser(StringUtils.join(approvedUserList, ",")); // 所有审批人
-//                if (approvedUserList != null && approvedUserList.size()>0) {
-//                    fieldData.setCurrentApprovedUser(String.valueOf(approvedUserList.get(0))); // 当前审批人
-//                }
                 if (!StringUtil.trimToEmpty(fieldData.getApprovedUser()).equals("")) {
                     String[] approvedUserList = fieldData.getApprovedUser().split(",");
                     fieldData.setApprovedUser(approvedUserList[0]);
@@ -714,6 +701,13 @@ public class FieldDataController extends BaseController {
                 fieldData.setRelId(null);
             }
             fieldDataServiceI.update(fieldData);
+
+            int fieldId = Integer.parseInt(StringUtil.trimToEmpty(fieldDataServiceI.getId(fieldData)));
+            if (fieldData.getNeedApproved().equals("1")) {
+                fieldData.setId(fieldId);
+                taskPushService.addFieldTaskPush(fieldData);
+            }
+
             j.setSuccess(true);
             j.setMsg("操作成功！");
         } catch (NumberFormatException ex) {

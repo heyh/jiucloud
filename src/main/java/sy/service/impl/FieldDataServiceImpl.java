@@ -55,27 +55,6 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
     public TFieldData add(TFieldData tFieldData) {
         tFieldData.setCreatTime(new Date());
         fieldDataDaoI.save(tFieldData);
-
-        // 推送任务
-        if (tFieldData.getNeedApproved().equals("1")) {
-            TaskPush taskPush = new TaskPush();
-            taskPush.setTaskId(StringUtil.trimToEmpty(this.getId(tFieldData)));
-            taskPush.setUserId(tFieldData.getCurrentApprovedUser());
-            taskPush.setTaskType(Constant.TaskType.APPROVE);
-            taskPush.setPushType(Constant.PushType.NOTIFICATION_PUSH);
-            taskPush.setPushState(Constant.PushState.PUSH_INIT);
-
-            JSONObject jsonExtra = new JSONObject();
-            PushExtra pushExtra = new PushExtra();
-            pushExtra.setAlert("您有一个审批任务，请及时处理!");
-            jsonExtra.put("taskId",StringUtil.trimToEmpty(this.getId(tFieldData)));
-            pushExtra.setExtra(jsonExtra);
-            pushExtra.setMessage("您有一个审批任务，请及时处理!");
-            taskPush.setExtra(JSONObject.fromObject(pushExtra).toString());
-
-            taskPushService.addTaskPush(taskPush);
-        }
-
         return tFieldData;
     }
 
@@ -351,6 +330,9 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
                 if (approvedState.equals("8")) { // 需要查看是不是最终审批人，不是改为审批中
                     t.setApprovedUser(t.getApprovedUser() + "," + currentApprovedUser);
                     t.setCurrentApprovedUser(currentApprovedUser);
+
+                    // 推送任务
+                    taskPushService.addFieldTaskPush(t);
                 }
             }
             t.setNeedApproved(approvedState);
