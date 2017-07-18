@@ -621,7 +621,7 @@ public class Api extends BaseController {
                                              @RequestParam(value = "cid", required = true) String cid,
                                              @RequestParam(value = "currentPage", required = true) int currentPage,
                                              @RequestParam(value = "limitSize", required = true) int limitSize,
-                                             @RequestParam(value = "source", required = true) String source,
+                                             @RequestParam(value = "source", required = false) String source,
                                              @RequestParam(value = "keyword", required = false) String keyword,
                                              @RequestParam(value = "startTime", required = false) String startTime,
                                              @RequestParam(value = "endTime", required = false) String endTime,
