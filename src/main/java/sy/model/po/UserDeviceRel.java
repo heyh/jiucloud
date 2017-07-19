@@ -22,7 +22,7 @@ public class UserDeviceRel {
     private String userId;
 
     @Column(name = "isPush")
-    private char isPush;
+    private String isPush;
 
     @Column(name = "createTime")
     private Date createTime;
@@ -30,7 +30,34 @@ public class UserDeviceRel {
     @Column(name = "updateTime")
     private Date updateTime;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        UserDeviceRel that = (UserDeviceRel) o;
+
+        if (id != that.id) return false;
+        if (!registrationId.equals(that.registrationId)) return false;
+        if (!userId.equals(that.userId)) return false;
+        if (isPush != null ? !isPush.equals(that.isPush) : that.isPush != null) return false;
+        if (createTime != null ? !createTime.equals(that.createTime) : that.createTime != null) return false;
+        return updateTime != null ? updateTime.equals(that.updateTime) : that.updateTime == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id;
+        result = 31 * result + registrationId.hashCode();
+        result = 31 * result + userId.hashCode();
+        result = 31 * result + (isPush != null ? isPush.hashCode() : 0);
+        result = 31 * result + (createTime != null ? createTime.hashCode() : 0);
+        result = 31 * result + (updateTime != null ? updateTime.hashCode() : 0);
+        return result;
+    }
+
     public int getId() {
+
         return id;
     }
 
@@ -54,11 +81,11 @@ public class UserDeviceRel {
         this.userId = userId;
     }
 
-    public char getIsPush() {
+    public String getIsPush() {
         return isPush;
     }
 
-    public void setIsPush(char isPush) {
+    public void setIsPush(String isPush) {
         this.isPush = isPush;
     }
 
@@ -76,32 +103,5 @@ public class UserDeviceRel {
 
     public void setUpdateTime(Date updateTime) {
         this.updateTime = updateTime;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        UserDeviceRel that = (UserDeviceRel) o;
-
-        if (id != that.id) return false;
-        if (isPush != that.isPush) return false;
-        if (registrationId != null ? !registrationId.equals(that.registrationId) : that.registrationId != null)
-            return false;
-        if (userId != null ? !userId.equals(that.userId) : that.userId != null) return false;
-        if (createTime != null ? !createTime.equals(that.createTime) : that.createTime != null) return false;
-        return updateTime != null ? updateTime.equals(that.updateTime) : that.updateTime == null;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = id;
-        result = 31 * result + (registrationId != null ? registrationId.hashCode() : 0);
-        result = 31 * result + (userId != null ? userId.hashCode() : 0);
-        result = 31 * result + (int) isPush;
-        result = 31 * result + (createTime != null ? createTime.hashCode() : 0);
-        result = 31 * result + (updateTime != null ? updateTime.hashCode() : 0);
-        return result;
     }
 }

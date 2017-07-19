@@ -6,7 +6,6 @@ import org.springframework.util.StringUtils;
 import sy.dao.UserDeviceRelDaol;
 import sy.model.po.UserDeviceRel;
 import sy.service.UserDeviceRelService;
-import sy.util.BeanUtils;
 
 import java.util.Date;
 import java.util.HashMap;
@@ -54,13 +53,13 @@ public class UserDeviceRelServiceImpl implements UserDeviceRelService {
     /**
      * 根据用户ID查询设备号
      *
-     * @param userDeviceRel
+     * @param userId
      * @return
      * @throws Exception
      */
-    public List<UserDeviceRel> selectUserDeviceRelByUserId(UserDeviceRel userDeviceRel) throws Exception {
+    public List<UserDeviceRel> selectUserDeviceRelByUserId(String userId) throws Exception {
         Map<String, Object> paramMap = new HashMap<String, Object>();
-        paramMap.put("USER_ID", StringUtils.isEmpty(userDeviceRel.getUserId()) ? "" : userDeviceRel.getUserId());
+        paramMap.put("USER_ID", StringUtils.isEmpty(userId) ? "" : userId);
         String hql = "from UserDeviceRel a where a.userId=:USER_ID";
         return userDeviceRelDao.find(hql, paramMap);
     }
@@ -99,18 +98,21 @@ public class UserDeviceRelServiceImpl implements UserDeviceRelService {
         return userDeviceRelDao.find(hql, paramMap);
     }
 
-    /**
-     * 更新用户设备关系
-     *
-     * @param userDeviceRel
-     * @return
-     * @throws Exception
-     */
-    public int updateUserDeviceRel(UserDeviceRel userDeviceRel) throws Exception {
+    @Override
+    public int updateUserDeviceRelUserId(UserDeviceRel userDeviceRel) throws Exception {
         Map<String, Object> paramMap = new HashMap<String, Object>();
         paramMap.put("USER_ID", StringUtils.isEmpty(userDeviceRel.getUserId()) ? "" : userDeviceRel.getUserId());
         paramMap.put("REGISTRATION_ID", userDeviceRel.getRegistrationId());
         String sql = " UPDATE UserDeviceRel set userId = :USER_ID where registrationId =:REGISTRATION_ID ";
+        return userDeviceRelDao.executeSql(sql, paramMap);
+    }
+
+    @Override
+    public int updateUserDeviceRelRegistrationID(UserDeviceRel userDeviceRel) throws Exception {
+        Map<String, Object> paramMap = new HashMap<String, Object>();
+        paramMap.put("USER_ID", StringUtils.isEmpty(userDeviceRel.getUserId()) ? "" : userDeviceRel.getUserId());
+        paramMap.put("REGISTRATION_ID", userDeviceRel.getRegistrationId());
+        String sql = " UPDATE UserDeviceRel set registrationId =:REGISTRATION_ID where userId = :USER_ID ";
         return userDeviceRelDao.executeSql(sql, paramMap);
     }
 

@@ -27,11 +27,11 @@ public interface UserDeviceRelService {
 
     /**
      * 根据用户ID查询设备号
-     * @param userDeviceRel
+     * @param userId
      * @return
      * @throws Exception
      */
-    public List<UserDeviceRel> selectUserDeviceRelByUserId(UserDeviceRel userDeviceRel) throws Exception;
+    public List<UserDeviceRel> selectUserDeviceRelByUserId(String userId) throws Exception;
 
     /**
      * 根据用户ID列表查询设备号
@@ -48,13 +48,22 @@ public interface UserDeviceRelService {
      * @throws Exception
      */
     public List<UserDeviceRel> selectUserDeviceRelByRegistrationID(String registrationId)throws Exception;
+
     /**
-     * 更新用户设备关系
+     * 更新用户设备关系UserId
      * @param userDeviceRel
      * @return
      * @throws Exception
      */
-    public int updateUserDeviceRel(UserDeviceRel userDeviceRel) throws Exception;
+    public int updateUserDeviceRelUserId(UserDeviceRel userDeviceRel) throws Exception;
+
+    /**
+     * 更新用户设备关系注册ID
+     * @param userDeviceRel
+     * @return
+     * @throws Exception
+     */
+    public int updateUserDeviceRelRegistrationID(UserDeviceRel userDeviceRel) throws Exception;
 
     /**
      * 获取所有的用户设备关系
@@ -69,7 +78,5 @@ public interface UserDeviceRelService {
      * @return
      * @throws Exception
      */
-    public List<UserDeviceRel> getUserDeviceRelByRegistrationIds(List<UserDeviceRel>
-                                                                         userDeviceRelList)
-            throws Exception;
+    public List<UserDeviceRel> getUserDeviceRelByRegistrationIds(List<UserDeviceRel> userDeviceRelList) throws Exception;
 }
