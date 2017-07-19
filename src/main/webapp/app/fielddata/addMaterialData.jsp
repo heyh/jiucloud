@@ -184,10 +184,10 @@
                 alert("材料名称不能为空");
                 return;
             }
-            if (section == '') {
-                alert("标段不能为空");
-                return;
-            }
+//            if (section == '') {
+//                alert("标段不能为空");
+//                return;
+//            }
             if (price == '') {
                 alert("价格不能为空");
                 return;
