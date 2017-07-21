@@ -577,16 +577,16 @@ public class Api extends BaseController {
                                             @RequestParam(value = "currentPage", required = true) int currentPage,
                                             @RequestParam(value = "limitSize", required = true) int limitSize,
                                             HttpServletRequest request, HttpServletResponse response) {
-        DataGrid dataGrid = null;
+        List<FieldData> approveList = new ArrayList<FieldData>();
         PageHelper pageHelper = new PageHelper();
         pageHelper.setPage(currentPage);
         pageHelper.setRows(limitSize);
         try {
-            dataGrid = fieldDataService.approveDataGrid(pageHelper, uid);
+            approveList = fieldDataService.approveList(pageHelper, uid);
         } catch (Exception e) {
             return new WebResult().fail().setMessage("网络异常,请稍后再试");
         }
-        return new WebResult().ok().set("approvalFieldDataList", dataGrid.getRows());
+        return new WebResult().ok().set("approvalFieldDataList", approveList);
     }
 
     /**

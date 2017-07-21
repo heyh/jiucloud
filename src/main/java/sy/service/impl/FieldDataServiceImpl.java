@@ -373,13 +373,12 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
     }
 
     @Override
-    public DataGrid approveDataGrid(PageHelper ph, String currentApprovedUser) {
+    public List<FieldData> approveList(PageHelper ph, String currentApprovedUser) {
         DataGrid dg = new DataGrid();
         Map<String, Object> params = new HashMap<String, Object>();
         String hql= " from TFieldData t  where isDelete=0 and  needApproved in ('1','8') and currentApprovedUser = :currentApprovedUser order by t.id desc";
         params.put("currentApprovedUser", currentApprovedUser);
         List<TFieldData> l = fieldDataDaoI.find(hql, params, ph.getPage(), ph.getRows());
-        dg.setTotal(fieldDataDaoI.count("select count(*) " + hql, params));
         List<FieldData> list = new ArrayList<FieldData>();
         for (TFieldData tem : l) {
             FieldData f = new FieldData();
@@ -444,8 +443,7 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
             }
         });
 
-        dg.setRows(list);
-        return dg;
+        return list;
     }
 
     @Override
