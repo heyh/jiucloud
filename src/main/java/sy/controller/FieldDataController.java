@@ -1087,29 +1087,9 @@ public class FieldDataController extends BaseController {
 
         Json json = new Json();
         SessionInfo sessionInfo = (SessionInfo) request.getSession().getAttribute(ConfigUtil.getSessionInfoName());
+
         List<TFieldData> needApproveList = new ArrayList<TFieldData>();
-        try {
-            needApproveList = fieldDataServiceI.getNeedApproveList(currentApprovedUser);
-            for (TFieldData needApprove : needApproveList) {
-                String uid = needApprove.getUid();
-                User user = userService.getUser(uid);
-                String realName = user.getRealname();
-                if (realName == null || realName.equals("")) {
-                    realName = user.getUsername();
-                }
-                needApprove.setUname(realName);
-
-                String itemcode = needApprove.getItemCode();
-                boolean isData = itemcode != null && !itemcode.equals("") && !itemcode.substring(0, 3).equals("000") && Integer.parseInt(itemcode.substring(0, 3)) <= 900;
-                if (isData) {
-                    needApprove.setItemCode("0");
-                } else {
-                    needApprove.setItemCode("1");
-                }
-            }
-        } catch (Exception e) {
-
-        }
+        needApproveList = fieldDataServiceI.getNeedApproveList(currentApprovedUser);
 
         // 后加的功能
         Company c = companyService.findOneView(currentApprovedUser,cid);

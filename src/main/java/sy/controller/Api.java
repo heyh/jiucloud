@@ -582,22 +582,7 @@ public class Api extends BaseController {
         pageHelper.setPage(currentPage);
         pageHelper.setRows(limitSize);
         try {
-            List<Integer> ugroup = departmentService.getUsers(cid, Integer.parseInt(uid));
             dataGrid = fieldDataService.approveDataGrid(pageHelper, uid);
-            List<FieldData> fieldDatas = dataGrid.getRows();
-            if (fieldDatas != null && fieldDatas.size() > 0) {
-                for (int i = fieldDatas.size() - 1; i >= 0; i--) {
-                    String currentApprovedUser = fieldDatas.get(i).getCurrentApprovedUser() == null ? "" : fieldDatas.get(i).getCurrentApprovedUser();
-                    if (!currentApprovedUser.equals("")) {
-                        User user = userService.getUser(currentApprovedUser);
-                        String realName = user.getRealname();
-                        if (realName == null || realName.equals("")) {
-                            realName = user.getUsername();
-                        }
-                        fieldDatas.get(i).setCurrentApprovedUser(realName);
-                    }
-                }
-            }
         } catch (Exception e) {
             return new WebResult().fail().setMessage("网络异常,请稍后再试");
         }
@@ -682,24 +667,6 @@ public class Api extends BaseController {
     public JSONObject getNeedApproveList(@RequestParam(value = "uid", required = true) String currentApprovedUser,
                                          HttpServletResponse response, HttpServletRequest request) {
         List<TFieldData> needApproveList = fieldDataService.getNeedApproveList(currentApprovedUser);
-        for (TFieldData needApprove : needApproveList) {
-            String uid = needApprove.getUid();
-            User user = userService.getUser(uid);
-            String realName = user.getRealname();
-            if (realName == null || realName.equals("")) {
-                realName = user.getUsername();
-            }
-            needApprove.setUname(realName);
-
-            String itemcode = needApprove.getItemCode();
-            boolean isData = itemcode != null && !itemcode.equals("") && !itemcode.substring(0, 3).equals("000") && Integer.parseInt(itemcode.substring(0, 3)) <= 900;
-            if (isData) {
-                needApprove.setItemCode("0");
-            } else {
-                needApprove.setItemCode("1");
-            }
-        }
-
         return new WebResult().ok().set("needApproveList", needApproveList);
     }
 
