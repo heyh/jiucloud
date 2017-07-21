@@ -318,10 +318,10 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
         try {
             TFieldData t = fieldDataDaoI.get("from TFieldData t where t.id = " + id);
             if (!t.getApprovedUser().equals("")) {
-                if (approvedState.equals("9")) { // 拒绝
+                if (!StringUtil.trimToEmpty(approvedOption).equals("")) {
                     String[] approvedUsers = t.getApprovedUser().split(",");
-                    if (approvedUsers != null && approvedUsers.length>0) {
-                        String lastApprovedUser = approvedUsers[approvedUsers.length-1];
+                    if (approvedUsers != null && approvedUsers.length > 0) {
+                        String lastApprovedUser = approvedUsers[approvedUsers.length - 1];
                         String userName = userService.get(lastApprovedUser).getUsername();
                         approvedOption = UtilDate.getDateFormatter() + " " + userName + " 审批意见: " + approvedOption;
                     }
