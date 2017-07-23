@@ -318,13 +318,11 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
         try {
             TFieldData t = fieldDataDaoI.get("from TFieldData t where t.id = " + id);
             if (!t.getApprovedUser().equals("")) {
-                if (!StringUtil.trimToEmpty(approvedOption).equals("")) {
-                    String[] approvedUsers = t.getApprovedUser().split(",");
-                    if (approvedUsers != null && approvedUsers.length > 0) {
-                        String lastApprovedUser = approvedUsers[approvedUsers.length - 1];
-                        String userName = userService.get(lastApprovedUser).getUsername();
-                        approvedOption = UtilDate.getDateFormatter() + " " + userName + " 审批意见: " + approvedOption;
-                    }
+                String[] approvedUsers = t.getApprovedUser().split(",");
+                if (approvedUsers != null && approvedUsers.length > 0) {
+                    String lastApprovedUser = approvedUsers[approvedUsers.length - 1];
+                    String userName = userService.get(lastApprovedUser).getUsername();
+                    approvedOption = UtilDate.getDateFormatter() + "::" + userName + "::" + approvedOption;
                 }
 
                 if (approvedState.equals("8")) { // 需要查看是不是最终审批人，不是改为审批中

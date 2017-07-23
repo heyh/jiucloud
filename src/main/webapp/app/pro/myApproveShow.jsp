@@ -98,6 +98,9 @@
     <link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1-rc.1/css/select2.min.css" rel="stylesheet" />
     <script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1-rc.1/js/select2.min.js"></script>
 
+    <script type="text/javascript" src="${pageContext.request.contextPath }/jslib/layer-v3.0.3/layer/layer.js"></script>
+
+
     <style>
 
         ul {
@@ -442,22 +445,7 @@
                         {
                             field : 'approvedOption11',
                             title : '审批意见',
-                            width : 100,
-                            formatter: function (value, row, index) {
-                                debugger;
-                                var str = '';
-                                if (row.needApproved == '0' || row.needApproved == '1') {
-                                    return str;
-                                } else {
-                                    if (row.approvedOption != '') {
-                                        var approvedOptions= new Array();
-                                        approvedOptions = row.approvedOption.split('\|');
-                                    }
-                                    str += $.formatString('<span>approvedOptions[approvedOptions.length-1]</span>');
-                                }
-
-                                return str;
-                            }
+                            width : 200,
                         },
                         {
                             field : 'currentApprovedUser',
@@ -597,22 +585,6 @@
                             field : 'approvedOption',
                             title : '审批意见',
                             width : 200,
-                            formatter: function (value, row, index) {
-                                debugger;
-                                var str = '';
-                                if (row.needApproved == '0' || row.needApproved == '1') {
-                                    return str;
-                                } else {
-                                    if (row.approvedOption != '') {
-                                        var approvedOptions= new Array();
-                                        approvedOptions = row.approvedOption.split('|');
-                                        str += $.formatString('<span onmouseover="popupApprovedOptions()">' + approvedOptions[approvedOptions.length-1] + '</span>');
-                                    }
-
-                                }
-
-                                return str;
-                            }
                         },
                         {
                             field : 'currentApprovedUser',
@@ -798,12 +770,28 @@
                         {
                             field : 'approvedOption',
                             title : '审批意见',
-                            width : 100
+                            width : 100,
+                            formatter: function (value, row, index) {
+                                var str = '';
+                                if (row.needApproved == '0' || row.needApproved == '1') {
+                                    return str;
+                                } else {
+                                    if (row.approvedOption != '' && row.approvedOption != undefined && row.approvedOption != 'undefined') {
+//                                        var approvedOption = row.row.approvedOption;
+                                        str += $.formatString('<a onclick="viewApproveDetailsFun(\' {0} \');" href="javascript:void(0);" class="easyui-linkbutton">' +
+                                            '<img src="${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/viewDetails.png">' +
+                                            '审批详情</a>',
+                                            row.approvedOption);
+                                    }
+                                }
+
+                                return str;
+                            }
                         },
                         {
                             field : 'currentApprovedUser',
                             title : '当前审批人',
-                            width : 100
+                            width : 100,
                         },
                         {
                             field : 'action',
@@ -1259,10 +1247,38 @@
     })(jQuery);
 
 
-    function popupApprovedOptions() {
-        alert(11)
+    function viewApproveDetailsFun(approvedOption) {
+        var approvedOptions = approvedOption.split('|');
+
+        var approvedOptionsHtml =
+            '<table class="table_style" style="font-size: 12px;" cellpadding="0" cellspacing="0">' +
+                '<tr>' +
+                    '<td align="center">时间</td>' +
+                    '<td align="center">审核人</td>' +
+                    '<td align="center">审核意见</td>' +
+                '</tr>';
+
+        for (var i=0; i<approvedOptions.length; i++) {
+            approvedOptionsHtml += '<tr>';
+            var approvedOptionInfos = approvedOptions[i].split('::');
+            for (var j=0; j<approvedOptionInfos.length; j++) {
+                approvedOptionsHtml += '<td>' + approvedOptionInfos[j] + '</td>';
+            }
+            approvedOptionsHtml += '</tr>'
+        }
+        approvedOptionsHtml += '</table>';
+
+
+        var approvedOptions = approvedOption.split('|');
+        layer.open({
+            type: 1,
+            title: '审批详情',
+            closeBtn: 2,
+            shadeClose: true,
+            maxmin: true, //开启最大化最小化按钮
+            area: ['360px', '300px'],
+            content: approvedOptionsHtml
+        });
     }
 </script>
-</body>
-
 </html>
