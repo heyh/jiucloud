@@ -1067,6 +1067,16 @@ public class FieldDataController extends BaseController {
         return listmap;
     }
 
+    /**
+     * 审批
+     * @param id
+     * @param approvedState
+     * @param approvedOption
+     * @param currentApprovedUser
+     * @param response
+     * @param request
+     * @return
+     */
     @RequestMapping("/securi_approvedField")
     @ResponseBody
     public Json approvedField(Integer id, String approvedState, String approvedOption, String currentApprovedUser, HttpServletResponse response, HttpServletRequest request) {
@@ -1079,6 +1089,14 @@ public class FieldDataController extends BaseController {
         return j;
     }
 
+    /**
+     * 页面顶端提醒
+     * @param currentApprovedUser
+     * @param cid
+     * @param response
+     * @param request
+     * @return
+     */
     @RequestMapping("securi_getNeedApproveList")
     @ResponseBody
     public Json getNeedApproveList(@RequestParam(value = "currentApprovedUser", required = true) String currentApprovedUser,
@@ -1111,11 +1129,12 @@ public class FieldDataController extends BaseController {
         return json;
     }
 
-//    @RequestMapping("securi_chooseApprove")
-//    public String chooseApprove() {
-//        return "/app/fielddata/chooseApprove";
-//    }
-
+    /**
+     * 增加记录时 选择审批人
+     * @param response
+     * @param request
+     * @return
+     */
     @RequestMapping("securi_chooseApprove")
     @ResponseBody
     public Json chooseApprove(HttpServletResponse response, HttpServletRequest request) {
@@ -1139,6 +1158,13 @@ public class FieldDataController extends BaseController {
         return json;
     }
 
+    /**
+     * 继续审批时选择审批人
+     * @param request
+     * @param response
+     * @return
+     * @throws IOException
+     */
     @RequestMapping("/securi_chooseApprovePage")
     public String chooseApprovePage(HttpServletRequest request, HttpServletResponse response) throws IOException {
 
@@ -1175,14 +1201,25 @@ public class FieldDataController extends BaseController {
 
     }
 
-    @RequestMapping("/myApproveShow")
-    public String myApproveShow(HttpServletRequest req) {
-        req.setAttribute("first", UtilDate.getshortFirst());
-        req.setAttribute("last", UtilDate.getshortLast());
-//        return "/app/fielddata/myApproveShow";
-        return "/app/pro/myApproveShow";
+    /**
+     * 领导审批页面
+     * @param request
+     * @return
+     */
+    @RequestMapping("/approve")
+    public String approve(HttpServletRequest request) {
+        return "/app/pro/approveAll";
     }
 
+    /**
+     * 领导审批
+     * @param fieldData
+     * @param ph
+     * @param request
+     * @param response
+     * @param session
+     * @return
+     */
     @RequestMapping("/securi_getNeedApproveDataGrid")
     @ResponseBody
     public DataGrid getNeedApproveDataGrid(FieldData fieldData, PageHelper ph, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
@@ -1195,6 +1232,28 @@ public class FieldDataController extends BaseController {
         return dataGrid;
     }
 
+    /**
+     * 审批进度查询页面
+     * @param req
+     * @return
+     */
+    @RequestMapping("/myApproveShow")
+    public String myApproveShow(HttpServletRequest req) {
+        req.setAttribute("first", UtilDate.getshortFirst());
+        req.setAttribute("last", UtilDate.getshortLast());
+//        return "/app/fielddata/myApproveShow";
+        return "/app/pro/myApproveShow";
+    }
+
+    /**
+     * 审批进度查询
+     * @param fieldData
+     * @param ph
+     * @param request
+     * @param response
+     * @param session
+     * @return
+     */
     @RequestMapping("/securi_myApproveDataGrid")
     @ResponseBody
     public DataGrid securi_myApproveDataGrid(FieldData fieldData, PageHelper ph, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
