@@ -234,7 +234,7 @@
 
     <div class="section" id="bill" style="padding-bottom:20px;">
         <img src="${pageContext.request.contextPath}/images/verticalLine.png" style="padding-top:20px; padding-bottom:20px; vertical-align:middle" />
-        <span style="vertical-align:middle; font-family:SimSun; margin-left: 4px"><b>清单项量</b></span>
+        <span style="vertical-align:middle; font-family:SimSun; margin-left: 4px"><b>清单项量</b></span><span id="billTotal"></span>
         <table id="dataGrid4Bill" class="easyui-datagrid" width="100%">
         </table>
         <div id="toolbar4Bill" class="fee_detail" style="display: none;">
@@ -314,7 +314,7 @@
         dataGrid4Data = $('#dataGrid4Data')
                 .datagrid(
                 {
-                    url : '${pageContext.request.contextPath}/fieldDataController/dataGrid?source=data&needApproved=1',
+                    url : '${pageContext.request.contextPath}/fieldDataController/securi_getNeedApproveDataGrid?source=data',
                     fit : true,
                     fitColumns : false,
                     border : true,
@@ -393,12 +393,12 @@
                         {
                             field : 'uname',
                             title : '操作人',
-                            width : 100
+                            width : 200
                         },
                         {
                             field : 'creatTime',
                             title : '录入时间',
-                            width : 100
+                            width : 200
                         },
                         {
                             field : 'uid',
@@ -480,7 +480,7 @@
         dataGrid4Doc = $('#dataGrid4Doc')
             .datagrid(
                 {
-                    url : '${pageContext.request.contextPath}/fieldDataController/dataGrid?source=doc&needApproved=1',
+                    url : '${pageContext.request.contextPath}/fieldDataController/securi_getNeedApproveDataGrid?source=doc',
                     fit : true,
                     fitColumns : false,
                     border : true,
@@ -525,12 +525,12 @@
                         {
                             field : 'uname',
                             title : '操作人',
-                            width : 100
+                            width : 200
                         },
                         {
                             field : 'creatTime',
                             title : '入库时间',
-                            width : 100
+                            width : 200
                         },
                         {
                             field : 'uid',
@@ -610,7 +610,7 @@
         dataGrid4Bill= $('#dataGrid4Bill')
             .datagrid(
                 {
-                    url : '${pageContext.request.contextPath}/fieldDataController/dataGrid?source=bill&needApproved=1',
+                    url : '${pageContext.request.contextPath}/fieldDataController/securi_getNeedApproveDataGrid?source=bill',
                     fit : true,
                     fitColumns : false,
                     border : true,
@@ -704,12 +704,12 @@
                         {
                             field : 'uname',
                             title : '操作人',
-                            width : 100
+                            width : 200
                         },
                         {
                             field : 'creatTime',
                             title : '录入时间',
-                            width : 100
+                            width : 200
                         },
                         {
                             field : 'uid',
@@ -783,13 +783,14 @@
                     toolbar : '#toolbar4Bill',
                     onLoadSuccess : function() {
                         parent.$.messager.progress('close');
+                        $("#billTotal").html(dataGrid4Bill.datagrid('getData').total)
                     }
                 });
 
         dataGrid4Material = $('#dataGrid4Material')
             .datagrid(
                 {
-                    url : '${pageContext.request.contextPath}/fieldDataController/dataGrid?source=material&needApproved=1',
+                    url : '${pageContext.request.contextPath}/fieldDataController/securi_getNeedApproveDataGrid?source=material',
                     fit : true,
                     fitColumns : false,
                     border : true,
@@ -868,12 +869,12 @@
                         {
                             field : 'uname',
                             title : '操作人',
-                            width : 100
+                            width : 200
                         },
                         {
                             field : 'creatTime',
                             title : '入库时间',
-                            width : 100
+                            width : 200
                         },
                         {
                             field : 'uid',

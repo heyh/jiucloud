@@ -1183,30 +1183,14 @@ public class FieldDataController extends BaseController {
         return "/app/pro/myApproveShow";
     }
 
-    @RequestMapping("/securi_myApproveDataGrid")
+    @RequestMapping("/securi_getNeedApproveDataGrid")
     @ResponseBody
-    public DataGrid securi_myApproveDataGrid(FieldData fieldData, PageHelper ph, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+    public DataGrid getNeedApproveDataGrid(FieldData fieldData, PageHelper ph, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
         SessionInfo sessionInfo = (SessionInfo) session.getAttribute(ConfigUtil.getSessionInfoName());
         String uid = sessionInfo.getId();
         String source = StringUtil.trimToEmpty(request.getParameter("source"));
         String keyword = StringUtil.trimToEmpty(request.getParameter("keyword"));
-        DataGrid dataGrid = fieldDataServiceI.myApproveDataGrid(ph, uid, source, fieldData, keyword);
-
-        // add by heyh begin
-        List<FieldData> fieldDatas = dataGrid.getRows();
-        if (fieldDatas != null && fieldDatas.size() > 0) {
-            for (int i = fieldDatas.size() - 1; i >= 0; i--) {
-                String currentApprovedUser = fieldDatas.get(i).getCurrentApprovedUser() == null ? "" : fieldDatas.get(i).getCurrentApprovedUser();
-                if (!currentApprovedUser.equals("")) {
-                    User user = userService.getUser(currentApprovedUser);
-                    String realName = user.getRealname();
-                    if (realName == null || realName.equals("")) {
-                        realName = user.getUsername();
-                    }
-                    fieldDatas.get(i).setCurrentApprovedUser(realName);
-                }
-            }
-        }
+        DataGrid dataGrid = fieldDataServiceI.getNeedApproveDataGrid(ph, uid, source, fieldData, keyword);
 
         return dataGrid;
     }

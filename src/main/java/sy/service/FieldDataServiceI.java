@@ -61,6 +61,8 @@ public interface FieldDataServiceI {
 
 	public void approvedField(Integer id, String approvedState, String approvedOption, String currentApprovedUser);
 
+	public DataGrid getNeedApproveDataGrid(PageHelper ph, String uid, String source, FieldData cmodel, String keyword);
+
     public List<TFieldData> getNeedApproveList(String currentApprovedUser);
 
     public boolean hasSameFieldData(TFieldData fieldData);
