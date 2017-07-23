@@ -1276,7 +1276,7 @@
             closeBtn: 2,
             shadeClose: true,
             maxmin: true, //开启最大化最小化按钮
-            area: ['360px', '300px'],
+            area: ['400px', '300px'],
             content: approvedOptionsHtml
         });
     }
