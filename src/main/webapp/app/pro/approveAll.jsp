@@ -143,7 +143,7 @@
         .section {
             border-bottom: 5px solid #ccc;
             min-height: 60vh;
-            padding:0px 10px 0 100px;
+            padding:0px 10px 0 118px;
 
         }
 
@@ -173,15 +173,18 @@
             font-weight: 800;
             font-size: 14px;
         }
+
+        .notice_num{padding:1px 2px; background:#ff9718; border-radius:20px;position:relative;top:-5px;color: white}
+
     </style>
 </head>
 
 <body>
 <ul id="nav">
-    <li class="current"><a href="#data">项目数据</a></li>
-    <li><a href="#doc">项目资料</a></li>
-    <li><a href="#bill">清单项量</a></li>
-    <li><a href="#material">项目材料</a></li>
+        <li class="current"><a href="#data">项目数据&nbsp;<span style="display: none" class="notice_num" id="dataTotal"></span></a></li>
+        <li><a href="#doc">项目资料&nbsp;<span style="display: none" class="notice_num" id="docTotal"></span></a></li>
+        <li><a href="#bill">清单项量&nbsp;<span style="display: none" class="notice_num" id="billTotal"></span></a></li>
+        <li><a href="#material">项目材料&nbsp;<span style="display: none" class="notice_num" id="materialTotal"></span></a></li>
 </ul>
 
 <div id="container">
@@ -234,7 +237,7 @@
 
     <div class="section" id="bill" style="padding-bottom:20px;">
         <img src="${pageContext.request.contextPath}/images/verticalLine.png" style="padding-top:20px; padding-bottom:20px; vertical-align:middle" />
-        <span style="vertical-align:middle; font-family:SimSun; margin-left: 4px"><b>清单项量</b></span><span id="billTotal"></span>
+        <span style="vertical-align:middle; font-family:SimSun; margin-left: 4px"><b>清单项量</b></span>
         <table id="dataGrid4Bill" class="easyui-datagrid" width="100%">
         </table>
         <div id="toolbar4Bill" class="fee_detail" style="display: none;">
@@ -298,10 +301,14 @@
     };
 
     window.onload = function () {
-        $('#startTime').datebox('setValue', formatterFirstDate(new Date()));
-        $('#endTime').datebox('setValue', formatterCurrentDate(new Date()));
-        $('#startTimeDoc').datebox('setValue', formatterFirstDate(new Date()));
-        $('#endTimeDoc').datebox('setValue', formatterCurrentDate(new Date()));
+        $('#startTime4Data').datebox('setValue', formatterFirstDate(new Date()));
+        $('#endTime4Data').datebox('setValue', formatterCurrentDate(new Date()));
+        $('#startTime4Doc').datebox('setValue', formatterFirstDate(new Date()));
+        $('#endTime4Doc').datebox('setValue', formatterCurrentDate(new Date()));
+        $('#startTime4Bill').datebox('setValue', formatterFirstDate(new Date()));
+        $('#endTime4Bill').datebox('setValue', formatterCurrentDate(new Date()));
+        $('#startTime4Material').datebox('setValue', formatterFirstDate(new Date()));
+        $('#endTime4Material').datebox('setValue', formatterCurrentDate(new Date()));
     }
     var dataGrid4Data;
     var dataGrid4Doc;
@@ -472,7 +479,11 @@
                     toolbar : '#toolbar4Data',
                     onLoadSuccess : function() {
                         parent.$.messager.progress('close');
-
+                        var total = dataGrid4Data.datagrid('getData').total;
+                        if (total > 0) {
+                            $("#dataTotal").html(total)
+                            $("#dataTotal").show();
+                        }
                     }
                 });
 
@@ -604,6 +615,11 @@
                     toolbar : '#toolbar4Doc',
                     onLoadSuccess : function() {
                         parent.$.messager.progress('close');
+                        var total = dataGrid4Doc.datagrid('getData').total;
+                        if (total > 0) {
+                            $("#docTotal").html(total)
+                            $("#docTotal").show();
+                        }
                     }
                 });
 
@@ -783,7 +799,12 @@
                     toolbar : '#toolbar4Bill',
                     onLoadSuccess : function() {
                         parent.$.messager.progress('close');
-                        $("#billTotal").html(dataGrid4Bill.datagrid('getData').total)
+                        var total = dataGrid4Bill.datagrid('getData').total;
+                        if (total > 0) {
+                            $("#billTotal").html(total)
+                            $("#billTotal").show();
+                        }
+
                     }
                 });
 
@@ -948,6 +969,11 @@
                     toolbar : '#toolbar4Material',
                     onLoadSuccess : function() {
                         parent.$.messager.progress('close');
+                        var total = dataGrid4Material.datagrid('getData').total;
+                        if (total > 0) {
+                            $("#materialTotal").html(total)
+                            $("#materialTotal").show();
+                        }
                     }
                 });
     });
@@ -995,12 +1021,14 @@
                                 },
                                 dataType : "json",
                                 success : function(data) {
+                                    debugger;
                                     if (data.success == true) {
                                         if (flag == 'data') {
                                             searchFun4Data();
                                         } else if (flag == 'doc') {
                                             searchFun4Doc();
                                         } else if (flag == 'bill') {
+                                            debugger;
                                             searchFun4Bill();
                                         } else if (flag == 'material') {
                                             searchFun4Material();
@@ -1100,6 +1128,8 @@
 
     //过滤条件查询
     function searchFun4Bill() {
+        alert('dataGrid4Bill')
+        debugger;
         var startTime = $('#startTime4Bill').datebox('getValue').substring(0, 10) + ' 00:00:00';
         var endTime = $('#endTime4Bill').datebox('getValue').substring(0, 10) + ' 23:59:59';
         $('#dataGrid4Bill').datagrid('reload',{keyword:$('#keyword4Bill').val(),itemCode:$('#itemCode4Bill').val(),
