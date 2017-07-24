@@ -80,6 +80,8 @@ public interface FieldDataServiceI {
      */
 	public DataGrid myApproveDataGrid(PageHelper ph, String uid, String source, FieldData cmodel, String keyword);
 
+	public DataGrid approveMonitorDataGrid(PageHelper ph, List<Integer> ugroup, String source, FieldData cmodel, String keyword);
+
 	public TFieldData getMaxFieldByCidUid(String cid, String uid);
 
     public TFieldData getFieldByMaxId(String cid, String uid, String projectId);

@@ -1282,6 +1282,56 @@ public class FieldDataController extends BaseController {
         return dataGrid;
     }
 
+    /**
+     * 审批监控页面
+     * @param req
+     * @return
+     */
+    @RequestMapping("/approveMonitor")
+    public String approveMonitor(HttpServletRequest req) {
+        req.setAttribute("first", UtilDate.getshortFirst());
+        req.setAttribute("last", UtilDate.getshortLast());
+        return "/app/pro/approveMonitor";
+    }
+
+    /**
+     * 审批监控（下属所有待审批记录）
+     * @param fieldData
+     * @param ph
+     * @param request
+     * @param response
+     * @param session
+     * @return
+     */
+    @RequestMapping("/securi_approveMonitorDataGrid")
+    @ResponseBody
+    public DataGrid approveMonitorDataGrid(FieldData fieldData, PageHelper ph, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+        SessionInfo sessionInfo = (SessionInfo) session.getAttribute(ConfigUtil.getSessionInfoName());
+        String uid = sessionInfo.getId();
+        String source = StringUtil.trimToEmpty(request.getParameter("source"));
+        String keyword = StringUtil.trimToEmpty(request.getParameter("keyword"));
+        List<Integer> ugroup = sessionInfo.getUgroup();
+        DataGrid dataGrid = fieldDataServiceI.approveMonitorDataGrid(ph, ugroup, source, fieldData, keyword);
+
+        // add by heyh begin
+        List<FieldData> fieldDatas = dataGrid.getRows();
+        if (fieldDatas != null && fieldDatas.size() > 0) {
+            for (int i = fieldDatas.size() - 1; i >= 0; i--) {
+                String currentApprovedUser = fieldDatas.get(i).getCurrentApprovedUser() == null ? "" : fieldDatas.get(i).getCurrentApprovedUser();
+                if (!currentApprovedUser.equals("")) {
+                    User user = userService.getUser(currentApprovedUser);
+                    String realName = user.getRealname();
+                    if (realName == null || realName.equals("")) {
+                        realName = user.getUsername();
+                    }
+                    fieldDatas.get(i).setCurrentApprovedUser(realName);
+                }
+            }
+        }
+
+        return dataGrid;
+    }
+
     @RequestMapping("/securi_cloudProjects")
     public String cloudProjects(HttpServletRequest request) {
         SessionInfo sessionInfo = (SessionInfo) request.getSession()

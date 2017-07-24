@@ -335,6 +335,7 @@
                     selectOnCheck : false,
                     nowrap : false,
                     rownumbers: true,
+                    striped:true,
                     columns : [ [
                         {
                             field : 'id',
@@ -505,6 +506,7 @@
                     selectOnCheck : false,
                     nowrap : false,
                     rownumbers: true,
+                    striped:true,
                     columns : [ [
                         {
                             field : 'id',
@@ -640,6 +642,7 @@
                     selectOnCheck : false,
                     nowrap : false,
                     rownumbers: true,
+                    striped:true,
                     columns : [ [
                         {
                             field : 'id',
@@ -825,6 +828,7 @@
                     selectOnCheck : false,
                     nowrap : false,
                     rownumbers: true,
+                    striped:true,
                     columns : [ [
                         {
                             field : 'id',

@@ -54,6 +54,7 @@
 							checkOnSelect : false,
 							selectOnCheck : false,
 							nowrap : false,
+                            striped:true,
 							columns : [ [
 									{
 										field : 'id',
