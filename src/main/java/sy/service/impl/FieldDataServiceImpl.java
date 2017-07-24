@@ -59,8 +59,7 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
     }
 
     @Override
-    public DataGrid dataGrid(FieldData fieldData, PageHelper ph,
-                             List<Integer> ugroup,String source, String keyword) {
+    public DataGrid dataGrid(FieldData fieldData, PageHelper ph, List<Integer> ugroup,String source, String keyword) {
         DataGrid dg = new DataGrid();
         Map<String, Object> params = new HashMap<String, Object>();
         String hql="";
@@ -239,9 +238,15 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
             params.put("specifications", "%%" + keyword + "%%");
 
         }
+//        if (null == cmodel.getNeedApproved() ) {
+//            String uids = StringUtils.join(ugroup, ",");
+//            hql += " and uid in (" + uids + ")";
+//        }
+
         if (null == cmodel.getNeedApproved() ) {
             String uids = StringUtils.join(ugroup, ",");
-            hql += " and uid in (" + uids + ")";
+            hql += " and (uid in (" + uids + ") or ( (substring(itemcode , 1 , 3) = '700' or substring(itemcode , 1 , 3) = '800') and cid = :cid))";
+            params.put("cid", String.valueOf(cmodel.getCid()));
         }
 
         if ( cmodel.getId() != 0) {

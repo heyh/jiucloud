@@ -261,7 +261,7 @@
                                                     row.id,
                                                     '${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/discuss-blue.png');
 
-                                            if (strHasOutRight && row.itemCode.substring(0, 3) == '800' && row.count >=0) {
+                                            if (strHasOutRight && (row.needApproved =='0' || row.needApproved == '2') && row.itemCode.substring(0, 3) == '800' && row.count >=0) {
 												str += '&nbsp;';
 												str += $
 													.formatString(
