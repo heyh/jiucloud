@@ -1064,38 +1064,6 @@
                                         }
                                     }]
                                 });
-
-                            <%--$.ajax({--%>
-                                <%--url: '${pageContext.request.contextPath}/fieldDataController/securi_chooseApprove',--%>
-                                <%--type: 'post',--%>
-                                <%--dataType: 'json',--%>
-                                <%--contentType: "application/x-www-form-urlencoded; charset=utf-8",--%>
-                                <%--success: function (data) {--%>
-
-                                    <%--if (data.success) {--%>
-                                        <%--var str = '';--%>
-                                        <%--var users = data.obj;--%>
-                                        <%--for (var i in users) {--%>
-                                            <%--str += "<label><input type='radio' value=" + users[i].id + "/>" + users[i].username + "</label>"--%>
-                                        <%--}--%>
-                                        <%--parent.$--%>
-                                            <%--.modalDialog({--%>
-                                                <%--title: '选择审批人',--%>
-                                                <%--width: 250,--%>
-                                                <%--height: 150,--%>
-                                                <%--href: '${pageContext.request.contextPath}/fieldDataController/securi_chooseApprovePage?id=' + id,--%>
-                                                <%--buttons: [{--%>
-                                                    <%--text: '确定',--%>
-                                                    <%--handler: function () {--%>
-                                                        <%--parent.$.modalDialog.openner_dataGrid = dataGrid;//因为添加成功之后，需要刷新这个dataGrid，所以先预定义好--%>
-                                                        <%--var f = parent.$.modalDialog.handler.find('#form');--%>
-                                                        <%--f.submit();--%>
-                                                    <%--}--%>
-                                                <%--}]--%>
-                                            <%--});--%>
-                                    <%--}--%>
-                                <%--}--%>
-                            <%--});--%>
                         }
                     });
         }
@@ -1132,8 +1100,6 @@
 
     //过滤条件查询
     function searchFun4Bill() {
-        alert('dataGrid4Bill')
-        debugger;
         var startTime = $('#startTime4Bill').datebox('getValue').substring(0, 10) + ' 00:00:00';
         var endTime = $('#endTime4Bill').datebox('getValue').substring(0, 10) + ' 23:59:59';
         $('#dataGrid4Bill').datagrid('reload',{keyword:$('#keyword4Bill').val(),itemCode:$('#itemCode4Bill').val(),

@@ -11,6 +11,11 @@
 							url : '${pageContext.request.contextPath}/fieldDataController/securi_approvedField',
 
 							onSubmit : function() {
+                                approvedOption = prompt("审批意见","");
+                                if (approvedOption === null) {
+                                    return false;
+                                }
+                                $('#approvedOption').val(approvedOption);
 								return true;
 							},
 							success : function(result) {
