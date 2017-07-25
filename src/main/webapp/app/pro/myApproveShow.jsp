@@ -26,6 +26,10 @@
     JSONArray jsonArray4Material = new JSONArray();
     JSONArray materialCostTree = new JSONArray();
 
+    boolean hasOnlyReadRight = false;
+    boolean hasReadEditRight = false;
+    boolean hasOutRight = false;
+
     SessionInfo sessionInfo = (SessionInfo) session.getAttribute(ConfigUtil.getSessionInfoName());
     String userId = null;
     if (sessionInfo == null) {
@@ -59,6 +63,10 @@
             jsonArray4Material.add(nodeJson);
         }
         userId = sessionInfo.getId();
+
+        hasOnlyReadRight = sessionInfo.getRightList().contains("16") && 0 != sessionInfo.getParentId();
+        hasReadEditRight = sessionInfo.getRightList().contains("15") || 0 == sessionInfo.getParentId();
+        hasOutRight = sessionInfo.getRightList().contains("17");
     }
 
 %>
@@ -914,7 +922,20 @@
                         {
                             field : 'price',
                             title : '单价',
-                            width : 100
+                            width : 100,
+                            formatter: function (value, row, index) {
+                                var str = '';
+                                var strHasOutRight = <%=hasOutRight%>;
+                                var hasReadEditRight = <%= hasOnlyReadRight %> || <%= hasReadEditRight %>;
+                                if (strHasOutRight && row.itemCode.substring(0, 3) == '800') {
+                                    str = '***';
+                                } else if(row.itemCode.substring(0, 3) == '700' && !hasReadEditRight) {
+                                    str = '***';
+                                } else {
+                                    str = row.price;
+                                }
+                                return str;
+                            }
                         },
                         {
                             field : 'count',
@@ -926,9 +947,18 @@
                             title : '金额',
                             width : 100,
                             formatter : function(value, row, index) {
-                                return (row.count * row.price).toFixed(2);
+                                var str = '';
+                                var strHasOutRight = <%=hasOutRight%>;
+                                var hasReadEditRight = <%= hasOnlyReadRight %> || <%= hasReadEditRight %>;
+                                if (strHasOutRight && row.itemCode.substring(0, 3) == '800') {
+                                    str = '***';
+                                } else if(row.itemCode.substring(0, 3) == '700' && !hasReadEditRight) {
+                                    str = '***';
+                                } else {
+                                    str = (row.count * ((row.price==null || row.price=='') ? 0 : row.price)).toFixed(2);
+                                }
+                                return str;
                             }
-
                         },
                         {
                             field : 'specifications',

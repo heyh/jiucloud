@@ -21,7 +21,6 @@
 	boolean hasOnlyReadRight = false;
 	boolean hasReadEditRight = false;
 	boolean hasOutRight = false;
-	boolean hasBackFillRight = false;
 
     SessionInfo sessionInfo = (SessionInfo) session.getAttribute(ConfigUtil.getSessionInfoName());
     if (sessionInfo == null) {
@@ -39,7 +38,6 @@
 		hasOnlyReadRight = sessionInfo.getRightList().contains("16") && 0 != sessionInfo.getParentId();
 		hasReadEditRight = sessionInfo.getRightList().contains("15") || 0 == sessionInfo.getParentId();
 		hasOutRight = sessionInfo.getRightList().contains("17");
-		hasBackFillRight = sessionInfo.getRightList().contains("18");
 	}
 
 %>
