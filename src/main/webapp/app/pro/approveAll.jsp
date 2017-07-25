@@ -1007,8 +1007,10 @@
                     approvedTip,
                     function(b) {
                         if (b) {
-                            if(approvedState == '9') {
-                                approvedOption = prompt("审批意见","")
+
+                            approvedOption = prompt("审批意见","");
+                            if (approvedOption === null) {
+                                return;
                             }
 
                             parent.$.messager.progress({
@@ -1025,14 +1027,12 @@
                                 },
                                 dataType : "json",
                                 success : function(data) {
-                                    debugger;
                                     if (data.success == true) {
                                         if (flag == 'data') {
                                             searchFun4Data();
                                         } else if (flag == 'doc') {
                                             searchFun4Doc();
                                         } else if (flag == 'bill') {
-                                            debugger;
                                             searchFun4Bill();
                                         } else if (flag == 'material') {
                                             searchFun4Material();
