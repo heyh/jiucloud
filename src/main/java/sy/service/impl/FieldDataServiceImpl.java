@@ -244,7 +244,7 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
 //        }
 
         if (null == cmodel.getNeedApproved() ) {
-            if ( !cmodel.getCid().equals("")) {
+            if ( !StringUtil.trimToEmpty(cmodel.getCid()).equals("")) {
                 String uids = StringUtils.join(ugroup, ",");
                 hql += " and (uid in (" + uids + ") or ( (substring(itemcode , 1 , 3) = '700' or substring(itemcode , 1 , 3) = '800') and cid = :cid))";
                 params.put("cid", String.valueOf(cmodel.getCid()));

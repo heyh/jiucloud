@@ -110,20 +110,6 @@
 										field : 'price',
 										title : '单价',
 										width : 100,
-										formatter: function (value, row, index) {
-										    var str = '';
-										    var strHasOutRight = <%=hasOutRight%>;
-										    var hasReadEditRight = <%= hasOnlyReadRight %> || <%= hasReadEditRight %>;
-											if (strHasOutRight && row.itemCode.substring(0, 3) == '800') {
-                                                str = '***';
-											} else if(row.itemCode.substring(0, 3) == '700' && !hasReadEditRight) {
-                                                str = '***';
-											} else {
-                                                str = row.price;
-                                            }
-                                            return str;
-											<%--return row.itemCode.substring(0, 3) != '700' || <%= hasOnlyReadRight %> || <%= hasReadEditRight %> ? row.price : '***';--%>
-                                        }
 									},
 									{
 										field : 'count',
@@ -136,17 +122,8 @@
 										width : 100,
 										formatter : function(value, row, index) {
                                             var str = '';
-                                            var strHasOutRight = <%=hasOutRight%>;
-                                            var hasReadEditRight = <%= hasOnlyReadRight %> || <%= hasReadEditRight %>;
-                                            if (strHasOutRight && row.itemCode.substring(0, 3) == '800') {
-                                                str = '***';
-                                            } else if(row.itemCode.substring(0, 3) == '700' && !hasReadEditRight) {
-                                                str = '***';
-                                            } else {
-                                                str = (row.count * ((row.price==null || row.price=='') ? 0 : row.price)).toFixed(2);
-                                            }
+											str = (row.count * ((row.price==null || row.price=='') ? 0 : row.price)).toFixed(2);
                                             return str;
-											<%--return row.itemCode.substring(0, 3) != '700' || <%= hasOnlyReadRight %> || <%= hasReadEditRight %> ? (row.count * ((row.price==null || row.price=='') ? 0 : row.price)).toFixed(2) : '***';--%>
 										}
 									},
 									{
@@ -159,11 +136,6 @@
 										title : '备注',
 										width : 150
 									},
-//									{
-//										field : 'supplier',
-//										title : '供应商',
-//										width: 100
-//									},
 									{
 										field : 'uname',
 										title : '操作人',
@@ -220,7 +192,6 @@
 											var str = '';
                                             // modify by heyh 当数据填报之后，在当日内23:59分内均可以修改自己填报数据
                                             var userId = <%= userId%>;
-                                            var strHasOutRight = <%=hasOutRight%>;
                                             if(((compareDate(getCurrentDate(), row.creatTime.substring(0, 10)) == 0 || '9' == row.needApproved) && userId == row.uid  && '0' == row.isLock && '2' != row.needApproved) || (row.itemCode.substring(0, 3) == '700' && <%= hasReadEditRight %> )) {
                                                     str += $
                                                             .formatString(
@@ -261,15 +232,6 @@
                                                     '<img onclick="discussFun(\'{0}\');" src="{1}" title="交流"/>',
                                                     row.id,
                                                     '${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/discuss-blue.png');
-
-                                            if (strHasOutRight && row.itemCode.substring(0, 3) == '800' && row.count >=0) {
-												str += '&nbsp;';
-												str += $
-													.formatString(
-														'<img onclick="outStorageFun(\'{0}\');" src="{1}" title="出库"/>',
-														row.id,
-														'${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/out.png');
-											}
 
                                             return str;
 										}
@@ -320,25 +282,6 @@
             iconCls : 'wrench'
         };
         window.parent.ac(params);
-    }
-
-    //出库
-    function outStorageFun(id) {
-        parent.$
-            .modalDialog({
-                title : '出库',
-                width : 900,
-                height : 520,
-                href : '${pageContext.request.contextPath}/fieldDataController/outStorage?id=' + id,
-                buttons : [ {
-                    text : '确定',
-                    handler : function() {
-                        parent.$.modalDialog.openner_dataGrid = dataGrid;//因为添加成功之后，需要刷新这个dataGrid，所以先预定义好
-                        var f = parent.$.modalDialog.handler.find('#form');
-                        f.submit();
-                    }
-                } ]
-            });
     }
 
 	//删除
@@ -760,17 +703,11 @@
 					style="display: none;">
 					<tr>
 						<td>关键字搜索:&nbsp;
-                            <%--<input name="uname" id='uname' placeholder="可以模糊查询" class="span2" />--%>
-                            <%--<select  style="width: 136px" name="uname" id="uname">--%>
-                                <%--<option ></option>--%>
-                            <%--</select>--%>
                             <input name="keyword" id="keyword" placeholder="可以模糊查询" class="span2" style="width: 180px;"/>
                         </td>
 						<td>工程名称:&nbsp;
-                            <%--<input name="projectName" id="projectName" placeholder="可以模糊查询" class="span2" />--%>
                             <select  style="width: 180px" name="projectName" id="projectName">
                                 <option ></option>
-
                             </select>
                         </td>
 						<td>费用类型:&nbsp;
@@ -797,12 +734,6 @@
 		<a onclick="addFun();" href="javascript:void(0);"
 			class="easyui-linkbutton"
 			data-options="plain:true,iconCls:'add_new'">添加</a>
-		<%--<a onclick="quickAddFun();" href="javascript:void(0);"--%>
-		   <%--class="easyui-linkbutton"--%>
-		   <%--data-options="plain:true,iconCls:'add_quick'">快速添加</a>--%>
-        <%--modify by heyh --%>
-        <%--<a onclick="batchDeleteFun();" href="javascript:void(0);"--%>
-			<%--class="easyui-linkbutton" data-options="plain:true,iconCls:'delete'">批量删除</a>--%>
 		<a href="javascript:void(0);" class="easyui-linkbutton"
 			data-options="iconCls:'out_new',plain:true"
 			onclick="exportFun();">execl导出</a><a href="javascript:void(0);"
@@ -819,14 +750,6 @@
 		<a onclick="execlImportFun();" href="javascript:void(0);"
 		   class="easyui-linkbutton"
 		   data-options="plain:true,iconCls:'execl_in'">execl导入</a>
-		<%--<c:choose>--%>
-			<%--<c:when test="<%=hasBackFillRight%>">--%>
-				<%--<a onclick="backFillFun();" href="javascript:void(0);"--%>
-				   <%--class="easyui-linkbutton"--%>
-				   <%--data-options="plain:true,iconCls:'backfill'">单价回填</a>--%>
-			<%--</c:when>--%>
-		<%--</c:choose>--%>
-
 
 	</div>
 
