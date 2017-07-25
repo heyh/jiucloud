@@ -901,9 +901,9 @@ public class FieldDataController extends BaseController {
         String keyword = request.getParameter("keyword");
         HttpSession session = request.getSession();
 
-        SessionInfo sessionInfo = (SessionInfo) session.getAttribute(ConfigUtil
-                .getSessionInfoName());
+        SessionInfo sessionInfo = (SessionInfo) session.getAttribute(ConfigUtil.getSessionInfoName());
         List<Integer> ugroup = sessionInfo.getUgroup();
+        List<String> rights = sessionInfo.getRightList();
         ph.setRows(999999999);
 
 //		try {
@@ -916,7 +916,9 @@ public class FieldDataController extends BaseController {
 //		} catch (UnsupportedEncodingException e1) {
 //			e1.printStackTrace();
 //		}
-
+        if (sessionInfo.getRightList().contains("15") || sessionInfo.getRightList().contains("16") || sessionInfo.getRightList().contains("17")  || sessionInfo.getRightList().contains("18")) {
+            fieldData.setCid(sessionInfo.getCompid());
+        }
         fieldData.setUname(request.getParameter("uname"));
         fieldData.setProjectName(request.getParameter("projectName"));
         fieldData.setItemCode(request.getParameter("itemCode"));
@@ -936,6 +938,11 @@ public class FieldDataController extends BaseController {
                     "price_sj", "uname", "createTime"};// map中的key
 
         } else if (source.equals("material")) {
+            for (FieldData data : datas) {
+                if (data.getItemCode().substring(0,3).equals("800") && rights.contains("17")) {
+                    data.setPrice("***");
+                }
+            }
             map = createMaterialExcelRecord(datas);
             columnNames = new String[]{"工程名称", "费用类型", "材料名称", "单位", "数量", "单价", "规格型号", "供应商", "操作人", "录入时间"};     // 列名
             keys = new String[]{"project_name", "costType_name", "dataName", "unit", "count", "price", "specifications", "supplier", "uname", "createTime"};// map中的key
@@ -1261,6 +1268,10 @@ public class FieldDataController extends BaseController {
         String uid = sessionInfo.getId();
         String source = StringUtil.trimToEmpty(request.getParameter("source"));
         String keyword = StringUtil.trimToEmpty(request.getParameter("keyword"));
+        if (null == fieldData.getStartTime() && null == fieldData.getEndTime()) {
+            fieldData.setStartTime(UtilDate.getshortFirst() + " 00:00:00");
+            fieldData.setEndTime(UtilDate.getshortLast() + " 23:59:59");
+        }
         DataGrid dataGrid = fieldDataServiceI.myApproveDataGrid(ph, uid, source, fieldData, keyword);
 
         // add by heyh begin
@@ -1311,6 +1322,10 @@ public class FieldDataController extends BaseController {
         String source = StringUtil.trimToEmpty(request.getParameter("source"));
         String keyword = StringUtil.trimToEmpty(request.getParameter("keyword"));
         List<Integer> ugroup = sessionInfo.getUgroup();
+        if (null == fieldData.getStartTime() && null == fieldData.getEndTime()) {
+            fieldData.setStartTime(UtilDate.getshortFirst() + " 00:00:00");
+            fieldData.setEndTime(UtilDate.getshortLast() + " 23:59:59");
+        }
         DataGrid dataGrid = fieldDataServiceI.approveMonitorDataGrid(ph, ugroup, source, fieldData, keyword);
 
         // add by heyh begin
