@@ -189,8 +189,10 @@ public class UserController extends BaseController {
 				/////////////////////////////////// 默认添加体验信息 /////////////////////////////////////////
 
                 // 增加默认费用类型配置
-				costService.initDefaultCost(String.valueOf(c.getId()));
-				priceService.initPrice(String.valueOf(c.getId()));
+//				costService.initDefaultCost(String.valueOf(c.getId()));
+//				priceService.initPrice(String.valueOf(c.getId()));
+
+				priceService.initDefaultPriceCost(StringUtil.trimToEmpty(c.getId()));
 
 				// 体验帐号拷贝信息
 				NodeUtility nodeUtility = new NodeUtility();

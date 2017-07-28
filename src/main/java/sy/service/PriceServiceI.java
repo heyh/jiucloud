@@ -39,4 +39,6 @@ public interface PriceServiceI {
 	Price_Cost findoneview2(int cost_id, int price_id);
 
 	public void initPrice(String cid);
+
+	public void initDefaultPriceCost(String cid);
 }

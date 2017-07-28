@@ -1,5 +1,6 @@
 package sy.service.impl;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -12,6 +13,7 @@ import sy.model.po.*;
 import sy.pageModel.DataGrid;
 import sy.pageModel.PageHelper;
 import sy.service.PriceServiceI;
+import sy.util.StringUtil;
 
 @Service
 public class PriceServiceImpl implements PriceServiceI {
@@ -126,6 +128,110 @@ public class PriceServiceImpl implements PriceServiceI {
 			price.setCid(Integer.parseInt(cid));
 			this.add(price);
 		}
+
+	}
+
+	@Override
+	public void initDefaultPriceCost(String cid) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("cid", Integer.parseInt(cid));
+
+		// TPrice
+		long count = priceDao.count("select count(*) from Price where cid=:cid", params);
+		List<Price> prices = new ArrayList<Price>();
+		if (count == 0) {
+			Price price = new Price();
+			prices = priceDao.find("from Price where cid='195' ");
+			for (Price p : prices) {
+				price = new Price();
+				price.setCid(Integer.parseInt(cid));
+				price.setName(p.getName());
+				this.add(price);
+
+				params = new HashMap<String, Object>();
+				params.put("cid", 195);
+				params.put("name", price.getName());
+				Price defaultPrice = priceDao.get(" from Price where cid=:cid and name=:name", params);
+
+				params = new HashMap<String, Object>();
+				params.put("price_id", defaultPrice.getId());
+				List<Price_Cost> priceCosts = price_costDao.find(" from Price_Cost where price_id = :price_id ", params);
+
+				// TCost
+				for (Price_Cost priceCost : priceCosts) {
+
+					params = new HashMap<String, Object>();
+					params.put("cid", "195");
+					params.put("id", StringUtil.trimToEmpty(priceCost.getCost_id()));
+					Cost c = costDao.get(" from Cost where cid=:cid and isdelete=0 and id= :id", params);
+					if (c == null) {
+						continue;
+					}
+
+					Cost cost = new Cost();
+					cost.setCid(cid);
+					cost.setCostType(c.getCostType());
+					cost.setIsDelete(c.getIsDelete());
+					cost.setFlag(c.getFlag());
+					cost.setPid(c.getPid());
+					cost.setSort(c.getSort());
+					cost.setNid(c.getNid());
+					cost.setIsend(c.getIsend());
+					cost.setLevel(c.getLevel());
+					cost.setItemCode(c.getItemCode());
+					costDao.save(cost);
+
+					params = new HashMap<String, Object>();
+					params.put("cid", Integer.parseInt(cid));
+					params.put("name", price.getName());
+					Price priceTem = priceDao.get(" from Price where cid=:cid and name = :name", params);
+
+					params = new HashMap<String, Object>();
+					params.put("cid", cid);
+					params.put("itemCode", c.getItemCode());
+					Cost costTem = costDao.get(" from Cost where cid=:cid and isdelete=0 and itemCode = :itemCode", params);
+
+					params = new HashMap<String, Object>();
+					params.put("price_id", priceTem.getId());
+					params.put("cost_id", costTem.getId());
+					price_costDao.executeSql("insert into TPrice_Cost values(null, :price_id, :cost_id)", params);
+				}
+
+			}
+		}
+
+		// TCost
+		List<Cost> costs = new ArrayList<Cost>();
+		Cost cost = new Cost();
+		costs = costDao.find(" from Cost where cid='195' and isdelete=0 ");
+
+		for (Cost c : costs) {
+			Map<String, Object> costParam = new HashMap<String, Object>();
+			costParam.put("cid", cid);
+			costParam.put("costType", c.getCostType());
+			Cost hasCosts = costDao.get( " from Cost where cid=:cid and costType=:costType", costParam);
+			if (hasCosts == null) {
+				cost = new Cost();
+				cost.setCid(cid);
+				cost.setCostType(c.getCostType());
+				cost.setIsDelete(c.getIsDelete());
+				cost.setFlag(c.getFlag());
+				cost.setPid(c.getPid());
+				cost.setSort(c.getSort());
+				cost.setNid(c.getNid());
+				cost.setIsend(c.getIsend());
+				cost.setLevel(c.getLevel());
+				cost.setItemCode(c.getItemCode());
+				costDao.save(cost);
+			}
+
+			// TPrice_Cost
+
+
+		}
+
+
+
 
 	}
 
