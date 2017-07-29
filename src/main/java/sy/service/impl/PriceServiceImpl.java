@@ -141,7 +141,9 @@ public class PriceServiceImpl implements PriceServiceI {
 		List<Price> prices = new ArrayList<Price>();
 		if (count == 0) {
 			Price price = new Price();
-			prices = priceDao.find("from Price where cid='195' ");
+			params = new HashMap<String, Object>();
+			params.put("cid", 195);
+			prices = priceDao.find("from Price where cid=:cid" , params);
 			for (Price p : prices) {
 				price = new Price();
 				price.setCid(Integer.parseInt(cid));
