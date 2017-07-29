@@ -203,13 +203,16 @@ public class PriceServiceImpl implements PriceServiceI {
 		// TCost
 		List<Cost> costs = new ArrayList<Cost>();
 		Cost cost = new Cost();
-		costs = costDao.find(" from Cost where cid='195' and isdelete=0 ");
+		params = new HashMap<String, Object>();
+		params.put("cid", "195");
+		params.put("isDelete", 0);
+		costs = costDao.find(" from Cost where cid=:cid and isDelete=:isDelete", params);
 
 		for (Cost c : costs) {
-			Map<String, Object> costParam = new HashMap<String, Object>();
-			costParam.put("cid", cid);
-			costParam.put("costType", c.getCostType());
-			Cost hasCosts = costDao.get( " from Cost where cid=:cid and costType=:costType", costParam);
+			params = new HashMap<String, Object>();
+			params.put("cid", cid);
+			params.put("itemCode", c.getItemCode());
+			Cost hasCosts = costDao.get( " from Cost where cid=:cid and itemCode=:itemCode", params);
 			if (hasCosts == null) {
 				cost = new Cost();
 				cost.setCid(cid);
@@ -224,10 +227,6 @@ public class PriceServiceImpl implements PriceServiceI {
 				cost.setItemCode(c.getItemCode());
 				costDao.save(cost);
 			}
-
-			// TPrice_Cost
-
-
 		}
 
 
