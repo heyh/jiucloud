@@ -162,7 +162,7 @@ public class PriceServiceImpl implements PriceServiceI {
 
 					params = new HashMap<String, Object>();
 					params.put("cid", "195");
-					params.put("id", StringUtil.trimToEmpty(priceCost.getCost_id()));
+					params.put("id", priceCost.getCost_id());
 					Cost c = costDao.get(" from Cost where cid=:cid and isdelete=0 and id= :id", params);
 					if (c == null) {
 						continue;
