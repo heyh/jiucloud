@@ -227,7 +227,11 @@
                         var optionstring = '';
                         var users = data.obj;
                         for (var i in users) {
-                            optionstring += "<option value=\"" + users[i].id + "\" >" + users[i].username + "</option>";
+                            if (users[i].id == $('#firstLevelParentDepartment').val()) {
+                                optionstring += "<option value=\"" + users[i].id + "\" selected = 'selected'>" + users[i].username + "</option>";
+                            } else {
+                                optionstring += "<option value=\"" + users[i].id + "\" >" + users[i].username + "</option>";
+                            }
                         }
                         $("#currentApprovedUser").html(optionstring);
                     }
@@ -236,41 +240,6 @@
 
 
         }
-        <%--function isChooseApprove(isChooseApprove) {--%>
-            <%--$('#approvedUser').value = '';--%>
-            <%--$('#chooseApproveName').value = '';--%>
-            <%--if (isChooseApprove == '1') {--%>
-                <%--parent.$--%>
-                        <%--.modalDialog({--%>
-                            <%--title: '选择审批人',--%>
-                            <%--width: 450,--%>
-                            <%--height: 500,--%>
-                            <%--href: '${pageContext.request.contextPath }/fieldDataController/securi_chooseApprove',--%>
-                            <%--buttons: [{--%>
-                                <%--text: '确认',--%>
-                                <%--handler: function () {--%>
-                                    <%--var chooseNodes = parent.$.modalDialog.handler.find(".chooseNode");--%>
-                                    <%--console.log(chooseNodes);--%>
-                                    <%--var approveUids = [];--%>
-                                    <%--var approveNames = [];--%>
-                                    <%--$.each(chooseNodes, function (index, chooseNode) {--%>
-                                        <%--if (chooseNode.firstChild.id != '-1' && $.inArray(chooseNode.firstChild.id, approveUids) == '-1') {--%>
-                                            <%--approveUids.push(chooseNode.firstChild.id);--%>
-                                            <%--approveNames.push(chooseNode.innerText);--%>
-                                        <%--}--%>
-                                    <%--});--%>
-                                    <%--document.getElementById("chooseApproveName").value = approveNames.reverse().join(',');--%>
-                                    <%--document.getElementById("approvedUser").value = approveUids.reverse().join(',');--%>
-                                    <%--parent.$.modalDialog.handler.dialog('close');--%>
-
-                                    <%--$('#approvedUserLabel').show();--%>
-                                <%--}--%>
-                            <%--}]--%>
-                        <%--});--%>
-            <%--} else {--%>
-                <%--$('#approvedUserLabel').hide();--%>
-            <%--}--%>
-        <%--}--%>
 
         $(document).ready(function () {
             $("#unit").select2({
@@ -346,6 +315,19 @@
                     });
                 }
             });
+
+            var optionstring = '';
+            if ($('#firstLevelParentDepartment').val() != '') {
+                optionstring += "<option value='0'>不需要</option>";
+                optionstring += "<option value='1' selected = 'selected'>需要</option>";
+                isNeedApprove(1);
+            } else {
+                optionstring += "<option value='0' selected = 'selected'>不需要</option>";
+                optionstring += "<option value='1' >需要</option>";
+                isNeedApprove(0);
+            }
+
+            $('#needApproved').html(optionstring);
         });
 
         $.getJSON('${pageContext.request.contextPath}/projectController/securi_getProjects', function (data) {
@@ -480,6 +462,7 @@
 <div class="container-fluid">
     <form class="form-horizontal basic-grey" name="form" id="form" method="post" enctype="multipart/form-data" role="form">
         <input type="hidden" id = "maxProjectId" name="maxProjectId" value="${maxProjectId}"/>
+        <input type="hidden" id = "firstLevelParentDepartment" name="firstLevelParentDepartment" value="${firstLevelParentDepartment}">
         <fieldset>
             <legend>添加数据</legend>
             <div class="row-fluid">
@@ -588,8 +571,8 @@
 
                         <div class="controls">
                             <select onchange="isNeedApprove(this.options[this.options.selectedIndex].value)" style="width:250px;" id="needApproved" name="needApproved">
-                                <option value="0" selected = "selected">不需要</option>
-                                <option value="1">需要</option>
+                                <%--<option value="0">不需要</option>--%>
+                                <%--<option value="1">需要</option>--%>
                             </select>
                         </div>
                     </div>

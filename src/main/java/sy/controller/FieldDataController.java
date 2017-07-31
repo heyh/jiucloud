@@ -445,9 +445,14 @@ public class FieldDataController extends BaseController {
                 maxApprovedUser = tFieldData.getApprovedUser().split(",")[0];
             }
         }
+
+        List<String> firstLevelParentDepartments = departmentService.getFirstLevelParentDepartmentsByUid(cid, uid);
+        String firstLevelParentDepartment = firstLevelParentDepartments.size() > 0 ? firstLevelParentDepartments.get(0) : "";
+
         request.setAttribute("maxProjectId", maxProjectId);
         request.setAttribute("maxNeedApproved", maxNeedApproved);
         request.setAttribute("maxApprovedUser", maxApprovedUser);
+        request.setAttribute("firstLevelParentDepartment", firstLevelParentDepartment);
 
         return pageUrl;
     }
