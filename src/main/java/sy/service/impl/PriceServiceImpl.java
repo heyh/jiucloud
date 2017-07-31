@@ -200,38 +200,36 @@ public class PriceServiceImpl implements PriceServiceI {
 				}
 
 			}
-		}
 
-		// TCost
-		List<Cost> costs = new ArrayList<Cost>();
-		Cost cost = new Cost();
-		params = new HashMap<String, Object>();
-		params.put("cid", "195");
-		params.put("isDelete", 0);
-		costs = costDao.find(" from Cost where cid=:cid and isDelete=:isDelete", params);
-
-		for (Cost c : costs) {
+			// TCost
+			List<Cost> costs = new ArrayList<Cost>();
+			Cost cost = new Cost();
 			params = new HashMap<String, Object>();
-			params.put("cid", cid);
-			params.put("itemCode", c.getItemCode());
-			Cost hasCosts = costDao.get( " from Cost where cid=:cid and itemCode=:itemCode", params);
-			if (hasCosts == null) {
-				cost = new Cost();
-				cost.setCid(cid);
-				cost.setCostType(c.getCostType());
-				cost.setIsDelete(c.getIsDelete());
-				cost.setFlag(c.getFlag());
-				cost.setPid(c.getPid());
-				cost.setSort(c.getSort());
-				cost.setNid(c.getNid());
-				cost.setIsend(c.getIsend());
-				cost.setLevel(c.getLevel());
-				cost.setItemCode(c.getItemCode());
-				costDao.save(cost);
+			params.put("cid", "195");
+			params.put("isDelete", 0);
+			costs = costDao.find(" from Cost where cid=:cid and isDelete=:isDelete", params);
+
+			for (Cost c : costs) {
+				params = new HashMap<String, Object>();
+				params.put("cid", cid);
+				params.put("itemCode", c.getItemCode());
+				Cost hasCosts = costDao.get(" from Cost where cid=:cid and itemCode=:itemCode", params);
+				if (hasCosts == null) {
+					cost = new Cost();
+					cost.setCid(cid);
+					cost.setCostType(c.getCostType());
+					cost.setIsDelete(c.getIsDelete());
+					cost.setFlag(c.getFlag());
+					cost.setPid(c.getPid());
+					cost.setSort(c.getSort());
+					cost.setNid(c.getNid());
+					cost.setIsend(c.getIsend());
+					cost.setLevel(c.getLevel());
+					cost.setItemCode(c.getItemCode());
+					costDao.save(cost);
+				}
 			}
 		}
-
-
 
 
 	}
