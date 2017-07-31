@@ -478,7 +478,7 @@
 
 	// 添加
 	function addFun() {
-		var url = '${pageContext.request.contextPath}/fieldDataController/securi_addBillData';
+		var url = '${pageContext.request.contextPath}/fieldDataController/securi_addPage?source=bill';
 		var text = "添加清单项量";
 		var params = {
 			url : url,

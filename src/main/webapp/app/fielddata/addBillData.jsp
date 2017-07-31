@@ -68,57 +68,6 @@
 
     <script type="text/javascript">
         var flag = 0;
-        function selectp() {
-            parent.$
-                    .modalDialog({
-                        title: '选择项目工程',
-                        width: 550,
-                        height: 550,
-                        href: '${pageContext.request.contextPath }/fieldDataController/securi_selectp',
-                        buttons: [{
-                            text: '确认',
-                            handler: function () {
-                                var id = parent.$.modalDialog.handler.find(
-                                        "#proidh").val();
-                                var name = parent.$.modalDialog.handler.find(
-                                        "#proNameh").val();
-                                document.getElementById("projectName").value = id;
-                                document.getElementById("pName").value = name;
-                                parent.$.modalDialog.handler.dialog('close');
-                            }
-                        }]
-                    });
-        }
-
-        function selectc() {
-            parent.$
-                    .modalDialog({
-                        title: '选择费用类型',
-                        width: 450,
-                        height: 500,
-                        href: '${pageContext.request.contextPath }/fieldDataController/securi_selectc',
-                        buttons: [{
-                            text: '确认',
-                            handler: function () {
-                                var id = parent.$.modalDialog.handler.find(
-                                        "#proidh").val();
-                                var name = parent.$.modalDialog.handler.find(
-                                        "#proNameh").val();
-                                var itemCode = parent.$.modalDialog.handler.find(
-                                        "#code").val();
-                                document.getElementById("costType").value = id;
-                                document.getElementById("costTypeName").value = name;
-                                document.getElementById("itemCode").value = itemCode;
-                                parent.$.modalDialog.handler.dialog('close');
-                                if (name == '纯附件') {
-                                    $('.will_hide').hide();
-                                } else {
-                                    $('.will_hide').show();
-                                }
-                            }
-                        }]
-                    });
-        }
 
         var cfg = {
             url: '${pageContext.request.contextPath}/fieldDataController/savefieldData',

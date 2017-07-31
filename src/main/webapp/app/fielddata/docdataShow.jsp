@@ -386,7 +386,7 @@
     }
 
 	function addFun() {
-		var url = '${pageContext.request.contextPath}/fieldDataController/addDocData';
+		var url = '${pageContext.request.contextPath}/fieldDataController/securi_addPage?source=doc';
 		var text = "添加资料数据";
 		var params = {
 			url : url,

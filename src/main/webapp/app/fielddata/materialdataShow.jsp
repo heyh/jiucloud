@@ -485,7 +485,7 @@
 
 	// 添加
 	function addFun() {
-		var url = '${pageContext.request.contextPath}/fieldDataController/securi_addMaterialData';
+		var url = '${pageContext.request.contextPath}/fieldDataController/securi_addPage?source=material';
 		var text = "添加材料数据";
 		var params = {
 			url : url,

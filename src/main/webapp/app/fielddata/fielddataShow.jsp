@@ -430,7 +430,7 @@
 
 	// 添加
 	function addFun() {
-		var url = '${pageContext.request.contextPath}/fieldDataController/addfieldData';
+		var url = '${pageContext.request.contextPath}/fieldDataController/securi_addPage?source=data';
 		var text = "添加费用数据";
 		var params = {
 			url : url,
