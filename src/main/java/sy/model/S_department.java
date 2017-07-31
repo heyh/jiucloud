@@ -26,6 +26,16 @@ public class S_department {
 
 	private int company_id;
 
+	public String getShenpi() {
+		return shenpi;
+	}
+
+	public void setShenpi(String shenpi) {
+		this.shenpi = shenpi;
+	}
+
+	private String shenpi;
+
 	public int getId() {
 		return id;
 	}
