@@ -439,8 +439,8 @@ public class FieldDataController extends BaseController {
         String maxNeedApproved = null;
         String maxApprovedUser = null;
         if (tFieldData != null) {
-            maxProjectId = tFieldData.getProjectName();
-            maxNeedApproved = tFieldData.getNeedApproved();
+            maxProjectId = StringUtil.trimToEmpty(tFieldData.getProjectName());
+            maxNeedApproved = StringUtil.trimToEmpty(tFieldData.getNeedApproved());
             if (!maxNeedApproved.equals("0")) {
                 maxApprovedUser = tFieldData.getApprovedUser().split(",")[0];
             }

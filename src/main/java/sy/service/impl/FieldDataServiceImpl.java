@@ -786,6 +786,8 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
 
         if (fieldDataList != null && fieldDataList.size()>0) {
             rtnFieldData = fieldDataList.get(0);
+        } else {
+            rtnFieldData = null;
         }
         return rtnFieldData;
     }
