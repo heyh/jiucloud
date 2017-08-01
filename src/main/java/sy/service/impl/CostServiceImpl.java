@@ -531,7 +531,7 @@ public class CostServiceImpl implements CostServiceI {
 
         hql = " from Cost t  where cid=:cid and isdelete=0";
         if (departmentIds != null && departmentIds.size()>0) {
-            hql += " and id in (select cost_id from Department_Cost where department_id in (";
+            hql += " and substring(id, 3) in (select substring(cost_id,3) from Department_Cost where department_id in (";
             for (int i=0; i<departmentIds.size(); i++) {
                 if (i < departmentIds.size() - 1) {
                     hql += departmentIds.get(i) + ",";
