@@ -290,27 +290,30 @@ public class Api extends BaseController {
     public JSONObject getMaxFieldData(@RequestParam(value = "cid", required = true) String cid,
                                      @RequestParam(value = "uid", required = true) String uid,
                                      HttpServletRequest request, HttpServletResponse response) {
-        TFieldData maxFieldData = fieldDataService.getMaxFieldByCidUid(cid, uid);
-        Project project = new Project();
-        if (maxFieldData.getProjectName() != null) {
-            project = projectService.findOneView(Integer.parseInt(maxFieldData.getProjectName()));
-        }
 
         String proName = "";
         String sectionName = "";
-        if (project != null) {
-            proName = project.getProName();
-        }
-        Item sectionItem = new Item();
-        if (maxFieldData.getProjectName() != null) {
-            sectionItem = itemService.getSingleItem(cid, maxFieldData.getProjectName(), maxFieldData.getSection());
+
+        TFieldData maxFieldData = fieldDataService.getMaxFieldByCidUid(cid, uid);
+        Project project = new Project();
+        if (maxFieldData != null) {
+            project = projectService.findOneView(Integer.parseInt(maxFieldData.getProjectName()));
+
+            if (project != null) {
+                proName = project.getProName();
+            }
+            Item sectionItem = new Item();
+            if (maxFieldData.getProjectName() != null) {
+                sectionItem = itemService.getSingleItem(cid, maxFieldData.getProjectName(), maxFieldData.getSection());
+            }
+
+            if (sectionItem == null) {
+                sectionName = "标段1";
+            } else {
+                sectionName = sectionItem.getName();
+            }
         }
 
-        if (sectionItem == null) {
-            sectionName = "标段1";
-        } else {
-            sectionName = sectionItem.getName();
-        }
         return new WebResult().ok().set("maxFieldData", maxFieldData).set("proName", proName).set("sectionName", sectionName);
     }
 
