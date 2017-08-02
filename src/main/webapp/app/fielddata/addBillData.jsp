@@ -19,7 +19,7 @@
 <%
     List<Param> unitParams = new ArrayList<Param>();
     JSONArray billCostTree = new JSONArray();
-    List<Map<String, Object>> dataCostInfos = new ArrayList<Map<String, Object>>();
+    List<Map<String, Object>> billCostInfos = new ArrayList<Map<String, Object>>();
     JSONArray jsonArray = new JSONArray();
     SessionInfo sessionInfo = (SessionInfo) session.getAttribute(ConfigUtil.getSessionInfoName());
     if (sessionInfo == null) {
@@ -27,8 +27,8 @@
     } else {
         unitParams = sessionInfo.getUnitParams();
         billCostTree = sessionInfo.getBillCostTree();
-        dataCostInfos = sessionInfo.getCostTypeInfos().get("dataCostInfos");
-        for (Map<String, Object> nodeMap : dataCostInfos) {
+        billCostInfos = sessionInfo.getCostTypeInfos().get("billCostInfos");
+        for (Map<String, Object> nodeMap : billCostInfos) {
             JSONObject nodeJson = JSONObject.fromObject(nodeMap);
             jsonArray.add(nodeJson);
         }
@@ -287,6 +287,14 @@
                         for (var i=0; i<_jsonArray.length; i++) {
                             if (_jsonArray[i].itemCode.substring(0, 3) == '700' && _jsonArray[i].nid == node.id) {
                                 $('#dataName').val(node.text);
+                                var costType = node.text;
+                                if ((costType.indexOf("(") != -1 || costType.indexOf("（") != -1)
+                                    && (costType.indexOf(")") != -1 || costType.indexOf("）") != -1)) {
+                                    debugger;
+                                    var strUnit = costType.substring(costType.indexOf("（")+1,costType.indexOf("）"));
+                                    $("#unit").val(strUnit).trigger("change");
+                                }
+
                                 break;
                             } else {
                                 $('#dataName').val('');
@@ -493,7 +501,7 @@
                                         <optgroup label="${unitParam.paramValue}"></optgroup>
                                     </c:if>
                                     <c:if test="${unitParam.parentCode != ''}">
-                                        <option value="${unitParam.paramValue}">&nbsp;&nbsp;&nbsp;&nbsp;${unitParam.paramValue}</option>
+                                        <option value="${unitParam.paramValue}">${unitParam.paramValue}</option>
                                     </c:if>
                                 </c:forEach>
                             </select>

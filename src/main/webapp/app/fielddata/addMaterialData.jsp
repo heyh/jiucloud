@@ -19,7 +19,7 @@
 <%
     List<Param> unitParams = new ArrayList<Param>();
     JSONArray materialCostTree = new JSONArray();
-    List<Map<String, Object>> dataCostInfos = new ArrayList<Map<String, Object>>();
+    List<Map<String, Object>> materialCostInfos = new ArrayList<Map<String, Object>>();
     JSONArray jsonArray = new JSONArray();
     SessionInfo sessionInfo = (SessionInfo) session.getAttribute(ConfigUtil.getSessionInfoName());
     if (sessionInfo == null) {
@@ -27,8 +27,8 @@
     } else {
         unitParams = sessionInfo.getUnitParams();
         materialCostTree = sessionInfo.getMaterialCostTree();
-        dataCostInfos = sessionInfo.getCostTypeInfos().get("dataCostInfos");
-        for (Map<String, Object> nodeMap : dataCostInfos) {
+        materialCostInfos = sessionInfo.getCostTypeInfos().get("materialCostInfos");
+        for (Map<String, Object> nodeMap : materialCostInfos) {
             JSONObject nodeJson = JSONObject.fromObject(nodeMap);
             jsonArray.add(nodeJson);
         }
@@ -285,7 +285,7 @@
                     } else {
                         var _jsonArray =  <%= jsonArray %>;
                         for (var i=0; i<_jsonArray.length; i++) {
-                            if (_jsonArray[i].itemCode.substring(0, 3) == '700' && _jsonArray[i].nid == node.id) {
+                            if (_jsonArray[i].itemCode.substring(0, 3) == '800' && _jsonArray[i].nid == node.id) {
                                 $('#dataName').val(node.text);
                                 break;
                             } else {
