@@ -314,7 +314,10 @@ public class Api extends BaseController {
             }
         }
 
-        return new WebResult().ok().set("maxFieldData", maxFieldData).set("proName", proName).set("sectionName", sectionName);
+        List<String> firstLevelParentDepartments = departmentService.getFirstLevelParentDepartmentsByUid(cid, uid);
+        String firstLevelParentDepartment = firstLevelParentDepartments.size() > 0 ? firstLevelParentDepartments.get(0) : "";
+
+        return new WebResult().ok().set("maxFieldData", maxFieldData).set("proName", proName).set("sectionName", sectionName).set("firstLevelParentDepartment", firstLevelParentDepartment);
     }
 
     @RequestMapping("/securi_getSupInfo")
@@ -699,7 +702,7 @@ public class Api extends BaseController {
             for (User user : users) {
                 userMap = new HashMap<String, Object>();
                 userMap.put("id", user.getId());
-                userMap.put("username", !user.getRealname().equals("") ? user.getRealname() : user.getUsername());
+                userMap.put("username", !StringUtil.trimToEmpty(user.getRealname()).equals("") ? user.getRealname() : user.getUsername());
                 userList.add(userMap);
             }
         }
