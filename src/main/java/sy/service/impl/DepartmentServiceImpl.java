@@ -666,19 +666,13 @@ public class DepartmentServiceImpl implements DepartmentServiceI {
         params.put("cid", cid);
         params.put("uid", uid);
 
-        String sql = "SELECT DISTINCT a.id, a.parent_id FROM jsw_corporation_department a WHERE a.company_id = :cid AND find_in_set(:uid, a.user_id)";
+        String sql = "SELECT DISTINCT a.id, a.parent_id, a.shenpi FROM jsw_corporation_department a WHERE a.company_id = :cid AND find_in_set(:uid, a.user_id)";
         List<Object[]> deps = departmentDaoI.findBySql(sql, params);
-        List<Object[]> parentDeps = new ArrayList<Object[]>();
-        for (Object[] dep : deps) {
-            params = new HashMap<String, Object>();
-            params.put("id", Integer.parseInt(StringUtil.trimToEmpty(dep[1])));
-            sql = "SELECT DISTINCT a.id, a.user_id, a.shenpi FROM jsw_corporation_department a WHERE id = :id AND endnode = '0'";
-            parentDeps.addAll(departmentDaoI.findBySql(sql, params));
-        }
 
-        S_department firstLevelParentDepartment = new S_department();
-        for (Object[] parentDep : parentDeps) {
-            firstLevelParentDepartments.add(StringUtil.trimToEmpty(parentDep[2]));
+        for (Object[] dep : deps) {
+            if (!StringUtil.trimToEmpty(dep[2]).equals("")) {
+                firstLevelParentDepartments.add(StringUtil.trimToEmpty(dep[2]));
+            }
         }
 
         return firstLevelParentDepartments;
