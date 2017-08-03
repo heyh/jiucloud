@@ -200,7 +200,10 @@ public class UserController extends BaseController {
 				List<Node> nodes = nodeUtility.getDepartmentNodeList(nodeList);
 				boolean isTYZH = false;
 				for (Node node : nodes) {
-					isTYZH = userService.getUser(StringUtil.trimToEmpty(node.getUserId())).getUsername().startsWith("AT");
+					User user = userService.getUser(StringUtil.trimToEmpty(node.getUserId()));
+					if (user != null && user.getUsername() != null) {
+						isTYZH = userService.getUser(StringUtil.trimToEmpty(node.getUserId())).getUsername().startsWith("AT");
+					}
 					if (isTYZH) {
 						break;
 					}
