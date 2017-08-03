@@ -520,7 +520,6 @@
 
                         <div class="controls">
                             <textarea type="text" name="remark" id="remark" style="width:236px"></textarea>
-                            <%--<input type="text" name="remark" id="remark" class="easyui-textbox" style="width:236px">--%>
                         </div>
                     </div>
 
