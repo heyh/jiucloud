@@ -452,7 +452,7 @@ public class FieldDataController extends BaseController {
         List<String> firstLevelParentDepartments = departmentService.getFirstLevelParentDepartmentsByUid(cid, uid);
         String firstLevelParentDepartment = firstLevelParentDepartments.size() > 0 ? firstLevelParentDepartments.get(0) : "";
 
-        List<Feature> features = featureService.getFeatures(cid,"","");
+        List<Feature> features = featureService.getFeatures(cid,"");
         request.setAttribute("maxProjectId", maxProjectId);
         request.setAttribute("maxNeedApproved", maxNeedApproved);
         request.setAttribute("maxApprovedUser", maxApprovedUser);

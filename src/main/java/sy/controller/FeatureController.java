@@ -43,11 +43,10 @@ public class FeatureController extends BaseController {
     @RequestMapping("/securi_getFeatures")
     @ResponseBody
     public JSONObject getFeatures(@RequestParam(value = "cid", required = true) String cid,
-                                  @RequestParam(value = "searchMc", required = false) String searchMc,
-                                  @RequestParam(value = "searchDw", required = false) String searchDw,
+                                  @RequestParam(value = "keyword", required = false) String keyword,
                                   HttpServletRequest request) throws Exception {
 
-        List<Feature> features = featureService.getFeatures(cid,searchMc,searchDw);
+        List<Feature> features = featureService.getFeatures(cid,keyword);
 
         return new WebResult().ok().set("features", features);
     }
@@ -68,7 +67,7 @@ public class FeatureController extends BaseController {
                                  @RequestParam(value = "id", required = true) String id,
                                  HttpServletRequest request) throws Exception {
         featureService.delFeature(id);
-        List<Feature> features = featureService.getFeatures(cid,"","");
+        List<Feature> features = featureService.getFeatures(cid,"");
         return new WebResult().ok().set("features", features);
     }
 }

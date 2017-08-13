@@ -79,6 +79,12 @@
     <!-- Latest compiled and minified Locales -->
     <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/locale/bootstrap-table-zh-CN.min.js"></script>
 
+    <style>
+        .table th, .table td {
+            text-align: center;
+            vertical-align: middle!important;
+        }
+    </style>
     <script type="text/javascript">
         var flag = 0;
 
@@ -540,7 +546,7 @@
             debugger;
             $.ajax({
                 url: '${pageContext.request.contextPath}/featureController/securi_getFeatures',
-                data: {searchMc: $('#searchMc').val(), searchDw: $('#searchDw').val(), cid: <%= cid %>},
+                data: {keyword: $('#keyword').val(), cid: <%= cid %>},
                 type: 'post',
                 dataType: 'json',
                 contentType: "application/x-www-form-urlencoded; charset=utf-8",
@@ -810,11 +816,9 @@
         <thead>
         <tr>
             <th></th>
-            <th><input type="text" placeholder="名称" id="searchMc" style="margin-bottom:0px;width: 186px" oninput="searchFeatures()"></th>
-            <th></th>
-            <th><input type="text" placeholder="单位" id="searchDw" style="margin-bottom:0px;width: 122px" oninput="searchFeatures()"></th>
+            <th style="padding-top: 5px;padding-bottom: 5px;"><input type="text" placeholder="关键字搜索" id="keyword" style="margin-bottom:0px;" oninput="searchFeatures()"></th>
         </tr>
-        <tr>
+        <tr style="height:34px; background:#76b3ff; color:#fff; font-weight: normal">
             <th>序号</th>
             <th>名称</th>
             <th>数量</th>
@@ -828,11 +832,11 @@
                 <td >${status.index+1}</td>
                 <td class="featureCol">${item.mc}</td>
                 <td class="featureCol">
-                    <input type="text" align="right" placeholder="数量" style="margin-bottom:0px;width: 80px">
+                    <input type="text" placeholder="数量" style="margin-bottom:0px;width: 80px">
                 </td>
                 <td class="featureCol">${item.dw}</td>
                 <td class="featureCol" style="display: none">9</td>
-                <td><button class="btn btn-xs btn-warning" onclick="delFeature(${item.id})">删除</button>  </td>
+                <td><button class="btn btn-xs btn-link" onclick="delFeature(${item.id})">删除</button>  </td>
             </tr>
         </c:forEach>
         </tbody>

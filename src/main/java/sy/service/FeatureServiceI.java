@@ -11,7 +11,7 @@ import java.util.List;
  */
 public interface FeatureServiceI {
 
-    List<Feature> getFeatures(String cid, String searchMc, String searchDw);
+    List<Feature> getFeatures(String cid, String keyword);
 
     Feature addFeature(String cid, String mc, String dw);
 
