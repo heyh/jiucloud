@@ -79,6 +79,9 @@ public class FieldDataController extends BaseController {
     @Autowired
     private TaskPushServiceI taskPushService;
 
+    @Autowired
+    private FeatureServiceI featureService;
+
     /**
      * 跳转管理页面
      *
@@ -449,10 +452,12 @@ public class FieldDataController extends BaseController {
         List<String> firstLevelParentDepartments = departmentService.getFirstLevelParentDepartmentsByUid(cid, uid);
         String firstLevelParentDepartment = firstLevelParentDepartments.size() > 0 ? firstLevelParentDepartments.get(0) : "";
 
+        List<Feature> features = featureService.getFeatures(cid,"","");
         request.setAttribute("maxProjectId", maxProjectId);
         request.setAttribute("maxNeedApproved", maxNeedApproved);
         request.setAttribute("maxApprovedUser", maxApprovedUser);
         request.setAttribute("firstLevelParentDepartment", firstLevelParentDepartment);
+        request.setAttribute("features", features);
 
         return pageUrl;
     }

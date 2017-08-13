@@ -4,7 +4,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sy.dao.FeatureDaoI;
 import sy.model.po.Feature;
+import sy.model.po.TFieldData;
+import sy.pageModel.DataGrid;
+import sy.pageModel.PageHelper;
 import sy.service.FeatureServiceI;
+import sy.util.StringUtil;
 
 import java.util.HashMap;
 import java.util.List;
@@ -21,10 +25,20 @@ public class FeatureServiceImpl implements FeatureServiceI {
     private FeatureDaoI featureDao;
 
     @Override
-    public List<Feature> getFeatures(String cid) {
+    public List<Feature> getFeatures(String cid,String searchMc, String searchDw) {
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("cid", cid);
-        String hql = "from Feature where cid = :cid";
+        String hql = "from Feature where cid = :cid ";
+        if (!StringUtil.trimToEmpty(searchMc).equals("")) {
+            hql += " and mc like :mc ";
+            params.put("mc", "%%" + searchMc + "%%");
+        }
+
+        if (!StringUtil.trimToEmpty(searchDw).equals("")) {
+            hql += " and dw like :dw ";
+            params.put("dw", "%%" + searchDw + "%%");
+        }
+
         List<Feature> features = featureDao.find(hql, params);
         return features;
     }
@@ -46,5 +60,28 @@ public class FeatureServiceImpl implements FeatureServiceI {
         params.put("id", Integer.parseInt(id));
         Feature feature = featureDao.get("from Feature where id=:id", params);
         featureDao.delete(feature);
+    }
+
+    @Override
+    public DataGrid getFeaturesDataGrid(PageHelper ph, String cid, String keyword) {
+        DataGrid dg = new DataGrid();
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("cid", cid);
+        String hql = "from Feature where cid = :cid";
+
+        if (!keyword.equals("")) {
+            hql += " and ( mc like :mc ";
+            params.put("mc", "%%" + keyword + "%%");
+
+            hql += " and dw like :dw) ";
+            params.put("dw", "%%" + keyword + "%%");
+        }
+        hql += " order by id desc";
+
+        List<Feature> l = featureDao.find(hql, params, ph.getPage(), ph.getRows());
+        dg.setRows(l);
+        dg.setTotal(featureDao.count("select count(*) " + hql, params));
+
+        return dg;
     }
 }

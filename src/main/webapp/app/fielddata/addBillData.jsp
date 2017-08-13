@@ -21,6 +21,8 @@
     JSONArray billCostTree = new JSONArray();
     List<Map<String, Object>> billCostInfos = new ArrayList<Map<String, Object>>();
     JSONArray jsonArray = new JSONArray();
+
+    String cid = "";
     SessionInfo sessionInfo = (SessionInfo) session.getAttribute(ConfigUtil.getSessionInfoName());
     if (sessionInfo == null) {
         response.sendRedirect(request.getContextPath());
@@ -32,6 +34,8 @@
             JSONObject nodeJson = JSONObject.fromObject(nodeMap);
             jsonArray.add(nodeJson);
         }
+
+        cid = sessionInfo.getCompid();
     }
 
 %>
@@ -65,6 +69,15 @@
     <%--src="${pageContext.request.contextPath}/jslib/bootstrap-datepicker/js/locales/bootstrap-datepicker.zh-CN.js"--%>
     <%--charset="UTF-8"></script>--%>
     <script type="text/javascript" src="${pageContext.request.contextPath }/jslib/layer-v3.0.3/layer/layer.js"></script>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.css">
+
+    <!-- Latest compiled and minified JavaScript -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.js"></script>
+
+    <!-- Latest compiled and minified Locales -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/locale/bootstrap-table-zh-CN.min.js"></script>
 
     <script type="text/javascript">
         var flag = 0;
@@ -429,6 +442,151 @@
             $('#dataName').val($("#supInfoSel").val());
 
         }
+
+        function openFeatureModal() {
+            layer.open({
+                type: 1,
+                title: '项目特征',
+                closeBtn: 2,
+                btn:['确定','增加'],
+                yes: function(index, layero){
+                    merageFeatures();
+                    layer.close(index); //如果设定了yes回调，需进行手工关闭
+                },
+                btn2: function(index, layero){
+                    addLine();
+                    return false // 开启该代码可禁止点击该按钮关闭
+                },
+                shadeClose: true,
+                area: ['600px', '400px'],
+                content: $('#featuresDiv') //这里content是一个DOM，注意：最好该元素要存放在body最外层，否则可能被其它的相对元素所影响
+            });
+        }
+
+        function merageFeatures() {
+            var feature = '';
+            $(".featureRow").each(function (index, row) {
+                debugger;
+                var features = row.getElementsByClassName("featureCol");
+                var mc;
+                var dw;
+                var modifyTag = features[3].innerHTML;
+                if (modifyTag == '0') { // 新增
+                    mc = features[0].firstElementChild.value;
+                    dw = features[2].firstElementChild.value;
+                } else if (modifyTag == '9') {
+                    mc = features[0].innerHTML;
+                    dw = features[2].innerHTML;
+                }
+                var count = features[1].firstElementChild.value;
+
+                if (mc != '' && count != '' && dw != '') {
+                    feature += mc + ":" + count + ' ' + dw + ";  ";
+                    if (modifyTag == '0') {
+                        addFeature(mc, dw);
+                    }
+                }
+
+                $('#remark').val(feature);
+            });
+        }
+
+        function addFeature(mc, dw) {
+            $.ajax({
+                url: '${pageContext.request.contextPath}/featureController/securi_addFeature',
+                data: {mc: mc, dw: dw, cid: <%= cid %>},
+                type: 'post',
+                dataType: 'json',
+                contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                success: function (data) {
+                    if (data.rspCode == '0') {
+                        console.log("ok")
+                    }
+                }
+            });
+        }
+
+        function delFeature(id) {
+            $.ajax({
+                url: '${pageContext.request.contextPath}/featureController/securi_delFeature',
+                data: {id: id, cid: <%= cid %>},
+                type: 'post',
+                dataType: 'json',
+                contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                success: function (data) {
+                    if (data.rspCode == '0') {
+                        var htmlStr = '';
+                        var features = data.features;
+                        $.each(data.features,function(index,item){
+                            htmlStr +=
+                                '<tr class="featureRow">'+
+                                    '<td >' + (index + 1) + '</td>'+
+                                    '<td class="featureCol">' + item.mc + '</td>'+
+                                    '<td class="featureCol">'+
+                                        '<input type="text" align="right" placeholder="数量" style="margin-bottom:0px;width: 80px">'+
+                                    '</td>'+
+                                    '<td class="featureCol">' + item.dw + '</td>'+
+                                    '<td class="featureCol" style="display: none">9</td>'+
+                                    '<td><button class="btn btn-xs btn-warning" onclick="delFeature(' + item.id + ')">删除</button>  </td>'+
+                                '</tr>'
+                        });
+                        $('.featuresBody').html(htmlStr);
+                    }
+                }
+            });
+        }
+
+        function searchFeatures() {
+            debugger;
+            $.ajax({
+                url: '${pageContext.request.contextPath}/featureController/securi_getFeatures',
+                data: {searchMc: $('#searchMc').val(), searchDw: $('#searchDw').val(), cid: <%= cid %>},
+                type: 'post',
+                dataType: 'json',
+                contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                success: function (data) {
+                    if (data.rspCode == '0') {
+                        var htmlStr = '';
+                        var features = data.features;
+                        $.each(data.features,function(index,item){
+                            htmlStr +=
+                                '<tr class="featureRow">'+
+                                '<td >' + (index + 1) + '</td>'+
+                                '<td class="featureCol">' + item.mc + '</td>'+
+                                '<td class="featureCol">'+
+                                '<input type="text" align="right" placeholder="数量" style="margin-bottom:0px;width: 80px">'+
+                                '</td>'+
+                                '<td class="featureCol">' + item.dw + '</td>'+
+                                '<td class="featureCol" style="display: none">9</td>'+
+                                '<td><button class="btn btn-xs btn-warning" onclick="delFeature(' + item.id + ')">删除</button>  </td>'+
+                                '</tr>'
+                        });
+                        $('.featuresBody').html(htmlStr);
+                    }
+                }
+            });
+        }
+
+        function addLine() {
+            var rowHtml = '';
+            rowHtml = '<tr class="featureRow">'+
+                '<td ></td>'+
+                '<td class="featureCol">' +
+                    '<input type="text" align="right" placeholder="名称" style="margin-bottom:0px;width: 100px">'+
+                '</td>'+
+                '<td class="featureCol">'+
+                    '<input type="text" align="right" placeholder="数量" style="margin-bottom:0px;width: 80px">'+
+                '</td>'+
+                '<td class="featureCol">' +
+                    '<input type="text" align="right" placeholder="单位" style="margin-bottom:0px;width: 50px">'+
+                '</td>'+
+                '<td class="featureCol" style="display: none">0</td>'+
+                '<td><button class="btn btn-xs btn-warning" onclick="this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode)">删除</button>  </td>'+
+            '</tr>';
+            $('.featuresBody').append(rowHtml);
+
+        }
+
     </script>
 
     <style>
@@ -520,6 +678,8 @@
 
                         <div class="controls">
                             <textarea type="text" name="remark" id="remark" style="width:236px"></textarea>
+                            <a onclick="openFeatureModal()" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'add_new'"></a>
+
                         </div>
                     </div>
 
@@ -643,6 +803,40 @@
     <div id="approveRadioDiv" style="margin: 20px">
 
     </div>
+</div>
+
+<div id="featuresDiv" style="display:none; ">
+    <table data-toggle="table" class="featuresTable">
+        <thead>
+        <tr>
+            <th></th>
+            <th><input type="text" placeholder="名称" id="searchMc" style="margin-bottom:0px;width: 186px" oninput="searchFeatures()"></th>
+            <th></th>
+            <th><input type="text" placeholder="单位" id="searchDw" style="margin-bottom:0px;width: 122px" oninput="searchFeatures()"></th>
+        </tr>
+        <tr>
+            <th>序号</th>
+            <th>名称</th>
+            <th>数量</th>
+            <th>单位</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody class="featuresBody">
+        <c:forEach items="${features}" var="item" varStatus="status">
+            <tr class="featureRow">
+                <td >${status.index+1}</td>
+                <td class="featureCol">${item.mc}</td>
+                <td class="featureCol">
+                    <input type="text" align="right" placeholder="数量" style="margin-bottom:0px;width: 80px">
+                </td>
+                <td class="featureCol">${item.dw}</td>
+                <td class="featureCol" style="display: none">9</td>
+                <td><button class="btn btn-xs btn-warning" onclick="delFeature(${item.id})">删除</button>  </td>
+            </tr>
+        </c:forEach>
+        </tbody>
+    </table>
 </div>
 
 </html>

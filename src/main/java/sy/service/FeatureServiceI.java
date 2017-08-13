@@ -1,6 +1,8 @@
 package sy.service;
 
 import sy.model.po.Feature;
+import sy.pageModel.DataGrid;
+import sy.pageModel.PageHelper;
 
 import java.util.List;
 
@@ -9,9 +11,11 @@ import java.util.List;
  */
 public interface FeatureServiceI {
 
-    List<Feature> getFeatures(String cid);
+    List<Feature> getFeatures(String cid, String searchMc, String searchDw);
 
     Feature addFeature(String cid, String mc, String dw);
 
     void delFeature(String id);
+
+    DataGrid getFeaturesDataGrid(PageHelper ph, String cid, String keyword);
 }
