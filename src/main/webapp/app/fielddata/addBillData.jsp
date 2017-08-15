@@ -70,21 +70,35 @@
     <%--charset="UTF-8"></script>--%>
     <script type="text/javascript" src="${pageContext.request.contextPath }/jslib/layer-v3.0.3/layer/layer.js"></script>
 
-    <!-- Latest compiled and minified CSS -->
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.css">
+    <%--&lt;%&ndash;&lt;%&ndash;<!-- Latest compiled and minified CSS -->&ndash;%&gt;&ndash;%&gt;--%>
+    <%--<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath }/jslib/bootstrap-table/src/bootstrap-table.css"/>--%>
+    <%--&lt;%&ndash;&lt;%&ndash;<!-- Latest compiled and minified JavaScript -->&ndash;%&gt;&ndash;%&gt;--%>
+    <%--<script type="text/javascript" src="${pageContext.request.contextPath }/jslib/bootstrap-table/src/bootstrap-table.js"></script>--%>
 
-    <!-- Latest compiled and minified JavaScript -->
-    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/bootstrap-table.min.js"></script>
-
-    <!-- Latest compiled and minified Locales -->
-    <script src="//cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.11.1/locale/bootstrap-table-zh-CN.min.js"></script>
+    <%--&lt;%&ndash;&lt;%&ndash;<!-- Latest compiled and minified Locales -->&ndash;%&gt;&ndash;%&gt;--%>
+    <%--<script type="text/javascript" src="${pageContext.request.contextPath }/jslib/bootstrap-table/src/locale/bootstrap-table-zh-CN.js"></script>--%>
 
     <style>
-        .table th, .table td {
-            text-align: center;
-            vertical-align: middle!important;
+        .table_style {
+            width: 100%;
+            margin-bottom: 20px;
+            border:1px solid #EDEDED
+
         }
+
+        .table_style th{height:34px; background:#76b3ff; color:#fff; font-weight: normal;text-align:center;vertical-align:middle;}
+        .table_style td{height:32px; color:#0e0e0e;padding-left:10px;color:#666}
+        .table_style tbody tr{cursor: default}
+        .table_style tbody tr.hover td{background:#e4fbfb}
+        .td_title{font-weight:bold;color:#333}
+
+        .table_style tbody tr:nth-child(even) td,
+        .table_style tbody tr:nth-child(even) th {background-color:#fff;}
+
+        .table_style tbody tr:nth-child(odd) td,
+        .table_style tbody tr:nth-child(odd) th {background-color:#eee;}
     </style>
+
     <script type="text/javascript">
         var flag = 0;
 
@@ -564,7 +578,7 @@
                                 '</td>'+
                                 '<td class="featureCol">' + item.dw + '</td>'+
                                 '<td class="featureCol" style="display: none">9</td>'+
-                                '<td><button class="btn btn-xs btn-warning" onclick="delFeature(' + item.id + ')">删除</button>  </td>'+
+                                '<td><button class="btn btn-xs btn-link" onclick="delFeature(' + item.id + ')">删除</button>  </td>'+
                                 '</tr>'
                         });
                         $('.featuresBody').html(htmlStr);
@@ -587,7 +601,7 @@
                     '<input type="text" align="right" placeholder="单位" style="margin-bottom:0px;width: 50px">'+
                 '</td>'+
                 '<td class="featureCol" style="display: none">0</td>'+
-                '<td><button class="btn btn-xs btn-warning" onclick="this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode)">删除</button>  </td>'+
+                '<td><button class="btn btn-xs btn-link" onclick="this.parentNode.parentNode.parentNode.removeChild(this.parentNode.parentNode)">删除</button>  </td>'+
             '</tr>';
             $('.featuresBody').append(rowHtml);
 
@@ -812,12 +826,18 @@
 </div>
 
 <div id="featuresDiv" style="display:none; ">
-    <table data-toggle="table" class="featuresTable">
+    <div>
+        <input type="text" placeholder="关键字搜索" id="keyword" style="margin-top: 10px" oninput="searchFeatures()">
+    </div>
+    <table class="table_style featuresTable">
         <thead>
-        <tr>
-            <th></th>
-            <th style="padding-top: 5px;padding-bottom: 5px;"><input type="text" placeholder="关键字搜索" id="keyword" style="margin-bottom:0px;" oninput="searchFeatures()"></th>
-        </tr>
+        <%--<tr>--%>
+            <%--<th></th>--%>
+            <%--<th style="padding-top: 5px;padding-bottom: 5px;"><input type="text" placeholder="关键字搜索" id="keyword" style="margin-bottom:0px;" oninput="searchFeatures()"></th>--%>
+            <%--<th></th>--%>
+            <%--<th></th>--%>
+            <%--<th></th>--%>
+        <%--</tr>--%>
         <tr style="height:34px; background:#76b3ff; color:#fff; font-weight: normal">
             <th>序号</th>
             <th>名称</th>
@@ -826,17 +846,17 @@
             <th>操作</th>
         </tr>
         </thead>
-        <tbody class="featuresBody">
+        <tbody class="featuresBody" style="overflow: scroll;">
         <c:forEach items="${features}" var="item" varStatus="status">
             <tr class="featureRow">
                 <td >${status.index+1}</td>
-                <td class="featureCol">${item.mc}</td>
-                <td class="featureCol">
+                <td style="text-align:center;" class="featureCol">${item.mc}</td>
+                <td class="featureCol" style="text-align:center;">
                     <input type="text" placeholder="数量" style="margin-bottom:0px;width: 80px">
                 </td>
-                <td class="featureCol">${item.dw}</td>
+                <td style="text-align:center;" class="featureCol">${item.dw}</td>
                 <td class="featureCol" style="display: none">9</td>
-                <td><button class="btn btn-xs btn-link" onclick="delFeature(${item.id})">删除</button>  </td>
+                <td style="text-align:center;"><button class="btn btn-xs btn-link" onclick="delFeature(${item.id})">删除</button>  </td>
             </tr>
         </c:forEach>
         </tbody>
