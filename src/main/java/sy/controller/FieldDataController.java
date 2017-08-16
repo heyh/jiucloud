@@ -1,7 +1,6 @@
 package sy.controller;
 
 import org.apache.commons.io.FileUtils;
-import org.apache.commons.lang.StringUtils;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,15 +12,8 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import sy.model.Item;
 import sy.model.ParamTrans;
-import sy.model.PushExtra;
-import sy.model.S_department;
 import sy.model.po.*;
-import sy.pageModel.DataGrid;
-import sy.pageModel.FieldData;
-import sy.pageModel.Json;
-import sy.pageModel.PageHelper;
-import sy.pageModel.SessionInfo;
-import sy.pageModel.User;
+import sy.pageModel.*;
 import sy.service.*;
 import sy.util.*;
 
@@ -29,14 +21,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -81,6 +66,9 @@ public class FieldDataController extends BaseController {
 
     @Autowired
     private FeatureServiceI featureService;
+
+    @Autowired
+    private LocationServiceI locationService;
 
     /**
      * 跳转管理页面
@@ -453,11 +441,13 @@ public class FieldDataController extends BaseController {
         String firstLevelParentDepartment = firstLevelParentDepartments.size() > 0 ? firstLevelParentDepartments.get(0) : "";
 
         List<Feature> features = featureService.getFeatures(cid,"");
+        List<Location> locations = locationService.getLocations(cid, "");
         request.setAttribute("maxProjectId", maxProjectId);
         request.setAttribute("maxNeedApproved", maxNeedApproved);
         request.setAttribute("maxApprovedUser", maxApprovedUser);
         request.setAttribute("firstLevelParentDepartment", firstLevelParentDepartment);
         request.setAttribute("features", features);
+        request.setAttribute("locations", locations);
 
         return pageUrl;
     }
@@ -522,6 +512,12 @@ public class FieldDataController extends BaseController {
             if (fieldData.getNeedApproved().equals("1")) {
                 fieldData.setId(fieldId);
                 taskPushService.addFieldTaskPush(fieldData);
+            }
+
+            // 增加设施地点
+            List<Location> hasLocations = locationService.getLocationsByName(fieldData.getCid(), StringUtil.trimToEmpty(fieldData.getSpecifications()).trim());
+            if (hasLocations == null || hasLocations.size()<=0) {
+                locationService.addLocation(fieldData.getCid(), StringUtil.trimToEmpty(fieldData.getSpecifications()).trim());
             }
             j.setObj(fieldId);
             sessionInfo.setLast_cost_id(fieldData.getCostType());

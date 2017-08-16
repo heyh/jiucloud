@@ -275,6 +275,13 @@
         }
 
         $(document).ready(function () {
+
+            $("#specifications").select2({
+                tags: "true",
+                placeholder: "可以模糊查询",
+                allowClear: true
+            });
+
             $("#unit").select2({
                 tags: "true",
                 placeholder: "可以模糊查询",
@@ -665,7 +672,14 @@
                         <label class="control-label" for="specifications">设施名称:</label>
 
                         <div class="controls">
-                            <input type="text" name="specifications" id="specifications" class="easyui-textbox" style="width:236px" onblur="cal()">
+                            <select style="width:250px" name="specifications" id="specifications">
+                                <option></option>
+                                <c:forEach var="location" items="${locations}" varStatus="index">
+                                    <option value="${location.mc}">${location.mc}</option>
+                                </c:forEach>
+                            </select>
+
+                            <%--<input type="text" name="specifications" id="specifications" class="easyui-textbox" style="width:236px">--%>
                         </div>
                     </div>
                     <div class="control-group">
