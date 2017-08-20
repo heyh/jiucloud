@@ -544,4 +544,99 @@ public class analysisController extends BaseController {
         }
         return mv;
     }
+
+	@RequestMapping("/securi_maintenanceDetails")
+	public ModelAndView maintenanceDetails(@RequestParam(value = "month", required = false) String month,
+									HttpServletResponse response, HttpServletRequest request) {
+		ModelAndView mv = new ModelAndView();
+		try {
+			response.setContentType("text/html;charset=utf8");
+			SessionInfo sessionInfo = (SessionInfo) request.getSession().getAttribute(ConfigUtil.getSessionInfoName());
+			String cid = sessionInfo.getCompid();
+
+			List<Object[]> tempMaintenanceDetailsList = fieldDataService.getMaintenanceDetails(cid);
+
+			List<Map<String, Object>> datas = new ArrayList<Map<String, Object>>();
+			Map<String, Object> maintenanceDetails = new HashMap<String, Object>();
+
+			List<Map<String, Object>> billCostInfos = sessionInfo.getCostTypeInfos().get("billCostInfos");
+
+			int i=4;
+			List<PageData> varList = new ArrayList<PageData>();
+			PageData vpd = new PageData();
+			vpd = new PageData();
+			vpd.put("var1", "");
+			vpd.put("var2", "");
+			vpd.put("var3", "");
+			for (Map<String, Object> billCostInfo : billCostInfos) {
+				if (Integer.parseInt(StringUtil.trimToEmpty(billCostInfo.get("isSend"))) == 1) {
+					vpd.put("var" + i++, "");
+				}
+			}
+			varList.add(vpd);
+
+			vpd = new PageData();
+			i=4;
+			vpd.put("var1", "填报单位：南京市市政工程管理处");
+			vpd.put("var2", "");
+			vpd.put("var3", "");
+			for (Map<String, Object> billCostInfo : billCostInfos) {
+				if (Integer.parseInt(StringUtil.trimToEmpty(billCostInfo.get("isSend"))) == 1) {
+					vpd.put("var" + i++, "");
+				}
+			}
+			varList.add(vpd);
+
+			vpd = new PageData();
+			i=4;
+			vpd.put("var1", "序号");
+			vpd.put("var2", "维护日期");
+			vpd.put("var3", "设施名称");
+			for (Map<String, Object> billCostInfo : billCostInfos) {
+				if (Integer.parseInt(StringUtil.trimToEmpty(billCostInfo.get("isSend"))) == 1) {
+					vpd.put("var" + i++, StringUtil.trimToEmpty(billCostInfo.get("costType")));
+				}
+			}
+			varList.add(vpd);
+
+			for (Object[] tempMaintenanceDetails : tempMaintenanceDetailsList) {
+				maintenanceDetails = new HashMap<String, Object>();
+				maintenanceDetails.put("createDate", tempMaintenanceDetails[0]);
+				maintenanceDetails.put("specifications", tempMaintenanceDetails[1]);
+				maintenanceDetails.put(StringUtil.trimToEmpty(tempMaintenanceDetails[2]), tempMaintenanceDetails[3]);
+				datas.add(maintenanceDetails);
+			}
+
+
+			Map<String, Object> dataMap = new HashMap<String, Object>();
+
+			String largeTitleContent = "2017年 8 月维护完成明细表";
+			int cellCount = vpd.size();
+			Map<String, Object> largeTitle = new HashMap<String, Object>();
+			largeTitle.put("largeTitleContent", largeTitleContent);
+			largeTitle.put("cellCount", cellCount);
+			dataMap.put("largeTitle", largeTitle);
+
+			for (int j = 0; j < datas.size(); j++) {
+				vpd = new PageData();
+				vpd.put("var1", StringUtil.trimToEmpty(j + 1));
+				vpd.put("var2", datas.get(j).get("createDate"));
+				vpd.put("var3", datas.get(j).get("specifications"));
+				int _j=4;
+				for (Map<String, Object> billCostInfo : billCostInfos) {
+					if (Integer.parseInt(StringUtil.trimToEmpty(billCostInfo.get("isSend"))) == 1) {
+						vpd.put("var" + _j++ , datas.get(j).get(StringUtil.trimToEmpty(billCostInfo.get("itemCode"))));
+					}
+				}
+				varList.add(vpd);
+			}
+
+			dataMap.put("varList", varList);
+			ObjectExcelView erv = new ObjectExcelView();
+			mv = new ModelAndView(erv, dataMap);
+		} catch (Exception e) {
+			logger.error(e.toString(), e);
+		}
+		return mv;
+	}
 }

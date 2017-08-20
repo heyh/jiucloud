@@ -539,6 +539,18 @@
 		window.open(url);
 	}
 
+	function exportMaintenanceDetailsFun() {
+        var str = '';
+//		str += '&uname=' + $('#uname').val();
+        str += '&keyword=' + $('#keyword').val();
+        str += '&projectName=' + $('#projectName').val();
+        str += '&itemCode=' + $('#itemCode').val();
+        str += '&startTime=' + $('#startTime').val();
+        str += '&endTime=' + $('#endTime').val();
+        var url = "${pageContext.request.contextPath}/analysisController/securi_maintenanceDetails?a=1&source=bill"
+            + str;
+        window.open(url);
+    }
 	//过滤条件查询
 	function searchFun() {
 //		$('#startTime').val($('#startTime').val() + ' 00:00:00');
@@ -817,6 +829,10 @@
 				   data-options="plain:true,iconCls:'backfill'">单价回填</a>
 			</c:when>
 		</c:choose>
+
+		<a href="javascript:void(0);" class="easyui-linkbutton"
+		   data-options="iconCls:'out_new',plain:true"
+		   onclick="exportMaintenanceDetailsFun();">execl导出</a>
 
 
 	</div>
