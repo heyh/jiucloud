@@ -832,7 +832,7 @@
 
 		<a href="javascript:void(0);" class="easyui-linkbutton"
 		   data-options="iconCls:'out_new',plain:true"
-		   onclick="exportMaintenanceDetailsFun();">execl导出</a>
+		   onclick="exportMaintenanceDetailsFun();">维护明细表导出</a>
 
 
 	</div>

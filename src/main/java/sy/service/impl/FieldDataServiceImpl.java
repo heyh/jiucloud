@@ -982,7 +982,11 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
     }
 
     @Override
-    public List<Object[]> getMaintenanceDetails(String cid) {
+    public List<Object[]> getMaintenanceDetails(String cid, String month) {
+
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("cid", cid);
+        params.put("month", month);
 
         String sql = "SELECT\n" +
                 "        a.specifications,\n" +
@@ -991,10 +995,10 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
                 "        sum(count) _count\n" +
                 "      FROM TFieldData a\n" +
                 "      WHERE\n" +
-                "        a.isDelete = '0' AND a.itemCode LIKE '700%' AND a.cid = '179' AND date_format(a.creatTime, '%y-%m') = '17-08'\n" +
+                "        a.isDelete = '0' AND a.itemCode LIKE '700%' AND a.cid = :cid AND date_format(a.creatTime, '%y-%m') = :month \n" +
                 "      GROUP BY a.specifications, date_format(a.creatTime, '%y-%m-%d'), a.itemCode";
 
-        return fieldDataDaoI.findBySql(sql);
+        return fieldDataDaoI.findBySql(sql, params);
     }
 
     @Override

@@ -554,7 +554,7 @@ public class analysisController extends BaseController {
 			SessionInfo sessionInfo = (SessionInfo) request.getSession().getAttribute(ConfigUtil.getSessionInfoName());
 			String cid = sessionInfo.getCompid();
 
-			List<Object[]> tempMaintenanceDetailsList = fieldDataService.getMaintenanceDetails(cid);
+			List<Object[]> tempMaintenanceDetailsList = fieldDataService.getMaintenanceDetails(cid, "17-08");
 
 			List<Map<String, Object>> datas = new ArrayList<Map<String, Object>>();
 			Map<String, Object> maintenanceDetails = new HashMap<String, Object>();
