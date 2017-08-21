@@ -565,17 +565,6 @@ public class analysisController extends BaseController {
 			List<PageData> varList = new ArrayList<PageData>();
 			PageData vpd = new PageData();
 			vpd = new PageData();
-			vpd.put("var1", "");
-			vpd.put("var2", "");
-			vpd.put("var3", "");
-			for (Map<String, Object> billCostInfo : billCostInfos) {
-				if (Integer.parseInt(StringUtil.trimToEmpty(billCostInfo.get("isSend"))) == 1) {
-					vpd.put("var" + i++, "");
-				}
-			}
-			varList.add(vpd);
-
-			vpd = new PageData();
 			i=4;
 			vpd.put("var1", "填报单位：南京市市政工程管理处");
 			vpd.put("var2", "");
@@ -631,8 +620,22 @@ public class analysisController extends BaseController {
 				varList.add(vpd);
 			}
 
+            vpd = new PageData();
+			vpd.put("var1", "total");
+            vpd.put("var2", "");
+            vpd.put("var3", "");
+            for (int j=4; j<=varList.get(0).size(); j++) {
+                Double total = 0.00;
+                for (int _j=3; _j<varList.size(); _j++) {
+                    String val = StringUtil.trimToEmpty(varList.get(_j).get("var" + j));
+                    total += val.equals("")? 0.00 : Double.parseDouble(val);
+                }
+                vpd.put("var" + j, total);
+            }
+            varList.add(vpd);
+
 			dataMap.put("varList", varList);
-			ObjectExcelView erv = new ObjectExcelView();
+            ObjectExcelViewSpecial erv = new ObjectExcelViewSpecial();
 			mv = new ModelAndView(erv, dataMap);
 		} catch (Exception e) {
 			logger.error(e.toString(), e);
