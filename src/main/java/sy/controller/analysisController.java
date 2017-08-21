@@ -599,7 +599,7 @@ public class analysisController extends BaseController {
 
 			Map<String, Object> dataMap = new HashMap<String, Object>();
 
-			String largeTitleContent = "2017年 8 月维护完成明细表";
+			String largeTitleContent = month + " 维护完成明细表";
 			int cellCount = vpd.size();
 			Map<String, Object> largeTitle = new HashMap<String, Object>();
 			largeTitle.put("largeTitleContent", largeTitleContent);
