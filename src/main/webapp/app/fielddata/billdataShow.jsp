@@ -52,8 +52,9 @@
 	<link rel="stylesheet" type="text/css"
 		  href="${pageContext.request.contextPath }/jslib/select2/dist/css/select2.min.css"/>
 	<script type="text/javascript" src="${pageContext.request.contextPath }/jslib/select2/dist/js/select2.min.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath }/jslib/layer-v3.0.3/layer/layer.js"></script>
 
-<script type="text/javascript">
+	<script type="text/javascript">
 	var dataGrid;
 	$(function() {
 		dataGrid = $('#dataGrid')
@@ -540,16 +541,23 @@
 	}
 
 	function exportMaintenanceDetailsFun() {
-        var str = '';
-//		str += '&uname=' + $('#uname').val();
-        str += '&keyword=' + $('#keyword').val();
-        str += '&projectName=' + $('#projectName').val();
-        str += '&itemCode=' + $('#itemCode').val();
-        str += '&startTime=' + $('#startTime').val();
-        str += '&endTime=' + $('#endTime').val();
-        var url = "${pageContext.request.contextPath}/analysisController/securi_maintenanceDetails?a=1&source=bill"
-            + str;
-        window.open(url);
+
+        layer.open({
+            type: 1,
+            title: '月份选择',
+            closeBtn: 2,
+            btn:['导出'],
+            yes: function(index, layero){
+                var params = 'month=' +$('#month').val();
+                var url = "${pageContext.request.contextPath}/analysisController/securi_maintenanceDetails?" + params;
+                window.open(url);
+                layer.close(index); //如果设定了yes回调，需进行手工关闭
+            },
+            shadeClose: false,
+            content: $('#monthDiv') //这里content是一个DOM，注意：最好该元素要存放在body最外层，否则可能被其它的相对元素所影响
+        });
+
+
     }
 	//过滤条件查询
 	function searchFun() {
@@ -843,4 +851,8 @@
 		<div onclick="editFun();" data-options="iconCls:'pencil'">编辑</div>
 	</div>
 </body>
+
+	<div id="monthDiv" style="display:none; width: 200px;height:50px;text-align:center; vertical-align:middle;">
+		<input style="margin-top: 10%" class="span2" name="month" id='month' placeholder="点击选择月份" onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM'})" readonly="readonly" value='${first }' />
+	</div>
 </html>
