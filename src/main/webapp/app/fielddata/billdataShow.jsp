@@ -57,6 +57,7 @@
 	<script type="text/javascript">
 	var dataGrid;
 	$(function() {
+
 		dataGrid = $('#dataGrid')
 				.datagrid(
 						{
@@ -540,8 +541,11 @@
 		window.open(url);
 	}
 
-	function exportMaintenanceDetailsFun() {
 
+
+
+
+    function exportMaintenanceDetailsFun() {
         layer.open({
             type: 1,
             title: '月份选择',
@@ -556,8 +560,6 @@
             shadeClose: false,
             content: $('#monthDiv') //这里content是一个DOM，注意：最好该元素要存放在body最外层，否则可能被其它的相对元素所影响
         });
-
-
     }
 	//过滤条件查询
 	function searchFun() {
@@ -853,6 +855,6 @@
 </body>
 
 	<div id="monthDiv" style="display:none; width: 200px;height:50px;text-align:center; vertical-align:middle;">
-		<input style="margin-top: 10%" class="span2" name="month" id='month' placeholder="点击选择月份" onfocus="WdatePicker({readOnly:true,dateFmt:'yyyy-MM'})" readonly="readonly" value='${first }' />
+		<input style="margin-top: 10%" class="Wdate span2" name="month" id='month' placeholder="点击选择月份" onclick="WdatePicker({dateFmt:'yyyy-MM'})" value='${month}' />
 	</div>
 </html>

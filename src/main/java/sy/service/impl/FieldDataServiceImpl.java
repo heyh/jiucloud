@@ -990,13 +990,13 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
 
         String sql = "SELECT\n" +
                 "        a.specifications,\n" +
-                "        date_format(a.creatTime, '%y-%m-%d') createDate,\n" +
+                "        date_format(a.creatTime, '%Y-%m-%d') createDate,\n" +
                 "        a.itemCode,\n" +
                 "        sum(count) _count\n" +
                 "      FROM TFieldData a\n" +
                 "      WHERE\n" +
-                "        a.isDelete = '0' AND a.itemCode LIKE '700%' AND a.cid = :cid AND date_format(a.creatTime, '%y-%m') = :month \n" +
-                "      GROUP BY a.specifications, date_format(a.creatTime, '%y-%m-%d'), a.itemCode";
+                "        a.isDelete = '0' AND a.itemCode LIKE '700%' AND a.cid = :cid AND date_format(a.creatTime, '%Y-%m') = :month \n" +
+                "      GROUP BY a.specifications, date_format(a.creatTime, '%Y-%m-%d'), a.itemCode";
 
         return fieldDataDaoI.findBySql(sql, params);
     }

@@ -29,6 +29,7 @@ public class UtilDate {
 			"yyyy-MM-dd hh:mm:ss");
 	static SimpleDateFormat sdateFormat = new SimpleDateFormat("yyyy-MM-dd");
 
+	public static final String month = "yyyy-MM";
 	/**
 	 * 返回系统当前时间(精确到毫秒),作为一个唯一的订单编号
 	 * 
@@ -54,6 +55,16 @@ public class UtilDate {
 	public static String getDateFormatter() {
 		Date date = new Date();
 		DateFormat df = new SimpleDateFormat(simple);
+		return df.format(date);
+	}
+
+	/**
+	 * 获取当前月
+	 * @return
+	 */
+	public static String getCurrentMonth() {
+		Date date = new Date();
+		DateFormat df = new SimpleDateFormat(month);
 		return df.format(date);
 	}
 

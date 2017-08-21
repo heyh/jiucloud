@@ -98,6 +98,7 @@ public class FieldDataController extends BaseController {
     public String billDataShow(HttpServletRequest req) {
         req.setAttribute("first", UtilDate.getshortFirst());
         req.setAttribute("last", UtilDate.getshortLast());
+        req.setAttribute("month", UtilDate.getCurrentMonth());
         return "/app/fielddata/billdataShow";
     }
 
