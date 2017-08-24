@@ -143,6 +143,11 @@
 										}
 									},
 									{
+										field : 'payAmount',
+										title : '实付金额',
+										width : 100
+									},
+									{
 										field : 'specifications',
 										title : '规格型号',
 										width : 200

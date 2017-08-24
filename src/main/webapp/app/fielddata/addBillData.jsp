@@ -141,9 +141,8 @@
             var projectName = document.getElementById("projectName").value;
             var costType = $("#costType").combotree("getValue")
             var dataName = document.getElementById("dataName").value;
-            var price = document.getElementById("price").value;
-            price = (price * 1).toFixed(2);
-            var count = document.getElementById("count").value;
+            var price = $('#price').numberbox('getValue');
+            var count = $('#count').numberbox('getValue');
             var specifications = document.getElementById("specifications").value;
             var remark = document.getElementById("remark").value;
             var unit = document.getElementById("unit").value;
@@ -153,6 +152,8 @@
             var currentApprovedUser = document.getElementById("currentApprovedUser").value;
             var section = $('#section').val();
             var supplier = $('#supplier').val();
+            var payAmount = $('#payAmount').numberbox('getValue');
+
 
             if (projectName == '') {
                 alert("项目名称不能为空");
@@ -211,7 +212,8 @@
                 'needApproved': needApproved,
                 'currentApprovedUser': currentApprovedUser,
                 'section': section,
-                'supplier': supplier
+                'supplier': supplier,
+                'payAmount': payAmount
             }
 
             $.ajax(cfg);
@@ -219,11 +221,12 @@
         }
 
         function cal() {
-            var price = document.getElementById("price").value;
-            var count = document.getElementById("count").value;
+            var price = $('#price').numberbox('getValue');
+            var count = $('#count').numberbox('getValue');
+            var total = (price * count).toFixed(2);
             if (price != '' && count != '') {
-                document.getElementById("sumprice").value = (price * count)
-                        .toFixed(2);
+                $('#sumprice').numberbox('setValue', total);
+                $('#payAmount').numberbox('setValue', total);
             }
         }
 
@@ -708,6 +711,13 @@
                         </div>
                     </div>
                     <div class="control-group">
+                        <label class="control-label" for="payAmount">实付金额:</label>
+
+                        <div class="controls">
+                            <input type="text" name="payAmount" id="payAmount" class="easyui-numberbox" precision="2" style="width:236px">
+                        </div>
+                    </div>
+                    <div class="control-group">
                         <label class="control-label" for="remark">项目特征:</label>
 
                         <div class="controls">
@@ -745,11 +755,11 @@
                             <input type="text" name="count" id="count" class="easyui-numberbox" precision="4" style="width:236px" onblur="cal()">
                         </div>
                     </div>
-                    <div class="control-group" style="display: none">
-                        <label class="control-label" for="sumprice">金额:</label>
+                    <div class="control-group">
+                        <label class="control-label" for="sumprice">应付金额:</label>
 
                         <div class="controls">
-                            <input type="text" name="sumprice" id="sumprice" class="easyui-numberbox" precision="2" style="width:236px" onblur="cal()">
+                            <input type="text" name="sumprice" id="sumprice" class="easyui-numberbox" precision="2" style="width:236px" onblur="cal()" readonly>
                         </div>
                     </div>
                     <div class="control-group" id="supplierDiv" style="display: none;">

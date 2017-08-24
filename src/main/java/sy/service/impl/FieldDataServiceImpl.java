@@ -121,6 +121,7 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
             }
             f.setPrice_ys(tem.getPrice_ys());
             f.setPrice_sj(tem.getPrice_sj());
+            f.setPayAmount(tem.getPayAmount());
             list.add(f);
         }
         // 0 不需要审批； 1 需要审批（显示未审批）
@@ -419,6 +420,8 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
                 f.setProjectName(project.getProName());
                 f.setIsLock(project.getIsLock());
             }
+
+            f.setPayAmount(tem.getPayAmount());
             list.add(f);
         }
         // 0 不需要审批； 1 需要审批（显示未审批）
@@ -507,6 +510,8 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
                 f.setProjectName(project.getProName());
                 f.setIsLock(project.getIsLock());
             }
+
+            f.setPayAmount(tem.getPayAmount());
             list.add(f);
         }
         // 0 不需要审批； 1 需要审批（显示未审批）
@@ -596,6 +601,8 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
                 f.setProjectName(project.getProName());
                 f.setIsLock(project.getIsLock());
             }
+
+            f.setPayAmount(tem.getPayAmount());
             list.add(f);
         }
         // 0 不需要审批； 1 需要审批（显示未审批）
@@ -687,6 +694,7 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
                 f.setProjectName(project.getProName());
                 f.setIsLock(project.getIsLock());
             }
+            f.setPayAmount(tem.getPayAmount());
             list.add(f);
         }
         // 0 不需要审批； 1 需要审批（显示未审批）
@@ -1065,6 +1073,7 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
                 f.setProjectName(project.getProName());
                 f.setIsLock(project.getIsLock());
             }
+            f.setPayAmount(tem.getPayAmount());
             list.add(f);
         }
         // 0 不需要审批； 1 需要审批（显示未审批）

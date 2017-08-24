@@ -120,6 +120,11 @@
 										width : 100
 									},
 									{
+										field : 'payAmount',
+										title : '实付金额',
+										width : 100
+									},
+									{
 										field : 'price_ys',
 										title : '预算单价',
 										width : 100

@@ -59,6 +59,16 @@ public class FieldData {
     private String price_ys;
     private String price_sj;
 
+    private String payAmount;
+
+	public String getPayAmount() {
+		return payAmount;
+	}
+
+	public void setPayAmount(String payAmount) {
+		this.payAmount = payAmount;
+	}
+
 	public String getPrice_ys() {
 		return price_ys;
 	}

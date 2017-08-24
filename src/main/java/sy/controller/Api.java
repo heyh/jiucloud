@@ -351,6 +351,7 @@ public class Api extends BaseController {
                                     @RequestParam(value = "section", required = false) String section,
                                     @RequestParam(value = "supplier", required = false) String supplier,
                                     @RequestParam(value = "relId", required = false) String relId,
+                                    @RequestParam(value = "payAmount", required = false) String payAmount,
                                     HttpServletRequest request) {
 
         if (companyName == null || companyName.equals("")) {
@@ -369,7 +370,7 @@ public class Api extends BaseController {
 
         TFieldData fieldData = new TFieldData(projectName, uid, new Date(),
                 costType, dataName, price, companyName, count, specifications,
-                remark, cid, uname, unit, needApproved, approvedUser, currentApprovedUser, itemCode, "", section, supplier, relId, "", "");
+                remark, cid, uname, unit, needApproved, approvedUser, currentApprovedUser, itemCode, "", section, supplier, relId, "", "", payAmount);
         try {
             fieldDataService.add(fieldData);
         } catch (Exception e) {
@@ -399,6 +400,7 @@ public class Api extends BaseController {
                                     @RequestParam(value = "needApproved", required = false) String needApproved,
                                     @RequestParam(value = "section", required = false) String section,
                                     @RequestParam(value = "supplier", required = false) String supplier,
+                                    @RequestParam(value = "payAmount", required = false) String payAmount,
                                     HttpServletRequest request, HttpServletResponse response) {
 
         TFieldData fieldData = fieldDataService.detail(id);
@@ -441,6 +443,10 @@ public class Api extends BaseController {
         }
         if (supplier != null && !supplier.equals("") && !supplier.equals(fieldData.getSupplier())) {
             fieldData.setSupplier(supplier);
+        }
+
+        if (payAmount != null && !payAmount.equals("") && !payAmount.equals(fieldData.getPayAmount())) {
+            fieldData.setPayAmount(payAmount);
         }
 
         String approvedUser = "";
