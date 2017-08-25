@@ -546,12 +546,6 @@ public class FieldDataController extends BaseController {
     public Json updateFieldData(TFieldData fieldData, HttpSession session) {
         Json j = new Json();
         try {
-            Cost tem = costServiceI.findById(fieldData.getCostType());
-
-            if (!Constant.isSameDate(fieldData.getCreatTime(), new Date()) && !fieldData.getNeedApproved().equals("9")) {
-                j.setMsg("只能修改当天录入的信息!!");
-                return j;
-            }
 
             // add by heyh begin 修改后重新设置审批状态和当前审批人
             if (fieldData.getNeedApproved() != null && !fieldData.getNeedApproved().equals("0")) {
