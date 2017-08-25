@@ -315,7 +315,7 @@ public class AnalysisServiceImpl implements AnalysisServiceI {
     @Override
     public List<Object[]> getAllFee(String cid, List<Integer> ugroup) {
         String hql = "select base.projectId, base.proName, base.price_id, base.name, if (isnull(sum(base.money)), 0, sum(base.money)) from (\n" +
-                "SELECT  a.ID projectId, a.proName, a.price_id, a.name, a.costType, a.itemCode, payAmount money from \n" +
+				"SELECT  a.ID projectId, a.proName, a.price_id, a.name, a.costType, a.itemCode, f.count * f.price money from \n" +
                 "(SELECT p. NAME, pc.price_id, pc.cost_id, c.costType, c.itemCode, proj.proName, proj.ID\n" +
                 "FROM TPrice p, TPrice_Cost pc, TCost c, tgc_Project proj\n" +
                 "WHERE p.cid = " + cid + "\n" +
