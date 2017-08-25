@@ -152,7 +152,7 @@
             var currentApprovedUser = document.getElementById("currentApprovedUser").value;
             var section = $('#section').val();
             var supplier = $('#supplier').val();
-            var payAmount = $('#payAmount').numberbox('getValue');
+//            var payAmount = $('#payAmount').numberbox('getValue');
 
 
             if (projectName == '') {
@@ -212,8 +212,8 @@
                 'needApproved': needApproved,
                 'currentApprovedUser': currentApprovedUser,
                 'section': section,
-                'supplier': supplier,
-                'payAmount': payAmount
+                'supplier': supplier
+//                'payAmount': payAmount
             }
 
             $.ajax(cfg);
@@ -226,7 +226,7 @@
             var total = (price * count).toFixed(2);
             if (price != '' && count != '') {
                 $('#sumprice').numberbox('setValue', total);
-                $('#payAmount').numberbox('setValue', total);
+//                $('#payAmount').numberbox('setValue', total);
             }
         }
 
@@ -710,13 +710,13 @@
                             <input type="text" name="price" id="price" class="easyui-numberbox" precision="2" style="width:236px" onblur="cal()">
                         </div>
                     </div>
-                    <div class="control-group">
-                        <label class="control-label" for="payAmount">实付金额:</label>
+                    <%--<div class="control-group">--%>
+                        <%--<label class="control-label" for="payAmount">实付金额:</label>--%>
 
-                        <div class="controls">
-                            <input type="text" name="payAmount" id="payAmount" class="easyui-numberbox" precision="2" style="width:236px">
-                        </div>
-                    </div>
+                        <%--<div class="controls">--%>
+                            <%--<input type="text" name="payAmount" id="payAmount" class="easyui-numberbox" precision="2" style="width:236px">--%>
+                        <%--</div>--%>
+                    <%--</div>--%>
                     <div class="control-group">
                         <label class="control-label" for="remark">项目特征:</label>
 
@@ -755,13 +755,13 @@
                             <input type="text" name="count" id="count" class="easyui-numberbox" precision="4" style="width:236px" onblur="cal()">
                         </div>
                     </div>
-                    <div class="control-group">
-                        <label class="control-label" for="sumprice">应付金额:</label>
+                    <%--<div class="control-group">--%>
+                        <%--<label class="control-label" for="sumprice">金额:</label>--%>
 
-                        <div class="controls">
-                            <input type="text" name="sumprice" id="sumprice" class="easyui-numberbox" precision="2" style="width:236px" onblur="cal()" readonly>
-                        </div>
-                    </div>
+                        <%--<div class="controls">--%>
+                            <%--<input type="text" name="sumprice" id="sumprice" class="easyui-numberbox" precision="2" style="width:236px" onblur="cal()" readonly>--%>
+                        <%--</div>--%>
+                    <%--</div>--%>
                     <div class="control-group" id="supplierDiv" style="display: none;">
                         <label class="control-label" for="supplier">供应商:</label>
 

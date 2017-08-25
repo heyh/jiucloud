@@ -183,12 +183,12 @@
 						placeholder="数量" class="easyui-validatebox span2"
 						data-options="required:true,precision:4" value="${tfielddata.count}"></td>
 				</tr>
-				<tr>
-					<td style="width: 80px;">实付金额</td>
-					<td><input name="payAmount" style="width: 250px;" type="text"
-							   placeholder="实付金额" class="easyui-validatebox span2"
-							   data-options="required:true,precision:4" value="${tfielddata.payAmount}"></td>
-				</tr>
+				<%--<tr>--%>
+					<%--<td style="width: 80px;">实付金额</td>--%>
+					<%--<td><input name="payAmount" style="width: 250px;" type="text"--%>
+							   <%--placeholder="实付金额" class="easyui-validatebox span2"--%>
+							   <%--data-options="required:true,precision:4" value="${tfielddata.payAmount}"></td>--%>
+				<%--</tr>--%>
 				<tr>
 					<td style="width: 80px;">项目特征</td>
 					<td><input name="remark" style="width: 250px;" type="text"
