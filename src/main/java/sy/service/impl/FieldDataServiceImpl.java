@@ -831,9 +831,43 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
         param.put("cid", cid);
         param.put("statDate", statDate);
         String uids = StringUtils.join(ugroup, ",");
+//        String sql1 = " SELECT a.itemCode, " +
+//                " SUM(if(a.count > 0, a.count * IF(ISNULL(a.price) or a.price='', 0, a.price), 0)) as inComeMonthly, " +
+//                " ABS(SUM(if(a.count < 0, a.count * IF(ISNULL(a.price) or a.price='', 0, a.price), 0))) as consumeMonthly " +
+//                " FROM TFieldData a " +
+//                " WHERE a.cid = :cid  " +
+//                " AND a.isDelete = '0' " +
+//                " AND LEFT(a.itemCode , 3) = '800'  " +
+//                " AND date_format(a.creatTime , '%Y-%m') = :statDate " +
+//                " AND uid in (" + uids + ")" +
+//                " GROUP BY a.itemCode ";
+//        List<Object[]> list1 = fieldDataDaoI.findBySql(sql1, param);
+//
+//        String sql2 = " SELECT a.itemCode, " +
+//                " SUM(a.count * IF(ISNULL(a.price) or a.price='', 0, a.price)) as monthEndCarry " +
+//                " FROM TFieldData a " +
+//                " WHERE a.cid = :cid " +
+//                " AND a.isDelete = '0' " +
+//                " AND LEFT(a.itemCode , 3) = '800' " +
+//                " AND date_format(a.creatTime , '%Y-%m') <= :statDate " +
+//                " AND uid in (" + uids + ")" +
+//                " GROUP BY a.itemCode";
+//        List<Object[]> list2 = fieldDataDaoI.findBySql(sql2, param);
+//
+//
+//        String sql3 = " SELECT a.itemCode, " +
+//                " SUM(a.count * IF(ISNULL(a.price) or a.price='', 0, a.price)) as lastMonthCarryover " +
+//                " FROM TFieldData a " +
+//                " WHERE a.cid = :cid " +
+//                " AND a.isDelete = '0' " +
+//                " AND LEFT(a.itemCode , 3) = '800' " +
+//                " AND date_format(a.creatTime , '%Y-%m') < :statDate " +
+//                " AND uid in (" + uids + ")" +
+//                " GROUP BY a.itemCode";
+
         String sql1 = " SELECT a.itemCode, " +
-                " SUM(if(a.count > 0, a.count * IF(ISNULL(a.price) or a.price='', 0, a.price), 0)) as inComeMonthly, " +
-                " ABS(SUM(if(a.count < 0, a.count * IF(ISNULL(a.price) or a.price='', 0, a.price), 0))) as consumeMonthly " +
+                " SUM(if(a.count > 0, a.payAmount, 0)) as inComeMonthly, " +
+                " ABS(SUM(if(a.count < 0, a.payAmount, 0))) as consumeMonthly " +
                 " FROM TFieldData a " +
                 " WHERE a.cid = :cid  " +
                 " AND a.isDelete = '0' " +
@@ -844,7 +878,7 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
         List<Object[]> list1 = fieldDataDaoI.findBySql(sql1, param);
 
         String sql2 = " SELECT a.itemCode, " +
-                " SUM(a.count * IF(ISNULL(a.price) or a.price='', 0, a.price)) as monthEndCarry " +
+                " SUM(a.payAmount) as monthEndCarry " +
                 " FROM TFieldData a " +
                 " WHERE a.cid = :cid " +
                 " AND a.isDelete = '0' " +
@@ -856,7 +890,7 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
 
 
         String sql3 = " SELECT a.itemCode, " +
-                " SUM(a.count * IF(ISNULL(a.price) or a.price='', 0, a.price)) as lastMonthCarryover " +
+                " SUM(a.payAmount) as lastMonthCarryover " +
                 " FROM TFieldData a " +
                 " WHERE a.cid = :cid " +
                 " AND a.isDelete = '0' " +
@@ -864,6 +898,8 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
                 " AND date_format(a.creatTime , '%Y-%m') < :statDate " +
                 " AND uid in (" + uids + ")" +
                 " GROUP BY a.itemCode";
+
+
         List<Object[]> list3 = fieldDataDaoI.findBySql(sql3, param);
 
         List<Map<String, Object>> materialStatInfos = new ArrayList<Map<String, Object>>();
