@@ -29,9 +29,9 @@ public class ObjectExcelViewSpecial extends AbstractExcelView {
 		headerStyle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
 		HSSFFont headerFont = workbook.createFont();	//标题字体
 		headerFont.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
-		headerFont.setFontHeightInPoints((short)30);
+		headerFont.setFontHeightInPoints((short)20);
 		headerStyle.setFont(headerFont);
-		short width = 30, headerHeight=25*40, contentHeight=25*20;
+		short width = 15, headerHeight=25*20, contentHeight=25*15;
 		sheet.setDefaultColumnWidth(width);
 
 		headerStyle.setBorderLeft(HSSFCellStyle.BORDER_THIN);
@@ -66,13 +66,25 @@ public class ObjectExcelViewSpecial extends AbstractExcelView {
 		HSSFCellStyle contentStyle = workbook.createCellStyle(); //内容样式
 		HSSFFont contentFont = workbook.createFont();	//标题字体
 		contentFont.setBoldweight((short)200);
-		contentFont.setFontHeightInPoints((short)15);
+		contentFont.setFontHeightInPoints((short)10);
 		contentStyle.setFont(contentFont);
 		contentStyle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
 		contentStyle.setBorderLeft(HSSFCellStyle.BORDER_THIN);
 		contentStyle.setBorderRight(HSSFCellStyle.BORDER_THIN);
 		contentStyle.setBorderTop(HSSFCellStyle.BORDER_THIN);
 		contentStyle.setBorderBottom(HSSFCellStyle.BORDER_THIN);
+
+		// 合计
+		HSSFCellStyle totalStyle = workbook.createCellStyle(); //内容样式
+		HSSFFont totalFont = workbook.createFont();	//标题字体
+		totalFont.setBoldweight(HSSFFont.BOLDWEIGHT_BOLD);
+		totalFont.setFontHeightInPoints((short)15);
+		totalStyle.setFont(totalFont);
+		totalStyle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
+		totalStyle.setBorderLeft(HSSFCellStyle.BORDER_THIN);
+		totalStyle.setBorderRight(HSSFCellStyle.BORDER_THIN);
+		totalStyle.setBorderTop(HSSFCellStyle.BORDER_THIN);
+		totalStyle.setBorderBottom(HSSFCellStyle.BORDER_THIN);
 
 		List<PageData> varList = (List<PageData>) model.get("varList");
 		int varCount = varList.size();
@@ -82,7 +94,7 @@ public class ObjectExcelViewSpecial extends AbstractExcelView {
 				String varstr = StringUtil.trimToEmpty(vpd.get("var"+(j+1)));
 				if (varstr.equals("total")) {
 					cell = getCell(sheet, i+1, 0);
-					cell.setCellStyle(contentStyle);
+					cell.setCellStyle(totalStyle);
 					setText(cell,"合计");
 					sheet.addMergedRegion(new Region(i+1, (short) (0), i+1, (short) (2)));
 				} else {
