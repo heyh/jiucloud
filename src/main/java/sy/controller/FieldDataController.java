@@ -544,16 +544,20 @@ public class FieldDataController extends BaseController {
     @RequestMapping("/updatefieldData")
     @ResponseBody
     public Json updateFieldData(TFieldData fieldData, HttpSession session) {
+        SessionInfo sessionInfo = (SessionInfo) session.getAttribute(ConfigUtil.getSessionInfoName());
+        boolean hasReadEditRight = sessionInfo.getRightList().contains("15") || 0 == sessionInfo.getParentId();
         Json j = new Json();
         try {
-
-            // add by heyh begin 修改后重新设置审批状态和当前审批人
-            if (fieldData.getNeedApproved() != null && !fieldData.getNeedApproved().equals("0")) {
-                fieldData.setNeedApproved("1");
-                if (!StringUtil.trimToEmpty(fieldData.getApprovedUser()).equals("")) {
-                    String[] approvedUserList = fieldData.getApprovedUser().split(",");
-                    fieldData.setApprovedUser(approvedUserList[0]);
-                    fieldData.setCurrentApprovedUser(approvedUserList[0]);
+            // 无权限修改，修改后要重置审批状态
+            if (!hasReadEditRight && fieldData.getItemCode().substring(0, 3).equals("800")) {
+                // add by heyh begin 修改后重新设置审批状态和当前审批人
+                if (fieldData.getNeedApproved() != null && !fieldData.getNeedApproved().equals("0")) {
+                    fieldData.setNeedApproved("1");
+                    if (!StringUtil.trimToEmpty(fieldData.getApprovedUser()).equals("")) {
+                        String[] approvedUserList = fieldData.getApprovedUser().split(",");
+                        fieldData.setApprovedUser(approvedUserList[0]);
+                        fieldData.setCurrentApprovedUser(approvedUserList[0]);
+                    }
                 }
             }
             // add by heyh end
