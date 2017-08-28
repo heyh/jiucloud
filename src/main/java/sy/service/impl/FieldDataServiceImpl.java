@@ -1033,8 +1033,8 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
         params.put("month", month);
 
         String sql = "SELECT\n" +
-                "        a.specifications,\n" +
                 "        date_format(a.creatTime, '%Y-%m-%d') createDate,\n" +
+                "        a.specifications,\n" +
                 "        a.itemCode,\n" +
                 "        sum(count) _count\n" +
                 "      FROM TFieldData a\n" +
