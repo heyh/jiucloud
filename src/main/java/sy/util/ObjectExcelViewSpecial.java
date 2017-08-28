@@ -23,7 +23,8 @@ public class ObjectExcelViewSpecial extends AbstractExcelView {
 		response.setContentType("application/octet-stream");
 		response.setHeader("Content-Disposition", "attachment;filename="+filename+".xls");
 		sheet = workbook.createSheet("sheet1");
-		
+
+		// 标题
 		HSSFCellStyle headerStyle = workbook.createCellStyle(); //标题样式
 		headerStyle.setAlignment(HSSFCellStyle.ALIGN_CENTER);
 		headerStyle.setVerticalAlignment(HSSFCellStyle.VERTICAL_CENTER);
@@ -39,28 +40,17 @@ public class ObjectExcelViewSpecial extends AbstractExcelView {
 		headerStyle.setBorderTop(HSSFCellStyle.BORDER_THIN);
 		headerStyle.setBorderBottom(HSSFCellStyle.BORDER_THIN);
 
-		// 标题
-		Map<String, Object> largeTitle = (Map<String, Object>) model.get("largeTitle");
-		if (largeTitle != null) {
-			String largeTitleContent = StringUtil.trimToEmpty(largeTitle.get("largeTitleContent"));
-			int cellCount = Integer.parseInt(StringUtil.trimToEmpty(largeTitle.get("cellCount")));
-			cell = getCell(sheet, 0, 0);
-			cell.setCellStyle(headerStyle);
-			setText(cell, largeTitleContent);
-			sheet.addMergedRegion(new Region(0, (short) (0), 0, (short) (cellCount - 1)));
-		}
-
-		// 表头
-		List<String> titles = (List<String>) model.get("titles");
-		if (titles != null && titles.size()>0) {
-			for (int i = 0; i < titles.size(); i++) { //表头
-				String title = titles.get(i);
-				cell = getCell(sheet, 1, i);
-				cell.setCellStyle(headerStyle);
-				setText(cell, title);
-			}
-			sheet.getRow(0).setHeight(headerHeight);
-		}
+		// 填报单位
+		HSSFCellStyle companyStyle = workbook.createCellStyle(); //内容样式
+		HSSFFont companyFont = workbook.createFont();	//标题字体
+		companyFont.setBoldweight((short)200);
+		companyFont.setFontHeightInPoints((short)10);
+		companyStyle.setFont(companyFont);
+		companyStyle.setAlignment(HSSFCellStyle.ALIGN_LEFT);
+		companyStyle.setBorderLeft(HSSFCellStyle.BORDER_THIN);
+		companyStyle.setBorderRight(HSSFCellStyle.BORDER_THIN);
+		companyStyle.setBorderTop(HSSFCellStyle.BORDER_THIN);
+		companyStyle.setBorderBottom(HSSFCellStyle.BORDER_THIN);
 
 		// 内容
 		HSSFCellStyle contentStyle = workbook.createCellStyle(); //内容样式
@@ -86,25 +76,110 @@ public class ObjectExcelViewSpecial extends AbstractExcelView {
 		totalStyle.setBorderTop(HSSFCellStyle.BORDER_THIN);
 		totalStyle.setBorderBottom(HSSFCellStyle.BORDER_THIN);
 
+
+		// 标题
+		Map<String, Object> largeTitle = (Map<String, Object>) model.get("largeTitle");
+		if (largeTitle != null) {
+			String largeTitleContent = StringUtil.trimToEmpty(largeTitle.get("largeTitleContent"));
+			int cellCount = Integer.parseInt(StringUtil.trimToEmpty(largeTitle.get("cellCount")));
+			cell = getCell(sheet, 0, 0);
+			cell.setCellStyle(headerStyle);
+			setText(cell, largeTitleContent);
+			sheet.addMergedRegion(new Region(0, (short) (0), 0, (short) (cellCount - 1)));
+		}
+
+		// 小标题
+		List<Map<String, Object>> littleTitleList = (List<Map<String, Object>>) model.get("littleTitleList");
+		if (littleTitleList != null && littleTitleList.size()>0) {
+
+			cell = getCell(sheet, 1, 0);
+			cell.setCellStyle(contentStyle);
+			setText(cell,"");
+
+			cell = getCell(sheet, 1, 1);
+			cell.setCellStyle(contentStyle);
+			setText(cell,"");
+
+			cell = getCell(sheet, 1, 2);
+			cell.setCellStyle(contentStyle);
+			setText(cell,"");
+
+			int col = 3;
+			for (Map<String, Object> littleTitle : littleTitleList) {
+				String text = StringUtil.trimToEmpty(littleTitle.get("title"));
+				int cellCount = Integer.parseInt(StringUtil.trimToEmpty(littleTitle.get("count")));
+				cell = getCell(sheet, 1, col);
+				cell.setCellStyle(totalStyle);
+				setText(cell, text);
+
+				int colTo = col + cellCount - 1;
+				sheet.addMergedRegion(new Region(1, (short)col, 1, (short)colTo));
+				col += cellCount;
+			}
+			sheet.getRow(1).setHeight(contentHeight);
+		}
+
+		// 表头
+		List<String> titles = (List<String>) model.get("titles");
+		if (titles != null && titles.size()>0) {
+			for (int i = 0; i < titles.size(); i++) { //表头
+				String title = titles.get(i);
+				cell = getCell(sheet, 1, i);
+				cell.setCellStyle(headerStyle);
+				setText(cell, title);
+			}
+			sheet.getRow(0).setHeight(headerHeight);
+		}
+
+
+
 		List<PageData> varList = (List<PageData>) model.get("varList");
 		int varCount = varList.size();
-		for(int i=0; i<varCount; i++){
+		for(int i=0; i<varCount; i++) {
 			PageData vpd = varList.get(i);
-			for(int j=0;j<vpd.size();j++){
-				String varstr = StringUtil.trimToEmpty(vpd.get("var"+(j+1)));
-				if (varstr.equals("total")) {
-					cell = getCell(sheet, i+1, 0);
-					cell.setCellStyle(totalStyle);
-					setText(cell,"合计");
-					sheet.addMergedRegion(new Region(i+1, (short) (0), i+1, (short) (2)));
-				} else {
-					cell = getCell(sheet, i+1, j);
-					cell.setCellStyle(contentStyle);
-					setText(cell,varstr);
+			if (StringUtil.trimToEmpty(vpd.get("var1")).contains("littleTitle")) {
+				int col = 0;
+				for (int j=0; j < vpd.size(); j++) {
+					String varstr = StringUtil.trimToEmpty(vpd.get("var" + (j + 1)));
+					if (!varstr.equals("")) {
+						String[] vars = varstr.split("\\|");
+						String text = vars[0];
+
+						cell = getCell(sheet, i + 1, col);
+						cell.setCellStyle(contentStyle);
+						if (text.equals("littleTitle")) {
+							setText(cell, "");
+						} else {
+							setText(cell, text);
+						}
+						sheet.addMergedRegion(new Region(i + 1, (short) (col), i + 1, (short) (col + Integer.parseInt(StringUtil.trimToEmpty(vars[1])) - 1)));
+						col += Integer.parseInt(StringUtil.trimToEmpty(vars[1]));
+					}
+				}
+				sheet.getRow(i + 1).setHeight(contentHeight);
+			} else {
+				for (int j = 0; j < vpd.size(); j++) {
+					String varstr = StringUtil.trimToEmpty(vpd.get("var" + (j + 1)));
+					if (varstr.equals("填报单位：南京市市政工程管理处")) {
+						cell = getCell(sheet, i + 1, 0);
+						cell.setCellStyle(companyStyle);
+						setText(cell, "填报单位：南京市市政工程管理处");
+						sheet.addMergedRegion(new Region(i + 1, (short) (0), i + 1, (short) (vpd.size())));
+					} else if (varstr.equals("total")) {
+						cell = getCell(sheet, i + 1, 0);
+						cell.setCellStyle(totalStyle);
+						setText(cell, "合计");
+						sheet.addMergedRegion(new Region(i + 1, (short) (0), i + 1, (short) (2)));
+					} else {
+						cell = getCell(sheet, i + 1, j);
+						cell.setCellStyle(contentStyle);
+						setText(cell, varstr);
+					}
 				}
 
 			}
-			sheet.getRow(i+1).setHeight(contentHeight);
+			sheet.getRow(i + 1).setHeight(contentHeight);
+
 		}
 		
 	}

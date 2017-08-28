@@ -549,6 +549,7 @@ public class analysisController extends BaseController {
 	public ModelAndView maintenanceDetails(@RequestParam(value = "month", required = false) String month,
 									HttpServletResponse response, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
+		Map<String, Object> dataMap = new HashMap<String, Object>();
 		try {
 			response.setContentType("text/html;charset=utf8");
 			SessionInfo sessionInfo = (SessionInfo) request.getSession().getAttribute(ConfigUtil.getSessionInfoName());
@@ -576,6 +577,63 @@ public class analysisController extends BaseController {
 			}
 			varList.add(vpd);
 
+//			vpd = new PageData();
+//			i=4;
+//			vpd.put("var1", "littleTitle|3");
+//			vpd.put("var2", "");
+//			vpd.put("var3", "");
+//			for (Map<String, Object> billCostInfo : billCostInfos) {
+//				if (Integer.parseInt(StringUtil.trimToEmpty(billCostInfo.get("level"))) == 2) {
+//					int count = 0;
+//					for (Map<String, Object> bill1 : billCostInfos) {
+//						for (Map<String, Object> bill2 : billCostInfos) {
+//							if (Long.parseLong(StringUtil.trimToEmpty(bill1.get("pid"))) == Long.parseLong(StringUtil.trimToEmpty(billCostInfo.get("nid"))) &&
+//									Long.parseLong(StringUtil.trimToEmpty(bill2.get("pid"))) == Long.parseLong(StringUtil.trimToEmpty(bill1.get("nid")))) {
+//								count++;
+//							}
+//						}
+//					}
+//					vpd.put("var" + i++, StringUtil.trimToEmpty(billCostInfo.get("costType")) + "|" +count);
+//
+//					for (Map<String, Object> bill1 : billCostInfos) {
+//						for (Map<String, Object> bill2 : billCostInfos) {
+//							if (Long.parseLong(StringUtil.trimToEmpty(bill1.get("pid"))) == Long.parseLong(StringUtil.trimToEmpty(billCostInfo.get("nid"))) &&
+//									Long.parseLong(StringUtil.trimToEmpty(bill2.get("pid"))) == Long.parseLong(StringUtil.trimToEmpty(bill1.get("nid")))) {
+//								vpd.put("var" + i++, "");
+//							}
+//						}
+//					}
+//
+//					i--;
+//				}
+//			}
+//			varList.add(vpd);
+
+			vpd = new PageData();
+			i=4;
+			vpd.put("var1", "littleTitle|3");
+			vpd.put("var2", "");
+			vpd.put("var3", "");
+			for (Map<String, Object> billCostInfo : billCostInfos) {
+				if (Integer.parseInt(StringUtil.trimToEmpty(billCostInfo.get("level"))) == 3) {
+					int count = 0;
+					for (Map<String, Object> bill : billCostInfos) {
+						if (Long.parseLong(StringUtil.trimToEmpty(bill.get("pid"))) == Long.parseLong(StringUtil.trimToEmpty(billCostInfo.get("nid")))) {
+							count++;
+						}
+					}
+					vpd.put("var" + i++, StringUtil.trimToEmpty(billCostInfo.get("costType")) + "|" +count);
+
+					for (Map<String, Object> bill : billCostInfos) {
+						if (Long.parseLong(StringUtil.trimToEmpty(bill.get("pid"))) == Long.parseLong(StringUtil.trimToEmpty(billCostInfo.get("nid")))) {
+							vpd.put("var" + i++, "");
+						}
+					}
+					i--;
+				}
+			}
+			varList.add(vpd);
+
 			vpd = new PageData();
 			i=4;
 			vpd.put("var1", "序号");
@@ -597,7 +655,7 @@ public class analysisController extends BaseController {
 			}
 
 
-			Map<String, Object> dataMap = new HashMap<String, Object>();
+
 
 			String largeTitleContent = month + " 维护完成明细表";
 			int cellCount = vpd.size();
@@ -625,12 +683,12 @@ public class analysisController extends BaseController {
             vpd.put("var2", "");
             vpd.put("var3", "");
             for (int j=4; j<=varList.get(0).size(); j++) {
-                Double total = 0.00;
+                Double total = Double.valueOf(0);
                 for (int _j=3; _j<varList.size(); _j++) {
                     String val = StringUtil.trimToEmpty(varList.get(_j).get("var" + j));
-                    total += val.equals("")? 0.00 : Double.parseDouble(val);
+                    total += val.equals("") ? 0 : Double.valueOf(val).doubleValue();
                 }
-                vpd.put("var" + j, total);
+                vpd.put("var" + j, new java.text.DecimalFormat("#.00").format(total));
             }
             varList.add(vpd);
 
