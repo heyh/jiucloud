@@ -553,17 +553,18 @@
     function exportMaintenanceDetailsFun() {
         layer.open({
             type: 1,
-            title: '月份选择',
+            title: '时间选择',
             closeBtn: 2,
             btn:['导出'],
             yes: function(index, layero){
-                var params = 'month=' +$('#month').val();
+                var params = 'exportMaintenanceDetailsStartDate=' +$('#exportMaintenanceDetailsStartDate').val();
+                params += '&exportMaintenanceDetailsEndDate=' + $('#exportMaintenanceDetailsEndDate').val();
                 var url = "${pageContext.request.contextPath}/analysisController/securi_maintenanceDetails?" + params;
                 window.open(url);
                 layer.close(index); //如果设定了yes回调，需进行手工关闭
             },
             shadeClose: false,
-            content: $('#monthDiv') //这里content是一个DOM，注意：最好该元素要存放在body最外层，否则可能被其它的相对元素所影响
+            content: $('#exportMaintenanceDetailsDiv') //这里content是一个DOM，注意：最好该元素要存放在body最外层，否则可能被其它的相对元素所影响
         });
     }
 	//过滤条件查询
@@ -606,23 +607,33 @@
         return new Date(dateA.replace(/-/g, "/")) - new Date(dateB.replace(/-/g, "/"));
     }
 
+    function getSomeDate(date) {
+        var seperator = "-";
+        var year = date.getFullYear();
+        var month = date.getMonth() + 1;
+        var strDate = date.getDate();
+        if (month >= 1 && month <= 9) {
+            month = "0" + month;
+        }
+        if (strDate >= 0 && strDate <= 9) {
+            strDate = "0" + strDate;
+        }
+        var currentdate = year + seperator + month + seperator + strDate;
+        return currentdate;
+    }
+
     $(document).ready(function() {
-        <%--$("#uname").select2({--%>
-            <%--placeholder: "可以模糊查询",--%>
-            <%--allowClear: true,--%>
-            <%--data:<%=underlingUsers%>--%>
-        <%--});--%>
+        var sDate = new Date(new Date().getFullYear(), new Date().getMonth()-1, 21);
+        $('#exportMaintenanceDetailsStartDate').val(getSomeDate(sDate));
+
+        var eDate = new Date(new Date().getFullYear(), new Date().getMonth(), 20);
+        $('#exportMaintenanceDetailsEndDate').val(getSomeDate(eDate));
+
         $("#projectName").select2({
             placeholder: "可以模糊查询",
             allowClear: true,
             data:<%=projectInfos%>
         });
-        <%--$("#costType").select2({--%>
-            <%--tags: "true",--%>
-            <%--placeholder: "可以模糊查询",--%>
-            <%--allowClear: true,--%>
-            <%--&lt;%&ndash;data:<%=costTypeInfos%>&ndash;%&gt;--%>
-        <%--});--%>
 
 		$('#costTypeRef').combotree({
 			data: <%= billCostTree %>,
@@ -778,14 +789,9 @@
 					style="display: none;">
 					<tr>
 						<td>关键字搜索:&nbsp;
-                            <%--<input name="uname" id='uname' placeholder="可以模糊查询" class="span2" />--%>
-                            <%--<select  style="width: 136px" name="uname" id="uname">--%>
-                                <%--<option ></option>--%>
-                            <%--</select>--%>
                             <input name="keyword" id="keyword" placeholder="可以模糊查询" class="span2" style="width: 180px;"/>
                         </td>
 						<td>工程名称:&nbsp;
-                            <%--<input name="projectName" id="projectName" placeholder="可以模糊查询" class="span2" />--%>
                             <select  style="width: 180px" name="projectName" id="projectName">
                                 <option ></option>
 
@@ -830,13 +836,6 @@
 			data-options="iconCls:'zhongzhiguolvtiaojian_new',plain:true"
 			onclick="cleanFun();">清空条件</a>
 
-		<%--<a onclick="cloudImportFun();" href="javascript:void(0);"--%>
-		   <%--class="easyui-linkbutton"--%>
-		   <%--data-options="plain:true,iconCls:'cloud_in'">氿上云导入</a>--%>
-
-		<%--<a onclick="execlImportFun();" href="javascript:void(0);"--%>
-		   <%--class="easyui-linkbutton"--%>
-		   <%--data-options="plain:true,iconCls:'execl_in'">execl导入</a>--%>
 		<c:choose>
 			<c:when test="<%=hasBackFillRight%>">
 				<a onclick="backFillFun();" href="javascript:void(0);"
@@ -859,7 +858,11 @@
 	</div>
 </body>
 
-	<div id="monthDiv" style="display:none; width: 200px;height:50px;text-align:center; vertical-align:middle;">
-		<input style="margin-top: 10%" class="Wdate span2" name="month" id='month' placeholder="点击选择月份" onclick="WdatePicker({dateFmt:'yyyy-MM'})" value='${month}' />
+	<div id="exportMaintenanceDetailsDiv" style="display:none; width: 350px;height:60px;text-align:center; vertical-align:middle;">
+		<div style="margin-top: 10%;">
+		<input style="" class="Wdate span2" name="exportMaintenanceDetailsStartDate" id='exportMaintenanceDetailsStartDate' placeholder="开始时间" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',readOnly:true})" />
+		-
+		<input style="" class="Wdate span2" name="exportMaintenanceDetailsEndDate" id='exportMaintenanceDetailsEndDate' placeholder="截止时间" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',readOnly:true})" />
+		</div>
 	</div>
 </html>
