@@ -145,7 +145,18 @@
 									{
 										field : 'payAmount',
 										title : '实付金额',
-										width : 100
+										width : 100,
+										formatter : function (value, row, index) {
+										    var str = '';
+                                            var hasReadEditRight = <%= hasOnlyReadRight %> || <%= hasReadEditRight %>;
+                                            if (hasReadEditRight) {
+                                                str = row.payAmount;
+											} else {
+                                                str = '***';
+											}
+
+											return str;
+                                        }
 									},
 									{
 										field : 'specifications',
