@@ -546,8 +546,9 @@ public class analysisController extends BaseController {
     }
 
 	@RequestMapping("/securi_maintenanceDetails")
-	public ModelAndView maintenanceDetails(@RequestParam(value = "month", required = false) String month,
-									HttpServletResponse response, HttpServletRequest request) {
+	public ModelAndView maintenanceDetails(@RequestParam(value = "exportMaintenanceDetailsStartDate", required = false) String exportMaintenanceDetailsStartDate,
+										   @RequestParam(value = "exportMaintenanceDetailsEndDate", required = false) String exportMaintenanceDetailsEndDate,
+										   HttpServletResponse response, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
 		Map<String, Object> dataMap = new HashMap<String, Object>();
 		try {
@@ -555,7 +556,10 @@ public class analysisController extends BaseController {
 			SessionInfo sessionInfo = (SessionInfo) request.getSession().getAttribute(ConfigUtil.getSessionInfoName());
 			String cid = sessionInfo.getCompid();
 
-			List<Object[]> tempMaintenanceDetailsList = fieldDataService.getMaintenanceDetails(cid, month);
+			String startDate = exportMaintenanceDetailsStartDate + " 00:00:00";
+			String endDate= exportMaintenanceDetailsEndDate + " 23:59:59";
+
+			List<Object[]> tempMaintenanceDetailsList = fieldDataService.getMaintenanceDetails(cid, startDate, endDate);
 
 			List<Map<String, Object>> datas = new ArrayList<Map<String, Object>>();
 			Map<String, Object> maintenanceDetails = new HashMap<String, Object>();
@@ -576,38 +580,6 @@ public class analysisController extends BaseController {
 				}
 			}
 			varList.add(vpd);
-
-//			vpd = new PageData();
-//			i=4;
-//			vpd.put("var1", "littleTitle|3");
-//			vpd.put("var2", "");
-//			vpd.put("var3", "");
-//			for (Map<String, Object> billCostInfo : billCostInfos) {
-//				if (Integer.parseInt(StringUtil.trimToEmpty(billCostInfo.get("level"))) == 2) {
-//					int count = 0;
-//					for (Map<String, Object> bill1 : billCostInfos) {
-//						for (Map<String, Object> bill2 : billCostInfos) {
-//							if (Long.parseLong(StringUtil.trimToEmpty(bill1.get("pid"))) == Long.parseLong(StringUtil.trimToEmpty(billCostInfo.get("nid"))) &&
-//									Long.parseLong(StringUtil.trimToEmpty(bill2.get("pid"))) == Long.parseLong(StringUtil.trimToEmpty(bill1.get("nid")))) {
-//								count++;
-//							}
-//						}
-//					}
-//					vpd.put("var" + i++, StringUtil.trimToEmpty(billCostInfo.get("costType")) + "|" +count);
-//
-//					for (Map<String, Object> bill1 : billCostInfos) {
-//						for (Map<String, Object> bill2 : billCostInfos) {
-//							if (Long.parseLong(StringUtil.trimToEmpty(bill1.get("pid"))) == Long.parseLong(StringUtil.trimToEmpty(billCostInfo.get("nid"))) &&
-//									Long.parseLong(StringUtil.trimToEmpty(bill2.get("pid"))) == Long.parseLong(StringUtil.trimToEmpty(bill1.get("nid")))) {
-//								vpd.put("var" + i++, "");
-//							}
-//						}
-//					}
-//
-//					i--;
-//				}
-//			}
-//			varList.add(vpd);
 
 			vpd = new PageData();
 			i=4;
@@ -657,7 +629,7 @@ public class analysisController extends BaseController {
 
 
 
-			String largeTitleContent = month + " 维护完成明细表";
+			String largeTitleContent = "维护完成明细表（" + exportMaintenanceDetailsStartDate + " 至 " + exportMaintenanceDetailsEndDate + "）";
 			int cellCount = vpd.size();
 			Map<String, Object> largeTitle = new HashMap<String, Object>();
 			largeTitle.put("largeTitleContent", largeTitleContent);

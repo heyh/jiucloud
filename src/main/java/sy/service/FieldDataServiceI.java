@@ -96,5 +96,5 @@ public interface FieldDataServiceI {
 
 	public List<TFieldData> getAllField(String cid);
 
-	public List<Object[]> getMaintenanceDetails(String cid, String month);
+	public List<Object[]> getMaintenanceDetails(String cid, String startDate, String endDate);
 }
