@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
+import sy.model.Clockingin;
 import sy.model.Item;
 import sy.model.Param;
 import sy.model.S_department;
@@ -68,6 +69,9 @@ public class Api extends BaseController {
 
     @Autowired
     private TaskPushServiceI taskPushService;
+
+    @Autowired
+    private ClockinginServiceI clockinginService;
 
     @RequestMapping("/securi_login")
     @ResponseBody
@@ -1541,6 +1545,30 @@ public class Api extends BaseController {
         outFieldData.setRelId(id);
 
         fieldDataService.add(outFieldData);
+
+        return new WebResult().ok();
+    }
+
+    @ResponseBody
+    @RequestMapping("/securi_clockingin")
+    public JSONObject clockingin(@RequestParam(value = "uid", required = true) String uid,
+                                 @RequestParam(value = "cid", required = true) String cid,
+                                 @RequestParam(value = "longitude", required = false) String longitude,
+                                 @RequestParam(value = "latitude", required = false) String latitude,
+                                 @RequestParam(value = "address", required = false) String address,
+                                 @RequestParam(value = "clockinginFlag", required = false) String clockinginFlag,
+                                 HttpServletRequest request) {
+        Clockingin clockingin = new Clockingin();
+        clockingin.setCid(cid);
+        clockingin.setUid(uid);
+        clockingin.setLatitude(latitude);
+        clockingin.setLongitude(longitude);
+        clockingin.setAddress(address);
+        clockingin.setClockinginFlag(clockinginFlag);
+
+        clockingin.setClockinginTime(new Date());
+
+        clockinginService.Clockingin(clockingin);
 
         return new WebResult().ok();
     }
