@@ -1565,6 +1565,7 @@ public class Api extends BaseController {
         clockingin.setLongitude(longitude);
         clockingin.setAddress(address);
         clockingin.setClockinginFlag(clockinginFlag);
+        clockingin.setIsDelete("0");
 
         clockingin.setClockinginTime(new Date());
 

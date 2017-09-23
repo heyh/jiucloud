@@ -39,14 +39,32 @@ public class Clockingin {
     @Column(name = "clockinginTime")
     private Date clockinginTime;
 
-    @Column(name = "isRight")
-    private String isRight;
+    @Column(name = "approveState")
+    private String approveState;
+
+    @Column(name = "approveDesc")
+    private String approveDesc;
 
     @Column(name = "approveUser")
     private String approveUser;
 
     @Column(name = "approveTime")
-    protected Date approveTime;
+    private Date approveTime;
+
+    @Column(name = "isDelete")
+    private String isDelete;
+
+    public String getIsDelete() {
+        return isDelete;
+    }
+
+    public void setIsDelete(String isDelete) {
+        this.isDelete = isDelete;
+    }
+
+    private String startDate;
+    private String endDate;
+    private String uname;
 
     public int getId() {
         return id;
@@ -112,12 +130,20 @@ public class Clockingin {
         this.clockinginTime = clockinginTime;
     }
 
-    public String getIsRight() {
-        return isRight;
+    public String getApproveState() {
+        return approveState;
     }
 
-    public void setIsRight(String isRight) {
-        this.isRight = isRight;
+    public void setApproveState(String approveState) {
+        this.approveState = approveState;
+    }
+
+    public String getApproveDesc() {
+        return approveDesc;
+    }
+
+    public void setApproveDesc(String approveDesc) {
+        this.approveDesc = approveDesc;
     }
 
     public String getApproveUser() {
@@ -134,5 +160,29 @@ public class Clockingin {
 
     public void setApproveTime(Date approveTime) {
         this.approveTime = approveTime;
+    }
+
+    public String getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    public String getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
+    }
+
+    public String getUname() {
+        return uname;
+    }
+
+    public void setUname(String uname) {
+        this.uname = uname;
     }
 }

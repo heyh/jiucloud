@@ -1,6 +1,9 @@
 package sy.service;
 
 import sy.model.Clockingin;
+import sy.model.po.TFieldData;
+import sy.pageModel.DataGrid;
+import sy.pageModel.PageHelper;
 
 import java.util.List;
 
@@ -14,4 +17,12 @@ public interface ClockinginServiceI {
     public List<Clockingin> getClockingins(List<Integer> ugroup);
 
     public int approveClockingin(String approveState);
+
+    DataGrid dataGrid(String cid, List<Integer> ugroup, Clockingin clockingin, PageHelper pageHelper);
+
+    public Clockingin getClockingin(int id);
+
+    public void update(Clockingin info);
+
+    void delete(int id);
 }
