@@ -37,6 +37,14 @@
 
 			<input type="hidden" id="id" name="id" value="${clockingin.id}" />
 
+			<%--<div class="control-group" style="padding-top: 20px; ">--%>
+				<%--<label class="control-label" for="clockinginTime">日期:</label>--%>
+
+				<%--<div class="controls">--%>
+					<%--<input type="text" id="clockinginDate" name="clockinginDate" value="${clockingin.clockinginDate}" disabled='true'>--%>
+				<%--</div>--%>
+			<%--</div>--%>
+
 			<div class="control-group" style="padding-top: 20px; ">
 				<label class="control-label" for="uname">人员:</label>
 

@@ -80,7 +80,7 @@ public class ClockinginServiceImpl implements ClockinginServiceI {
         for (Clockingin c : clockingins) {
             if (!StringUtil.trimToEmpty(c.getUid()).equals("")) {
                 User user = userService.getUser(c.getUid());
-                String uname = user.getRealname().equals("") ? user.getUsername() : user.getRealname();
+                String uname = StringUtil.trimToEmpty(user.getRealname()).equals("") ? user.getUsername() : user.getRealname();
                 c.setUname(uname);
             }
         }
@@ -121,5 +121,23 @@ public class ClockinginServiceImpl implements ClockinginServiceI {
             e.printStackTrace();
         }
 
+    }
+
+    @Override
+    public Clockingin hasSameClockingin(Clockingin clockingin) {
+        Clockingin sameClockingin = new Clockingin();
+
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("cid", clockingin.getCid());
+        params.put("uid", clockingin.getUid());
+        params.put("clockinginFlag", clockingin.getClockinginFlag());
+        params.put("clockinginDate", clockingin.getClockinginDate());
+
+        String hql = "from Clockingin where cid = :cid and uid = :uid and clockinginFlag = :clockinginFlag and clockinginDate = :clockinginDate and isDelete = '0' ";
+        List<Clockingin> clockinginList = clockinginDao.find(hql, params);
+        if (clockinginList != null && clockinginList.size()>0) {
+            sameClockingin = clockinginList.get(0);
+        }
+        return sameClockingin;
     }
 }

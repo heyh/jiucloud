@@ -25,4 +25,6 @@ public interface ClockinginServiceI {
     public void update(Clockingin info);
 
     void delete(int id);
+
+    public Clockingin hasSameClockingin(Clockingin clockingin);
 }

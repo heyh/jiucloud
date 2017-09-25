@@ -1550,6 +1550,26 @@ public class Api extends BaseController {
     }
 
     @ResponseBody
+    @RequestMapping("/securi_checkClockingin")
+    public JSONObject checkClockingin(@RequestParam(value = "uid", required = true) String uid,
+                                 @RequestParam(value = "cid", required = true) String cid,
+                                 @RequestParam(value = "longitude", required = false) String longitude,
+                                 @RequestParam(value = "latitude", required = false) String latitude,
+                                 @RequestParam(value = "address", required = false) String address,
+                                 @RequestParam(value = "clockinginFlag", required = false) String clockinginFlag,
+                                 HttpServletRequest request) {
+        Clockingin clockingin = new Clockingin();
+        clockingin.setCid(cid);
+        clockingin.setUid(uid);
+        clockingin.setClockinginFlag(clockinginFlag);
+        clockingin.setClockinginDate(DateKit.strToDateOrTime(DateKit.getCurrentDate("yyyy-MM-dd")));
+        Clockingin sameClockingin = clockinginService.hasSameClockingin(clockingin);
+        Boolean hasSame = ( sameClockingin == null ? false : true );
+
+        return new WebResult().set("hasSame", hasSame).ok();
+    }
+
+    @ResponseBody
     @RequestMapping("/securi_clockingin")
     public JSONObject clockingin(@RequestParam(value = "uid", required = true) String uid,
                                  @RequestParam(value = "cid", required = true) String cid,
@@ -1568,7 +1588,12 @@ public class Api extends BaseController {
         clockingin.setIsDelete("0");
 
         clockingin.setClockinginTime(new Date());
+        clockingin.setClockinginDate(DateKit.strToDateOrTime(DateKit.getCurrentDate("yyyy-MM-dd")));
 
+        Clockingin sameClockingin = clockinginService.hasSameClockingin(clockingin);
+        if (sameClockingin != null) {
+            clockinginService.delete(sameClockingin.getId());
+        }
         clockinginService.Clockingin(clockingin);
 
         return new WebResult().ok();

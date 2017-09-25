@@ -36,6 +36,9 @@ public class Clockingin {
     @Column(name = "clockinginFlag")
     private String clockinginFlag;
 
+    @Column(name = "clockinginDate")
+    private Date clockinginDate;
+
     @Column(name = "clockinginTime")
     private Date clockinginTime;
 
@@ -184,5 +187,13 @@ public class Clockingin {
 
     public void setUname(String uname) {
         this.uname = uname;
+    }
+
+    public Date getClockinginDate() {
+        return clockinginDate;
+    }
+
+    public void setClockinginDate(Date clockinginDate) {
+        this.clockinginDate = clockinginDate;
     }
 }
