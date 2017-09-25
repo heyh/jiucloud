@@ -1563,8 +1563,8 @@ public class Api extends BaseController {
         clockingin.setUid(uid);
         clockingin.setClockinginFlag(clockinginFlag);
         clockingin.setClockinginDate(DateKit.strToDateOrTime(DateKit.getCurrentDate("yyyy-MM-dd")));
-        Clockingin sameClockingin = clockinginService.hasSameClockingin(clockingin);
-        Boolean hasSame = ( sameClockingin == null ? false : true );
+        List<Clockingin> sameClockingin = clockinginService.hasSameClockingin(clockingin);
+        Boolean hasSame = ( sameClockingin != null && sameClockingin.size()>0 ? true : false );
 
         return new WebResult().set("hasSame", hasSame).ok();
     }
@@ -1590,9 +1590,9 @@ public class Api extends BaseController {
         clockingin.setClockinginTime(new Date());
         clockingin.setClockinginDate(DateKit.strToDateOrTime(DateKit.getCurrentDate("yyyy-MM-dd")));
 
-        Clockingin sameClockingin = clockinginService.hasSameClockingin(clockingin);
-        if (sameClockingin != null) {
-            clockinginService.delete(sameClockingin.getId());
+        List<Clockingin> sameClockingin = clockinginService.hasSameClockingin(clockingin);
+        if (sameClockingin != null && sameClockingin.size()>0) {
+            clockinginService.delete(sameClockingin.get(0).getId());
         }
         clockinginService.Clockingin(clockingin);
 

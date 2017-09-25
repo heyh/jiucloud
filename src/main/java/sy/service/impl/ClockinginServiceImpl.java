@@ -124,8 +124,7 @@ public class ClockinginServiceImpl implements ClockinginServiceI {
     }
 
     @Override
-    public Clockingin hasSameClockingin(Clockingin clockingin) {
-        Clockingin sameClockingin = new Clockingin();
+    public List<Clockingin> hasSameClockingin(Clockingin clockingin) {
 
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("cid", clockingin.getCid());
@@ -135,9 +134,7 @@ public class ClockinginServiceImpl implements ClockinginServiceI {
 
         String hql = "from Clockingin where cid = :cid and uid = :uid and clockinginFlag = :clockinginFlag and clockinginDate = :clockinginDate and isDelete = '0' ";
         List<Clockingin> clockinginList = clockinginDao.find(hql, params);
-        if (clockinginList != null && clockinginList.size()>0) {
-            sameClockingin = clockinginList.get(0);
-        }
-        return sameClockingin;
+
+        return clockinginList;
     }
 }

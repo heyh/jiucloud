@@ -26,5 +26,5 @@ public interface ClockinginServiceI {
 
     void delete(int id);
 
-    public Clockingin hasSameClockingin(Clockingin clockingin);
+    public List<Clockingin> hasSameClockingin(Clockingin clockingin);
 }
