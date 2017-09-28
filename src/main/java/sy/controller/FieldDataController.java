@@ -522,6 +522,15 @@ public class FieldDataController extends BaseController {
             if (hasLocations == null || hasLocations.size()<=0) {
                 locationService.addLocation(fieldData.getCid(), StringUtil.trimToEmpty(fieldData.getSpecifications()).trim());
             }
+
+            // 增加名称
+            List<Feature> featureList = featureService.getFeatureList(fieldData.getCid(), StringUtil.trimToEmpty(fieldData.getDataName()),
+                    StringUtil.trimToEmpty(fieldData.getUnit()));
+            if (featureList == null || featureList.size()<=0) {
+                featureService.addFeature(fieldData.getCid(), StringUtil.trimToEmpty(fieldData.getDataName()),
+                        StringUtil.trimToEmpty(fieldData.getUnit()));
+            }
+
             j.setObj(fieldId);
             sessionInfo.setLast_cost_id(fieldData.getCostType());
             sessionInfo.setLast_project_id(fieldData.getProjectName());

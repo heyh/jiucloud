@@ -82,4 +82,15 @@ public class FeatureServiceImpl implements FeatureServiceI {
 
         return dg;
     }
+
+    @Override
+    public List<Feature> getFeatureList(String cid, String mc, String dw) {
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("cid", cid);
+        params.put("mc", mc);
+        params.put("dw", dw);
+        String hql = "from Feature where cid = :cid and mc = :mc and dw = :dw ";
+        List<Feature> featureList = featureDao.find(hql, params);
+        return featureList;
+    }
 }

@@ -18,4 +18,6 @@ public interface FeatureServiceI {
     void delFeature(String id);
 
     DataGrid getFeaturesDataGrid(PageHelper ph, String cid, String keyword);
+
+    List<Feature> getFeatureList(String cid, String mc, String dw);
 }
