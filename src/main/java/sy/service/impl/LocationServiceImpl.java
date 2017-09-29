@@ -51,7 +51,7 @@ public class LocationServiceImpl implements LocationServiceI {
         Location location = new Location();
         location.setCid(cid);
         location.setMc(mc);
-        locationDao.saveOrUpdate(location);
+        locationDao.save(location);
 
         return location;
     }

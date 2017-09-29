@@ -73,6 +73,12 @@ public class Api extends BaseController {
     @Autowired
     private ClockinginServiceI clockinginService;
 
+    @Autowired
+    private LocationServiceI locationService;
+
+    @Autowired
+    private FeatureServiceI featureService;
+
     @RequestMapping("/securi_login")
     @ResponseBody
     public JSONObject login(@RequestParam(value = "name", required = true) String name,
@@ -385,6 +391,23 @@ public class Api extends BaseController {
         if (fieldData.getNeedApproved().equals("1")) {
             fieldData.setId(fieldId);
             taskPushService.addFieldTaskPush(fieldData);
+        }
+
+        // 增加设施地点
+        if (fieldData.getItemCode().substring(0, 3).equals("700")) {
+            List<Location> hasLocations = locationService.getLocationsByName(fieldData.getCid(), StringUtil.trimToEmpty(fieldData.getSpecifications()).trim());
+            if (hasLocations == null || hasLocations.size() <= 0) {
+                locationService.addLocation(fieldData.getCid(), StringUtil.trimToEmpty(fieldData.getSpecifications()).trim());
+            }
+        }
+
+        // 增加名称
+        if (fieldData.getItemCode().substring(0, 3).equals("800")) {
+            String mc = StringUtil.trimToEmpty(fieldData.getDataName()) + (StringUtil.trimToEmpty(fieldData.getSpecifications()).equals("") ? "" : "(" + StringUtil.trimToEmpty(fieldData.getSpecifications()) + ")");
+            List<Feature> featureList = featureService.getFeatureList(fieldData.getCid(), mc, StringUtil.trimToEmpty(fieldData.getUnit()));
+            if (featureList == null || featureList.size() <= 0) {
+                featureService.addFeature(fieldData.getCid(), mc, StringUtil.trimToEmpty(fieldData.getUnit()));
+            }
         }
 
         return new WebResult().ok().set("mid", fieldId);

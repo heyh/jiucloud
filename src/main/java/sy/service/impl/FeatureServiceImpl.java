@@ -47,7 +47,7 @@ public class FeatureServiceImpl implements FeatureServiceI {
         feature.setCid(cid);
         feature.setMc(mc);
         feature.setDw(dw);
-        featureDao.saveOrUpdate(feature);
+        featureDao.save(feature);
 
         return feature;
     }

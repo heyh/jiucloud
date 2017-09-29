@@ -518,17 +518,20 @@ public class FieldDataController extends BaseController {
             }
 
             // 增加设施地点
-            List<Location> hasLocations = locationService.getLocationsByName(fieldData.getCid(), StringUtil.trimToEmpty(fieldData.getSpecifications()).trim());
-            if (hasLocations == null || hasLocations.size()<=0) {
-                locationService.addLocation(fieldData.getCid(), StringUtil.trimToEmpty(fieldData.getSpecifications()).trim());
+            if (fieldData.getItemCode().substring(0, 3).equals("700")) {
+                List<Location> hasLocations = locationService.getLocationsByName(fieldData.getCid(), StringUtil.trimToEmpty(fieldData.getSpecifications()).trim());
+                if (hasLocations == null || hasLocations.size() <= 0) {
+                    locationService.addLocation(fieldData.getCid(), StringUtil.trimToEmpty(fieldData.getSpecifications()).trim());
+                }
             }
 
             // 增加名称
-            List<Feature> featureList = featureService.getFeatureList(fieldData.getCid(), StringUtil.trimToEmpty(fieldData.getDataName()),
-                    StringUtil.trimToEmpty(fieldData.getUnit()));
-            if (featureList == null || featureList.size()<=0) {
-                featureService.addFeature(fieldData.getCid(), StringUtil.trimToEmpty(fieldData.getDataName()),
-                        StringUtil.trimToEmpty(fieldData.getUnit()));
+            if (fieldData.getItemCode().substring(0, 3).equals("800")) {
+                String mc = StringUtil.trimToEmpty(fieldData.getDataName()) + (StringUtil.trimToEmpty(fieldData.getSpecifications()).equals("") ? "" : "(" + StringUtil.trimToEmpty(fieldData.getSpecifications()) + ")");
+                List<Feature> featureList = featureService.getFeatureList(fieldData.getCid(), mc, StringUtil.trimToEmpty(fieldData.getUnit()));
+                if (featureList == null || featureList.size() <= 0) {
+                    featureService.addFeature(fieldData.getCid(), mc, StringUtil.trimToEmpty(fieldData.getUnit()));
+                }
             }
 
             j.setObj(fieldId);
