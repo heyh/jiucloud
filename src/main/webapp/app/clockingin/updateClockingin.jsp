@@ -30,6 +30,13 @@
 
 	});
 
+    var approveState = document.getElementById('approveStateRef').value;
+    for (var i = 0; i < document.getElementById('approveState').options.length; i++) {
+        if (document.getElementById('approveState').options[i].value == approveState) {
+            document.getElementById('approveState').options[i].selected = true;
+            break;
+        }
+    }
 </script>
 <div class="easyui-layout" data-options="fit:true,border:false">
 	<div data-options="region:'center',border:false" title="" style="overflow: hidden;">
@@ -70,21 +77,31 @@
 			</div>
 
 			<div class="control-group" style="padding-top: 20px; ">
-				<label class="control-label" for="approveState"><span style="color: #ff0000">审批状态:</span></label>
+				<label class="control-label" for="reasonDesc">事由:</label>
+
+				<div class="controls">
+					<input type="text" id="reasonDesc" name="reasonDesc" value="${clockingin.reasonDesc}" disabled='true'>
+				</div>
+			</div>
+
+			<div class="control-group" style="padding-top: 20px; ">
+				<label class="control-label" for="approveState"><span style="color: #ff0000">状态:</span></label>
 
 				<div class="controls">
 					<select id="approveState" name="approveState">
 						<option value="正常">正常</option>
 						<option value="迟到">迟到</option>
 						<option value="早退">早退</option>
-						<option value="上班地点不正确">上班地点不正确</option>
-						<option value="下班地点不正确">下班地点不正确</option>
+						<option value="事假">事假</option>
+						<option value="病假">病假</option>
+						<option value="出差">出差</option>
 					</select>
+					<input type="hidden" id="approveStateRef" value='${clockingin.approveState }'></td>
 				</div>
 			</div>
 
 			<div class="control-group" style="padding-top: 20px; ">
-				<label class="control-label" for="approveDesc">意见:</label>
+				<label class="control-label" for="approveDesc">审核意见:</label>
 
 				<div class="controls">
 					<input type="text" id="approveDesc" name="approveDesc"/>

@@ -19,4 +19,6 @@ public interface ClockinginTimeServiceI {
     ClockinginTime getClockinginTime(int id);
 
     void update(ClockinginTime c);
+
+    public ClockinginTime addDefaultClockinginTime(String cid);
 }

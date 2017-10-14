@@ -96,7 +96,12 @@
                             },
                             {
                                 field: 'approveState',
-                                title: '审批状态',
+                                title: '状态',
+                                width: 250
+                            },
+                            {
+                                field: 'reasonDesc',
+                                title: '事由',
                                 width: 250
                             },
                             {
@@ -122,7 +127,7 @@
                                     var str = '';
                                     var userId = <%= userId %>;
 
-                                    if (userId == row.uid) {
+                                    if (userId != row.uid) {
                                         str += $
                                             .formatString(
                                                 '<img onclick="editFun(\'{0}\');" src="{1}" title="审核" />',
@@ -190,8 +195,8 @@
             parent.$
                 .modalDialog({
                     title: '编辑',
-                    width: 480,
-                    height: 450,
+                    width: 530,
+                    height: 480,
                     href: '${pageContext.request.contextPath}/clockinginController/securi_updateClockinginPage?id=' + id,
                     buttons: [{
                         text: '修改',

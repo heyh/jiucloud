@@ -57,13 +57,8 @@ public class Clockingin {
     @Column(name = "isDelete")
     private String isDelete;
 
-    public String getIsDelete() {
-        return isDelete;
-    }
-
-    public void setIsDelete(String isDelete) {
-        this.isDelete = isDelete;
-    }
+    @Column(name = "reasonDesc")
+    private String reasonDesc;
 
     private String startDate;
     private String endDate;
@@ -125,6 +120,14 @@ public class Clockingin {
         this.clockinginFlag = clockinginFlag;
     }
 
+    public Date getClockinginDate() {
+        return clockinginDate;
+    }
+
+    public void setClockinginDate(Date clockinginDate) {
+        this.clockinginDate = clockinginDate;
+    }
+
     public Date getClockinginTime() {
         return clockinginTime;
     }
@@ -165,6 +168,22 @@ public class Clockingin {
         this.approveTime = approveTime;
     }
 
+    public String getIsDelete() {
+        return isDelete;
+    }
+
+    public void setIsDelete(String isDelete) {
+        this.isDelete = isDelete;
+    }
+
+    public String getReasonDesc() {
+        return reasonDesc;
+    }
+
+    public void setReasonDesc(String reasonDesc) {
+        this.reasonDesc = reasonDesc;
+    }
+
     public String getStartDate() {
         return startDate;
     }
@@ -187,13 +206,5 @@ public class Clockingin {
 
     public void setUname(String uname) {
         this.uname = uname;
-    }
-
-    public Date getClockinginDate() {
-        return clockinginDate;
-    }
-
-    public void setClockinginDate(Date clockinginDate) {
-        this.clockinginDate = clockinginDate;
     }
 }

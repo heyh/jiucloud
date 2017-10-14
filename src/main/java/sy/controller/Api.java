@@ -79,6 +79,9 @@ public class Api extends BaseController {
     @Autowired
     private FeatureServiceI featureService;
 
+    @Autowired
+    private ClockinginTimeServiceI clockinginTimeService;
+
     @RequestMapping("/securi_login")
     @ResponseBody
     public JSONObject login(@RequestParam(value = "name", required = true) String name,
@@ -1589,7 +1592,14 @@ public class Api extends BaseController {
         List<Clockingin> sameClockingin = clockinginService.hasSameClockingin(clockingin);
         Boolean hasSame = ( sameClockingin != null && sameClockingin.size()>0 ? true : false );
 
-        return new WebResult().set("hasSame", hasSame).ok();
+        ClockinginTime clockinginTime = new ClockinginTime();
+        List<ClockinginTime> clockinginTimeList = clockinginTimeService.getClockinginTimeList(cid);
+        if (clockinginTimeList == null || clockinginTimeList.size()<=0) {
+            clockinginTime = clockinginTimeService.addDefaultClockinginTime(cid);
+        } else {
+            clockinginTime = clockinginTimeList.get(0);
+        }
+        return new WebResult().set("hasSame", hasSame).set("clockinginTime", clockinginTime).ok();
     }
 
     @ResponseBody
@@ -1600,6 +1610,8 @@ public class Api extends BaseController {
                                  @RequestParam(value = "latitude", required = false) String latitude,
                                  @RequestParam(value = "address", required = false) String address,
                                  @RequestParam(value = "clockinginFlag", required = false) String clockinginFlag,
+                                 @RequestParam(value = "reasonDesc", required = false) String reasonDesc,
+                                 @RequestParam(value = "approvedState", required = false) String approvedState,
                                  HttpServletRequest request) {
         Clockingin clockingin = new Clockingin();
         clockingin.setCid(cid);
@@ -1609,6 +1621,9 @@ public class Api extends BaseController {
         clockingin.setAddress(address);
         clockingin.setClockinginFlag(clockinginFlag);
         clockingin.setIsDelete("0");
+        clockingin.setReasonDesc(StringUtil.trimToEmpty(reasonDesc));
+        approvedState = StringUtil.trimToEmpty(approvedState).equals("") ? "正常" : StringUtil.trimToEmpty(approvedState);
+        clockingin.setApproveState(approvedState);
 
         clockingin.setClockinginTime(new Date());
         clockingin.setClockinginDate(DateKit.strToDateOrTime(DateKit.getCurrentDate("yyyy-MM-dd")));
