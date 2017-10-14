@@ -792,10 +792,10 @@
 							<input type="hidden" name="costType" id="costType">
 							<input type="hidden" name="itemCode" id="itemCode">
                         </td>
-						<td>起止时间:&nbsp;<input class="span2" name="startTime"
+						<td>起止时间:&nbsp;<input class="Wdate span2" name="startTime"
 							id='startTime' placeholder="点击选择时间"
 							onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})"
-							readonly="readonly" value='${first }' /> - <input class="span2"
+							readonly="readonly" value='${first }' /> - <input class="Wdate span2"
 							name="endTime" id='endTime' placeholder="点击选择时间"
 							onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})"
 							readonly="readonly" value='${last }' /></td>

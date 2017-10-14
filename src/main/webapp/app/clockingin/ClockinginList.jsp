@@ -106,7 +106,7 @@
                             },
                             {
                                 field: 'approveDesc',
-                                title: '审批意见',
+                                title: '审核意见',
                                 width: 250
                             },
                             {
@@ -232,6 +232,27 @@
         function searchFun() {
             dataGrid.datagrid('load', $.serializeObject($('#searchForm')));
         }
+
+        $(document).ready(function() {
+            $("#clockinginFlag").select2({
+                allowClear: true
+            });
+            $("#approveState").select2({
+                allowClear: true
+            });
+        });
+
+
+        function exportFun(objTab) {
+            var str = '';
+            str += '&keyword=' + $('#keyword').val();
+            str += '&clockinginFlag=' + $('#clockinginFlag').val();
+            str += '&approveState=' + $('#approveState').val();
+            str += '&startDate=' + $('#startDate').val();
+            str += '&endDate=' + $('#endDate').val();
+            var url = "${pageContext.request.contextPath}/clockinginController/securi_execl?" + str;
+            window.open(url);
+        }
     </script>
 </head>
 <body>
@@ -242,12 +263,30 @@
             <table class="table table-hover table-condensed"
                    style="display: none;">
                 <tr>
-                    <%--<td>人员:&nbsp;--%>
-                        <%--<select  style="width: 180px" name="projectName" id="projectName">--%>
-                            <%--<option ></option>--%>
-                        <%--</select>--%>
-                    <%--</td>--%>
+                    <td>关键字:&nbsp;
+                        <input type="text" name="keyword" id="keyword" placeholder="可以模糊查询" style="width: 180px;"/>
+                    </td>
+                    <td>上/下班:&nbsp;
+                        <select  style="width: 180px" name="clockinginFlag" id="clockinginFlag">
+                            <option value="">全部</option>
+                            <option value="0">上班</option>
+                            <option value="1">下班</option>
+                        </select>
+                    </td>
+
                     <td>
+                    <td>状态:&nbsp;
+                        <select id="approveState" name="approveState" style="width: 180px">
+                            <option value="">全部</option>
+                            <option value="正常">正常</option>
+                            <option value="迟到">迟到</option>
+                            <option value="早退">早退</option>
+                            <option value="事假">事假</option>
+                            <option value="病假">病假</option>
+                            <option value="出差">出差</option>
+                        </select>
+                    </td>
+                    <td>起始时期:&nbsp;
                         <input style="" class="Wdate span2" name="startDate" id='startDate' placeholder="开始时间" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',readOnly:true})" />
                         -
                         <input style="" class="Wdate span2" name="endDate" id='endDate' placeholder="截止时间" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',readOnly:true})" />
@@ -263,6 +302,9 @@
 
     <div id="toolbar" style="display: none;">
         <a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'search_new',plain:true" onclick="searchFun();">查询</a>
+        <a href="javascript:void(0);" class="easyui-linkbutton"
+           data-options="iconCls:'out_new',plain:true"
+           onclick="exportFun();">execl导出</a>
     </div>
 </div>
 </body>

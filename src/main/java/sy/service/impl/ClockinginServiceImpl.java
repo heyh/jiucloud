@@ -50,7 +50,7 @@ public class ClockinginServiceImpl implements ClockinginServiceI {
     }
 
     @Override
-    public DataGrid dataGrid(String cid, List<Integer> ugroup, Clockingin clockingin, PageHelper pageHelper) {
+    public DataGrid dataGrid(String keyword, String cid, List<Integer> ugroup, Clockingin clockingin, PageHelper pageHelper) {
         DataGrid dg = new DataGrid();
         Map<String, Object> params = new HashMap<String, Object>();
         String hql = "";
@@ -74,6 +74,27 @@ public class ClockinginServiceImpl implements ClockinginServiceI {
         if (!StringUtil.trimToEmpty(clockingin.getUid()).equals("")) {
             hql += " and uid = :uid ";
             params.put("uid", clockingin.getUid());
+        }
+
+        if (!StringUtil.trimToEmpty(clockingin.getClockinginFlag()).equals("")) {
+            hql += " and clockinginFlag = :clockinginFlag ";
+            params.put("clockinginFlag", clockingin.getClockinginFlag());
+        }
+
+        if (!StringUtil.trimToEmpty(clockingin.getApproveState()).equals("")) {
+            hql += " and approveState = :approveState ";
+            params.put("approveState", clockingin.getApproveState());
+        }
+
+        if (!keyword.equals("")) {
+            hql += " and ( address like :address ";
+            params.put("address", "%%" + keyword + "%%");
+
+            hql += " or uname like :uname ";
+            params.put("uname", "%%" + keyword + "%%");
+
+            hql += " or approveState like :approveState ) ";
+            params.put("approveState", "%%" + keyword + "%%");
         }
 
         List<Clockingin> clockingins = clockinginDao.find(hql, params, pageHelper.getPage(), pageHelper.getRows());
