@@ -12,19 +12,14 @@
 
 <%
     String userId = null;
-    String projectInfos = null;
-    List<Integer> ugroup = new ArrayList<Integer>();
     boolean hasApproveRight = false;
     SessionInfo sessionInfo = (SessionInfo) session.getAttribute(ConfigUtil.getSessionInfoName());
     if (sessionInfo == null) {
         response.sendRedirect(request.getContextPath());
     } else {
         userId = sessionInfo.getId();
-        projectInfos = sessionInfo.getProjectInfos();
-        ugroup = sessionInfo.getUgroup();
         hasApproveRight = sessionInfo.getRightList().contains("19") || 0 == sessionInfo.getParentId();
     }
-
 %>
 
 <!DOCTYPE html>
