@@ -207,7 +207,7 @@ public class ClockinginController extends BaseController  {
             Map<String, Object> mapValue = new HashMap<String, Object>();
             mapValue.put("clockinginDate", StringUtil.trimToEmpty(tem.getClockinginDate()).substring(0, 10));
             mapValue.put("uname", tem.getUname());
-            mapValue.put("clockinginFlag", tem.getClockinginFlag().equals('0') ? "上班" : "下班");
+            mapValue.put("clockinginFlag", Integer.parseInt(tem.getClockinginFlag()) == 0 ? "上班" : "下班");
             mapValue.put("clockinginTime", StringUtil.trimToEmpty(tem.getClockinginTime()).substring(0, 19));
             mapValue.put("address", tem.getAddress());
 
