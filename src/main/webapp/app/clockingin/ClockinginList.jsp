@@ -14,6 +14,7 @@
     String userId = null;
     String projectInfos = null;
     List<Integer> ugroup = new ArrayList<Integer>();
+    boolean hasApproveRight = false;
     SessionInfo sessionInfo = (SessionInfo) session.getAttribute(ConfigUtil.getSessionInfoName());
     if (sessionInfo == null) {
         response.sendRedirect(request.getContextPath());
@@ -21,6 +22,7 @@
         userId = sessionInfo.getId();
         projectInfos = sessionInfo.getProjectInfos();
         ugroup = sessionInfo.getUgroup();
+        hasApproveRight = sessionInfo.getRightList().contains("19") || 0 == sessionInfo.getParentId();
     }
 
 %>
@@ -127,7 +129,7 @@
                                     var str = '';
                                     var userId = <%= userId %>;
 
-                                    if (userId != row.uid) {
+                                    if (userId != row.uid && <%= hasApproveRight %>) {
                                         str += $
                                             .formatString(
                                                 '<img onclick="editFun(\'{0}\');" src="{1}" title="审核" />',
