@@ -45,6 +45,8 @@ public class ClockinginController extends BaseController  {
         SessionInfo sessionInfo = (SessionInfo) session.getAttribute(ConfigUtil.getSessionInfoName());
         String cid = sessionInfo.getCompid();
         List<Integer> ugroup = sessionInfo.getUgroup();
+        boolean hasApproveRight = sessionInfo.getRightList().contains("19"); // 有审核权限可以查询全部
+
         Clockingin clockingin = new Clockingin();
         clockingin.setCid(cid);
 
@@ -65,7 +67,7 @@ public class ClockinginController extends BaseController  {
         String approveState = StringUtil.trimToEmpty(request.getParameter("approveState"));
         clockingin.setApproveState(approveState);
 
-        DataGrid dataGrid = clockinginService.dataGrid(keyword, cid, ugroup, clockingin, pageHelper);
+        DataGrid dataGrid = clockinginService.dataGrid(keyword, cid, ugroup, clockingin, pageHelper, hasApproveRight);
         return dataGrid;
     }
 
@@ -122,6 +124,7 @@ public class ClockinginController extends BaseController  {
         HttpSession session = request.getSession();
         String keyword = StringUtil.trimToEmpty(request.getParameter("keyword"));
         SessionInfo sessionInfo = (SessionInfo) session.getAttribute(ConfigUtil.getSessionInfoName());
+        boolean hasApproveRight = sessionInfo.getRightList().contains("19");
         String cid = sessionInfo.getCompid();
         List<Integer> ugroup = sessionInfo.getUgroup();
         Clockingin clockingin = new Clockingin();
@@ -145,7 +148,7 @@ public class ClockinginController extends BaseController  {
         clockingin.setApproveState(approveState);
 
         pageHelper.setRows(999999999);
-        List<Clockingin> datas = clockinginService.dataGrid(keyword, cid, ugroup, clockingin, pageHelper).getRows();
+        List<Clockingin> datas = clockinginService.dataGrid(keyword, cid, ugroup, clockingin, pageHelper, hasApproveRight).getRows();
 
         List<Map<String, Object>> map = new ArrayList<Map<String, Object>>();
 

@@ -18,7 +18,7 @@ public interface ClockinginServiceI {
 
     public int approveClockingin(String approveState);
 
-    DataGrid dataGrid(String keyword, String cid, List<Integer> ugroup, Clockingin clockingin, PageHelper pageHelper);
+    DataGrid dataGrid(String keyword, String cid, List<Integer> ugroup, Clockingin clockingin, PageHelper pageHelper, boolean hasApproveRight);
 
     public Clockingin getClockingin(int id);
 

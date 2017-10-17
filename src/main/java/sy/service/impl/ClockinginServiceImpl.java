@@ -50,15 +50,17 @@ public class ClockinginServiceImpl implements ClockinginServiceI {
     }
 
     @Override
-    public DataGrid dataGrid(String keyword, String cid, List<Integer> ugroup, Clockingin clockingin, PageHelper pageHelper) {
+    public DataGrid dataGrid(String keyword, String cid, List<Integer> ugroup, Clockingin clockingin, PageHelper pageHelper, boolean hasApproveRight) {
         DataGrid dg = new DataGrid();
         Map<String, Object> params = new HashMap<String, Object>();
         String hql = "";
         hql = "from Clockingin where cid=:cid and isDelete = '0' ";
         params.put("cid", cid);
 
-        String uids = StringUtils.join(ugroup, ",");
-        hql += " and uid in (" + uids + ") ";
+        if (hasApproveRight) {
+            String uids = StringUtils.join(ugroup, ",");
+            hql += " and uid in (" + uids + ") ";
+        }
 
         hql += " and clockinginTime >= :startTime";
         params.put("startTime", DateKit.strToDateOrTime(clockingin.getStartDate()));
