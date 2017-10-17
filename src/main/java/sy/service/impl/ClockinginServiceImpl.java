@@ -57,7 +57,7 @@ public class ClockinginServiceImpl implements ClockinginServiceI {
         hql = "from Clockingin where cid=:cid and isDelete = '0' ";
         params.put("cid", cid);
 
-        if (hasApproveRight) {
+        if (!hasApproveRight) {
             String uids = StringUtils.join(ugroup, ",");
             hql += " and uid in (" + uids + ") ";
         }
