@@ -389,15 +389,11 @@
                             width : 100,
                             formatter: function (value, row, index) {
                                 var str = '';
-                                if (row.needApproved == '0' || row.needApproved == '1') {
-                                    return str;
-                                } else {
-                                    if (row.approvedOption != '' && row.approvedOption != undefined && row.approvedOption != 'undefined') {
-                                        str += $.formatString('<a onclick="viewApproveDetailsFun(\' {0} \');" href="javascript:void(0);" class="easyui-linkbutton">' +
-                                            '<img src="${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/viewDetails.png">' +
-                                            '审批详情</a>',
-                                            row.approvedOption);
-                                    }
+                                if (row.approvedOption != '' && row.approvedOption != undefined && row.approvedOption != 'undefined') {
+                                    str += $.formatString('<a onclick="viewApproveDetailsFun(\' {0} \');" href="javascript:void(0);" class="easyui-linkbutton">' +
+                                        '<img src="${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/viewDetails.png">' +
+                                        '审批详情</a>',
+                                        row.approvedOption);
                                 }
 
                                 return str;
@@ -566,15 +562,11 @@
                             width : 100,
                             formatter: function (value, row, index) {
                                 var str = '';
-                                if (row.needApproved == '0' || row.needApproved == '1') {
-                                    return str;
-                                } else {
-                                    if (row.approvedOption != '' && row.approvedOption != undefined && row.approvedOption != 'undefined') {
-                                        str += $.formatString('<a onclick="viewApproveDetailsFun(\' {0} \');" href="javascript:void(0);" class="easyui-linkbutton">' +
-                                            '<img src="${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/viewDetails.png">' +
-                                            '审批详情</a>',
-                                            row.approvedOption);
-                                    }
+                                if (row.approvedOption != '' && row.approvedOption != undefined && row.approvedOption != 'undefined') {
+                                    str += $.formatString('<a onclick="viewApproveDetailsFun(\' {0} \');" href="javascript:void(0);" class="easyui-linkbutton">' +
+                                        '<img src="${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/viewDetails.png">' +
+                                        '审批详情</a>',
+                                        row.approvedOption);
                                 }
 
                                 return str;
@@ -693,15 +685,11 @@
                             width : 100,
                             formatter: function (value, row, index) {
                                 var str = '';
-                                if (row.needApproved == '0' || row.needApproved == '1') {
-                                    return str;
-                                } else {
-                                    if (row.approvedOption != '' && row.approvedOption != undefined && row.approvedOption != 'undefined') {
-                                        str += $.formatString('<a onclick="viewApproveDetailsFun(\' {0} \');" href="javascript:void(0);" class="easyui-linkbutton">' +
-                                            '<img src="${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/viewDetails.png">' +
-                                            '审批详情</a>',
-                                            row.approvedOption);
-                                    }
+                                if (row.approvedOption != '' && row.approvedOption != undefined && row.approvedOption != 'undefined') {
+                                    str += $.formatString('<a onclick="viewApproveDetailsFun(\' {0} \');" href="javascript:void(0);" class="easyui-linkbutton">' +
+                                        '<img src="${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/viewDetails.png">' +
+                                        '审批详情</a>',
+                                        row.approvedOption);
                                 }
 
                                 return str;
@@ -882,15 +870,11 @@
                             width : 100,
                             formatter: function (value, row, index) {
                                 var str = '';
-                                if (row.needApproved == '0' || row.needApproved == '1') {
-                                    return str;
-                                } else {
-                                    if (row.approvedOption != '' && row.approvedOption != undefined && row.approvedOption != 'undefined') {
-                                        str += $.formatString('<a onclick="viewApproveDetailsFun(\' {0} \');" href="javascript:void(0);" class="easyui-linkbutton">' +
-                                            '<img src="${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/viewDetails.png">' +
-                                            '审批详情</a>',
-                                            row.approvedOption);
-                                    }
+                                if (row.approvedOption != '' && row.approvedOption != undefined && row.approvedOption != 'undefined') {
+                                    str += $.formatString('<a onclick="viewApproveDetailsFun(\' {0} \');" href="javascript:void(0);" class="easyui-linkbutton">' +
+                                        '<img src="${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/viewDetails.png">' +
+                                        '审批详情</a>',
+                                        row.approvedOption);
                                 }
 
                                 return str;

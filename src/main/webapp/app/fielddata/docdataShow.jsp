@@ -35,6 +35,22 @@
 <jsp:include page="../../inc.jsp"></jsp:include>
     <link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1-rc.1/css/select2.min.css" rel="stylesheet" />
     <script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1-rc.1/js/select2.min.js"></script>
+	<script type="text/javascript" src="${pageContext.request.contextPath }/jslib/layer-v3.0.3/layer/layer.js"></script>
+	<style>
+		.table_style {
+			width: 100%;
+			margin-bottom: 20px;
+			border:1px solid #EDEDED
+
+		}
+		.table_style th{height:34px; background:#76b3ff; color:#fff; font-weight: normal}
+		.table_style td{height:32px; color:#0e0e0e;padding-left:10px;color:#666}
+		.table_style tbody tr{background:#eee; cursor: default}
+		.table_style tbody tr.hover td{background:#e4fbfb}
+		.td_title{font-weight:bold;color:#333}
+
+		.subtotal { font-weight: bold; }/*合计单元格样式*/
+	</style>
 <script type="text/javascript">
 	var dataGrid;
 	$(function() {
@@ -155,6 +171,22 @@
                                             return str;
                                         }
                                     },
+									{
+										field : 'approvedOption',
+										title : '审批意见',
+										width : 100,
+										formatter: function (value, row, index) {
+                                            var str = '';
+                                            if (row.approvedOption != '' && row.approvedOption != undefined && row.approvedOption != 'undefined') {
+                                                str += $.formatString('<a onclick="viewApproveDetailsFun(\' {0} \');" href="javascript:void(0);" class="easyui-linkbutton">' +
+                                                    '<img src="${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/viewDetails.png">' +
+                                                    '审批详情</a>',
+                                                    row.approvedOption);
+                                            }
+
+                                            return str;
+										}
+									},
                                     {
                                         field : 'currentApprovedUser',
                                         title : '当前审批人',
@@ -220,6 +252,38 @@
 							}
                         });
     });
+
+    function viewApproveDetailsFun(approvedOption) {
+        var approvedOptions = approvedOption.split('|');
+
+        var approvedOptionsHtml =
+            '<table class="table_style" style="font-size: 12px;" cellpadding="0" cellspacing="0">' +
+            '<tr>' +
+            '<td align="center">时间</td>' +
+            '<td align="center">审核人</td>' +
+            '<td align="center">审核意见</td>' +
+            '</tr>';
+
+        for (var i=0; i<approvedOptions.length; i++) {
+            approvedOptionsHtml += '<tr>';
+            var approvedOptionInfos = approvedOptions[i].split('::');
+            for (var j=0; j<approvedOptionInfos.length; j++) {
+                approvedOptionsHtml += '<td>' + approvedOptionInfos[j] + '</td>';
+            }
+            approvedOptionsHtml += '</tr>'
+        }
+        approvedOptionsHtml += '</table>';
+
+		layer.open({
+            type: 1,
+            title: '审批详情',
+            closeBtn: 2,
+            shadeClose: true,
+            maxmin: true, //开启最大化最小化按钮
+            area: ['400px', '300px'],
+            content: approvedOptionsHtml
+        });
+    }
 
 	// 交流
     function discussFun(id) {
