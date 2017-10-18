@@ -381,6 +381,10 @@ public class Api extends BaseController {
             approvedUser = currentApprovedUser;
         }
 
+        if (StringUtil.trimToEmpty(payAmount).equals("") && itemCode.substring(0, 3).equals("800")) {
+            payAmount = String.valueOf(Double.parseDouble(count) * Double.parseDouble(price));
+        }
+
         TFieldData fieldData = new TFieldData(projectName, uid, new Date(),
                 costType, dataName, price, companyName, count, specifications,
                 remark, cid, uname, unit, needApproved, approvedUser, currentApprovedUser, itemCode, "", section, supplier, relId, "", "", payAmount);
