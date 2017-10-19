@@ -85,12 +85,12 @@
                         }
 
                         var storageCount = $('#storageCount').val();
-                        var dOutCount = parseFloat(outCount).toFixed(4);
+                        var dOutCount = parseFloat(outCount);
                         if (dOutCount == 0) {
                             alert('请输入出库数量');
                             return false;
                         }
-                        var dStorageCount = parseFloat(storageCount).toFixed(4);
+                        var dStorageCount = parseFloat(storageCount);
                         if (dOutCount > dStorageCount) {
                             alert('库存不足,请修改出库数量!');
                             return false;
