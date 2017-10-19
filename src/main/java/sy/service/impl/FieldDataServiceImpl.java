@@ -343,7 +343,7 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
             t.setNeedApproved(approvedState);
 
 
-            t.setApprovedOption(t.getApprovedOption().equals("") ? approvedOption : t.getApprovedOption() + "|" + approvedOption);
+            t.setApprovedOption(StringUtil.trimToEmpty(t.getApprovedOption()).equals("") ? approvedOption : StringUtil.trimToEmpty(t.getApprovedOption()) + "|" + approvedOption);
             this.fieldDataDaoI.update(t);
         } catch (Exception e) {
             e.printStackTrace();
