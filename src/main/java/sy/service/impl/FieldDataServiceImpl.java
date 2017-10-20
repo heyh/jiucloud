@@ -47,6 +47,9 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
     @Autowired
     private TaskPushServiceI taskPushService;
 
+    @Autowired
+    DepartmentServiceI departmentService;
+
     @Override
     public TFieldData add(TFieldData tFieldData) {
         tFieldData.setCreatTime(new Date());
@@ -56,6 +59,11 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
 
     @Override
     public DataGrid dataGrid(FieldData fieldData, PageHelper ph, List<Integer> ugroup,String source, String keyword) {
+
+        List<String> rightList = new ArrayList<String>();
+        if (!StringUtil.trimToEmpty(fieldData.getCid()).equals("") && !StringUtil.trimToEmpty(fieldData.getUid()).equals("")) {
+            rightList = departmentService.getAllRight(fieldData.getCid(), Integer.parseInt(fieldData.getUid()));
+        }
         DataGrid dg = new DataGrid();
         Map<String, Object> params = new HashMap<String, Object>();
         String hql="";
@@ -71,7 +79,7 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
             hql = " from TFieldData t  where isDelete=0  ";
         }
 
-        hql += whereHql(fieldData, params, ugroup, keyword);
+        hql += whereHql(fieldData, params, ugroup, keyword, rightList);
 
         List<TFieldData> l = fieldDataDaoI.find(hql, params, ph.getPage(), ph.getRows());
         dg.setTotal(fieldDataDaoI.count("select count(*) " + hql, params));
@@ -178,12 +186,12 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
         Map<String, Object> params = new HashMap<String, Object>();
         String hql = " from TFieldData t  where isDelete=0 ";
         List<TFieldData> l = fieldDataDaoI.find(
-                hql + whereHql(null, params, ugroup, ""), params, 0, 8);
+                hql + whereHql(null, params, ugroup, "", new ArrayList<String>()), params, 0, 8);
         return l;
     }
 
     private String whereHql(FieldData cmodel, Map<String, Object> params,
-                            List<Integer> ugroup, String keyword) {
+                            List<Integer> ugroup, String keyword, List<String> rightList) {
         String hql = " ";
         if (cmodel != null) {
             if (!StringUtil.trimToEmpty(cmodel.getUname()).equals("")) {
@@ -241,14 +249,26 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
 //        }
 
         if (null == cmodel.getNeedApproved() ) {
-            if ( !StringUtil.trimToEmpty(cmodel.getCid()).equals("")) {
+            if (rightList.contains("15") || rightList.contains(16) || rightList.contains("18")) {
                 String uids = StringUtils.join(ugroup, ",");
-                hql += " and (uid in (" + uids + ") or ( (substring(itemcode , 1 , 3) = '700' or substring(itemcode , 1 , 3) = '800') and cid = :cid))";
+                hql += " and (uid in (" + uids + ") or substring(itemcode , 1 , 3) = '700' and cid = :cid) ) ";
+                params.put("cid", String.valueOf(cmodel.getCid()));
+            } else if (rightList.contains("17")) {
+                String uids = StringUtils.join(ugroup, ",");
+                hql += " and (uid in (" + uids + ") or (substring(itemcode , 1 , 3) = '800' and cid = :cid) ) ";
                 params.put("cid", String.valueOf(cmodel.getCid()));
             } else {
                 String uids = StringUtils.join(ugroup, ",");
                 hql += " and uid in (" + uids + ")";
             }
+//            if ( !StringUtil.trimToEmpty(cmodel.getCid()).equals("")) {
+//                String uids = StringUtils.join(ugroup, ",");
+//                hql += " and (uid in (" + uids + ") or ( (substring(itemcode , 1 , 3) = '700' or substring(itemcode , 1 , 3) = '800') and cid = :cid))";
+//                params.put("cid", String.valueOf(cmodel.getCid()));
+//            } else {
+//                String uids = StringUtils.join(ugroup, ",");
+//                hql += " and uid in (" + uids + ")";
+//            }
         }
 
         if ( cmodel.getId() != 0) {
@@ -1062,7 +1082,7 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
             hql = " from TFieldData t  where isDelete=0  ";
         }
 
-        hql += whereHql(fieldData, params, ugroup, keyword);
+        hql += whereHql(fieldData, params, ugroup, keyword, new ArrayList<String>());
 
         List<TFieldData> l = fieldDataDaoI.find(hql, params, ph.getPage(), ph.getRows());
         dg.setTotal(fieldDataDaoI.count("select count(*) " + hql, params));

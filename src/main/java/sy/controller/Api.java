@@ -142,6 +142,9 @@ public class Api extends BaseController {
         }
         if (advancedSearchStartTime != null && !advancedSearchStartTime.equals("")) {
             fieldData.setStartTime(advancedSearchStartTime + " 00:00:00");
+        } else {
+            fieldData.setStartTime(UtilDate.getSameLaterDay(3) + " 00:00:00");
+
         }
         if (advancedSearchEndTime != null && !advancedSearchEndTime.equals("")) {
             fieldData.setEndTime(advancedSearchEndTime + " 23:59:59");

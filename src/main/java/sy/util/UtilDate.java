@@ -116,4 +116,19 @@ public class UtilDate {
 		calendar.set(Calendar.DAY_OF_MONTH, 0);
 		return sdateFormat.format(calendar.getTime());
 	}
+
+	public static String getSameLaterDay(int sameDay) {
+		SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+		Date date=new Date();
+		Calendar calendar = Calendar.getInstance();
+		calendar.setTime(date);
+		calendar.add(Calendar.DAY_OF_MONTH, -1 * sameDay);
+		date = calendar.getTime();
+		return sdf.format(date);
+	}
+
+	public static void main(String[] args) {
+		System.out.print(getSameLaterDay(21));
+	}
+
 }

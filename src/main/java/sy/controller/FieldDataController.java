@@ -96,7 +96,8 @@ public class FieldDataController extends BaseController {
 
     @RequestMapping("/billDataShow")
     public String billDataShow(HttpServletRequest req) {
-        req.setAttribute("first", UtilDate.getshortFirst());
+//        req.setAttribute("first", UtilDate.getshortFirst());
+        req.setAttribute("first", UtilDate.getSameLaterDay(3));
         req.setAttribute("last", UtilDate.getshortLast());
         req.setAttribute("month", UtilDate.getCurrentMonth());
         return "/app/fielddata/billdataShow";
@@ -117,9 +118,10 @@ public class FieldDataController extends BaseController {
     public DataGrid dataGrid(FieldData fieldData, PageHelper ph, HttpServletRequest request, HttpSession session) {
         SessionInfo sessionInfo = (SessionInfo) session.getAttribute(ConfigUtil.getSessionInfoName());
         String cid = sessionInfo.getCompid();
-        if (sessionInfo.getRightList().contains("15") || sessionInfo.getRightList().contains("16") || sessionInfo.getRightList().contains("17")  || sessionInfo.getRightList().contains("18")) {
+//        if (sessionInfo.getRightList().contains("15") || sessionInfo.getRightList().contains("16") || sessionInfo.getRightList().contains("17")  || sessionInfo.getRightList().contains("18")) {
             fieldData.setCid(cid);
-        }
+            fieldData.setUid(sessionInfo.getId());
+//        }
         List<Integer> ugroup = sessionInfo.getUgroup();
         String source = request.getParameter("source");
         String keyword = StringUtil.trimToEmpty(request.getParameter("keyword"));
