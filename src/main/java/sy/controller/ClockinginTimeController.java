@@ -12,9 +12,11 @@ import sy.pageModel.PageHelper;
 import sy.pageModel.SessionInfo;
 import sy.service.ClockinginTimeServiceI;
 import sy.util.ConfigUtil;
+import sy.util.StringUtil;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.sql.Time;
 import java.util.Date;
 
 /**
@@ -52,13 +54,17 @@ public class ClockinginTimeController extends BaseController {
 
     @RequestMapping("/securi_updateClockinginTime")
     @ResponseBody
-    public Json updateClockinginTime(ClockinginTime clockinginTime, HttpSession session) {
+    public Json updateClockinginTime(HttpServletRequest request, HttpSession session) {
         SessionInfo sessionInfo = (SessionInfo) session.getAttribute(ConfigUtil.getSessionInfoName());
+        int id = Integer.parseInt(StringUtil.trimToEmpty(request.getParameter("id")));
+        String clockinginStartTime = request.getParameter("clockinginStartTime");
+        String clockinginEndTime = request.getParameter("clockinginEndTime");
+
         Json j = new Json();
         try {
-            ClockinginTime c = clockinginTimeService.getClockinginTime(clockinginTime.getId());
-            c.setClockinginStartTime(clockinginTime.getClockinginStartTime());
-            c.setClockinginEndTime(clockinginTime.getClockinginEndTime());
+            ClockinginTime c = clockinginTimeService.getClockinginTime(id);
+            c.setClockinginStartTime(Time.valueOf(clockinginStartTime));
+            c.setClockinginEndTime(Time.valueOf(clockinginEndTime));
             clockinginTimeService.update(c);
 
             j.setSuccess(true);

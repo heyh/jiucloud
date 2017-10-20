@@ -43,6 +43,10 @@
 				<label class="control-label" for="clockinginStartTime">上班时间:</label>
 
 				<div class="controls">
+					<%--<div class="input-append date">--%>
+						<%--<input type="text" name="clockinginStartTime" id="clockinginStartTime" readonly value="${clockinginTime.clockinginStartTime}">--%>
+						<%--<span class="add-on"><i class="icon-th"></i></span>--%>
+					<%--</div>--%>
 					<input style="" class="Wdate span2" name="clockinginStartTime" id='clockinginStartTime' placeholder="上班时间" value="${clockinginTime.clockinginStartTime}" onclick="WdatePicker({dateFmt:'HH:mm:ss'})" />
 				</div>
 			</div>
@@ -51,6 +55,10 @@
 				<label class="control-label" for="clockinginEndTime">下班时间:</label>
 
 				<div class="controls">
+					<%--<div class="input-append date">--%>
+						<%--<input type="text" name="clockinginEndTime" id="clockinginEndTime" readonly value="${clockinginTime.clockinginEndTime}">--%>
+						<%--<span class="add-on"><i class="icon-th"></i></span>--%>
+					<%--</div>--%>
 					<input style="" class="Wdate span2" name="clockinginEndTime" id='clockinginEndTime' placeholder="上班时间" value="${clockinginTime.clockinginEndTime}" onclick="WdatePicker({dateFmt:'HH:mm:ss'})" />
 				</div>
 			</div>

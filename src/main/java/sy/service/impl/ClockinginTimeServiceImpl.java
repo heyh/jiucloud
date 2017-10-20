@@ -47,6 +47,10 @@ public class ClockinginTimeServiceImpl implements ClockinginTimeServiceI {
         params.put("cid", cid);
 
         List<ClockinginTime> clockinginTimeList = clockinginTimeDao.find(hql, params, pageHelper.getPage(), pageHelper.getRows());
+        if (clockinginTimeList == null || clockinginTimeList.size()<=0) {
+            addDefaultClockinginTime(cid);
+            clockinginTimeList = clockinginTimeDao.find(hql, params, pageHelper.getPage(), pageHelper.getRows());
+        }
 
         dg.setTotal(clockinginTimeDao.count("select count(*) " + hql, params));
         dg.setRows(clockinginTimeList);
