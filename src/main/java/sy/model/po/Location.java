@@ -26,11 +26,22 @@ public class Location {
     @Column(name = "cid")
     private String cid;
 
+    @Column(name = "uid")
+    private String uid;
+
     @Column(name = "mc")
     private String mc;
 
     public int getId() {
         return id;
+    }
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
     public void setId(int id) {

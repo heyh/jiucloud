@@ -11,11 +11,11 @@ import java.util.List;
 
 public interface LocationServiceI {
 
-    List<Location> getLocations(String cid, String keyword);
+    List<Location> getLocations(String cid, List<Integer> ugroup, String keyword);
 
     List<Location> getLocationsByName(String cid, String mc);
 
-    Location addLocation(String cid, String mc);
+    Location addLocation(String cid, String uid, String mc);
 
     void delLocation(String id);
 }

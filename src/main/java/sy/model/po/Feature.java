@@ -24,6 +24,17 @@ public class Feature {
     @Column(name = "cid")
     private String cid;
 
+    @Column(name = "uid")
+    private String uid;
+
+    public String getUid() {
+        return uid;
+    }
+
+    public void setUid(String uid) {
+        this.uid = uid;
+    }
+
     @Column(name = "mc")
     private String mc;
 

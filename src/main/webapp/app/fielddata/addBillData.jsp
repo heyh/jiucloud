@@ -23,6 +23,7 @@
     JSONArray jsonArray = new JSONArray();
 
     String cid = "";
+    String uid = "";
     SessionInfo sessionInfo = (SessionInfo) session.getAttribute(ConfigUtil.getSessionInfoName());
     if (sessionInfo == null) {
         response.sendRedirect(request.getContextPath());
@@ -36,6 +37,7 @@
         }
 
         cid = sessionInfo.getCompid();
+        uid = sessionInfo.getId();
     }
 
 %>
@@ -524,7 +526,7 @@
         function addFeature(mc, dw) {
             $.ajax({
                 url: '${pageContext.request.contextPath}/featureController/securi_addFeature',
-                data: {mc: mc, dw: dw, cid: <%= cid %>},
+                data: {mc: mc, dw: dw, cid: <%= cid %>, uid: <%= uid %>},
                 type: 'post',
                 dataType: 'json',
                 contentType: "application/x-www-form-urlencoded; charset=utf-8",
@@ -539,7 +541,7 @@
         function delFeature(id) {
             $.ajax({
                 url: '${pageContext.request.contextPath}/featureController/securi_delFeature',
-                data: {id: id, cid: <%= cid %>},
+                data: {id: id, cid: <%= cid %>, uid: <%= uid %>},
                 type: 'post',
                 dataType: 'json',
                 contentType: "application/x-www-form-urlencoded; charset=utf-8",
@@ -570,7 +572,7 @@
             debugger;
             $.ajax({
                 url: '${pageContext.request.contextPath}/featureController/securi_getFeatures',
-                data: {keyword: $('#keyword').val(), cid: <%= cid %>},
+                data: {keyword: $('#keyword').val(), cid: <%= cid %>, uid: <%= uid %>},
                 type: 'post',
                 dataType: 'json',
                 contentType: "application/x-www-form-urlencoded; charset=utf-8",

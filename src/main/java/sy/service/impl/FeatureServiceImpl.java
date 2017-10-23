@@ -1,5 +1,6 @@
 package sy.service.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sy.dao.FeatureDaoI;
@@ -25,7 +26,7 @@ public class FeatureServiceImpl implements FeatureServiceI {
     private FeatureDaoI featureDao;
 
     @Override
-    public List<Feature> getFeatures(String cid,String keyword) {
+    public List<Feature> getFeatures(String cid, List<Integer> ugroup, String keyword) {
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("cid", cid);
         String hql = "from Feature where cid = :cid ";
@@ -37,14 +38,18 @@ public class FeatureServiceImpl implements FeatureServiceI {
             params.put("dw", "%%" + keyword + "%%");
         }
 
+        String uids = StringUtils.join(ugroup, ",");
+        hql += " and uid in (" + uids + ")";
+
         List<Feature> features = featureDao.find(hql, params);
         return features;
     }
 
     @Override
-    public Feature addFeature(String cid, String mc, String dw) {
+    public Feature addFeature(String cid, String uid, String mc, String dw) {
         Feature feature = new Feature();
         feature.setCid(cid);
+        feature.setUid(uid);
         feature.setMc(mc);
         feature.setDw(dw);
         featureDao.save(feature);

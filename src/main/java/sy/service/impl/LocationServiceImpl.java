@@ -1,5 +1,6 @@
 package sy.service.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sy.dao.LocationDaoI;
@@ -22,7 +23,7 @@ public class LocationServiceImpl implements LocationServiceI {
     private LocationDaoI locationDao;
 
     @Override
-    public List<Location> getLocations(String cid, String keyword) {
+    public List<Location> getLocations(String cid, List<Integer> ugroup, String keyword) {
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("cid", cid);
         String hql = "from Location where cid = :cid ";
@@ -30,6 +31,9 @@ public class LocationServiceImpl implements LocationServiceI {
             hql += " and mc like :mc ";
             params.put("mc", "%%" + keyword + "%%");
         }
+
+        String uids = StringUtils.join(ugroup, ",");
+        hql += " and uid in (" + uids + ")";
 
         List<Location> locations = locationDao.find(hql, params);
         return locations;
@@ -47,9 +51,10 @@ public class LocationServiceImpl implements LocationServiceI {
     }
 
     @Override
-    public Location addLocation(String cid, String mc) {
+    public Location addLocation(String cid, String uid, String mc) {
         Location location = new Location();
         location.setCid(cid);
+        location.setUid(uid);
         location.setMc(mc);
         locationDao.save(location);
 

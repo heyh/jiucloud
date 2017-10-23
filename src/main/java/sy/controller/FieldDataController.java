@@ -416,6 +416,7 @@ public class FieldDataController extends BaseController {
         SessionInfo sessionInfo = (SessionInfo) request.getSession().getAttribute(ConfigUtil.getSessionInfoName());
         String cid = sessionInfo.getCompid();
         String uid = sessionInfo.getId();
+        List<Integer> ugroup = sessionInfo.getUgroup();
         String type = request.getParameter("source");
         String pageUrl = null;
         if (type.equals("data")) {
@@ -445,8 +446,8 @@ public class FieldDataController extends BaseController {
         List<String> firstLevelParentDepartments = departmentService.getFirstLevelParentDepartmentsByUid(cid, uid);
         String firstLevelParentDepartment = firstLevelParentDepartments.size() > 0 ? firstLevelParentDepartments.get(0) : "";
 
-        List<Feature> features = featureService.getFeatures(cid,"");
-        List<Location> locations = locationService.getLocations(cid, "");
+        List<Feature> features = featureService.getFeatures(cid, ugroup, "");
+        List<Location> locations = locationService.getLocations(cid, ugroup,"");
         request.setAttribute("maxProjectId", maxProjectId);
         request.setAttribute("maxNeedApproved", maxNeedApproved);
         request.setAttribute("maxApprovedUser", maxApprovedUser);
@@ -523,7 +524,7 @@ public class FieldDataController extends BaseController {
             if (fieldData.getItemCode().substring(0, 3).equals("700")) {
                 List<Location> hasLocations = locationService.getLocationsByName(fieldData.getCid(), StringUtil.trimToEmpty(fieldData.getSpecifications()).trim());
                 if (hasLocations == null || hasLocations.size() <= 0) {
-                    locationService.addLocation(fieldData.getCid(), StringUtil.trimToEmpty(fieldData.getSpecifications()).trim());
+                    locationService.addLocation(fieldData.getCid(), fieldData.getUid(), StringUtil.trimToEmpty(fieldData.getSpecifications()).trim());
                 }
             }
 
@@ -532,7 +533,7 @@ public class FieldDataController extends BaseController {
                 String mc = StringUtil.trimToEmpty(fieldData.getDataName()) + (StringUtil.trimToEmpty(fieldData.getSpecifications()).equals("") ? "" : "(" + StringUtil.trimToEmpty(fieldData.getSpecifications()) + ")");
                 List<Feature> featureList = featureService.getFeatureList(fieldData.getCid(), mc, StringUtil.trimToEmpty(fieldData.getUnit()));
                 if (featureList == null || featureList.size() <= 0) {
-                    featureService.addFeature(fieldData.getCid(), mc, StringUtil.trimToEmpty(fieldData.getUnit()));
+                    featureService.addFeature(fieldData.getCid(), fieldData.getUid(), mc, StringUtil.trimToEmpty(fieldData.getUnit()));
                 }
             }
 
