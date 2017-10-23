@@ -709,6 +709,13 @@
 //				}
 			}
 		});
+
+        if (<%= hasReadEditRight %>) {
+            document.getElementById('addDiv').style.display = '';
+        } else {
+            document.getElementById('addDiv').style.display = 'none';
+        }
+
     });
 
 	(function(){
@@ -873,7 +880,7 @@
 	<div id="toolbar" style="display: none;">
 		<a onclick="addFun();" href="javascript:void(0);"
 			class="easyui-linkbutton"
-			data-options="plain:true,iconCls:'add_new'">添加</a>
+			data-options="plain:true,iconCls:'add_new'" id="addDiv">添加</a>
 		<%--<a onclick="quickAddFun();" href="javascript:void(0);"--%>
 		   <%--class="easyui-linkbutton"--%>
 		   <%--data-options="plain:true,iconCls:'add_quick'">快速添加</a>--%>
