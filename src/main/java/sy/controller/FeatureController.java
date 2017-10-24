@@ -22,6 +22,7 @@ import sy.util.WebResult;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -47,11 +48,19 @@ public class FeatureController extends BaseController {
     @RequestMapping("/securi_getFeatures")
     @ResponseBody
     public JSONObject getFeatures(@RequestParam(value = "cid", required = true) String cid,
-                                  @RequestParam(value = "uid", required = true) String uid,
+                                  @RequestParam(value = "uid", required = false) String uid,
                                   @RequestParam(value = "keyword", required = false) String keyword,
                                   HttpServletRequest request) throws Exception {
-        List<Integer> ugroup = departmentService.getUsers(cid, Integer.parseInt(uid));
-        List<Feature> features = featureService.getFeatures(cid, ugroup, keyword);
+
+        List<Feature> features = new ArrayList<Feature>();
+
+        if (!StringUtil.trimToEmpty(uid).equals("")) {
+            List<Integer> ugroup = departmentService.getAllParents(cid, Integer.parseInt(uid));
+            ugroup.add(Integer.parseInt(uid));
+            features = featureService.getFeatures(cid, ugroup, keyword);
+        } else {
+            features = featureService.getFeatures(cid, keyword);
+        }
 
         return new WebResult().ok().set("features", features);
     }
@@ -59,7 +68,7 @@ public class FeatureController extends BaseController {
     @RequestMapping("/securi_addFeature")
     @ResponseBody
     public JSONObject addFeature(@RequestParam(value = "cid", required = true) String cid,
-                                 @RequestParam(value = "uid", required = true) String uid,
+                                 @RequestParam(value = "uid", required = false) String uid,
                                  @RequestParam(value = "mc", required = true) String mc,
                                  @RequestParam(value = "dw", required = true) String dw,
                                  HttpServletRequest request) throws Exception {
@@ -70,12 +79,21 @@ public class FeatureController extends BaseController {
     @RequestMapping("/securi_delFeature")
     @ResponseBody
     public JSONObject delFeature(@RequestParam(value = "cid", required = true) String cid,
-                                 @RequestParam(value = "uid", required = true) String uid,
+                                 @RequestParam(value = "uid", required = false) String uid,
                                  @RequestParam(value = "id", required = true) String id,
                                  HttpServletRequest request) throws Exception {
+
         featureService.delFeature(id);
-        List<Integer> ugroup = departmentService.getUsers(cid, Integer.parseInt(uid));
-        List<Feature> features = featureService.getFeatures(cid, ugroup, "");
+
+        List<Feature> features = new ArrayList<Feature>();
+        if (!StringUtil.trimToEmpty(uid).equals("")) {
+            List<Integer> ugroup = departmentService.getAllParents(cid, Integer.parseInt(uid));
+            ugroup.add(Integer.parseInt(uid));
+            features = featureService.getFeatures(cid, ugroup, "");
+        } else {
+            features = featureService.getFeatures(cid, "");
+        }
+
         return new WebResult().ok().set("features", features);
     }
 }

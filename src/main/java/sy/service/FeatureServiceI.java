@@ -13,6 +13,8 @@ public interface FeatureServiceI {
 
     List<Feature> getFeatures(String cid, List<Integer> ugroup, String keyword);
 
+    List<Feature> getFeatures(String cid, String keyword);
+
     Feature addFeature(String cid, String uid, String mc, String dw);
 
     void delFeature(String id);

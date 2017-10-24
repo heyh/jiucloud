@@ -46,6 +46,23 @@ public class FeatureServiceImpl implements FeatureServiceI {
     }
 
     @Override
+    public List<Feature> getFeatures(String cid, String keyword) {
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("cid", cid);
+        String hql = "from Feature where cid = :cid ";
+        if (!StringUtil.trimToEmpty(keyword).equals("")) {
+            hql += " and (mc like :mc ";
+            params.put("mc", "%%" + keyword + "%%");
+
+            hql += " or dw like :dw )";
+            params.put("dw", "%%" + keyword + "%%");
+        }
+
+        List<Feature> features = featureDao.find(hql, params);
+        return features;
+    }
+
+    @Override
     public Feature addFeature(String cid, String uid, String mc, String dw) {
         Feature feature = new Feature();
         feature.setCid(cid);

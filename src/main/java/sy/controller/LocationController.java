@@ -10,6 +10,7 @@ import sy.model.po.Feature;
 import sy.model.po.Location;
 import sy.service.DepartmentServiceI;
 import sy.service.LocationServiceI;
+import sy.util.StringUtil;
 import sy.util.WebResult;
 
 import javax.servlet.http.HttpServletRequest;
@@ -31,12 +32,18 @@ public class LocationController {
     @RequestMapping("/securi_getLocations")
     @ResponseBody
     public JSONObject getLocations(@RequestParam(value = "cid", required = true) String cid,
-                                   @RequestParam(value = "uid", required = true) String uid,
+                                   @RequestParam(value = "uid", required = false) String uid,
                                    @RequestParam(value = "keyword", required = false) String keyword,
                                    HttpServletRequest request) throws Exception {
 
-        List<Integer> ugroup = departmentService.getUsers(cid, Integer.parseInt(uid));
-        List<Location> locations = locationService.getLocations(cid, ugroup, keyword);
+        List<Location> locations;
+
+        if (!StringUtil.trimToEmpty(uid).equals("")) {
+            List<Integer> ugroup = departmentService.getUsers(cid, Integer.parseInt(uid));
+            locations = locationService.getLocations(cid, ugroup, keyword);
+        } else {
+            locations = locationService.getLocations(cid, keyword);
+        }
 
         return new WebResult().ok().set("locations", locations);
     }
@@ -44,7 +51,7 @@ public class LocationController {
     @RequestMapping("/securi_addLocation")
     @ResponseBody
     public JSONObject addLocation(@RequestParam(value = "cid", required = true) String cid,
-                                  @RequestParam(value = "uid", required = true) String uid,
+                                  @RequestParam(value = "uid", required = false) String uid,
                                   @RequestParam(value = "mc", required = true) String mc,
                                   HttpServletRequest request) throws Exception {
         Location location = locationService.addLocation(cid, uid, mc);
@@ -54,12 +61,20 @@ public class LocationController {
     @RequestMapping("/securi_delLocation")
     @ResponseBody
     public JSONObject delFeature(@RequestParam(value = "cid", required = true) String cid,
-                                 @RequestParam(value = "uid", required = true) String uid,
+                                 @RequestParam(value = "uid", required = false) String uid,
                                  @RequestParam(value = "id", required = true) String id,
                                  HttpServletRequest request) throws Exception {
         locationService.delLocation(id);
-        List<Integer> ugroup = departmentService.getUsers(cid, Integer.parseInt(uid));
-        List<Location> locations = locationService.getLocations(cid, ugroup, "");
+
+        List<Location> locations;
+
+        if (!StringUtil.trimToEmpty(uid).equals("")) {
+            List<Integer> ugroup = departmentService.getUsers(cid, Integer.parseInt(uid));
+            locations = locationService.getLocations(cid, ugroup, "");
+        } else {
+            locations = locationService.getLocations(cid,"");
+        }
+
         return new WebResult().ok().set("locations", locations);
     }
 

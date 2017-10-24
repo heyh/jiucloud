@@ -40,6 +40,20 @@ public class LocationServiceImpl implements LocationServiceI {
     }
 
     @Override
+    public List<Location> getLocations(String cid, String keyword) {
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("cid", cid);
+        String hql = "from Location where cid = :cid ";
+        if (!StringUtil.trimToEmpty(keyword).equals("")) {
+            hql += " and mc like :mc ";
+            params.put("mc", "%%" + keyword + "%%");
+        }
+
+        List<Location> locations = locationDao.find(hql, params);
+        return locations;
+    }
+
+    @Override
     public List<Location> getLocationsByName(String cid, String mc) {
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("cid", cid);
