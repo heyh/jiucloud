@@ -41,6 +41,7 @@ public class FeatureServiceImpl implements FeatureServiceI {
         String uids = StringUtils.join(ugroup, ",");
         hql += " and uid in (" + uids + ")";
 
+        hql += " ORDER BY ID ASC";
         List<Feature> features = featureDao.find(hql, params);
         return features;
     }
@@ -57,6 +58,7 @@ public class FeatureServiceImpl implements FeatureServiceI {
             hql += " or dw like :dw )";
             params.put("dw", "%%" + keyword + "%%");
         }
+        hql += " ORDER BY ID ASC";
 
         List<Feature> features = featureDao.find(hql, params);
         return features;

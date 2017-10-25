@@ -195,8 +195,22 @@ public class DateKit {
 
 	}
 
+	public static String lastMonth() {
+		Calendar c = Calendar.getInstance();
+		c.add(Calendar.MONTH, -1);
+		SimpleDateFormat format =  new SimpleDateFormat("yyyy-MM");
+		return format.format(c.getTime());
+	}
+
+	public static String currentMonth() {
+		Calendar c = Calendar.getInstance();
+		SimpleDateFormat format =  new SimpleDateFormat("yyyy-MM");
+		return format.format(c.getTime());
+	}
+
+
 	public static void main(String[] args) {
-		System.out.println(monthlyToStr(getDate()));
+		System.out.println(currentMonth());
 	}
 
 }

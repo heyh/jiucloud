@@ -29,12 +29,26 @@
 <head>
 <title>氿上网数据统计</title>
 <jsp:include page="../../inc.jsp"></jsp:include>
-    <link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1-rc.1/css/select2.min.css" rel="stylesheet" />
-    <script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1-rc.1/js/select2.min.js"></script>
+	<link rel="stylesheet" type="text/css"
+		  href="${pageContext.request.contextPath }/jslib/select2/dist/css/select2.min.css"/>
+	<script type="text/javascript" src="${pageContext.request.contextPath }/jslib/select2/dist/js/select2.min.js"></script>
+
 	<link rel="stylesheet" type="text/css" media="screen" href="${pageContext.request.contextPath}/app/analysis/css-table.css" />
 	<script type="text/javascript" src="${pageContext.request.contextPath}/app/analysis/js/style-table.js"></script>
 	<link rel="stylesheet" type="text/css" media="screen" href="${pageContext.request.contextPath}/jslib/MonthPicker/monthPicker.css" />
 	<script type="text/javascript" src="${pageContext.request.contextPath}/jslib/MonthPicker/monthPicker.js"></script>
+
+	<script type="text/javascript"
+			src="${pageContext.request.contextPath}/jslib/bootstrap-datepicker/js/bootstrap-datepicker.js"
+			charset="UTF-8"></script>
+	<script type="text/javascript"
+			src="${pageContext.request.contextPath}/jslib/bootstrap-datepicker/js/locales/bootstrap-datepicker.zh-CN.js"
+			charset="UTF-8"></script>
+	<link rel="stylesheet"
+		  href="${pageContext.request.contextPath}/jslib/bootstrap-datepicker/dist/css/bootstrap-datepicker.css">
+	<link rel="stylesheet"
+		  href="${pageContext.request.contextPath}/jslib/bootstrap-datepicker/dist/css/bootstrap-datepicker.standalone.css">
+
 
 	<script type="text/javascript">
 
@@ -47,18 +61,29 @@
                 allowClear: true,
             });
 
-            monthPicker.create('month_picker', {
-                trigger : 'month_trigger',
-                autoCommit : true,
-                all_month_valid : true,
-                callback : function(obj){
-                    //设置回调句柄,obj是当前已经选择的时间对象
-                    $('#selectedMonth').val(obj);
-                }
+            $('.input-append').datepicker({
+                format: "yyyy-mm-dd",
+                language: "zh-CN",
+                autoclose: true,
+                todayHighlight: true,
+                maxViewMode: 1,
+                todayBtn: true
+            }).on('changeDate', function (ev) {
+//                var startTime = ev.date.valueOf();
             });
 
-            $("#month_picker").html('${selectedMonth}');
-            $("#selectedMonth").val('${selectedMonth}');
+            <%--monthPicker.create('month_picker', {--%>
+                <%--trigger : 'month_trigger',--%>
+                <%--autoCommit : true,--%>
+                <%--all_month_valid : true,--%>
+                <%--callback : function(obj){--%>
+                    <%--//设置回调句柄,obj是当前已经选择的时间对象--%>
+                    <%--$('#selectedMonth').val(obj);--%>
+                <%--}--%>
+            <%--});--%>
+
+            <%--$("#month_picker").html('${selectedMonth}');--%>
+            <%--$("#selectedMonth").val('${selectedMonth}');--%>
 
             var optionstring = '';
 			var arr =  ${departments};
@@ -94,22 +119,25 @@
 			<form id="searchForm" autocomplete="off">
 				<table class="table table-hover table-condensed" style="display: none;">
 					<tr>
-						<%--<td>选择工程:&nbsp;--%>
-							<%--<select name="projectName" id="projectName">--%>
-								<%--<option></option>--%>
-							<%--</select>--%>
-						<%--</td>--%>
 						<td>
-							<input type="hidden" id="selectedMonth" name="selectedMonth">
-							<div class="ta_date" id="div_month_picker">
-								<span class="date_title" id="month_picker"></span>
-								<a class="opt_sel" id="month_trigger" href="javascript:void(0);">
-									<i class="i_orderd"></i>
-								</a>
+							<div class="input-append date">
+								<input type="text" name="startDate" id="startDate" readonly value="${startDate}">
+								<span class="add-on"><i class="icon-th"></i></span>
 							</div>
+							<span> 至 </span>
+							<div class="input-append date">
+								<input type="text" name="endDate" id="endDate" readonly value="${endDate}">
+								<span class="add-on"><i class="icon-th"></i></span>
+							</div>
+						<%--<input type="hidden" id="selectedMonth" name="selectedMonth">--%>
+							<%--<div class="ta_date" id="div_month_picker">--%>
+								<%--<span class="date_title" id="month_picker"></span>--%>
+								<%--<a class="opt_sel" id="month_trigger" href="javascript:void(0);">--%>
+									<%--<i class="i_orderd"></i>--%>
+								<%--</a>--%>
+							<%--</div>--%>
 							<select id="selDepartmentId" name="selDepartmentId" >
 							</select>
-							<%--<input type="hidden" id="selDepartmentId" name="selDepartmentId">--%>
 						</td>
 					</tr>
 					<tr>

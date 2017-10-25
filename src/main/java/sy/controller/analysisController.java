@@ -348,13 +348,24 @@ public class analysisController extends BaseController {
 		if (StringUtil.trimToEmpty(selectedMonth).equals("")) {
 			selectedMonth = DateKit.monthlyToStr(DateKit.getDate());
 		}
-		List<Map<String, Object>> materialStatInfos = fieldDataService.getMaterialDatas(cid, selectedMonth, ugroup, selDepartmentId);
+
+		String startDate = request.getParameter("startDate");
+		if (StringUtil.trimToEmpty(startDate).equals("")) {
+			startDate = DateKit.lastMonth() + "-21";
+		}
+		String endDate = request.getParameter("endDate");
+		if (StringUtil.trimToEmpty(endDate).equals("")) {
+			endDate = DateKit.currentMonth() + "-20";
+		}
+//		List<Map<String, Object>> materialStatInfos = fieldDataService.getMaterialDatas(cid, selectedMonth, ugroup, selDepartmentId);
+		List<Map<String, Object>> materialStatInfos = fieldDataService.getMaterialDatas(cid, startDate, endDate, ugroup, selDepartmentId);
+
 		request.setAttribute("materialStatInfos", materialStatInfos);
 		request.setAttribute("selectedMonth", selectedMonth);
+		request.setAttribute("startDate", startDate);
+		request.setAttribute("endDate", endDate);
 		request.setAttribute("selDepartmentId", selDepartmentId);
-//		if (departments.size()>1) {
-			request.setAttribute("departments", JSONArray.fromObject(departments));
-//		}
+		request.setAttribute("departments", JSONArray.fromObject(departments));
 
 		return "/app/analysis/materialStatReport";
 	}

@@ -955,6 +955,87 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
     }
 
     @Override
+    public List<Map<String, Object>> getMaterialDatas(String cid, String startDate, String endDate, List<Integer> ugroup, Integer selDepartmentId) {
+        Map<String, Object> param = new HashMap<String, Object>();
+        param.put("cid", cid);
+        param.put("startDate", startDate);
+        param.put("endDate", endDate);
+        String uids = StringUtils.join(ugroup, ",");
+
+        String sql1 = " SELECT a.itemCode, " +
+                " SUM(if(a.count > 0, a.payAmount, 0)) as inComeMonthly, " +
+                " ABS(SUM(if(a.count < 0, a.payAmount, 0))) as consumeMonthly " +
+                " FROM TFieldData a " +
+                " WHERE a.cid = :cid  " +
+                " AND a.isDelete = '0' " +
+                " AND LEFT(a.itemCode , 3) = '800'  " +
+                " AND date_format(a.creatTime , '%Y-%m-%d') >= :startDate " +
+                " AND date_format(a.creatTime , '%Y-%m-%d') <= :endDate " +
+                " AND uid in (" + uids + ")" +
+                " GROUP BY a.itemCode ";
+        List<Object[]> list1 = fieldDataDaoI.findBySql(sql1, param);
+
+        param = new HashMap<String, Object>();
+        param.put("cid", cid);
+        param.put("endDate", endDate);
+        String sql2 = " SELECT a.itemCode, " +
+                " SUM(a.payAmount) as monthEndCarry " +
+                " FROM TFieldData a " +
+                " WHERE a.cid = :cid " +
+                " AND a.isDelete = '0' " +
+                " AND LEFT(a.itemCode , 3) = '800' " +
+                " AND date_format(a.creatTime , '%Y-%m-%d') <= :endDate " +
+                " AND uid in (" + uids + ")" +
+                " GROUP BY a.itemCode";
+        List<Object[]> list2 = fieldDataDaoI.findBySql(sql2, param);
+
+        param = new HashMap<String, Object>();
+        param.put("cid", cid);
+        param.put("startDate", startDate);
+        String sql3 = " SELECT a.itemCode, " +
+                " SUM(a.payAmount) as lastMonthCarryover " +
+                " FROM TFieldData a " +
+                " WHERE a.cid = :cid " +
+                " AND a.isDelete = '0' " +
+                " AND LEFT(a.itemCode , 3) = '800' " +
+                " AND date_format(a.creatTime , '%Y-%m-%d') < :startDate " +
+                " AND uid in (" + uids + ")" +
+                " GROUP BY a.itemCode";
+        List<Object[]> list3 = fieldDataDaoI.findBySql(sql3, param);
+
+        List<Map<String, Object>> materialStatInfos = new ArrayList<Map<String, Object>>();
+        Map<String, Object> materialStatInfo = new HashMap<String, Object>();
+        List<Cost> costList = costService.getMatrialsCostList(cid, selDepartmentId);
+        if (costList != null && costList.size() > 0) {
+            for (Cost cost : costList) {
+                materialStatInfo = new HashMap<String, Object>();
+                materialStatInfo.put("costType", cost.getCostType());
+                for (Object[] temp : list1) {
+                    if (cost.getItemCode().equals(temp[0])) {
+                        materialStatInfo.put("inComeMonthly", temp[1]);
+                        materialStatInfo.put("consumeMonthly", temp[2]);
+                    }
+                }
+
+                for (Object[] temp : list2) {
+                    if (cost.getItemCode().equals(temp[0])) {
+                        materialStatInfo.put("monthEndCarry", temp[1]);
+                    }
+                }
+
+                for (Object[] temp : list3) {
+                    if (cost.getItemCode().equals(temp[0])) {
+                        materialStatInfo.put("lastMonthCarryover", temp[1]);
+                    }
+                }
+
+                materialStatInfos.add(materialStatInfo);
+            }
+        }
+        return materialStatInfos;
+    }
+
+    @Override
     public List<FieldData> getBoq(String cid, String startDate, String endDate, List<Integer> ugroup, String type) {
         Map<String, Object> params = new HashMap<String, Object>();
         String sql = "";
