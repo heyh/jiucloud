@@ -105,7 +105,8 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
             f.setApprovedOption(tem.getApprovedOption());
             Item sectionItem = itemService.getSingleItem(tem.getCid(), tem.getProjectName(), tem.getSection());
             if (sectionItem == null) {
-                f.setSectionName("标段1");
+//                f.setSectionName("标段1");
+                f.setSectionName(tem.getSection());
             } else {
                 f.setSectionName(sectionItem.getName());
             }

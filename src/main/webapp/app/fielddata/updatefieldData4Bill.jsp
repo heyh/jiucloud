@@ -157,26 +157,26 @@
 						</select>
 					</td>
 				</tr>
-				<tr>
-					<td style="width: 80px;">单价</td>
-					<td>
-						<c:choose>
-							<c:when test="${tfielddata.itemCode.substring(0, 3) != '700' && tfielddata.itemCode.substring(0, 3) != '800'}">
-								<input name="price" style="width: 250px;" type="text" placeholder="单价" class="easyui-validatebox span2" data-options="required:true" value="${tfielddata.price}">
-							</c:when>
-							<c:when test="<%= hasReadEditRight %>">
-								<input name="price" style="width: 250px;" type="text" placeholder="单价" class="easyui-validatebox span2" data-options="required:true" value="${tfielddata.price}">
-							</c:when>
-							<c:when test="<%= hasOnlyReadRight && !hasReadEditRight%>">
-								<input readonly='readonly' name="price" style="width: 250px;" type="text" placeholder="单价" class="easyui-validatebox span2" data-options="required:true" value="${tfielddata.price}">
-							</c:when>
-							<c:otherwise>
-								<input readonly='readonly'  style="width: 250px;" type="text" placeholder="单价" class="easyui-validatebox span2" data-options="required:true" value="***">
-								<input name="price" style="display: none" type="text" placeholder="单价" class="easyui-validatebox span2" data-options="required:true" value="${tfielddata.price}">
-							</c:otherwise>
-						</c:choose>
-					</td>
-				</tr>
+				<%--<tr>--%>
+					<%--<td style="width: 80px;">单价</td>--%>
+					<%--<td>--%>
+						<%--<c:choose>--%>
+							<%--<c:when test="${tfielddata.itemCode.substring(0, 3) != '700' && tfielddata.itemCode.substring(0, 3) != '800'}">--%>
+								<%--<input name="price" style="width: 250px;" type="text" placeholder="单价" class="easyui-validatebox span2" data-options="required:true" value="${tfielddata.price}">--%>
+							<%--</c:when>--%>
+							<%--<c:when test="<%= hasReadEditRight %>">--%>
+								<%--<input name="price" style="width: 250px;" type="text" placeholder="单价" class="easyui-validatebox span2" data-options="required:true" value="${tfielddata.price}">--%>
+							<%--</c:when>--%>
+							<%--<c:when test="<%= hasOnlyReadRight && !hasReadEditRight%>">--%>
+								<%--<input readonly='readonly' name="price" style="width: 250px;" type="text" placeholder="单价" class="easyui-validatebox span2" data-options="required:true" value="${tfielddata.price}">--%>
+							<%--</c:when>--%>
+							<%--<c:otherwise>--%>
+								<%--<input readonly='readonly'  style="width: 250px;" type="text" placeholder="单价" class="easyui-validatebox span2" data-options="required:true" value="***">--%>
+								<%--<input name="price" style="display: none" type="text" placeholder="单价" class="easyui-validatebox span2" data-options="required:true" value="${tfielddata.price}">--%>
+							<%--</c:otherwise>--%>
+						<%--</c:choose>--%>
+					<%--</td>--%>
+				<%--</tr>--%>
 				<tr>
 					<td style="width: 80px;">数量</td>
 					<td><input name="count" style="width: 250px;" type="text"
@@ -201,17 +201,17 @@
 							   <%--type="text" placeholder="供应商" class="easyui-validatebox span2"--%>
 							   <%--data-options="required:true" value="${tfielddata.supplier}">--%>
 				<%--</tr>--%>
-				<tr>
-				<td style="width: 80px;">工程属性</td>
-				<td>
-				<select id="section" name="section" style="width: 264px;">
-				<c:forEach items="${selectItems}" var="tem">
-					<option value="${tem.id}">${tem.text}</option>
-				</c:forEach>
-				</select>
-				</td>
+				<%--<tr>--%>
+				<%--<td style="width: 80px;">工程属性</td>--%>
+				<%--<td>--%>
+				<%--<select id="section" name="section" style="width: 264px;">--%>
+				<%--<c:forEach items="${selectItems}" var="tem">--%>
+					<%--<option value="${tem.id}">${tem.text}</option>--%>
+				<%--</c:forEach>--%>
+				<%--</select>--%>
+				<%--</td>--%>
 
-				</tr>
+				<%--</tr>--%>
 			</table>
 		</form>
 	</div>

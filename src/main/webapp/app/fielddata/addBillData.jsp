@@ -143,7 +143,7 @@
             var projectName = document.getElementById("projectName").value;
             var costType = $("#costType").combotree("getValue")
             var dataName = document.getElementById("dataName").value;
-            var price = $('#price').numberbox('getValue');
+//            var price = $('#price').numberbox('getValue');
             var count = $('#count').numberbox('getValue');
             var specifications = document.getElementById("specifications").value;
             var remark = document.getElementById("remark").value;
@@ -169,14 +169,14 @@
                 alert("名称不能为空");
                 return;
             }
-            if (section == '') {
-                alert("工程属性不能为空");
-                return;
-            }
-            if (price == '') {
-                alert("价格不能为空");
-                return;
-            }
+//            if (section == '') {
+//                alert("工程属性不能为空");
+//                return;
+//            }
+//            if (price == '') {
+//                alert("价格不能为空");
+//                return;
+//            }
             if (count == '' || count == '0') {
                 alert("数量不能为空");
                 return;
@@ -205,7 +205,7 @@
                 'projectName': projectName,
                 'costType': costType,
                 'dataName': dataName,
-                'price': price,
+//                'price': price,
                 'count': count,
                 'specifications': specifications,
                 'remark': remark,
@@ -222,15 +222,15 @@
 
         }
 
-        function cal() {
-            var price = $('#price').numberbox('getValue');
-            var count = $('#count').numberbox('getValue');
-            var total = (price * count).toFixed(2);
-            if (price != '' && count != '') {
-                $('#sumprice').numberbox('setValue', total);
-//                $('#payAmount').numberbox('setValue', total);
-            }
-        }
+//        function cal() {
+//            var price = $('#price').numberbox('getValue');
+//            var count = $('#count').numberbox('getValue');
+//            var total = (price * count).toFixed(2);
+//            if (price != '' && count != '') {
+//                $('#sumprice').numberbox('setValue', total);
+////                $('#payAmount').numberbox('setValue', total);
+//            }
+//        }
 
         window.onload = function () {
 //		if (document.getElementById("costTypeName").value == '纯附件') {
@@ -305,10 +305,10 @@
                 placeholder: "请选择项目",
                 allowClear: true
             });
-            $("#section").select2({
-                placeholder: "请选择标段",
-                allowClear: true
-            });
+//            $("#section").select2({
+//                placeholder: "请选择标段",
+//                allowClear: true
+//            });
 
             $('.easyui-combotree').combotree({
                 data: <%= billCostTree %>,
@@ -329,6 +329,7 @@
                         $('.easyui-combotree').treegrid("unselect");
                     } else {
                         var _jsonArray =  <%= jsonArray %>;
+                        var bigItemCode = '';
                         for (var i=0; i<_jsonArray.length; i++) {
                             if (_jsonArray[i].itemCode.substring(0, 3) == '700' && _jsonArray[i].nid == node.id) {
                                 $('#dataName').val(node.text);
@@ -338,6 +339,8 @@
                                     debugger;
                                     var strUnit = costType.substring(costType.indexOf("（")+1,costType.indexOf("）"));
                                     $("#unit").val(strUnit).trigger("change");
+
+                                    bigItemCode = _jsonArray[i].itemCode.substring(0, _jsonArray[i].itemCode.length-3);
                                 }
 
                                 break;
@@ -345,6 +348,14 @@
                                 $('#dataName').val('');
                             }
                         }
+
+                        for (var i=0; i<_jsonArray.length; i++) {
+                            if (_jsonArray[i].itemCode == bigItemCode ) {
+                                $('#section').val(_jsonArray[i].costType);
+                                break;
+                            }
+                        }
+
                     }
                 },
                 onChange: function (node) {
@@ -407,23 +418,23 @@
                 contentType: "application/x-www-form-urlencoded; charset=utf-8",
                 success: function (data) {
 
-                    if (data.success) {
-                        var _section = data.obj.section;
-                        var sectionInfos = data.obj.itemList;
-                        var optionstring = "";
-                        for (var i in sectionInfos) {
-                            if (_section == sectionInfos[i].id) {
-                                optionstring += "<option value=\"" + sectionInfos[i].id + "\" selected = 'selected'>" + sectionInfos[i].text + "</option>";
-
-                            } else {
-                                optionstring += "<option value=\"" + sectionInfos[i].id + "\" >" + sectionInfos[i].text + "</option>";
-                            }
-
-                        }
-                        $("#section").html("<option value=''>请选择标段</option> "+optionstring);
-
-                        changeSection();
-                    }
+//                    if (data.success) {
+//                        var _section = data.obj.section;
+//                        var sectionInfos = data.obj.itemList;
+//                        var optionstring = "";
+//                        for (var i in sectionInfos) {
+//                            if (_section == sectionInfos[i].id) {
+//                                optionstring += "<option value=\"" + sectionInfos[i].id + "\" selected = 'selected'>" + sectionInfos[i].text + "</option>";
+//
+//                            } else {
+//                                optionstring += "<option value=\"" + sectionInfos[i].id + "\" >" + sectionInfos[i].text + "</option>";
+//                            }
+//
+//                        }
+//                        $("#section").html("<option value=''>请选择标段</option> "+optionstring);
+//
+//                        changeSection();
+//                    }
 
                 }
             });
@@ -705,13 +716,13 @@
                         </div>
                     </div>
 
-                    <div class="control-group">
-                        <label class="control-label" for="price">单价:</label>
+                    <%--<div class="control-group">--%>
+                        <%--<label class="control-label" for="price">单价:</label>--%>
 
-                        <div class="controls">
-                            <input type="text" name="price" id="price" class="easyui-numberbox" precision="2" style="width:236px" onblur="cal()">
-                        </div>
-                    </div>
+                        <%--<div class="controls">--%>
+                            <%--<input type="text" name="price" id="price" class="easyui-numberbox" precision="2" style="width:236px" onblur="cal()">--%>
+                        <%--</div>--%>
+                    <%--</div>--%>
                     <%--<div class="control-group">--%>
                         <%--<label class="control-label" for="payAmount">实付金额:</label>--%>
 
@@ -754,7 +765,7 @@
                         <label class="control-label" for="count">数量:</label>
 
                         <div class="controls">
-                            <input type="text" name="count" id="count" class="easyui-numberbox" precision="4" style="width:236px" onblur="cal()">
+                            <input type="text" name="count" id="count" class="easyui-numberbox" precision="4" style="width:236px" >
                         </div>
                     </div>
                     <%--<div class="control-group">--%>
@@ -771,11 +782,12 @@
                             <input type="text" name="supplier" id="supplier" class="easyui-textbox" style="width:236px">
                         </div>
                     </div>
-                    <div class="control-group">
+                    <div class="control-group" style="display: none;">
                         <label class="control-label" for="section">工程属性:</label>
 
                         <div class="controls">
-                            <select style="width:250px;" id="section" name="section" onchange="changeSection()">
+                            <input type="text" name="section" id="section" class="easyui-textbox" style="width:236px">
+                            <%--<select style="width:250px;" id="section" name="section" onchange="changeSection()">--%>
                             </select>
                         </div>
                     </div>
