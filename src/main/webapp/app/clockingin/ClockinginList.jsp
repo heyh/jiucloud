@@ -124,7 +124,7 @@
                                     var str = '';
                                     var userId = <%= userId %>;
 
-                                    if (userId != row.uid && <%= hasApproveRight %>) {
+                                    if (<%= hasApproveRight %>) {
                                         str += $
                                             .formatString(
                                                 '<img onclick="editFun(\'{0}\');" src="{1}" title="审核" />',

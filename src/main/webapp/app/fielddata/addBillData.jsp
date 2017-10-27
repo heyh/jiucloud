@@ -145,7 +145,13 @@
             var dataName = document.getElementById("dataName").value;
 //            var price = $('#price').numberbox('getValue');
             var count = $('#count').numberbox('getValue');
-            var specifications = document.getElementById("specifications").value;
+
+            var specificationArr = new Array();
+            for (var i=0; i<$('#specifications').select2('data').length; i++) {
+                specificationArr.push($('#specifications').select2('data')[i].text);
+            }
+            var specifications = specificationArr.join(',');
+
             var remark = document.getElementById("remark").value;
             var unit = document.getElementById("unit").value;
 //            var itemCode = $("#itemCode").val();
@@ -282,8 +288,9 @@
         $(document).ready(function () {
 
             $("#specifications").select2({
-                tags: "true",
-                placeholder: "可以模糊查询",
+                placeholder: "可多选",
+                tags: true,
+                multiple: true,
                 allowClear: true
             });
 
@@ -336,7 +343,6 @@
                                 var costType = node.text;
                                 if ((costType.indexOf("(") != -1 || costType.indexOf("（") != -1)
                                     && (costType.indexOf(")") != -1 || costType.indexOf("）") != -1)) {
-                                    debugger;
                                     var strUnit = costType.substring(costType.indexOf("（")+1,costType.indexOf("）"));
                                     $("#unit").val(strUnit).trigger("change");
 
@@ -509,7 +515,6 @@
         function merageFeatures() {
             var feature = '';
             $(".featureRow").each(function (index, row) {
-                debugger;
                 var features = row.getElementsByClassName("featureCol");
                 var mc;
                 var dw;
@@ -580,7 +585,6 @@
         }
 
         function searchFeatures() {
-            debugger;
             $.ajax({
                 url: '${pageContext.request.contextPath}/featureController/securi_getFeatures',
                 data: {keyword: $('#keyword').val(), cid: <%= cid %>, uid: <%= uid %>},
