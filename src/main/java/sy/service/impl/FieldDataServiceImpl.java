@@ -133,6 +133,17 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
             f.setPayAmount(tem.getPayAmount());
             list.add(f);
         }
+
+        Collections.sort(list, new Comparator<FieldData>(){
+            @Override
+            public int compare(FieldData o1, FieldData o2) {
+                if (o1.getId() > o2.getId()) {
+                    return -1;
+                }
+                return 0;
+            }
+        });
+
         // 0 不需要审批； 1 需要审批（显示未审批）
         Collections.sort(list, new Comparator<FieldData>(){
             @Override
