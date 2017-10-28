@@ -82,6 +82,8 @@ public class ClockinginTimeServiceImpl implements ClockinginTimeServiceI {
         ClockinginTime clockinginTime = new ClockinginTime();
         clockinginTime.setCid(cid);
         clockinginTime.setClockinginStartTime(strToTime("08:30:00"));
+        clockinginTime.setClockinginStartTime2(strToTime("11:30:00"));
+        clockinginTime.setClockinginEndTime2(strToTime("13:30:00"));
         clockinginTime.setClockinginEndTime(strToTime("17:30:00"));
         clockinginTimeDao.save(clockinginTime);
         return clockinginTime;

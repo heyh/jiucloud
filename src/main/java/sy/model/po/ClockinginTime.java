@@ -28,8 +28,14 @@ public class ClockinginTime {
     @Column(name = "clockinginStartTime")
     private Time clockinginStartTime;
 
+    @Column(name = "clockinginStartTime2")
+    private Time clockinginStartTime2;
+
     @Column(name = "clockinginEndTime")
     private Time clockinginEndTime;
+
+    @Column(name = "clockinginEndTime2")
+    private Time clockinginEndTime2;
 
     public int getId() {
         return id;
@@ -55,11 +61,27 @@ public class ClockinginTime {
         this.clockinginStartTime = clockinginStartTime;
     }
 
+    public Time getClockinginStartTime2() {
+        return clockinginStartTime2;
+    }
+
+    public void setClockinginStartTime2(Time clockinginStartTime2) {
+        this.clockinginStartTime2 = clockinginStartTime2;
+    }
+
     public Time getClockinginEndTime() {
         return clockinginEndTime;
     }
 
     public void setClockinginEndTime(Time clockinginEndTime) {
         this.clockinginEndTime = clockinginEndTime;
+    }
+
+    public Time getClockinginEndTime2() {
+        return clockinginEndTime2;
+    }
+
+    public void setClockinginEndTime2(Time clockinginEndTime2) {
+        this.clockinginEndTime2 = clockinginEndTime2;
     }
 }

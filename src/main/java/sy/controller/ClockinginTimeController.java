@@ -57,13 +57,17 @@ public class ClockinginTimeController extends BaseController {
     public Json updateClockinginTime(HttpServletRequest request, HttpSession session) {
         SessionInfo sessionInfo = (SessionInfo) session.getAttribute(ConfigUtil.getSessionInfoName());
         int id = Integer.parseInt(StringUtil.trimToEmpty(request.getParameter("id")));
-        String clockinginStartTime = request.getParameter("clockinginStartTime");
-        String clockinginEndTime = request.getParameter("clockinginEndTime");
+        String clockinginStartTime = StringUtil.trimToEmpty(request.getParameter("clockinginStartTime"));
+        String clockinginStartTime2 = StringUtil.trimToEmpty(request.getParameter("clockinginStartTime2"));
+        String clockinginEndTime2 = StringUtil.trimToEmpty(request.getParameter("clockinginEndTime2"));
+        String clockinginEndTime = StringUtil.trimToEmpty(request.getParameter("clockinginEndTime"));
 
         Json j = new Json();
         try {
             ClockinginTime c = clockinginTimeService.getClockinginTime(id);
             c.setClockinginStartTime(Time.valueOf(clockinginStartTime));
+            c.setClockinginStartTime2(Time.valueOf(clockinginStartTime2));
+            c.setClockinginEndTime2(Time.valueOf(clockinginEndTime2));
             c.setClockinginEndTime(Time.valueOf(clockinginEndTime));
             clockinginTimeService.update(c);
 

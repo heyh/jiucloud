@@ -55,20 +55,20 @@
                         columns: [[
                             {
                                 field: 'clockinginStartTime',
-                                title: '上班时间',
-                                width: 250,
+                                title: '上午',
+                                width: 400,
                                 align: 'center',
                                 formatter: function (value, row, index) {
-                                    return row.clockinginStartTime.substring(11, 19);
+                                    return row.clockinginStartTime.substring(11, 19) + ' ~ ' + row.clockinginStartTime2.substring(11, 19);
                                 }
                             },
                             {
-                                field: 'clockinginEndTime',
-                                title: '下班时间',
-                                width: 250,
+                                field: 'clockinginEndTime2',
+                                title: '下午',
+                                width: 400,
                                 align: 'center',
                                 formatter: function (value, row, index) {
-                                    return row.clockinginEndTime.substring(11, 19);
+                                    return row.clockinginStartTime2.substring(11, 19) + ' ~ ' + row.clockinginEndTime.substring(11, 19);
                                 }
                             },
                             {
@@ -104,7 +104,7 @@
             parent.$
                 .modalDialog({
                     title: '编辑',
-                    width: 450,
+                    width: 550,
                     height: 300,
                     href: '${pageContext.request.contextPath}/clockinginTimeController/securi_updateClockinginTimePage?id=' + id,
                     buttons: [{
