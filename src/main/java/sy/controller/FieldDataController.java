@@ -130,7 +130,7 @@ public class FieldDataController extends BaseController {
             fieldData.setId(id);
         }
         if (null == fieldData.getStartTime() && null == fieldData.getEndTime()) {
-            fieldData.setStartTime(UtilDate.getshortFirst() + " 00:00:00");
+            fieldData.setStartTime(UtilDate.getSameLaterDay(3) + " 00:00:00");
             fieldData.setEndTime(UtilDate.getshortLast() + " 23:59:59");
         }
         if (null != request.getParameter("needApproved")) {
