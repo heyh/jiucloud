@@ -136,7 +136,7 @@
 									},
 									{
 										field : 'creatTime',
-										title : '入库时间',
+										title : '录入时间',
 										width : 100
 									},
                                     {

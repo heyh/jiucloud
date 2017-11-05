@@ -68,7 +68,7 @@
                                 width: 400,
                                 align: 'center',
                                 formatter: function (value, row, index) {
-                                    return row.clockinginStartTime2.substring(11, 19) + ' ~ ' + row.clockinginEndTime.substring(11, 19);
+                                    return row.clockinginEndTime2.substring(11, 19) + ' ~ ' + row.clockinginEndTime.substring(11, 19);
                                 }
                             },
                             {
