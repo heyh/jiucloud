@@ -250,7 +250,8 @@
                         })
                         $('#noticeDiv').html(htmlStr);
 
-                        $('#comp').text('企业名称: ' + data.obj.compName);
+//                        $('#comp').text('企业名称: ' + data.obj.compName);
+                        $('#comp').text(data.obj.compName);
                         $('#userName').text('欢迎您, ' + data.obj.userName);
                     }
                 }

@@ -512,8 +512,8 @@ public class FieldDataController extends BaseController {
         }
 
         try {
-            Cost tem = costServiceI.findById(fieldData.getCostType());
-            String fj = tem.getItemCode().substring(0, 3);
+//            Cost tem = costServiceI.findById(fieldData.getCostType());
+//            String fj = tem.getItemCode().substring(0, 3);
 
             fieldDataServiceI.add(fieldData);
             int fieldId = Integer.parseInt(StringUtil.trimToEmpty(fieldDataServiceI.getId(fieldData)));

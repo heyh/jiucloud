@@ -75,7 +75,12 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
             hql = " from TFieldData t  where isDelete=0 and (itemcode is not null and itemcode<>'' and substring(itemcode,1,3) ='700') ";
         } else if (source.equals("material")) {
             hql = " from TFieldData t  where isDelete=0 and (itemcode is not null and itemcode<>'' and substring(itemcode,1,3) ='800') ";
-        } else {
+        } else if (source.equals("overallplan")){
+            hql = " from TFieldData t  where isDelete=0 and itemcode = '011' ";
+        } else if (source.equals("monthplan")){
+            hql = " from TFieldData t  where isDelete=0 and itemcode = '012' ";
+        }
+        else {
             hql = " from TFieldData t  where isDelete=0  ";
         }
 
