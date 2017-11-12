@@ -31,14 +31,55 @@ public class MaterialManage {
     private DepartmentServiceI departmentService;
 
     @RequestMapping("/OverallPlanList")
-    public String fieldDataShow(HttpServletRequest req) {
+    public String OverallPlanList(HttpServletRequest req) {
         req.setAttribute("first", UtilDate.getshortFirst());
         req.setAttribute("last", UtilDate.getshortLast());
         return "/app/materials/overallplan/OverallPlanList";
     }
 
-    @RequestMapping("/securi_addPage")
-    public String addPage(HttpServletRequest request) {
+    @RequestMapping("/securi_addOverallPlanPage")
+    public String addOverallPlanPage(HttpServletRequest request) {
+        SessionInfo sessionInfo = (SessionInfo) request.getSession().getAttribute(ConfigUtil.getSessionInfoName());
+        String cid = sessionInfo.getCompid();
+        String uid = sessionInfo.getId();
+
+        TFieldData tFieldData = fieldDataService.getMaxFieldByCidUid(cid, uid);
+        String maxProjectId = null;
+        String maxNeedApproved = null;
+        String maxApprovedUser = null;
+        if (tFieldData != null) {
+            maxProjectId = StringUtil.trimToEmpty(tFieldData.getProjectName());
+            maxNeedApproved = StringUtil.trimToEmpty(tFieldData.getNeedApproved());
+            if (!maxNeedApproved.equals("0")) {
+                if (tFieldData.getApprovedUser() != null && !StringUtil.trimToEmpty(tFieldData.getApprovedUser()).equals("")) {
+                    maxApprovedUser = tFieldData.getApprovedUser().split(",")[0];
+                }
+            }
+        }
+
+        List<String> firstLevelParentDepartments = departmentService.getFirstLevelParentDepartmentsByUid(cid, uid);
+        String firstLevelParentDepartment = firstLevelParentDepartments.size() > 0 ? firstLevelParentDepartments.get(0) : "";
+
+        List<Integer> allParents = departmentService.getAllParents(cid, Integer.parseInt(uid));
+        allParents.add(Integer.parseInt(uid));
+        request.setAttribute("maxProjectId", maxProjectId);
+        request.setAttribute("maxNeedApproved", maxNeedApproved);
+        request.setAttribute("maxApprovedUser", maxApprovedUser);
+        request.setAttribute("firstLevelParentDepartment", firstLevelParentDepartment);
+
+        return "/app/materials/overallplan/addOverallPlan";
+    }
+
+
+    @RequestMapping("/MonthPlanList")
+    public String MonthPlanList(HttpServletRequest req) {
+        req.setAttribute("first", UtilDate.getshortFirst());
+        req.setAttribute("last", UtilDate.getshortLast());
+        return "/app/materials/overallplan/OverallPlanList";
+    }
+
+    @RequestMapping("/securi_addMonthPlanPage")
+    public String addMonthPlanPage(HttpServletRequest request) {
         SessionInfo sessionInfo = (SessionInfo) request.getSession().getAttribute(ConfigUtil.getSessionInfoName());
         String cid = sessionInfo.getCompid();
         String uid = sessionInfo.getId();

@@ -103,8 +103,8 @@
             var currentApprovedUser = document.getElementById("currentApprovedUser").value;
 			cfg.data = {
 				'projectName': projectName,
-				'costType': 480,
-				'dataName': $("#projectName").find("option:selected").text() + ' - 总材料计划',
+				'costType': 481,
+				'dataName': $("#projectName").find("option:selected").text() + ' - 当月材料计划',
 				'remark': remark,
 				'needApproved': '1',
                 'currentApprovedUser': currentApprovedUser

@@ -53,7 +53,7 @@
             dataGrid = $('#dataGrid')
                 .datagrid(
                     {
-                        url : '${pageContext.request.contextPath}/fieldDataController/dataGrid?source=overallplan',
+                        url : '${pageContext.request.contextPath}/fieldDataController/dataGrid?source=monthplan',
                         fit : true,
                         fitColumns : false,
                         border : false,
@@ -300,8 +300,8 @@
         }
 
         function addFun() {
-            var url = '${pageContext.request.contextPath}/materialManageController/securi_addOverallPlanPage';
-            var text = "添加工程总材料计划";
+            var url = '${pageContext.request.contextPath}/materialManageController/securi_addMonthPlanPage';
+            var text = "添加当月材料计划";
             var params = {
                 url : url,
                 title : text,
@@ -343,6 +343,8 @@
 
         //过滤条件查询
         function searchFun() {
+//		$('#startTime').val($('#startTime').val() + ' 00:00:00');
+//		$('#endTime').val($('#endTime').val() + ' 00:00:00');
             if($('#startTime').val() != '' && $('#endTime').val() != '') {
                 $('#startTime').val($('#startTime').val().substring(0, 10) + ' 00:00:00');
                 $('#endTime').val($('#endTime').val().substring(0, 10) + ' 23:59:59');
