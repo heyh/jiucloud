@@ -99,7 +99,7 @@ public class ClockinginServiceImpl implements ClockinginServiceI {
             params.put("approveState", "%%" + keyword + "%%");
         }
 
-        hql += " order by t.id desc";
+        hql += " order by id desc";
 
         List<Clockingin> clockingins = clockinginDao.find(hql, params, pageHelper.getPage(), pageHelper.getRows());
         for (Clockingin c : clockingins) {
