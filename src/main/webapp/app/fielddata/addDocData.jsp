@@ -391,7 +391,7 @@
 		<input type="hidden" id = "firstLevelParentDepartment" name="firstLevelParentDepartment" value="${firstLevelParentDepartment}">
 
 		<fieldset>
-			<legend>添加数据</legend>
+			<legend>添加资料</legend>
 			<div class="row-fluid">
 				<div class="span6">
 					<div class="control-group">
