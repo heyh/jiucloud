@@ -981,7 +981,7 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
 
         String sql1 = " SELECT a.itemCode, " +
                 " SUM(if(a.count > 0, a.payAmount, 0)) as inComeMonthly, " +
-                " ABS(SUM(if(a.count < 0, a.payAmount, 0))) as consumeMonthly " +
+                " ABS(SUM(if(a.count < 0, abs(a.count)*a.price, 0))) as consumeMonthly " +
                 " FROM TFieldData a " +
                 " WHERE a.cid = :cid  " +
                 " AND a.isDelete = '0' " +
