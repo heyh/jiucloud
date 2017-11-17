@@ -200,18 +200,18 @@
 					<%--<td><input style="width: 250px;" name="supplier"--%>
 							   <%--type="text" placeholder="供应商" class="easyui-validatebox span2"--%>
 							   <%--data-options="required:true" value="${tfielddata.supplier}">--%>
-				<%--</tr>--%>
-				<%--<tr>--%>
-				<%--<td style="width: 80px;">工程属性</td>--%>
-				<%--<td>--%>
-				<%--<select id="section" name="section" style="width: 264px;">--%>
-				<%--<c:forEach items="${selectItems}" var="tem">--%>
-					<%--<option value="${tem.id}">${tem.text}</option>--%>
-				<%--</c:forEach>--%>
-				<%--</select>--%>
-				<%--</td>--%>
+				</tr>
+				<tr>
+					<td style="width: 80px;">工程属性</td>
+					<td>
+						<select id="section" name="section" style="width: 264px;">
+							<c:forEach items="${selectItems}" var="tem">
+								<option value="${tem.id}">${tem.text}</option>
+							</c:forEach>
+						</select>
+					</td>
 
-				<%--</tr>--%>
+				</tr>
 			</table>
 		</form>
 	</div>
