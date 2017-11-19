@@ -110,4 +110,6 @@ public interface CostServiceI {
 
     public List<Cost> getMatrialsCostList(String cid, Integer selDepartmentId);
 
+    public Cost getCostByCostType(String costType, String cid);
+
 }

@@ -1519,7 +1519,7 @@ public class FieldDataController extends BaseController {
         String strDate = sdf.format(new Date());
 
         String strFileName = uid + "-" + section + "-" + strDate;
-        String filePath = PropertyUtil.getFileRealPath() + "/excel/" + projectName + "/"; //文件上传路径
+        String filePath = PropertyUtil.getFileRealPath() + "/upload/" + Constant.SOURCE + uid + "/"; //文件上传路径
         String fileName = FileUpload.fileUp(file, filePath, strFileName); //执行上传
 
         List<Map<String, Object>> excelInfos1 =  ObjectExcelRead.readExcel(filePath, fileName, 1, 0, 0); //执行读EXCEL操作,读出的数据导入List 2:从第3行开始；0:从第A列开始；0:第0个sheet
@@ -1885,6 +1885,130 @@ public class FieldDataController extends BaseController {
             e.printStackTrace();
             j.setMsg(e.getMessage());
         }
+        return j;
+    }
+
+    @RequestMapping("/securi_updateMaterilsExeclPage")
+    public String updateMaterilsExeclPage(HttpServletRequest request) {
+        SessionInfo sessionInfo = (SessionInfo) request.getSession().getAttribute(ConfigUtil.getSessionInfoName());
+        String uid = sessionInfo.getId();
+
+        String defaultTemplatePath = PropertyUtil.getFileRealPath() + "/template" + "/materialsTemplate.xls";
+        String templatePath = PropertyUtil.getFileRealPath() + "/template/" + uid + "/materialsTemplate.xls";
+        File file = new File(templatePath);
+        if (!file.exists()) {
+            File dir = new File(file.getParent());
+            dir.mkdir();
+            FileUtil.copyFile(defaultTemplatePath, templatePath);
+        }
+
+        String cid = sessionInfo.getCompid();
+        TFieldData tFieldData = fieldDataServiceI.getMaxFieldByCidUid(cid, uid);
+        String maxProjectId = null;
+        if (tFieldData != null) {
+            maxProjectId = tFieldData.getProjectName();
+        }
+        request.setAttribute("maxProjectId", maxProjectId);
+
+        return "/app/materials/import/execl_select";
+    }
+
+    /**
+     * 下载模版
+     */
+    @RequestMapping(value="/securi_downMaterilsExecl")
+    public void downMaterilsExecl(HttpServletResponse response)throws Exception{
+        FileDownload.fileDownload(response, PathUtil.getClasspath() + Constant.EXCEL_TEMPLATE + "materialsTemplate.xls", "materialsTemplate.xls");
+//        FileDownload.fileDownload(response, PropertyUtil.getFileRealPath() + Constant.EXCEL_TEMPLATE + "projectTemplate.xls", "projectTemplate.xls");
+
+    }
+
+    @RequestMapping("/securi_materialsExeclImport")
+    @ResponseBody
+    public Json materialsExeclImport(@RequestParam(value = "excel", required = false) MultipartFile file,
+                            @RequestParam(value = "projectName", required = false) String projectName,
+                            HttpServletRequest request) {
+        Json j = new Json();
+        SessionInfo sessionInfo = (SessionInfo) request.getSession().getAttribute(ConfigUtil.getSessionInfoName());
+        String uid = sessionInfo.getId();
+        String cid = sessionInfo.getCompid();
+
+        if (null == file && file.isEmpty()) {
+            return j;
+        }
+        SimpleDateFormat sdf =   new SimpleDateFormat("yyyyMMddHHmmss");
+        String strDate = sdf.format(new Date());
+
+        String strFileName = UUID.randomUUID().toString();
+        String filePath = PropertyUtil.getFileRealPath() + "/excel/materials/" + projectName + "/"; //文件上传路径
+        String fileName = FileUpload.fileUp(file, filePath, strFileName); //执行上传
+        String reg = file.getOriginalFilename().substring(file.getOriginalFilename().lastIndexOf(".")+1).toLowerCase();
+        int status = Constant.fileStatus(reg);
+        List<Map<String, Object>> excelInfos =  ObjectExcelRead.readExcel(filePath, fileName, 2, 0, 0); //执行读EXCEL操作,读出的数据导入List 2:从第3行开始；0:从第A列开始；0:第0个sheet
+
+
+        TFieldData fieldData = new TFieldData();
+
+        for (Map<String, Object> excelInfo : excelInfos) {
+            // 插入 mysql
+
+            String costName = StringUtil.trimToEmpty(excelInfo.get("var1"));
+            Cost cost = costServiceI.getCostByCostType(costName, cid);
+            String itemCode;
+            String costType;
+            if (cost != null) {
+                itemCode = cost.getItemCode();
+                costType = cost.getNid();
+            } else {
+                continue;
+            }
+
+            String unit = StringUtil.trimToEmpty(excelInfo.get("var2"));
+            String price = StringUtil.trimToEmpty(excelInfo.get("var3"));
+            String count = StringUtil.trimToEmpty(excelInfo.get("var4"));
+            String payAmount = StringUtil.trimToEmpty(excelInfo.get("var5"));
+            String specifications = StringUtil.trimToEmpty(excelInfo.get("var6"));
+            String supplier = StringUtil.trimToEmpty(excelInfo.get("var7"));
+            String dataName = costName + "-" + specifications;
+
+            fieldData.setUid(uid);
+            fieldData.setCid(cid);
+            fieldData.setUname((sessionInfo.getName() != null && !sessionInfo.getName().equals("")) ? sessionInfo.getName() : sessionInfo.getUsername());
+            fieldData.setCompany(sessionInfo.getCompName());
+            fieldData.setProjectName(projectName);
+            fieldData.setDataName(dataName);
+            fieldData.setPrice(price);
+            fieldData.setCount(count);
+            fieldData.setUnit(unit);
+            fieldData.setSpecifications(specifications);
+            fieldData.setRemark("execl材料导入-" + strFileName);
+            fieldData.setItemCode(itemCode);
+            fieldData.setCostType(costType);
+            fieldData.setNeedApproved("0");
+            fieldData.setApprovedUser("");
+            fieldData.setCurrentApprovedUser("");
+            fieldData.setApprovedOption("");
+            fieldData.setPayAmount(payAmount);
+            if (fieldDataServiceI.hasSameFieldData(fieldData)) {
+                continue;
+            }
+            fieldDataServiceI.add(fieldData);
+            int fieldId = Integer.parseInt(StringUtil.trimToEmpty(fieldDataServiceI.getId(fieldData)));
+
+            GCPo gcpo = new GCPo();
+            gcpo.setMpid(StringUtil.trimToEmpty(fieldId));
+            gcpo.setFileName(file.getOriginalFilename());
+            gcpo.setPdfFilePath("");
+            gcpo.setSwfFilePath("");
+            gcpo.setSourceFilePath(uid + "/" + fileName);
+            gcpo.setExt(reg);
+            gcpo.setStatus(status);
+            gcpoServiceI.add(gcpo);
+        }
+
+
+        j.setSuccess(true);
+        j.setMsg("导入成功！");
         return j;
     }
 }

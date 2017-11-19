@@ -671,5 +671,13 @@ public class CostServiceImpl implements CostServiceI {
 		return l;
 	}
 
+	@Override
+	public Cost getCostByCostType(String costType, String cid) {
+		Map<String, Object> params = new HashMap<String, Object>();
+		params.put("costType", costType);
+		params.put("cid", cid);
+		return costDaoI.get("from Cost where costType=:costType and cid=:cid ", params);
+	}
+
 
 }

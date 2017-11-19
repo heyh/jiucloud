@@ -789,8 +789,8 @@
 				.modalDialog({
 					title : 'execl导入',
 					width : 450,
-					height : 400,
-					href : '${pageContext.request.contextPath}/fieldDataController/securi_execlProjects',
+					height : 200,
+					href : '${pageContext.request.contextPath}/fieldDataController/securi_updateMaterilsExeclPage',
 					buttons : [{
                         text : '关闭',
                         handler : function() {
@@ -831,6 +831,24 @@
                     }
                 }
                 ]
+            });
+    }
+
+    function uploadFun() {
+        parent.$
+            .modalDialog({
+                title: '导入',
+                width: 400,
+                height: 150,
+                href: '${pageContext.request.contextPath}/fieldDataController/securi_uploadExeclPage',
+                buttons: [{
+                    text: '导入',
+                    handler: function () {
+                        parent.$.modalDialog.openner_dataGrid = dataGrid;//因为添加成功之后，需要刷新这个dataGrid，所以先预定义好
+                        var f = parent.$.modalDialog.handler.find('#form');
+                        f.submit();
+                    }
+                }]
             });
     }
 
@@ -889,28 +907,16 @@
 			<%--class="easyui-linkbutton" data-options="plain:true,iconCls:'delete'">批量删除</a>--%>
 		<a href="javascript:void(0);" class="easyui-linkbutton"
 			data-options="iconCls:'out_new',plain:true"
-			onclick="exportFun();">execl导出</a><a href="javascript:void(0);"
+			onclick="exportFun();">execl导出</a>
+		<a href="javascript:void(0);"
 			class="easyui-linkbutton"
-			data-options="iconCls:'search_new',plain:true" onclick="searchFun();">过滤条件</a><a
-			href="javascript:void(0);" class="easyui-linkbutton"
+			data-options="iconCls:'search_new',plain:true" onclick="searchFun();">过滤条件</a>
+		<a href="javascript:void(0);" class="easyui-linkbutton"
 			data-options="iconCls:'zhongzhiguolvtiaojian_new',plain:true"
 			onclick="cleanFun();">清空条件</a>
-
-		<%--<a onclick="cloudImportFun();" href="javascript:void(0);"--%>
-		   <%--class="easyui-linkbutton"--%>
-		   <%--data-options="plain:true,iconCls:'cloud_in'">氿上云导入</a>--%>
-
-		<%--<a onclick="execlImportFun();" href="javascript:void(0);"--%>
-		   <%--class="easyui-linkbutton"--%>
-		   <%--data-options="plain:true,iconCls:'execl_in'">execl导入</a>--%>
-		<%--<c:choose>--%>
-			<%--<c:when test="<%=hasBackFillRight%>">--%>
-				<%--<a onclick="backFillFun();" href="javascript:void(0);"--%>
-				   <%--class="easyui-linkbutton"--%>
-				   <%--data-options="plain:true,iconCls:'backfill'">单价回填</a>--%>
-			<%--</c:when>--%>
-		<%--</c:choose>--%>
-
+		<a onclick="execlImportFun();" href="javascript:void(0);"
+		   class="easyui-linkbutton"
+		   data-options="plain:true,iconCls:'execl_in'">execl导入</a>
 
 	</div>
 
