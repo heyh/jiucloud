@@ -916,7 +916,7 @@
 			onclick="cleanFun();">清空条件</a>
 		<a onclick="execlImportFun();" href="javascript:void(0);"
 		   class="easyui-linkbutton"
-		   data-options="plain:true,iconCls:'execl_in'">execl导入</a>
+		   data-options="plain:true,iconCls:'execl_in'">材料导入</a>
 
 	</div>
 
