@@ -149,31 +149,31 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
             }
         });
 
-        // 0 不需要审批； 1 需要审批（显示未审批）
-        Collections.sort(list, new Comparator<FieldData>(){
-            @Override
-            public int compare(FieldData o1, FieldData o2) {
-                String needApproved1 = o1.getNeedApproved() == null ? "0" : o1.getNeedApproved();
-                String needApproved2 = o2.getNeedApproved() == null ? "0" : o2.getNeedApproved();
-                if (needApproved1.equals("1") && !needApproved1.equals(needApproved2)) {
-                    return -1;
-                }
-                return 0;
-            }
-        });
-
-        // 9 审批不通过
-        Collections.sort(list, new Comparator<FieldData>(){
-            @Override
-            public int compare(FieldData o1, FieldData o2) {
-                String needApproved1 = o1.getNeedApproved() == null ? "0" : o1.getNeedApproved();
-                String needApproved2 = o2.getNeedApproved() == null ? "0" : o2.getNeedApproved();
-                if (needApproved1.equals("9") && !needApproved1.equals(needApproved2)) {
-                    return -1;
-                }
-                return 0;
-            }
-        });
+//        // 0 不需要审批； 1 需要审批（显示未审批）
+//        Collections.sort(list, new Comparator<FieldData>(){
+//            @Override
+//            public int compare(FieldData o1, FieldData o2) {
+//                String needApproved1 = o1.getNeedApproved() == null ? "0" : o1.getNeedApproved();
+//                String needApproved2 = o2.getNeedApproved() == null ? "0" : o2.getNeedApproved();
+//                if (needApproved1.equals("1") && !needApproved1.equals(needApproved2)) {
+//                    return -1;
+//                }
+//                return 0;
+//            }
+//        });
+//
+//        // 9 审批不通过
+//        Collections.sort(list, new Comparator<FieldData>(){
+//            @Override
+//            public int compare(FieldData o1, FieldData o2) {
+//                String needApproved1 = o1.getNeedApproved() == null ? "0" : o1.getNeedApproved();
+//                String needApproved2 = o2.getNeedApproved() == null ? "0" : o2.getNeedApproved();
+//                if (needApproved1.equals("9") && !needApproved1.equals(needApproved2)) {
+//                    return -1;
+//                }
+//                return 0;
+//            }
+//        });
 
         // footer
         if (source.equals("data")) {
