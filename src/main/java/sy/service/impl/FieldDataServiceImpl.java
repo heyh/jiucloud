@@ -85,8 +85,9 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
         }
 
         hql += whereHql(fieldData, params, ugroup, keyword, rightList);
+        hql += " limit " + (ph.getPage() - 1) * ph.getRows() + " , " + ph.getRows();
 
-        List<TFieldData> l = fieldDataDaoI.find(hql, params, ph.getPage(), ph.getRows());
+        List<TFieldData> l = fieldDataDaoI.find(hql, params);
         dg.setTotal(fieldDataDaoI.count("select count(*) " + hql, params));
         List<FieldData> list = new ArrayList<FieldData>();
         for (TFieldData tem : l) {
