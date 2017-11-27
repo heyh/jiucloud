@@ -157,49 +157,17 @@
 						</select>
 					</td>
 				</tr>
-				<%--<tr>--%>
-					<%--<td style="width: 80px;">单价</td>--%>
-					<%--<td>--%>
-						<%--<c:choose>--%>
-							<%--<c:when test="${tfielddata.itemCode.substring(0, 3) != '700' && tfielddata.itemCode.substring(0, 3) != '800'}">--%>
-								<%--<input name="price" style="width: 250px;" type="text" placeholder="单价" class="easyui-validatebox span2" data-options="required:true" value="${tfielddata.price}">--%>
-							<%--</c:when>--%>
-							<%--<c:when test="<%= hasReadEditRight %>">--%>
-								<%--<input name="price" style="width: 250px;" type="text" placeholder="单价" class="easyui-validatebox span2" data-options="required:true" value="${tfielddata.price}">--%>
-							<%--</c:when>--%>
-							<%--<c:when test="<%= hasOnlyReadRight && !hasReadEditRight%>">--%>
-								<%--<input readonly='readonly' name="price" style="width: 250px;" type="text" placeholder="单价" class="easyui-validatebox span2" data-options="required:true" value="${tfielddata.price}">--%>
-							<%--</c:when>--%>
-							<%--<c:otherwise>--%>
-								<%--<input readonly='readonly'  style="width: 250px;" type="text" placeholder="单价" class="easyui-validatebox span2" data-options="required:true" value="***">--%>
-								<%--<input name="price" style="display: none" type="text" placeholder="单价" class="easyui-validatebox span2" data-options="required:true" value="${tfielddata.price}">--%>
-							<%--</c:otherwise>--%>
-						<%--</c:choose>--%>
-					<%--</td>--%>
-				<%--</tr>--%>
 				<tr>
 					<td style="width: 80px;">数量</td>
 					<td><input name="count" style="width: 250px;" type="text"
 						placeholder="数量" class="easyui-validatebox span2"
 						data-options="required:true,precision:4" value="${tfielddata.count}"></td>
 				</tr>
-				<%--<tr>--%>
-					<%--<td style="width: 80px;">实付金额</td>--%>
-					<%--<td><input name="payAmount" style="width: 250px;" type="text"--%>
-							   <%--placeholder="实付金额" class="easyui-validatebox span2"--%>
-							   <%--data-options="required:true,precision:4" value="${tfielddata.payAmount}"></td>--%>
-				<%--</tr>--%>
 				<tr>
 					<td style="width: 80px;">项目特征</td>
-					<td><input name="remark" style="width: 250px;" type="text"
-							   placeholder="项目特征" class="easyui-validatebox span2"
-							   value="${tfielddata.remark}"></td>
-				</tr>
-				<%--<tr>--%>
-					<%--<td style="width: 80px;">供应商</td>--%>
-					<%--<td><input style="width: 250px;" name="supplier"--%>
-							   <%--type="text" placeholder="供应商" class="easyui-validatebox span2"--%>
-							   <%--data-options="required:true" value="${tfielddata.supplier}">--%>
+					<td>
+						<textarea type="text" name="remark" id="remark" style="width:268px">${tfielddata.remark}</textarea>
+					</td>
 				</tr>
 				<tr>
 					<td style="width: 80px;">工程属性</td>
