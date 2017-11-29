@@ -336,7 +336,7 @@
                     nowrap : false,
                     rownumbers: true,
                     striped:true,
-                    columns : [ [
+                    frozenColumns:[[
                         {
                             field : 'id',
                             title : '多选框',
@@ -358,6 +358,39 @@
                             field : 'dataName',
                             title : '名称',
                             width : 350
+                        },
+                        {
+                            field : 'creatTime',
+                            title : '录入时间',
+                            width : 200
+                        }
+                    ]],
+                    columns : [ [
+                        {
+                            field : 'id',
+                            title : '多选框',
+                            width : 100,
+                            checkbox : true
+                        },
+                        {
+                            field : 'projectName',
+                            title : '工程名称',
+                            width : 200
+                        },
+                        {
+                            field : 'dataName',
+                            title : '名称',
+                            width : 200
+                        },
+                        {
+                            field : 'creatTime',
+                            title : '录入时间',
+                            width : 150
+                        },
+                        {
+                            field : 'sectionName',
+                            title : '标段',
+                            width : 100
                         },
                         {
                             field : 'costType',
@@ -401,11 +434,6 @@
                         {
                             field : 'uname',
                             title : '操作人',
-                            width : 200
-                        },
-                        {
-                            field : 'creatTime',
-                            title : '录入时间',
                             width : 200
                         },
                         {
@@ -507,7 +535,7 @@
                     nowrap : false,
                     rownumbers: true,
                     striped:true,
-                    columns : [ [
+                    frozenColumns:[[
                         {
                             field : 'id',
                             title : '多选框',
@@ -517,9 +545,43 @@
                         {
                             field : 'projectName',
                             title : '工程名称',
-                            width : 250
+                            width : 200
 
                         },
+                        {
+                            field : 'dataName',
+                            title : '名称',
+                            width : 200
+                        },
+                        {
+                            field : 'creatTime',
+                            title : '入库时间',
+                            width : 150
+                        }
+                    ]],
+                    columns : [ [
+//                        {
+//                            field : 'id',
+//                            title : '多选框',
+//                            width : 100,
+//                            checkbox : true
+//                        },
+//                        {
+//                            field : 'projectName',
+//                            title : '工程名称',
+//                            width : 200
+//
+//                        },
+//                        {
+//                            field : 'dataName',
+//                            title : '名称',
+//                            width : 200
+//                        },
+//                        {
+//                            field : 'creatTime',
+//                            title : '入库时间',
+//                            width : 150
+//                        },
                         {
                             field : 'sectionName',
                             title : '标段',
@@ -531,18 +593,8 @@
                             width : 100
                         },
                         {
-                            field : 'dataName',
-                            title : '名称',
-                            width : 350
-                        },
-                        {
                             field : 'uname',
                             title : '操作人',
-                            width : 200
-                        },
-                        {
-                            field : 'creatTime',
-                            title : '入库时间',
                             width : 200
                         },
                         {
@@ -643,7 +695,7 @@
                     nowrap : false,
                     rownumbers: true,
                     striped:true,
-                    columns : [ [
+                    frozenColumns:[[
                         {
                             field : 'id',
                             title : '多选框',
@@ -653,24 +705,52 @@
                         {
                             field : 'projectName',
                             title : '工程名称',
-                            width : 250
+                            width : 150
 
                         },
+                        {
+                            field : 'dataName',
+                            title : '名称',
+                            width : 250
+                        },
+                        {
+                            field : 'creatTime',
+                            title : '录入时间',
+                            width : 150
+                        }
+                    ]],
+                    columns : [ [
+//                        {
+//                            field : 'id',
+//                            title : '多选框',
+//                            width : 100,
+//                            checkbox : true
+//                        },
+//                        {
+//                            field : 'projectName',
+//                            title : '工程名称',
+//                            width : 250
+//
+//                        },
+//                        {
+//                            field : 'dataName',
+//                            title : '名称',
+//                            width : 350
+//                        },
+//                        {
+//                            field : 'creatTime',
+//                            title : '录入时间',
+//                            width : 200
+//                        },
                         {
                             field : 'specifications',
                             title : '设施名称',
                             width : 200
                         },
-
                         {
                             field : 'costType',
                             title : '类型',
                             width : 100
-                        },
-                        {
-                            field : 'dataName',
-                            title : '名称',
-                            width : 350
                         },
                         {
                             field : 'remark',
@@ -723,11 +803,6 @@
                         {
                             field : 'uname',
                             title : '操作人',
-                            width : 200
-                        },
-                        {
-                            field : 'creatTime',
-                            title : '录入时间',
                             width : 200
                         },
                         {
@@ -829,7 +904,7 @@
                     nowrap : false,
                     rownumbers: true,
                     striped:true,
-                    columns : [ [
+                    frozenColumns:[[
                         {
                             field : 'id',
                             title : '多选框',
@@ -839,18 +914,47 @@
                         {
                             field : 'projectName',
                             title : '工程名称',
-                            width : 250
+                            width : 200
 
-                        },
-                        {
-                            field : 'costType',
-                            title : '费用类型',
-                            width : 100
                         },
                         {
                             field : 'dataName',
                             title : '材料名称',
-                            width : 350
+                            width : 200
+                        },
+                        {
+                            field : 'creatTime',
+                            title : '入库时间',
+                            width : 150
+                        }
+                    ]],
+                    columns : [ [
+//                        {
+//                            field : 'id',
+//                            title : '多选框',
+//                            width : 100,
+//                            checkbox : true
+//                        },
+//                        {
+//                            field : 'projectName',
+//                            title : '工程名称',
+//                            width : 200
+//
+//                        },
+//                        {
+//                            field : 'dataName',
+//                            title : '材料名称',
+//                            width : 200
+//                        },
+//                        {
+//                            field : 'creatTime',
+//                            title : '入库时间',
+//                            width : 150
+//                        },
+                        {
+                            field : 'costType',
+                            title : '材料类型',
+                            width : 100
                         },
                         {
                             field : 'unit',
@@ -894,11 +998,6 @@
                         {
                             field : 'uname',
                             title : '操作人',
-                            width : 200
-                        },
-                        {
-                            field : 'creatTime',
-                            title : '入库时间',
                             width : 200
                         },
                         {
@@ -982,6 +1081,23 @@
                 });
     });
 
+    //附件管理
+    function FileFun(id) {
+        parent.$
+            .modalDialog({
+                title: '附件管理',
+                width: 800,
+                height: 600,
+                href: '${pageContext.request.contextPath}/fieldDataController/securi_fieldDataFile?id='
+                + id,
+                buttons: [{
+                    text: '关闭',
+                    handler: function () {
+                        parent.$.modalDialog.handler.dialog('close');
+                    }
+                }]
+            });
+    }
 
     // 审批资料
     function approvedFun(id, approvedState, dg, flag) {
