@@ -816,9 +816,9 @@ public class FieldDataController extends BaseController {
         if (source.equals("bill")) {
             map = createBillExcelRecord(datas);
             columnNames = new String[]{"工程名称", "设施名称", "类型", "名称", "项目特征", "单位", "数量", "预算单价",
-                    "审计单价", "操作人", "录入时间"};     // 列名
+                    "审计单价", "操作人", "录入时间", "审批意见"};     // 列名
             keys = new String[]{"project_name", "specifications", "costType_name", "dataName", "remark", "unit", "count", "price_ys",
-                    "price_sj", "uname", "createTime"};// map中的key
+                    "price_sj", "uname", "createTime", "approvedOption"};// map中的key
 
         } else if (source.equals("material")) {
             for (FieldData data : datas) {
@@ -827,12 +827,12 @@ public class FieldDataController extends BaseController {
                 }
             }
             map = createMaterialExcelRecord(datas);
-            columnNames = new String[]{"工程名称", "费用类型", "材料名称", "单位", "数量", "单价", "规格型号", "供应商", "操作人", "录入时间"};     // 列名
-            keys = new String[]{"project_name", "costType_name", "dataName", "unit", "count", "price", "specifications", "supplier", "uname", "createTime"};// map中的key
+            columnNames = new String[]{"工程名称", "费用类型", "材料名称", "单位", "数量", "单价", "规格型号", "供应商", "操作人", "录入时间", "审批意见"};     // 列名
+            keys = new String[]{"project_name", "costType_name", "dataName", "unit", "count", "price", "specifications", "supplier", "uname", "createTime", "approvedOption"};// map中的key
         } else {
             map = createExcelRecord(datas);
-            columnNames = new String[]{"工程名称", "费用类型", "现场数据名称", "单价", "数量", "金额", "单位", "规格", "操作人", "入库时间"}; // 列名
-            keys = new String[]{"project_name", "costType_name", "name", "price", "count", "money", "unit", "specifications", "uname", "createTime"};// map中的key
+            columnNames = new String[]{"工程名称", "费用类型", "现场数据名称", "单价", "数量", "金额", "单位", "规格", "操作人", "入库时间", "审批意见"}; // 列名
+            keys = new String[]{"project_name", "costType_name", "name", "price", "count", "money", "unit", "specifications", "uname", "createTime", "approvedOption"};// map中的key
         }
 
         ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -896,6 +896,7 @@ public class FieldDataController extends BaseController {
             mapValue.put("specifications", tem.getSpecifications());
             mapValue.put("uname", tem.getUname());
             mapValue.put("createTime", tem.getCreatTime());
+            mapValue.put("approvedOption", StringUtil.trimToEmpty(tem.getApprovedOption()).replaceAll("::", " "));
             listmap.add(mapValue);
         }
         Map<String, Object> mapValue = new HashMap<String, Object>();
@@ -927,6 +928,7 @@ public class FieldDataController extends BaseController {
             mapValue.put("price_sj", tem.getPrice_sj());
             mapValue.put("uname", tem.getUname());
             mapValue.put("createTime", tem.getCreatTime());
+            mapValue.put("approvedOption", StringUtil.trimToEmpty(tem.getApprovedOption()).replaceAll("::", " "));
             listmap.add(mapValue);
         }
         return listmap;
@@ -952,6 +954,7 @@ public class FieldDataController extends BaseController {
             mapValue.put("supplier", tem.getSupplier());
             mapValue.put("uname", tem.getUname());
             mapValue.put("createTime", tem.getCreatTime());
+            mapValue.put("approvedOption", StringUtil.trimToEmpty(tem.getApprovedOption()).replaceAll("::", " "));
             listmap.add(mapValue);
         }
         return listmap;
