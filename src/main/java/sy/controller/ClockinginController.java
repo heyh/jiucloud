@@ -216,8 +216,10 @@ public class ClockinginController extends BaseController  {
 
             mapValue.put("approveState", tem.getApproveState());
             mapValue.put("reasonDesc", tem.getReasonDesc());
+            mapValue.put("approveDesc", tem.getApproveDesc());
             mapValue.put("approveUser", tem.getApproveUser());
             mapValue.put("approveTime", tem.getApproveTime());
+
             listmap.add(mapValue);
         }
         return listmap;
