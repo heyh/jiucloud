@@ -66,6 +66,12 @@ public class MaterialsServiceImpl implements MaterialsServiceI {
 
     }
 
+    @Override
+    public Materials findById(int id) {
+        Materials materials = materialsDao.get("from Materials m where m.id = " + id);
+        return materials;
+    }
+
     private boolean hasChild(int id) {
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("id", String.valueOf(id));

@@ -7,9 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import sy.model.Province;
-import sy.model.po.OverallPlan;
-import sy.model.po.OverallPlanDetails;
-import sy.model.po.Project;
+import sy.model.po.*;
 import sy.pageModel.*;
 import sy.service.OverallPlanServiceI;
 import sy.util.BeanUtils;
@@ -37,13 +35,23 @@ public class OverallPlanController {
 
     @RequestMapping("/securi_overallPlanList")
     @ResponseBody
-    public List<OverallPlanDetails> materialsTreeGridChild(HttpServletRequest request) {
-        List<OverallPlanDetails> overallPlanMap = new ArrayList<OverallPlanDetails>();
+    public List<OverallPlanBean> overallPlanList(HttpServletRequest request) {
+        List<OverallPlanBean> overallPlanBeanList = new ArrayList<OverallPlanBean>();
         SessionInfo sessionInfo = (SessionInfo) request.getSession().getAttribute(ConfigUtil.getSessionInfoName());
         String projectId = StringUtil.trimToEmpty(request.getParameter("projectId"));
-        overallPlanMap = overallPlanService.getOverallPlanList(projectId);
+        overallPlanBeanList = overallPlanService.getOverallPlanList(projectId);
 
-        return overallPlanMap;
+        return overallPlanBeanList;
+    }
+
+    @RequestMapping("/securi_overallPlanDetailsList")
+    @ResponseBody
+    public List<OverallPlanDetailsBean> overallPlanDetailsList(HttpServletRequest request) {
+        List<OverallPlanDetailsBean> overallPlanDetailsBeanList = new ArrayList<OverallPlanDetailsBean>();
+        String overallPlanId = StringUtil.trimToEmpty(request.getParameter("overallPlanId"));
+        overallPlanDetailsBeanList = overallPlanService.getOverallPlanDetailsList(overallPlanId);
+
+        return overallPlanDetailsBeanList;
     }
 
     @RequestMapping("/securi_toAddOverallPlan")

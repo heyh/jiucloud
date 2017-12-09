@@ -1,7 +1,9 @@
 package sy.service;
 
 import sy.model.po.OverallPlan;
+import sy.model.po.OverallPlanBean;
 import sy.model.po.OverallPlanDetails;
+import sy.model.po.OverallPlanDetailsBean;
 
 import java.util.List;
 import java.util.Map;
@@ -11,9 +13,15 @@ import java.util.Map;
  */
 public interface OverallPlanServiceI {
 
-    public List<OverallPlanDetails> getOverallPlanList(String projectId);
+    public List<OverallPlanBean> getOverallPlanList(String projectId);
+
+    List<OverallPlanDetailsBean> getOverallPlanDetailsList(String overallPlanId);
+
     public void addOverallPlan(OverallPlan overallPlan);
+
     public int getId(OverallPlan overallPlan);
 
     public void addOverallPlanDetails(OverallPlanDetails overallPlanDetails);
+
+
 }

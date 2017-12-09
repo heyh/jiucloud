@@ -59,8 +59,6 @@
             }
             $("#projectId").html(optionString);
             $("#proId").html(optionString);
-
-
         });
 
         layer.open({
@@ -81,34 +79,39 @@
         });
 
         function overallPlan(projectId) {
-            document.getElementById("mainbody").innerHTML = '';
+            document.getElementById("overallPlanTabBody").innerHTML = '';
             $.getJSON('${pageContext.request.contextPath}/overallPlanController/securi_overallPlanList?projectId=' + projectId, function (data) {
                 if (data.length > 0) {
                     for (var i in data) {
                         var row = data[i];
                         var trObj = document.createElement("tr");
-                        var _id = document.getElementById("overPlanTable").rows.length;
+                        var _id = document.getElementById("overallPlanTable").rows.length;
                         trObj.id = "tr_" + _id;
                         trObj.innerHTML =
                             "<td style='text-align:center;'>" + _id + "</td>" +
-                            "<td>" + row.mc + "</td>" +
-                            "<td>" + row.specifications + "</td>" +
-                            "<td style='text-align:center;'>row.count</td>" +
-                            "<td>" + row.dw + "</td>" +
-                            "<td>" + row.dw + "</td>" +
-                            document.getElementById("mainbody").appendChild(trObj);
+                            "<td>" + row.projectName + "</td>" +
+                            "<td style='display: none;'>" + row.projectId + "</td>" +
+                            "<td style='display: none;'>" + row.id + "</td>" +
+                            "<td>" + row.uname + "</td>" +
+                            "<td>" + row.createTime + "</td>" +
+                            "<td>" + row.needApproved + "</td>" +
+                            "<td>" + row.approvedOption + "</td>" +
+                            "<td>" + row.currentApprovedUser + "</td>" +
+                            "<td style='text-align:center; '><button class='layui-btn  layui-btn-xs layui-btn-normal' onclick='detailFun(" + row.id + ")'><i class='layui-icon'></i>查看详情</button></td>";
+                        document.getElementById("overallPlanTabBody").appendChild(trObj);
                     }
-                } else {
-                    var trObj = document.createElement("tr");
-                    trObj.innerHTML = "<td colspan='100' style='text-align:center;'><button onclick='addFun();' class='layui-btn layui-btn-normal layui-btn-radius'>制作计划</button></td>";
-                    document.getElementById("mainbody").appendChild(trObj);
                 }
+                var addObj = document.createElement("tr");
+                addObj.innerHTML = "<td colspan='100' style='text-align:right;'><button onclick='addFun();' class='layui-btn layui-btn-normal layui-btn-radius'>添加计划</button></td>";
+                document.getElementById("overallPlanTabBody").appendChild(addObj);
             });
         }
 
         function changeProjectId() {
             var projectId = $('#proId').val();
             overallPlan(projectId)
+
+            $('#overallPlanDetailsTable').hide();
         }
 
         function addFun() {
@@ -138,6 +141,29 @@
                 });
         }
 
+        function detailFun(overallplanId) {
+            $('#overallPlanDetailsTable').show();
+
+            document.getElementById("overallPlanDetailsTabBody").innerHTML = '';
+            $.getJSON('${pageContext.request.contextPath}/overallPlanController/securi_overallPlanDetailsList?overallPlanId=' + overallplanId , function (data) {
+                if (data.length > 0) {
+                    for (var i in data) {
+                        var row = data[i];
+                        var trObj = document.createElement("tr");
+                        var _id = document.getElementById("overallPlanDetailsTable").rows.length;
+                        trObj.id = "tr_" + _id;
+                        trObj.innerHTML =
+                            "<td style='text-align:center;'>" + _id + "</td>" +
+                            "<td>" + row.mc + "</td>" +
+                            "<td>" + row.specifications + "</td>" +
+                            "<td>" + row.count + "</td>" +
+                            "<td>" + row.dw + "</td>";
+                        document.getElementById("overallPlanDetailsTabBody").appendChild(trObj);
+                    }
+                }
+            });
+        }
+
     </script>
 
 </head>
@@ -148,18 +174,11 @@
 <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
 <![endif]-->
 
-<div class="container-fluid">
-    <div class="row-fluid">
-        <div class="span2">
-            <!--Sidebar content-->
-        </div>
-        <div class="span10">
-            <div class="controls">
-
-            </div>
-
+<div class="layui-container">
+    <div class="layui-row">
+        <div class="layui-col-xs12">
             <table class="table_style table table-striped table-bordered table-hover table-condensed"
-                   id="overPlanTable">
+                   id="overallPlanTable">
                 <caption>
                     <blockquote class="layui-elem-quote" style="text-align: center">
                         <a style="font-size:16px;">
@@ -173,15 +192,37 @@
                 <thead>
                 <tr>
                     <th style="text-align:center; ">序号</th>
+                    <th style="text-align:center; ">项目名称</th>
+                    <th style="display: none;">项目ID</th>
+                    <th style="display: none;">总体计划ID</th>
+                    <th style="text-align:center; ">录入人</th>
+                    <th style="text-align:center; ">录入时间</th>
+                    <th style="text-align:center; ">审批状态</th>
+                    <th style="text-align:center; ">审批意见</th>
+                    <th style="text-align:center; ">当前审批人</th>
+                    <th style="text-align:center; ">操作</th>
+                </tr>
+                </thead>
+                <tbody id="overallPlanTabBody">
+                </tbody>
+            </table>
+        </div>
+
+        <div class="layui-col-xs12">
+            <table class="table_style table table-striped table-bordered table-hover table-condensed" id="overallPlanDetailsTable" style="display: none;">
+                <caption>
+                   计划明细
+                </caption>
+                <thead>
+                <tr>
+                    <th style="text-align:center; ">序号</th>
                     <th style="text-align:center; ">材料名称</th>
                     <th style="text-align:center; ">规格型号</th>
                     <th style="text-align:center; ">数量</th>
                     <th style="text-align:center; ">单位</th>
-                    <th style="text-align:center; ">供应商</th>
-                    <th style="text-align:center; ">操作</th>
                 </tr>
                 </thead>
-                <tbody id="mainbody">
+                <tbody id="overallPlanDetailsTabBody">
                 </tbody>
             </table>
         </div>

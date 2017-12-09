@@ -1,5 +1,6 @@
 package sy.service;
 
+import sy.model.po.Materials;
 import sy.pageModel.DataGrid;
 import sy.pageModel.PageHelper;
 
@@ -8,4 +9,5 @@ import sy.pageModel.PageHelper;
  */
 public interface MaterialsServiceI {
     DataGrid dataGrid(PageHelper pageHelper, String keyword, String pid);
+    Materials findById(int id);
 }

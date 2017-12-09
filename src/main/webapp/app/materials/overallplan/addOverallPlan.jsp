@@ -156,7 +156,7 @@
             var _id = tableObj.rows[i].cells[0].innerText;
             var _mc = tableObj.rows[i].cells[1].innerText;
             var _specifications = tableObj.rows[i].cells[2].innerText;
-            var _count = tableObj.rows[i].cells[3].innerText;
+            var _count = tableObj.rows[i].cells[3].firstElementChild.value;
             var _dw = tableObj.rows[i].cells[4].innerText;
             var _supplier = tableObj.rows[i].cells[5].innerText;
             var _materialsId = tableObj.rows[i].cells[6].innerText;
@@ -171,16 +171,26 @@
 
             tableInfo.push(rowInfo);
         }
+        $('#overallPlanInfo').val(JSON.stringify(tableInfo));
+    }
 
-        var projectId = $('#proId').val()
-
-        $.ajax({
-            url : "${pageContext.request.contextPath}/overallPlanController/securi_geneOverallPlan",//路径
-            data : {'overallPlanInfo': JSON.stringify(tableInfo), projectId: projectId},
-            type: 'post',
-            dataType: 'json',
-            contentType: "application/x-www-form-urlencoded; charset=utf-8",
-            success : function(result) {  //返回数据根据结果进行相应的处理
+    $(function () {
+        parent.$.messager.progress('close');
+        $('#form').form({
+            url: '${pageContext.request.contextPath}/overallPlanController/securi_geneOverallPlan',
+            onSubmit: function () {
+                geneOverallPlan();
+                parent.$.messager.progress({
+                    title: '提示',
+                    text: '数据处理中，请稍后....'
+                });
+                var isValid = $(this).form('validate');
+                if (!isValid) {
+                    parent.$.messager.progress('close');
+                }
+                return isValid;
+            },
+            success: function (result) {
                 parent.$.messager.progress('close');
                 result = $.parseJSON(result);
                 if (result.success) {
@@ -191,12 +201,14 @@
                         timeout:3000,
                         showType:'show'
                     });
+//                    parent.$.modalDialog.handler.overallPlan($('#projectId').val());//之所以能在这里调用到parent.$.modalDialog.openner_dataGrid这个对象，是因为user.jsp页面预定义好了
+                    parent.$.modalDialog.handler.dialog('close');
                 } else {
                     parent.$.messager.alert('错误', result.msg, 'error');
                 }
             }
         });
-    }
+    });
 </script>
 
 <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
@@ -214,7 +226,7 @@
             </div>
         </div>
         <form class="form-horizontal" name="form" id="form" method="post" enctype="multipart/form-data" role="form">
-            <input type="hidden" id="proId" name="proId" value="${proId}"/>
+            <input type="hidden" id="projectId" name="projectId" value="${proId}"/>
             <div class="layui-col-md8">
                 <blockquote class="layui-elem-quote" style="text-align: center"><a style="font-size:16px;">${proName} 材料总计划</a>
                 </blockquote>
@@ -237,8 +249,8 @@
                     </tr>
                     </tbody>
                 </table>
-
-                <div align="center">
+                <input type="hidden" id="overallPlanInfo" name="overallPlanInfo">
+                <div style='text-align:right;'>
                     <button class='layui-btn layui-btn-normal layui-btn-radius' onclick="geneOverallPlan();">确    定</button>
                 </div>
             </div>
