@@ -84,6 +84,7 @@ public class OverallPlanController {
         overallPlan.setNeedApproved("1");
         overallPlan.setApprovedUser(currentApprovedUser);
         overallPlan.setCurrentApprovedUser(currentApprovedUser);
+        overallPlan.setApprovedOption("");
         overallPlanService.addOverallPlan(overallPlan);
 
         int overallPlanId = overallPlanService.getId(overallPlan);
