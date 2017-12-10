@@ -222,7 +222,14 @@
                         parent.$.messager.progress('close');
                         if (data.success) {
                             layer.closeAll();
+                            jQuery.messager.show({
+                                title:'温馨提示:',
+                                msg:'添加成功!',
+                                timeout:3000,
+                                showType:'show'
+                            });
                             parent.$.modalDialog.handler.dialog('close');
+
                         }
                     }
                 });
