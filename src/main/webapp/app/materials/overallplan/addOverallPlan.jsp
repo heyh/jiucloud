@@ -117,6 +117,15 @@
                 });
     });
 
+    function searchFun() {
+        $.post('${pageContext.request.contextPath}/materialsController/securi_materialsTreeGrid',
+            {keyword: $('#keyword').val()},
+            function (data) {
+                dataGrid.treegrid('loadData', data);
+            },
+            'json');
+    }
+
     function add(row) {
         if (document.getElementById("norecord") != undefined) {
             document.getElementById("mainbody").removeChild(document.getElementById("norecord"));
@@ -268,7 +277,12 @@
 <div class="layui-container">
     <div class="layui-row">
         <div class="layui-col-md6">
-            <blockquote class="layui-elem-quote"><a style="font-size:16px;">材料库</a></blockquote>
+            <blockquote class="layui-elem-quote">
+                <a style="font-size:16px;">材料库</a>
+                <input type="text" class="input-medium search-query" style="margin-left: 10px" id="keyword" name="keyword">
+                <button class="layui-btn layui-btn-sm layui-btn-normal layui-btn-radius" onclick="searchFun()">搜索</button>
+            </blockquote>
+
             <div data-options="region:'center',border:false">
                 <table id="dataGrid"></table>
             </div>
@@ -277,8 +291,8 @@
         <div class="layui-col-md6">
             <form class="form-horizontal" name="form" id="form" method="post" enctype="multipart/form-data" role="form">
                 <input type="hidden" id="projectId" name="projectId" value="${proId}"/>
-                <blockquote class="layui-elem-quote" style="text-align: center"><a style="font-size:16px;">${proName}
-                    材料总计划</a>
+                <blockquote class="layui-elem-quote" style="text-align: center">
+                    <a style="font-size:16px;">${proName}材料总计划</a>
                 </blockquote>
                 <table class="table_style table table-striped table-bordered table-hover table-condensed"
                        id="overPlanTable">

@@ -35,6 +35,11 @@ public class MaterialsController {
 
         String pid = StringUtil.trimToEmpty(request.getParameter("id")).equals("") ? "0" : StringUtil.trimToEmpty(request.getParameter("id"));
 
+        if (pageHelper.getPage() == 0 && pageHelper.getRows() == 0) {
+            pageHelper.setPage(1);
+            pageHelper.setRows(300);
+        }
+
         DataGrid dataGrid =  materialsService.dataGrid(pageHelper, keyword, pid);
 
         return dataGrid;

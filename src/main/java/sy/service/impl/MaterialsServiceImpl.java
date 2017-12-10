@@ -32,12 +32,14 @@ public class MaterialsServiceImpl implements MaterialsServiceI {
         MaterialsTree materialsTree = new MaterialsTree();
 
         Map<String, Object> params = new HashMap<String, Object>();
-        String hql = "from Materials where pid = :pid";
-        params.put("pid", pid);
+        String hql = "from Materials where";
 
         if (!keyword.equals("")) {
-            hql += " and name like :name ";
-            params.put("name", "%%" + keyword + "%%");
+            hql += " mc like :mc ";
+            params.put("mc", "%%" + keyword + "%%");
+        } else {
+            hql += " pid = :pid ";
+            params.put("pid", pid);
         }
 
         hql += " order by id";
