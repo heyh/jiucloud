@@ -74,12 +74,16 @@ public class OverallPlanController {
         String cid = sessionInfo.getCompid();
         String projectId = request.getParameter("projectId");
         JSONArray overallPlanInfo = JSONArray.fromObject(request.getParameter("overallPlanInfo"));
+        String currentApprovedUser = StringUtil.trimToEmpty(request.getParameter("currentApprovedUser"));
 
         OverallPlan overallPlan = new OverallPlan();
         overallPlan.setCid(cid);
         overallPlan.setUid(uid);
         overallPlan.setProjectId(projectId);
         overallPlan.setCreateTime(new Date());
+        overallPlan.setNeedApproved("1");
+        overallPlan.setApprovedUser(currentApprovedUser);
+        overallPlan.setCurrentApprovedUser(currentApprovedUser);
         overallPlanService.addOverallPlan(overallPlan);
 
         int overallPlanId = overallPlanService.getId(overallPlan);

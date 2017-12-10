@@ -17,6 +17,9 @@
       href="${pageContext.request.contextPath }/jslib/bootstrap-2.3.1/css/bootstrap.css"/>
 <script type="text/javascript" src="${pageContext.request.contextPath }/jslib/bootstrap-2.3.1/js/bootstrap.js"></script>
 
+<link rel="stylesheet" type="text/css"
+      href="${pageContext.request.contextPath }/jslib/layer-v3.0.3/layer/skin/default/layer.css" media="all"/>
+<script type="text/javascript" src="${pageContext.request.contextPath }/jslib/layer-v3.0.3/layer/layer.js"></script>
 
 <style>
     .table_style tbody tr:nth-child(even) td,
@@ -60,15 +63,9 @@
                     cascadeCheck: false,
                     columns: [[
                         {
-                            titile:'ID',
-                            field: 'id',
-                            width: 200,
-                            hidden:true
-                        },
-                        {
                             title: '材料名称',
                             field: 'mc',
-                            width: 200,
+                            width: 100,
                             formatter: function (value, row, index) {
                                 if (row.state == 'closed') {
                                     return row.mc;
@@ -77,16 +74,21 @@
                                 }
                             }
                         },
-
+                        {
+                            titile: 'ID',
+                            field: 'id',
+                            width: 10,
+                            hidden: true
+                        },
                         {
                             title: '规格型号',
                             field: 'specifications',
-                            width: 200
+                            width: 60
                         },
                         {
                             title: '单位',
                             field: 'dw',
-                            width: 100
+                            width: 30
                         }
                     ]],
 
@@ -172,6 +174,51 @@
             tableInfo.push(rowInfo);
         }
         $('#overallPlanInfo').val(JSON.stringify(tableInfo));
+
+        $.ajax({
+            url: '${pageContext.request.contextPath}/fieldDataController/securi_chooseApprove',
+            type: 'post',
+            dataType: 'json',
+            contentType: "application/x-www-form-urlencoded; charset=utf-8",
+            success: function (data) {
+
+                if (data.success) {
+                    var optionstring = '';
+                    var users = data.obj;
+                    for (var i in users) {
+                        optionstring += "<option value=\"" + users[i].id + "\" >" + users[i].username + "</option>";
+                    }
+                    $("#currentApprovedUserRef").html(optionstring);
+                }
+            }
+        });
+
+        layer.open({
+            type: 1,
+            title: '审批人选择',
+            content: '<div style="text-align: center; margin-top: 30px"><select id="currentApprovedUserRef" name="currentApprovedUserRef"></select></div>',
+            btn: '确定',
+            btnAlign: 'c',
+            shade: 0.3,
+            area: ['250px', '180px'],
+            yes: function () {
+                parent.$.messager.progress({title: '提示', text: '数据处理中，请稍后....'});
+                $.ajax({
+                    url: '${pageContext.request.contextPath}/overallPlanController/securi_geneOverallPlan',
+                    type: 'post',
+                    data: {overallPlanInfo: JSON.stringify(tableInfo), projectId: $('#projectId').val(), currentApprovedUser: $('#currentApprovedUserRef').val()},
+                    dataType: 'json',
+                    contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                    success: function (data) {
+                        parent.$.messager.progress('close');
+                        if (data.success) {
+                            layer.closeAll();
+                            parent.$.modalDialog.handler.dialog('close');
+                        }
+                    }
+                });
+            }
+        });
     }
 
     $(function () {
@@ -188,6 +235,7 @@
                 if (!isValid) {
                     parent.$.messager.progress('close');
                 }
+
                 return isValid;
             },
             success: function (result) {
@@ -196,10 +244,10 @@
                 if (result.success) {
                     parent.$.messager.progress('close');
                     jQuery.messager.show({
-                        title:'温馨提示:',
-                        msg:'添加成功!',
-                        timeout:3000,
-                        showType:'show'
+                        title: '温馨提示:',
+                        msg: '添加成功!',
+                        timeout: 3000,
+                        showType: 'show'
                     });
 //                    parent.$.modalDialog.handler.overallPlan($('#projectId').val());//之所以能在这里调用到parent.$.modalDialog.openner_dataGrid这个对象，是因为user.jsp页面预定义好了
                     parent.$.modalDialog.handler.dialog('close');
@@ -219,18 +267,21 @@
 
 <div class="layui-container">
     <div class="layui-row">
-        <div class="layui-col-md4">
+        <div class="layui-col-md6">
             <blockquote class="layui-elem-quote"><a style="font-size:16px;">材料库</a></blockquote>
             <div data-options="region:'center',border:false">
                 <table id="dataGrid"></table>
             </div>
         </div>
-        <form class="form-horizontal" name="form" id="form" method="post" enctype="multipart/form-data" role="form">
-            <input type="hidden" id="projectId" name="projectId" value="${proId}"/>
-            <div class="layui-col-md8">
-                <blockquote class="layui-elem-quote" style="text-align: center"><a style="font-size:16px;">${proName} 材料总计划</a>
+
+        <div class="layui-col-md6">
+            <form class="form-horizontal" name="form" id="form" method="post" enctype="multipart/form-data" role="form">
+                <input type="hidden" id="projectId" name="projectId" value="${proId}"/>
+                <blockquote class="layui-elem-quote" style="text-align: center"><a style="font-size:16px;">${proName}
+                    材料总计划</a>
                 </blockquote>
-                <table class="table_style table table-striped table-bordered table-hover table-condensed" id="overPlanTable">
+                <table class="table_style table table-striped table-bordered table-hover table-condensed"
+                       id="overPlanTable">
                     <thead>
                     <tr>
                         <th style="text-align:center; ">序号</th>
@@ -250,10 +301,13 @@
                     </tbody>
                 </table>
                 <input type="hidden" id="overallPlanInfo" name="overallPlanInfo">
-                <div style='text-align:right;'>
-                    <button class='layui-btn layui-btn-normal layui-btn-radius' onclick="geneOverallPlan();">确    定</button>
-                </div>
+                <%--<input type="hidden" id="currentApprovedUserRef" name="currentApprovedUserRef">--%>
+            </form>
+            <div style='text-align:right;'>
+                <button class='layui-btn layui-btn-normal layui-btn-radius' onclick="geneOverallPlan();">确 定
+                </button>
             </div>
-        </form>
+        </div>
+
     </div>
 </div>
