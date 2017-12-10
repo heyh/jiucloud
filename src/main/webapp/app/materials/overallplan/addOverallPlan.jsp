@@ -75,12 +75,6 @@
                             }
                         },
                         {
-                            titile: 'ID',
-                            field: 'id',
-                            width: 10,
-                            hidden: true
-                        },
-                        {
                             title: '规格型号',
                             field: 'specifications',
                             width: 60
@@ -88,7 +82,13 @@
                         {
                             title: '单位',
                             field: 'dw',
-                            width: 30
+                            width: 20
+                        },
+                        {
+                            titile: 'ID',
+                            field: 'id',
+                            width: 10,
+                            hidden: true
                         }
                     ]],
 
@@ -276,7 +276,7 @@
 
 <div class="layui-container">
     <div class="layui-row">
-        <div class="layui-col-md6">
+        <div class="layui-col-xs6">
             <blockquote class="layui-elem-quote">
                 <a style="font-size:16px;">材料库</a>
                 <input type="text" class="input-medium search-query" style="margin-left: 10px" id="keyword" name="keyword">
@@ -288,7 +288,7 @@
             </div>
         </div>
 
-        <div class="layui-col-md6">
+        <div class="layui-col-xs6">
             <form class="form-horizontal" name="form" id="form" method="post" enctype="multipart/form-data" role="form">
                 <input type="hidden" id="projectId" name="projectId" value="${proId}"/>
                 <blockquote class="layui-elem-quote" style="text-align: center">
