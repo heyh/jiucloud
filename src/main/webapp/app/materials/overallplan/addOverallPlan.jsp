@@ -284,7 +284,7 @@
 <div class="layui-container">
     <div class="layui-row">
         <div class="layui-col-xs6">
-            <blockquote class="layui-elem-quote">
+            <blockquote class="layui-elem-quote" style="height: 25px">
                 <a style="font-size:16px;">材料库</a>
                 <input type="text" class="input-medium search-query" style="margin-left: 10px" id="keyword" name="keyword">
                 <button class="layui-btn layui-btn-sm layui-btn-normal layui-btn-radius" onclick="searchFun()">搜索</button>
@@ -298,7 +298,7 @@
         <div class="layui-col-xs6">
             <form class="form-horizontal" name="form" id="form" method="post" enctype="multipart/form-data" role="form">
                 <input type="hidden" id="projectId" name="projectId" value="${proId}"/>
-                <blockquote class="layui-elem-quote" style="text-align: center">
+                <blockquote class="layui-elem-quote" style="text-align: center;height: 25px">
                     <a style="font-size:16px;">${proName}材料总计划</a>
                 </blockquote>
                 <table class="table_style table table-striped table-bordered table-hover table-condensed"
