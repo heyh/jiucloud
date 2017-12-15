@@ -1634,8 +1634,14 @@ public class Api extends BaseController {
         clockingin.setClockinginTime(new Date());
         clockingin.setClockinginDate(DateKit.strToDateOrTime(DateKit.getCurrentDate("yyyy-MM-dd")));
 
-        List<Clockingin> sameClockingin = clockinginService.hasSameClockingin(clockingin);
-        if (sameClockingin != null && sameClockingin.size()>0) {
+        Clockingin tmp = new Clockingin();
+        tmp.setCid(cid);
+        tmp.setUid(uid);
+        tmp.setClockinginFlag(clockinginFlag);
+        tmp.setIsDelete("0");
+        tmp.setClockinginDate(DateKit.strToDateOrTime(DateKit.getCurrentDate("yyyy-MM-dd")));
+        List<Clockingin> sameClockingin = clockinginService.hasSameClockingin(tmp);
+        if (sameClockingin != null && sameClockingin.size() > 0) {
             clockinginService.delete(sameClockingin.get(0).getId());
         }
         clockinginService.Clockingin(clockingin);

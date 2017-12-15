@@ -210,7 +210,26 @@ public class ClockinginController extends BaseController  {
             Map<String, Object> mapValue = new HashMap<String, Object>();
             mapValue.put("clockinginDate", StringUtil.trimToEmpty(tem.getClockinginDate()).substring(0, 10));
             mapValue.put("uname", tem.getUname());
-            mapValue.put("clockinginFlag", Integer.parseInt(tem.getClockinginFlag()) == 0 ? "上班" : "下班");
+
+            String strClockinginFlag = "";
+            switch (Integer.parseInt(tem.getClockinginFlag())) {
+                case 0:
+                    strClockinginFlag = "上午上班";
+                    break;
+                case 1:
+                    strClockinginFlag = "上午下班";
+                    break;
+                case 2:
+                    strClockinginFlag = "下午上班";
+                    break;
+                case 3:
+                    strClockinginFlag = "下午下班";
+                    break;
+                default:
+                    strClockinginFlag = "未知状态";
+
+            }
+            mapValue.put("clockinginFlag", strClockinginFlag);
             mapValue.put("clockinginTime", StringUtil.trimToEmpty(tem.getClockinginTime()).substring(0, 19));
             mapValue.put("address", tem.getAddress());
 

@@ -78,7 +78,17 @@
                                 title: '上/下班',
                                 width: 250,
                                 formatter: function (value, row, index) {
-                                    return value == '0' ? '上班' : '下班';
+                                    var strClockinginFlag = "";
+                                    if (value == '0') {
+                                        strClockinginFlag = "上午上班";
+                                    } else if (value == '1') {
+                                        strClockinginFlag = "上午下班";
+                                    } else if (value == '2') {
+                                        strClockinginFlag = "下午上班";
+                                    } else if (value == '3') {
+                                        strClockinginFlag = "下午下班";
+                                    }
+                                    return strClockinginFlag;
                                 }
                             },
                             {
