@@ -9,6 +9,7 @@ import sy.model.po.MonthPlanDetails;
 import sy.model.po.MonthPlanDetailsBean;
 import sy.pageModel.SessionInfo;
 import sy.service.MonthPlanServiceI;
+import sy.service.ProjectServiceI;
 import sy.util.ConfigUtil;
 import sy.util.StringUtil;
 import sy.util.UtilDate;
@@ -27,6 +28,9 @@ public class MonthPlanController {
 
     @Autowired
     private MonthPlanServiceI monthPlanService;
+
+    @Autowired
+    private ProjectServiceI projectService;
 
     @RequestMapping("/MonthPlanList")
     public String MonthPlanList(HttpServletRequest req) {
@@ -62,9 +66,12 @@ public class MonthPlanController {
     @RequestMapping("/securi_toAddMonthPlan")
     public String toAddPage(HttpServletRequest request) {
 
-        request.setAttribute("proId", request.getParameter("proId"));
-        request.setAttribute("proName", request.getParameter("proName"));
+        if (!StringUtil.trimToEmpty(request.getParameter("proId")).equals("")) {
+            request.setAttribute("proId", request.getParameter("proId"));
 
+            String proName = projectService.findOneView(Integer.parseInt(StringUtil.trimToEmpty(request.getParameter("proId")))).getProName();
+            request.setAttribute("proName", proName);
+        }
         return "/app/materials/monthplan/addMonthPlan";
     }
 }

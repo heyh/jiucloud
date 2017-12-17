@@ -296,7 +296,7 @@
             <form class="form-horizontal" name="form" id="form" method="post" enctype="multipart/form-data" role="form">
                 <input type="hidden" id="projectId" name="projectId" value="${proId}"/>
                 <blockquote class="layui-elem-quote" style="text-align: center;height: 25px">
-                    <a style="font-size:16px;">${proName}材料总计划</a>
+                    <a style="font-size:16px;">${proName}</a>&nbsp;&nbsp;材料总体计划
                 </blockquote>
                 <table class="table_style table table-striped table-bordered table-hover table-condensed"
                        id="overPlanTable">

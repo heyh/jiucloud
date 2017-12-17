@@ -142,4 +142,17 @@ public class MonthPlanServiceImpl implements MonthPlanServiceI {
 
         return monthPlanDetailsBeanList;
     }
+
+    @Override
+    public List<MonthPlanDetailsBean> getMonthPlanDetailsAll(String projectId) {
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("projectId", projectId);
+        String monthPlanHql = "from MonthPlan where isDelete = 0 and projectId = :projectId ";
+        List<MonthPlan> monthPlanList = monthPlanDao.find(monthPlanHql, params);
+        if (monthPlanList != null && monthPlanList.size()>0) {
+
+        }
+
+        return null;
+    }
 }

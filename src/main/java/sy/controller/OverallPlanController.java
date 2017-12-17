@@ -10,6 +10,7 @@ import sy.model.Province;
 import sy.model.po.*;
 import sy.pageModel.*;
 import sy.service.OverallPlanServiceI;
+import sy.service.ProjectServiceI;
 import sy.util.BeanUtils;
 import sy.util.ConfigUtil;
 import sy.util.StringUtil;
@@ -32,6 +33,9 @@ public class OverallPlanController {
 
     @Autowired
     private OverallPlanServiceI overallPlanService;
+
+    @Autowired
+    private ProjectServiceI projectService;
 
     @RequestMapping("/OverallPlanList")
     public String OverallPlanList(HttpServletRequest req) {
@@ -65,7 +69,9 @@ public class OverallPlanController {
     public String toAddPage(HttpServletRequest request) {
 
         request.setAttribute("proId", request.getParameter("proId"));
-        request.setAttribute("proName", request.getParameter("proName"));
+
+        String proName = projectService.findOneView(Integer.parseInt(StringUtil.trimToEmpty(request.getParameter("proId")))).getProName();
+        request.setAttribute("proName", proName);
 
         return "/app/materials/overallplan/addOverallPlan";
     }
