@@ -1,288 +1,334 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ page import="sy.model.Param" %>
-<%@ page import="java.util.Map" %>
-<%@ page import="java.util.ArrayList" %>
-<%@ page import="java.util.List" %>
-<%@ page import="net.sf.json.JSONArray" %>
-<%@ page import="sy.pageModel.SessionInfo" %>
-<%@ page import="sy.util.ConfigUtil" %><%--
-  Created by IntelliJ IDEA.
-  User: heyh
-  Date: 16/7/10
-  Time: 下午11:21
-  To change this template use File | Settings | File Templates.
---%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<!DOCTYPE html>
 
-<%
-	List<Param> unitParams = new ArrayList<Param>();
-	JSONArray docCostTree = new JSONArray();
 
-	SessionInfo sessionInfo = (SessionInfo) session.getAttribute(ConfigUtil.getSessionInfoName());
-	if (sessionInfo == null) {
-		response.sendRedirect(request.getContextPath());
-	} else {
-		docCostTree = sessionInfo.getDocCostTree();
+<%--<jsp:include page="../../../inc.jsp"></jsp:include>--%>
+
+<%--<!-- 新 Bootstrap 核心 CSS 文件 -->--%>
+<%--<link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.css">--%>
+<%--<!-- 可选的Bootstrap主题文件（一般不用引入） -->--%>
+<%--<link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap-theme.css">--%>
+<%--<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->--%>
+<%--<script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.js"></script>--%>
+<link rel="stylesheet" type="text/css"
+	  href="${pageContext.request.contextPath }/jslib/layui-v2.2.3/layui/css/layui.css"/>
+
+<link rel="stylesheet" type="text/css"
+	  href="${pageContext.request.contextPath }/jslib/bootstrap-2.3.1/css/bootstrap.css"/>
+<script type="text/javascript" src="${pageContext.request.contextPath }/jslib/bootstrap-2.3.1/js/bootstrap.js"></script>
+
+<link rel="stylesheet" type="text/css"
+	  href="${pageContext.request.contextPath }/jslib/layer-v3.0.3/layer/skin/default/layer.css" media="all"/>
+<script type="text/javascript" src="${pageContext.request.contextPath }/jslib/layer-v3.0.3/layer/layer.js"></script>
+
+<style>
+	.table_style tbody tr:nth-child(even) td,
+	.table_style tbody tr:nth-child(even) th {
+		background-color: #fff;
 	}
 
-%>
-<!DOCTYPE html>
-<html>
-<head>
-	<title>资料数据添加</title>
-	<jsp:include page="../../../inc.jsp"></jsp:include>
-	<%--<link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1-rc.1/css/select2.min.css" rel="stylesheet"/>--%>
-	<%--<script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1-rc.1/js/select2.min.js"></script>--%>
+	.table_style tbody tr:nth-child(odd) td,
+	.table_style tbody tr:nth-child(odd) th {
+		background-color: #eee;
+	}
+</style>
 
-	<link rel="stylesheet" type="text/css"
-		  href="${pageContext.request.contextPath }/jslib/select2/dist/css/select2.min.css"/>
-	<script type="text/javascript" src="${pageContext.request.contextPath }/jslib/select2/dist/js/select2.min.js"></script>
+<script type="text/javascript">
 
-	<link rel="stylesheet" type="text/css"
-		  href="${pageContext.request.contextPath }/jslib/webuploader/webuploader.css"/>
-	<link rel="stylesheet" type="text/css" href="${pageContext.request.contextPath }/jslib/webuploader/style.css"/>
+    parent.$.messager.progress('close');
 
-	<%--<link rel="stylesheet"--%>
-	<%--href="${pageContext.request.contextPath}/jslib/bootstrap-datepicker/dist/css/bootstrap-datepicker.css">--%>
-	<%--<link rel="stylesheet"--%>
-	<%--href="${pageContext.request.contextPath}/jslib/bootstrap-datepicker/dist/css/bootstrap-datepicker.standalone.css">--%>
-
-	<script type="text/javascript" src="${pageContext.request.contextPath }/jslib/webuploader/webuploader.js"></script>
-	<script type="text/javascript" src="${pageContext.request.contextPath }/jslib/webuploader/upload.js"></script>
-	<%--<script type="text/javascript"--%>
-	<%--src="${pageContext.request.contextPath}/jslib/bootstrap-datepicker/js/bootstrap-datepicker.js"--%>
-	<%--charset="UTF-8"></script>--%>
-	<%--<script type="text/javascript"--%>
-	<%--src="${pageContext.request.contextPath}/jslib/bootstrap-datepicker/js/locales/bootstrap-datepicker.zh-CN.js"--%>
-	<%--charset="UTF-8"></script>--%>
-	<script type="text/javascript" src="${pageContext.request.contextPath }/jslib/layer-v3.0.3/layer/layer.js"></script>
-
-
-	<script type="text/javascript">
-		var flag = 0;
-
-
-		var cfg = {
-			url: '${pageContext.request.contextPath}/fieldDataController/savefieldData',
-			type: 'post',
-			dataType: 'json',
-			contentType: "application/x-www-form-urlencoded; charset=utf-8",
-			success: function (data) {
-				alert(data.msg);
-				if (data.success) {
-
-					var count = 0;
-					$(".filelist").each(function () {
-						count += $(this).children('li').length;
-					});
-					if (count <= 0) {
-						location.reload();
-					} else {
-						uploader.options.formData = {'mid': data.obj, 'updateType': 'webuploader'};
-						$('.uploadBtn').click();
-						uploader.on('uploadFinished', function (file) {
-							setTimeout(function () {
-								location.reload();
-							}, 500);
-						});
-					}
-				}
-			}
-		};
-
-		function aaa() {
-
-			if (flag == 1) {
-				var a = confirm("检测到该数据可能已经添加，确定要重复添加吗");
-				if (!a) {
-					return;
-				}
-			}
-			var projectName = document.getElementById("projectName").value;
-			var remark = document.getElementById("remark").value;
-            var currentApprovedUser = document.getElementById("currentApprovedUser").value;
-			cfg.data = {
-				'projectName': projectName,
-				'costType': 481,
-				'dataName': $("#projectName").find("option:selected").text() + ' - 当月材料计划',
-				'remark': remark,
-				'needApproved': '1',
-                'currentApprovedUser': currentApprovedUser
-			}
-
-			$.ajax(cfg);
-
-		}
-
-		window.onload = function () {
-			$('#form input').click(function () {
-				flag = 0;
-			})
-		}
-
-		$(document).ready(function () {
-			$("#chooseApprove").select2({
-				placeholder: "请选择",
-				allowClear: true
-			});
-            $("#projectName").select2({
-                placeholder: "请选择项目",
-                allowClear: true
-            });
-
-            $.ajax({
-                url: '${pageContext.request.contextPath}/fieldDataController/securi_chooseApprove',
-                type: 'post',
-                dataType: 'json',
-                contentType: "application/x-www-form-urlencoded; charset=utf-8",
-                success: function (data) {
-
-                    if (data.success) {
-                        var optionstring = '';
-                        var users = data.obj;
-                        for (var i in users) {
-                            if (users[i].id == $('#firstLevelParentDepartment').val()) {
-                                optionstring += "<option value=\"" + users[i].id + "\" selected = 'selected'>" + users[i].username + "</option>";
-                            } else {
-                                optionstring += "<option value=\"" + users[i].id + "\" >" + users[i].username + "</option>";
+    var _url = '${pageContext.request.contextPath}/materialsController/securi_materialsTreeGrid';
+    var _clickUrl = '${pageContext.request.contextPath}/materialsController/securi_materialsTreeGridChild';
+    var dataGrid;
+    $(function () {
+        dataGrid = $('#dataGrid')
+            .treegrid(
+                {
+                    url: _url,
+                    method: 'get',
+                    idField: 'id',
+                    treeField: 'mc',
+                    iconCls: 'icon-ok',
+                    pageSize: 300,
+                    pageList: [300, 600, 900],
+                    rownumbers: true,
+                    animate: true,
+                    striped: true,//隔行变色,
+                    collapsible: true,
+                    fitColumns: true,
+                    pagination: true,
+                    lines: false,
+                    dnd: true,
+                    onlyLeafCheck: true,
+                    cascadeCheck: false,
+                    columns: [[
+                        {
+                            title: '材料名称',
+                            field: 'mc',
+                            width: 100,
+                            formatter: function (value, row, index) {
+                                if (row.state == 'closed') {
+                                    return row.mc;
+                                } else {
+                                    return "<input type='checkbox' id=" + "gridtree_row_" + row.id + " />" + row.mc;
+                                }
                             }
+                        },
+                        {
+                            title: '规格型号',
+                            field: 'specifications',
+                            width: 60
+                        },
+                        {
+                            title: '单位',
+                            field: 'dw',
+                            width: 20
+                        },
+                        {
+                            titile: 'ID',
+                            field: 'id',
+                            width: 10,
+                            hidden: true
                         }
-                        $("#currentApprovedUser").html(optionstring);
+                    ]],
+
+                    onBeforeLoad: function (row, param) {
+                        if (row) $(this).treegrid('options').url = _clickUrl;
+                    },
+                    toolbar: '#toolbar',
+                    onLoadSuccess: function (data) {
+                        delete $(this).treegrid('options').queryParams['id'];
+                        $('#searchForm table').show();
+                        $(this).treegrid('collapseAll');
+                        parent.$.messager.progress('close');
+                        $(this).treegrid('tooltip');
+                    },
+                    onClickRow: function (row) {
+                        if ($('#' + "gridtree_row_" + row.id).attr("checked")) {
+                            $('#' + "gridtree_row_" + row.id).attr("checked", "true");
+
+                            add(row);
+                        } else {
+                            $('#' + "gridtree_row_" + row.id).removeAttr("checked");
+
+                            del(row.id);
+                        }
+                    },
+                });
+    });
+
+    function searchFun() {
+        $.post('${pageContext.request.contextPath}/materialsController/securi_materialsTreeGrid',
+            {keyword: $('#keyword').val()},
+            function (data) {
+                dataGrid.treegrid('loadData', data);
+            },
+            'json');
+    }
+
+    function add(row) {
+        if (document.getElementById("norecord") != undefined) {
+            document.getElementById("mainbody").removeChild(document.getElementById("norecord"));
+        }
+        var trObj = document.createElement("tr");
+        trObj.id = "tr_" + row.id;
+        trObj.innerHTML =
+            "<td style='text-align:center;'>" + document.getElementById("overPlanTable").rows.length + "</td>" +
+            "<td>" + row.mc + "</td>" +
+            "<td>" + row.specifications + "</td>" +
+            "<td style='text-align:center;'><input type='text' class='layui-input' style='margin-bottom:0px;width: 50px'></td>" +
+            "<td>" + row.dw + "</td>" +
+            "<td>" + row.dw + "</td>" +
+            "<td style='display: none;'>" + row.id + "</td>" +
+            "<td style='text-align:center; '><button class='layui-btn  layui-btn-xs layui-btn-normal' onclick='del(" + row.id + ")'><i class='layui-icon'></i>删除</button></td>";
+        document.getElementById("mainbody").appendChild(trObj);
+    }
+
+    function del(_id) {
+        document.getElementById("mainbody").removeChild(document.getElementById("tr_" + _id));
+        for (var i = 1; i < document.getElementById("overPlanTable").rows.length; i++) {
+            document.getElementById("overPlanTable").rows[i].cells[0].innerHTML = i;
+        }
+        $('#' + "gridtree_row_" + _id).removeAttr("checked");
+
+        if (document.getElementById("overPlanTable").rows.length == 1) {
+            var trObj = document.createElement("tr");
+            trObj.id = "norecord";
+            trObj.innerHTML = "<td colspan='100' style='text-align:center;'>温馨提示:勾选左侧材料库材料，添加材料计划!</td>";
+            document.getElementById("mainbody").appendChild(trObj);
+        }
+    }
+
+    function geneOverallPlan() {
+        var tableObj = document.getElementById("overPlanTable");
+        var tableInfo = [];
+        for (var i = 1; i < tableObj.rows.length; i++) {
+            var rowInfo = {};
+            var _id = tableObj.rows[i].cells[0].innerText;
+            var _mc = tableObj.rows[i].cells[1].innerText;
+            var _specifications = tableObj.rows[i].cells[2].innerText;
+            var _count = tableObj.rows[i].cells[3].firstElementChild.value;
+            var _dw = tableObj.rows[i].cells[4].innerText;
+            var _supplier = tableObj.rows[i].cells[5].innerText;
+            var _materialsId = tableObj.rows[i].cells[6].innerText;
+
+            rowInfo.id = _id;
+            rowInfo.mc = _mc;
+            rowInfo.specifications = _specifications;
+            rowInfo.count = _count;
+            rowInfo.dw = _dw;
+            rowInfo.supplier = _supplier;
+            rowInfo.materialsId = _materialsId;
+
+            tableInfo.push(rowInfo);
+        }
+        $('#overallPlanInfo').val(JSON.stringify(tableInfo));
+
+        $.ajax({
+            url: '${pageContext.request.contextPath}/fieldDataController/securi_chooseApprove',
+            type: 'post',
+            dataType: 'json',
+            contentType: "application/x-www-form-urlencoded; charset=utf-8",
+            success: function (data) {
+
+                if (data.success) {
+                    var optionstring = '';
+                    var users = data.obj;
+                    for (var i in users) {
+                        optionstring += "<option value=\"" + users[i].id + "\" >" + users[i].username + "</option>";
                     }
+                    $("#currentApprovedUserRef").html(optionstring);
                 }
-            });
-		});
-
-        $.getJSON('${pageContext.request.contextPath}/projectController/securi_getProjects', function (data) {
-            var optionstring = "";
-            var projectInfos = data.obj;
-            for (var i in projectInfos) {
-                if ($('#maxProjectId').val() == projectInfos[i].id) {
-                    optionstring += "<option value=\"" + projectInfos[i].id + "\" selected = 'selected'>" + projectInfos[i].text + "</option>";
-                } else {
-                    optionstring += "<option value=\"" + projectInfos[i].id + "\" >" + projectInfos[i].text + "</option>";
-                }
-
             }
-            $("#projectName").html("<option value=''>请选择项目</option> "+optionstring);
         });
 
+        layer.open({
+            type: 1,
+            title: '审批人选择',
+            content: '<div style="text-align: center; margin-top: 30px"><select id="currentApprovedUserRef" name="currentApprovedUserRef"></select></div>',
+            btn: '确定',
+            btnAlign: 'c',
+            shade: 0.3,
+            area: ['250px', '180px'],
+            yes: function () {
+                parent.$.messager.progress({title: '提示', text: '数据处理中，请稍后....'});
+                $.ajax({
+                    url: '${pageContext.request.contextPath}/overallPlanController/securi_geneOverallPlan',
+                    type: 'post',
+                    data: {overallPlanInfo: JSON.stringify(tableInfo), projectId: $('#projectId').val(), currentApprovedUser: $('#currentApprovedUserRef').val()},
+                    dataType: 'json',
+                    contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                    success: function (data) {
+                        parent.$.messager.progress('close');
+                        if (data.success) {
+                            layer.closeAll();
+                            jQuery.messager.show({
+                                title:'温馨提示:',
+                                msg:'添加成功!',
+                                timeout:3000,
+                                showType:'show'
+                            });
+                            parent.$.modalDialog.handler.dialog('close');
 
+                        }
+                    }
+                });
+            }
+        });
+    }
 
-	</script>
+    $(function () {
+        parent.$.messager.progress('close');
+        $('#form').form({
+            url: '${pageContext.request.contextPath}/overallPlanController/securi_geneOverallPlan',
+            onSubmit: function () {
+                geneOverallPlan();
+                parent.$.messager.progress({
+                    title: '提示',
+                    text: '数据处理中，请稍后....'
+                });
+                var isValid = $(this).form('validate');
+                if (!isValid) {
+                    parent.$.messager.progress('close');
+                }
 
-	<style>
-		.container-fluid {
-			/*background: #f7f7f7;*/
-			/*padding: 25px 15px 25px 10px;*/
-		}
+                return isValid;
+            },
+            success: function (result) {
+                parent.$.messager.progress('close');
+                result = $.parseJSON(result);
+                if (result.success) {
+                    parent.$.messager.progress('close');
+                    jQuery.messager.show({
+                        title: '温馨提示:',
+                        msg: '添加成功!',
+                        timeout: 3000,
+                        showType: 'show'
+                    });
+//                    parent.$.modalDialog.handler.overallPlan($('#projectId').val());//之所以能在这里调用到parent.$.modalDialog.openner_dataGrid这个对象，是因为user.jsp页面预定义好了
+                    parent.$.modalDialog.handler.dialog('close');
+                } else {
+                    parent.$.messager.alert('错误', result.msg, 'error');
+                }
+            }
+        });
+    });
+</script>
 
-		fieldset {
-			/*margin-top: 20px;*/
-		}
+<!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+<!--[if lt IE 9]>
+<script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+<script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
 
-		legend {
-			color: #5eade0;
-			font-weight: 800;
-			background: #f7f7f7;
-			font-size: 14px;
-		}
+<div class="layui-container">
+	<div class="layui-row">
+		<div class="layui-col-xs6">
+			<blockquote class="layui-elem-quote" style="height: 25px">
+				<a style="font-size:16px;">材料库</a>
+				<input type="text" class="input-medium search-query" style="margin-left: 10px" id="keyword" name="keyword">
+				<button class="layui-btn layui-btn-sm layui-btn-normal layui-btn-radius" onclick="searchFun()">搜索</button>
+			</blockquote>
 
-		.row-fluid {
-			margin-top: 20px;
-		}
-
-		.basic-grey {
-			margin-left: auto;
-			margin-right: auto;
-			max-width: 1002px;
-			background: #F7F7F7;
-			padding: 25px 15px 60px 10px;
-			font: 12px Georgia, "Times New Roman", Times, serif;
-			color: #888;
-			text-shadow: 1px 1px 1px #FFF;
-			border: 1px solid #E4E4E4;
-		}
-	</style>
-</head>
-<body>
-
-<div class="container-fluid">
-	<form class="form-horizontal basic-grey" name="form" id="form" method="post" enctype="multipart/form-data" role="form">
-		<input type="hidden" id = "maxProjectId" name="maxProjectId" value="${maxProjectId}"/>
-		<input type="hidden" id = "firstLevelParentDepartment" name="firstLevelParentDepartment" value="${firstLevelParentDepartment}">
-
-		<fieldset>
-			<legend>添加数据</legend>
-			<div class="row-fluid">
-				<div class="span6">
-					<div class="control-group">
-						<label class="control-label" for="projectName">工程名称:</label>
-
-						<div class="controls">
-							<select style="width:250px;" id="projectName" name="projectName">
-							</select>
-						</div>
-					</div>
-
-					<div class="control-group">
-						<label class="control-label" for="remark">备注:</label>
-
-						<div class="controls">
-							<input type="text" name="remark" id="remark" class="easyui-textbox" style="width:236px">
-						</div>
-					</div>
-				</div>
-
-				<div class="span6">
-					<div class="control-group" id="chooseApproveDiv">
-						<label class="control-label" for="currentApprovedUser">审批人选择:</label>
-
-						<div class="controls">
-							<select style="width:250px;margin-bottom: 20px" id="currentApprovedUser" name="currentApprovedUser">
-
-							</select>
-						</div>
-					</div>
-
-				</div>
-
-				<div class="span12" style="text-align:center">
-					<div style="width:10%;float:left;padding-left:35px;text-align:right">工程总材料计划:</div>
-					<div style="float:left;">
-						<div id="uploader" style="width: 751px">
-							<div class="queueList">
-								<div id="dndArea" class="placeholder">
-									<div id="filePicker"></div>
-									<%--<p>或将照片拖到这里，单次最多可选300张</p>--%>
-								</div>
-							</div>
-							<div class="statusBar" style="display:none;">
-								<div class="progress">
-									<span class="text">0%</span>
-									<span class="percentage"></span>
-								</div><div class="info"></div>
-								<div class="btns">
-									<div id="filePicker2"></div>
-									<div class="uploadBtn" style="display:none">开始上传</div>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
+			<div data-options="region:'center',border:false">
+				<table id="dataGrid"></table>
 			</div>
-
-		</fieldset>
-
-		<div class="span12" style="text-align:center">
-			<input type="button" class="btn btn-danger btn-lg" value="添加" onclick="aaa()" style="width: 250px; margin-top:10px;height: 40px;" />
 		</div>
 
-
-		<div class="clear">
-			<input type="reset" name="reset" style="display: none;" />
+		<div class="layui-col-xs6">
+			<form class="form-horizontal" name="form" id="form" method="post" enctype="multipart/form-data" role="form">
+				<input type="hidden" id="projectId" name="projectId" value="${proId}"/>
+				<blockquote class="layui-elem-quote" style="text-align: center;height: 25px">
+					<a style="font-size:16px;">${proName}材料总计划</a>
+				</blockquote>
+				<table class="table_style table table-striped table-bordered table-hover table-condensed"
+					   id="overPlanTable">
+					<thead>
+					<tr>
+						<th style="text-align:center; ">序号</th>
+						<th style="text-align:center; ">材料名称</th>
+						<th style="text-align:center; ">规格型号</th>
+						<th style="text-align:center; ">数量</th>
+						<th style="text-align:center; ">单位</th>
+						<th style="text-align:center; ">供应商</th>
+						<th style="display: none;"></th>
+						<th style="text-align:center; ">操作</th>
+					</tr>
+					</thead>
+					<tbody id="mainbody">
+					<tr id="norecord">
+						<td colspan='100' style='text-align:center;'>温馨提示:勾选左侧材料库材料，添加材料计划!</td>
+					</tr>
+					</tbody>
+				</table>
+				<input type="hidden" id="overallPlanInfo" name="overallPlanInfo">
+				<%--<input type="hidden" id="currentApprovedUserRef" name="currentApprovedUserRef">--%>
+			</form>
+			<div style='text-align:right;'>
+				<button class='layui-btn layui-btn-normal layui-btn-radius' onclick="geneOverallPlan();">确 定
+				</button>
+			</div>
 		</div>
-	</form>
+
+	</div>
 </div>
-</body>
-</html>

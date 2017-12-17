@@ -33,6 +33,13 @@ public class OverallPlanController {
     @Autowired
     private OverallPlanServiceI overallPlanService;
 
+    @RequestMapping("/OverallPlanList")
+    public String OverallPlanList(HttpServletRequest req) {
+        req.setAttribute("first", UtilDate.getshortFirst());
+        req.setAttribute("last", UtilDate.getshortLast());
+        return "/app/materials/overallplan/OverallPlanList";
+    }
+
     @RequestMapping("/securi_overallPlanList")
     @ResponseBody
     public List<OverallPlanBean> overallPlanList(HttpServletRequest request) {
@@ -58,11 +65,8 @@ public class OverallPlanController {
     public String toAddPage(HttpServletRequest request) {
 
         request.setAttribute("proId", request.getParameter("proId"));
-        try {
-            request.setAttribute("proName", new String(request.getParameter("proName").getBytes("ISO-8859-1"), "UTF-8"));
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
+        request.setAttribute("proName", request.getParameter("proName"));
+
         return "/app/materials/overallplan/addOverallPlan";
     }
 

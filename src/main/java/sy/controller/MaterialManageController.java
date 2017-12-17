@@ -11,18 +11,16 @@ import sy.pageModel.SessionInfo;
 import sy.service.MaterialsServiceI;
 import sy.util.ConfigUtil;
 import sy.util.StringUtil;
-import sy.util.UtilDate;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 /**
- * Created by heyh on 2017/12/2.
+ * Created by heyh on 2017/11/11.
  */
-
 @Controller
-@RequestMapping("/materialsController")
-public class MaterialsController {
+@RequestMapping("/materialManageController")
+public class MaterialManageController {
 
     @Autowired
     private MaterialsServiceI materialsService;
@@ -57,5 +55,4 @@ public class MaterialsController {
 
         return dataGrid.getRows();
     }
-
 }

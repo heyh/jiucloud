@@ -37,8 +37,8 @@
 
     parent.$.messager.progress('close');
 
-    var _url = '${pageContext.request.contextPath}/materialsController/securi_materialsTreeGrid';
-    var _clickUrl = '${pageContext.request.contextPath}/materialsController/securi_materialsTreeGridChild';
+    var _url = '${pageContext.request.contextPath}/materialManageController/securi_materialsTreeGrid';
+    var _clickUrl = '${pageContext.request.contextPath}/materialManageController/securi_materialsTreeGridChild';
     var dataGrid;
     $(function () {
         dataGrid = $('#dataGrid')
@@ -138,7 +138,6 @@
             "<td>" + row.specifications + "</td>" +
             "<td style='text-align:center;'><input type='text' class='layui-input' style='margin-bottom:0px;width: 50px'></td>" +
             "<td>" + row.dw + "</td>" +
-            "<td>" + row.dw + "</td>" +
             "<td style='display: none;'>" + row.id + "</td>" +
             "<td style='text-align:center; '><button class='layui-btn  layui-btn-xs layui-btn-normal' onclick='del(" + row.id + ")'><i class='layui-icon'></i>删除</button></td>";
         document.getElementById("mainbody").appendChild(trObj);
@@ -169,15 +168,13 @@
             var _specifications = tableObj.rows[i].cells[2].innerText;
             var _count = tableObj.rows[i].cells[3].firstElementChild.value;
             var _dw = tableObj.rows[i].cells[4].innerText;
-            var _supplier = tableObj.rows[i].cells[5].innerText;
-            var _materialsId = tableObj.rows[i].cells[6].innerText;
+            var _materialsId = tableObj.rows[i].cells[5].innerText;
 
             rowInfo.id = _id;
             rowInfo.mc = _mc;
             rowInfo.specifications = _specifications;
             rowInfo.count = _count;
             rowInfo.dw = _dw;
-            rowInfo.supplier = _supplier;
             rowInfo.materialsId = _materialsId;
 
             tableInfo.push(rowInfo);
@@ -310,7 +307,6 @@
                         <th style="text-align:center; ">规格型号</th>
                         <th style="text-align:center; ">数量</th>
                         <th style="text-align:center; ">单位</th>
-                        <th style="text-align:center; ">供应商</th>
                         <th style="display: none;"></th>
                         <th style="text-align:center; ">操作</th>
                     </tr>

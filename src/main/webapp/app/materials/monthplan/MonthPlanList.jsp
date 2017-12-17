@@ -1,444 +1,239 @@
-<%@ page import="sy.pageModel.SessionInfo" %>
-<%@ page import="sy.util.ConfigUtil" %>
-<%@ page import="java.util.ArrayList" %>
-<%@ page import="java.util.List" %>
-<%@ page import="java.util.Map" %>
-<%@ page import="net.sf.json.JSONArray" %>
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-         pageEncoding="UTF-8"%>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
-
-<%
-    String userId = null;
-    String projectInfos = null;
-    JSONArray docCostTree = new JSONArray();
-    SessionInfo sessionInfo = (SessionInfo) session.getAttribute(ConfigUtil.getSessionInfoName());
-    if (sessionInfo == null) {
-        response.sendRedirect(request.getContextPath());
-    } else {
-        userId = sessionInfo.getId();
-        projectInfos = sessionInfo.getProjectInfos();
-        docCostTree = sessionInfo.getDocCostTree();
-    }
-
-%>
-
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <!DOCTYPE html>
 <html>
 <head>
-    <title>服务号管理</title>
+    <meta charset="utf-8">
+    <title>layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
     <jsp:include page="../../../inc.jsp"></jsp:include>
-    <link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1-rc.1/css/select2.min.css" rel="stylesheet" />
-    <script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.1-rc.1/js/select2.min.js"></script>
+    <link rel="stylesheet" type="text/css"
+          href="${pageContext.request.contextPath }/jslib/layui-v2.2.3/layui/css/layui.css" media="all"/>
+    <script type="text/javascript" src="${pageContext.request.contextPath }/jslib/layui-v2.2.3/layui/layui.js"></script>
+
+    <link rel="stylesheet" type="text/css"
+          href="${pageContext.request.contextPath }/jslib/layer-v3.0.3/layer/skin/default/layer.css" media="all"/>
     <script type="text/javascript" src="${pageContext.request.contextPath }/jslib/layer-v3.0.3/layer/layer.js"></script>
+
+    <link rel="stylesheet" type="text/css"
+          href="${pageContext.request.contextPath }/jslib/select2/dist/css/select2.min.css"/>
+    <script type="text/javascript"
+            src="${pageContext.request.contextPath }/jslib/select2/dist/js/select2.min.js"></script>
+
+    <script type="text/javascript"
+            src="${pageContext.request.contextPath}/jslib/bootstrap-datepicker/js/bootstrap-datepicker.js"
+            charset="UTF-8"></script>
+    <script type="text/javascript"
+            src="${pageContext.request.contextPath}/jslib/bootstrap-datepicker/js/locales/bootstrap-datepicker.zh-CN.js"
+            charset="UTF-8"></script>
+    <link rel="stylesheet"
+          href="${pageContext.request.contextPath}/jslib/bootstrap-datepicker/dist/css/bootstrap-datepicker.css">
+    <link rel="stylesheet"
+          href="${pageContext.request.contextPath}/jslib/bootstrap-datepicker/dist/css/bootstrap-datepicker.standalone.css">
+
     <style>
-        .table_style {
-            width: 100%;
-            margin-bottom: 20px;
-            border:1px solid #EDEDED
-
+        .table_style tbody tr:nth-child(even) td,
+        .table_style tbody tr:nth-child(even) th {
+            background-color: #fff;
         }
-        .table_style th{height:34px; background:#76b3ff; color:#fff; font-weight: normal}
-        .table_style td{height:32px; color:#0e0e0e;padding-left:10px;color:#666}
-        .table_style tbody tr{background:#eee; cursor: default}
-        .table_style tbody tr.hover td{background:#e4fbfb}
-        .td_title{font-weight:bold;color:#333}
 
-        .subtotal { font-weight: bold; }/*合计单元格样式*/
+        .table_style tbody tr:nth-child(odd) td,
+        .table_style tbody tr:nth-child(odd) th {
+            background-color: #eee;
+        }
     </style>
+
     <script type="text/javascript">
-        var dataGrid;
-        $(function() {
-            dataGrid = $('#dataGrid')
-                .datagrid(
-                    {
-                        url : '${pageContext.request.contextPath}/fieldDataController/dataGrid?source=monthplan',
-                        fit : true,
-                        fitColumns : false,
-                        border : false,
-                        pagination : true,
-                        idField : 'id',
-                        pageSize : 10,
-                        pageList : [ 10, 20, 30, 40, 50 ],
-                        sortName : 'name',
-                        sortOrder : 'asc',
-                        checkOnSelect : false,
-                        selectOnCheck : false,
-                        nowrap : false,
-                        striped:true,
-                        columns : [ [
-                            {
-                                field : 'id',
-                                title : '多选框',
-                                width : 100,
-                                checkbox : true
-                            },
-                            {
-                                field : 'projectName',
-                                title : '工程名称',
-                                width : 250
 
-                            },
-                            {
-                                field : 'uname',
-                                title : '操作人',
-                                width : 200
-                            },
-                            {
-                                field : 'creatTime',
-                                title : '录入时间',
-                                width : 200
-                            },
-                            {
-                                field : 'uid',
-                                title : '用户ID',
-                                width : 100,
-                                hidden: true
-                            },
-                            {
-                                field : 'needApproved',
-                                title : '审批状态',
-                                width : 100,
-                                formatter : function(value, row, index) {
-                                    var str = '';
-                                    if ('0' == value) {
-                                        str = '不需审批'
-                                    } else if ('1' == value) {
-                                        str = '<span style="color: #ff0000">' + '未审批' + '</span>';
-                                    } else if ('2' == value) {
-                                        str = '审批通过';
-                                    } else if ('8' == value) {
-                                        str = '<span style="color: #ff0000">' + '审批中' + '</span>';
-                                    } else if ('9' == value) {
-                                        str = '<span style="color: #ff0000">' + '审批未通过' + '</span>';
-                                    }
-                                    return str;
-                                }
-                            },
-                            {
-                                field : 'approvedOption',
-                                title : '审批意见',
-                                width : 100,
-                                formatter: function (value, row, index) {
-                                    var str = '';
-                                    if (row.approvedOption != '' && row.approvedOption != undefined && row.approvedOption != 'undefined') {
-                                        str += $.formatString('<a onclick="viewApproveDetailsFun(\' {0} \');" href="javascript:void(0);" class="easyui-linkbutton">' +
-                                            '<img src="${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/viewDetails.png">' +
-                                            '审批详情</a>',
-                                            row.approvedOption);
-                                    }
+        parent.$.messager.progress('close');
+        $(document).ready(function () {
 
-                                    return str;
-                                }
-                            },
-                            {
-                                field : 'currentApprovedUser',
-                                title : '当前审批人',
-                                width : 100
-                            },
-                            {
-                                field : 'remark',
-                                title : '备注',
-                                width : 100
-                            },
-                            {
-                                field : 'action',
-                                title : '操作',
-                                width : 100,
-                                formatter : function(value, row, index) {
-                                    var str = '';
-                                    // modify by heyh 当数据填报之后，在当日内23:59分内均可以修改自己填报数据
-                                    var userId = <%= userId%>;
-                                    if(compareDate(getCurrentDate(), row.creatTime.substring(0, 10)) == 0
-                                        && userId == row.uid && '0' == row.isLock && '2' != row.needApproved) {
-//                                                if ('0' == row.isLock && '2' != row.needApproved) {
-                                        str += $
-                                            .formatString(
-                                                '<img onclick="editFun(\'{0}\');" src="{1}" title="编辑" />',
-                                                row.id,
-                                                '${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/modify-blue.png');
-                                        str += '&nbsp;';
-                                        str += $
-                                            .formatString(
-                                                '<img onclick="deleteFun(\'{0}\');" src="{1}" title="删除"/>',
-                                                row.id,
-                                                '${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/delete-blue.png');
-//                                                }
-                                    } else {
-                                        str += $
-                                            .formatString(
-                                                '<img onclick="previewFun(\'{0}\');" src="{1}" title="预览" />',
-                                                row.id,
-                                                '${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/preview-blue.png');
-                                        str += '&nbsp;';
-                                    }
-                                    str += $
-                                        .formatString(
-                                            ' <img onclick="FileFun(\'{0}\');" src="{1}" title="附件管理"/>',
-                                            row.id,
-                                            '${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/fujianguanli-blue.png');
-
-                                    return str;
-                                }
-                            } ] ],
-                        toolbar : '#toolbar',
-                        onLoadSuccess : function() {
-                            $('#searchForm table').show();
-                            parent.$.messager.progress('close');
-                            $(this).datagrid('tooltip');
-                        }
-                    });
+            $("#proId").select2({
+                placeholder: "请选择项目",
+                allowClear: true
+            });
+            $('.input-append').datepicker({
+                format: "yyyy-mm-dd",
+                language: "zh-CN",
+                autoclose: true,
+                todayHighlight: true,
+                maxViewMode: 1
+            });
         });
 
-        function viewApproveDetailsFun(approvedOption) {
-            var approvedOptions = approvedOption.split('|');
 
-            var approvedOptionsHtml =
-                '<table class="table_style" style="font-size: 12px;" cellpadding="0" cellspacing="0">' +
-                '<tr>' +
-                '<td align="center">时间</td>' +
-                '<td align="center">审核人</td>' +
-                '<td align="center">审核意见</td>' +
-                '</tr>';
+        $.getJSON('${pageContext.request.contextPath}/projectController/securi_getProjects', function (data) {
+            var projectInfos = data.obj;
+            var optionString = '';
+            for (var i in projectInfos) {
+                optionString += "<option value=\"" + projectInfos[i].id + "\" >" + projectInfos[i].text + "</option>";
+            }
+            $("#projectId").html(optionString);
+            $("#proId").html('<option/>' + optionString);
+        });
 
-            for (var i=0; i<approvedOptions.length; i++) {
-                approvedOptionsHtml += '<tr>';
-                var approvedOptionInfos = approvedOptions[i].split('::');
-                for (var j=0; j<approvedOptionInfos.length; j++) {
-                    approvedOptionsHtml += '<td>' + approvedOptionInfos[j] + '</td>';
+        function searchFun() {
+            $('#monthPlanDetailsTable').hide();
+
+            var searchParam = {'projectId': $('#proId').val(), 'startDate': $('#startDate').val(), 'endDate': $('#endDate').val()};
+            document.getElementById("monthPlanTabBody").innerHTML = '';
+            $.getJSON('${pageContext.request.contextPath}/monthPlanController/securi_monthPlanList', searchParam, function (data) {
+                if (data.length > 0) {
+                    for (var i in data) {
+                        var row = data[i];
+                        var trObj = document.createElement("tr");
+                        var _id = document.getElementById("monthPlanTable").rows.length;
+                        trObj.id = "tr_" + _id;
+                        trObj.innerHTML =
+                            "<td style='text-align:center;'>" + _id + "</td>" +
+                            "<td>" + row.projectName + "</td>" +
+                            "<td style='display: none;'>" + row.projectId + "</td>" +
+                            "<td style='display: none;'>" + row.overallPlanId + "</td>" +
+                            "<td style='display: none;'>" + row.id + "</td>" +
+                            "<td>" + row.uname + "</td>" +
+                            "<td>" + row.createTime + "</td>" +
+                            "<td>" + row.needApproved + "</td>" +
+                            "<td>" + row.approvedOption + "</td>" +
+                            "<td>" + row.currentApprovedUser + "</td>" +
+                            "<td style='text-align:center; '><button class='layui-btn  layui-btn-xs layui-btn-normal' onclick='detailFun(" + row.id + ")'><i class='layui-icon'></i>查看详情</button></td>";
+                        document.getElementById("monthPlanTabBody").appendChild(trObj);
+                    }
                 }
-                approvedOptionsHtml += '</tr>'
-            }
-            approvedOptionsHtml += '</table>';
-
-            layer.open({
-                type: 1,
-                title: '审批详情',
-                closeBtn: 2,
-                shadeClose: true,
-                maxmin: true, //开启最大化最小化按钮
-                area: ['400px', '300px'],
-                content: approvedOptionsHtml
+                var addObj = document.createElement("tr");
+                addObj.innerHTML = "<td colspan='100' style='text-align:right;'><button onclick='addFun();' class='layui-btn layui-btn-normal layui-btn-radius'>添加计划</button></td>";
+                document.getElementById("monthPlanTabBody").appendChild(addObj);
             });
-        }
-
-        //删除
-        function deleteFun(id) {
-            if (id == undefined) {//点击右键菜单才会触发这个
-                var rows = dataGrid.datagrid('getSelections');
-                id = rows[0].id;
-            } else {//点击操作里面的删除图标会触发这个
-                dataGrid.datagrid('unselectAll').datagrid('uncheckAll');
-            }
-            parent.$.messager
-                .confirm(
-                    '询问',
-                    '您是否要删除当前配置？',
-                    function(b) {
-                        if (b) {
-                            parent.$.messager.progress({
-                                title : '提示',
-                                text : '数据处理中，请稍后....'
-                            });
-                            $
-                                .ajax({
-                                    type : "post",
-                                    url : '${pageContext.request.contextPath}/fieldDataController/delfieldData',
-                                    data : {
-                                        id : id
-                                    },
-                                    dataType : "json",
-                                    success : function(data) {
-                                        if (data.success == true) {
-                                            searchFun();
-                                        }
-                                    }
-                                });
-                        }
-                    });
-        }
-
-        //编辑
-        function editFun(id) {
-            parent.$
-                .modalDialog({
-                    title : '编辑',
-                    width : 420,
-                    height : 460,
-                    href : '${pageContext.request.contextPath}/fieldDataController/upfieldData?id='
-                    + id,
-                    buttons : [ {
-                        text : '下一步',
-                        handler : function() {
-                            parent.$.modalDialog.openner_dataGrid = dataGrid;//因为添加成功之后，需要刷新这个dataGrid，所以先预定义好
-                            var f = parent.$.modalDialog.handler.find('#form');
-                            f.submit();
-                        }
-                    } ]
-                });
-        }
-
-        //预览
-        function previewFun(id) {
-            parent.$
-                .modalDialog({
-                    title : '预览',
-                    width : 420,
-                    height : 460,
-                    href :
-                    '${pageContext.request.contextPath}/fieldDataController/upfieldData?id=' +
-                    id + '&preview=' + true ,
-                    buttons : [ {
-                        text : '关闭',
-                        handler : function() {
-                            parent.$.modalDialog.handler.dialog('destroy');
-                            parent.$.modalDialog.handler = undefined;
-                        }
-                    } ]
-                });
         }
 
         function addFun() {
-            var url = '${pageContext.request.contextPath}/materialManageController/securi_addMonthPlanPage';
-            var text = "添加当月材料计划";
-            var params = {
-                url : url,
-                title : text,
-                iconCls : 'wrench'
-            };
-            window.parent.ac(params);
-        }
 
-        //附件管理
-        function FileFun(id) {
+            var selProId = $("#proId").select2("val");
+            var selProText = $('#proId').find("option:selected").text();
+
             parent.$
                 .modalDialog({
-                    title : '附件管理',
-                    width : 800,
-                    height : 600,
-                    href : '${pageContext.request.contextPath}/fieldDataController/securi_fieldDataFile?id='
-                    + id,
-                    buttons : [ {
-                        text : '关闭',
-                        handler : function() {
-                            parent.$.modalDialog.handler.dialog('close');
+                    title: '新增采购计划',
+                    width: 1200,
+                    height: 600,
+                    href: '${pageContext.request.contextPath}/monthPlanController/securi_toAddMonthPlan?proId=' + selProId + '&proName=' + selProText,
+
+                    buttons: [{
+                        text: '确定',
+                        handler: function () {
+                            var f = parent.$.modalDialog.handler.find('#form');
+                            f.submit();
                         }
-                    } ]
+                    }],
+                    onOpen: function () {
+                        parent.$('.dialog-button:eq(0) a:eq(0)').hide();
+                    }
                 });
         }
 
-        function exportFun(objTab) {
-            var str = '';
-//		str += '&uname=' + $('#uname').val();
-            str += '&keyword=' + $('#keyword').val();
-            str += '&projectName=' + $('#projectName').val();
-            str += '&itemCode=' + $('#itemCode').val();
-            str += '&startTime=' + $('#startTime').val();
-            str += '&endTime=' + $('#endTime').val();
-            var url = "${pageContext.request.contextPath}/fieldDataController/securi_execl?a=1&source=doc"
-                + str;
-            window.open(url);
-        }
+        function detailFun(monthplanId) {
+            $('#monthPlanDetailsTable').show();
 
-        //过滤条件查询
-        function searchFun() {
-//		$('#startTime').val($('#startTime').val() + ' 00:00:00');
-//		$('#endTime').val($('#endTime').val() + ' 00:00:00');
-            if($('#startTime').val() != '' && $('#endTime').val() != '') {
-                $('#startTime').val($('#startTime').val().substring(0, 10) + ' 00:00:00');
-                $('#endTime').val($('#endTime').val().substring(0, 10) + ' 23:59:59');
-            }
-            dataGrid.datagrid('load', $.serializeObject($('#searchForm')));
-        }
-        //清除条件
-        function cleanFun() {
-            $('#searchForm input').val('');
-            dataGrid.datagrid('load', {});
-        }
-
-        // 获取当前日期
-        function getCurrentDate() {
-            var date = new Date();
-            var seperator = "-";
-            var year = date.getFullYear();
-            var month = date.getMonth() + 1;
-            var strDate = date.getDate();
-            if (month >= 1 && month <= 9) {
-                month = "0" + month;
-            }
-            if (strDate >= 0 && strDate <= 9) {
-                strDate = "0" + strDate;
-            }
-            var currentdate = year + seperator + month + seperator + strDate;
-            return currentdate;
-        }
-
-        // yyyy-MM-dd 日期比较
-        function compareDate(dateA, dateB) {
-            return new Date(dateA.replace(/-/g, "/")) - new Date(dateB.replace(/-/g, "/"));
-        }
-
-        $(document).ready(function() {
-            $("#projectName").select2({
-                placeholder: "可以模糊查询",
-                allowClear: true,
-                data:<%=projectInfos%>
+            document.getElementById("monthPlanDetailsTabBody").innerHTML = '';
+            $.getJSON('${pageContext.request.contextPath}/monthPlanController/securi_monthPlanDetailsList?monthPlanId=' + monthplanId , function (data) {
+                if (data.length > 0) {
+                    for (var i in data) {
+                        var row = data[i];
+                        var trObj = document.createElement("tr");
+                        var _id = document.getElementById("monthPlanDetailsTable").rows.length;
+                        trObj.id = "tr_" + _id;
+                        trObj.innerHTML =
+                            "<td style='text-align:center;'>" + _id + "</td>" +
+                            "<td>" + row.mc + "</td>" +
+                            "<td>" + row.specifications + "</td>" +
+                            "<td>" + row.count + "</td>" +
+                            "<td>" + row.dw + "</td>" +
+                            "<td>" + row.supplier + "</td>";
+                        document.getElementById("monthPlanDetailsTabBody").appendChild(trObj);
+                    }
+                }
             });
-        });
+        }
 
     </script>
+
 </head>
 <body>
-<div class="easyui-layout" data-options="fit : true,border : false">
-    <div data-options="region:'north',title:'查询条件',border:false"
-         style="height: 75px; overflow: hidden;">
-        <form id="searchForm">
-            <table class="table table-hover table-condensed" style="display: none;">
-                <tr>
-                    <td>关键字搜索:&nbsp;
-                        <input type="text" name="keyword" id="keyword" placeholder="可以模糊查询" style="width: 180px;"/>
-                    </td>
-                    <td>工程名称:&nbsp;
-                        <select style="width: 180px" name="projectName" id="projectName">
-                            <option></option>
-                        </select>
-                    </td>
-                    <td>起止时间:&nbsp;
-                        <input type="datetime" class="Wdate span2" name="startTime"
-                               id='startTime' placeholder="点击选择时间"
-                               onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})"
-                               readonly="readonly" value='${first }'/>
-                        -
-                        <input type="datetime" class="Wdate span2" name="endTime"
-                               id='endTime' placeholder="点击选择时间"
-                               onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})"
-                               readonly="readonly" value='${last }'/>
-                    </td>
-                </tr>
-            </table>
-        </form>
-    </div>
-    <div style="overflow-x:auto; " data-options="region:'center',border:false">
-        <table id="dataGrid"></table>
-    </div>
-</div>
-<div id="toolbar" style="display: none;">
-    <a onclick="addFun();" href="javascript:void(0);"
-       class="easyui-linkbutton"
-       data-options="plain:true,iconCls:'add_new'">添加</a>
-    <a href="javascript:void(0);"
-       class="easyui-linkbutton"
-       data-options="iconCls:'search_new',plain:true" onclick="searchFun();">过滤条件</a><a
-        href="javascript:void(0);" class="easyui-linkbutton"
-        data-options="iconCls:'zhongzhiguolvtiaojian_new',plain:true"
-        onclick="cleanFun();">清空条件</a>
-</div>
+<!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+<!--[if lt IE 9]>
+<script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+<script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+<![endif]-->
 
-<div id="menu" class="easyui-menu" style="width: 120px; display: none;">
-    <div onclick="addFun();" data-options="iconCls:'pencil_add'">增加</div>
-    <div onclick="deleteFun();" data-options="iconCls:'pencil_delete'">删除</div>
-    <div onclick="editFun();" data-options="iconCls:'pencil'">编辑</div>
+<div class="layui-container">
+    <div class="layui-row">
+        <div class="layui-col-xs12">
+            <table class="table_style table table-striped table-bordered table-hover table-condensed"
+                   id="monthPlanTable">
+                <caption>
+                    <blockquote class="layui-elem-quote" style="text-align: left"><span style="color:#2ba1fc;">查询区</span>
+                        &nbsp;&nbsp;&nbsp;
+                        <select id="proId" name="proId">
+                        </select>
+                        &nbsp;&nbsp;&nbsp;
+                        <div class="input-append date" style="margin-top: 10px">
+                            <input type="text" value="${first}" id="startDate" name="startDate" readonly>
+                            <span class="add-on"><i class="icon-th"></i></span>
+                        </div>
+                        -
+                        <div class="input-append date" style="margin-top: 10px">
+                            <input type="text" value="${last}" id="endDate" name="endDate" readonly>
+                            <span class="add-on"><i class="icon-th"></i></span>
+                        </div>
+                        &nbsp;&nbsp;&nbsp;
+                        <button class='layui-btn layui-btn-normal layui-btn-radius' onclick="searchFun();">查询</button>
+
+                    </blockquote>
+                    <a style="font-size:20px;">
+                        <span>采购计划</span>
+                    </a>
+                </caption>
+                <thead>
+                <tr>
+                    <th style="text-align:center; ">序号</th>
+                    <th style="text-align:center; ">项目名称</th>
+                    <th style="display: none;">项目ID</th>
+                    <th style="display: none;">总体计划ID</th>
+                    <th style="display: none;">采购计划ID</th>
+                    <th style="text-align:center; ">录入人</th>
+                    <th style="text-align:center; ">录入时间</th>
+                    <th style="text-align:center; ">审批状态</th>
+                    <th style="text-align:center; ">审批意见</th>
+                    <th style="text-align:center; ">当前审批人</th>
+                    <th style="text-align:center; ">操作</th>
+                </tr>
+                </thead>
+                <tbody id="monthPlanTabBody">
+                </tbody>
+            </table>
+        </div>
+
+        <div class="layui-col-xs12">
+            <table class="table_style table table-striped table-bordered table-hover table-condensed" id="monthPlanDetailsTable" style="display: none;">
+                <caption>
+                    计划明细
+                </caption>
+                <thead>
+                <tr>
+                    <th style="text-align:center; ">序号</th>
+                    <th style="text-align:center; ">材料名称</th>
+                    <th style="text-align:center; ">规格型号</th>
+                    <th style="text-align:center; ">数量</th>
+                    <th style="text-align:center; ">单位</th>
+                    <th style="text-align:center; ">供应商</th>
+                </tr>
+                </thead>
+                <tbody id="monthPlanDetailsTabBody">
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 </body>
 </html>
