@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<!DOCTYPE html>
+<%--<!DOCTYPE html>--%>
 
 
 <%--<jsp:include page="../../../inc.jsp"></jsp:include>--%>
@@ -37,125 +37,93 @@
 
     parent.$.messager.progress('close');
 
-    var _url = '${pageContext.request.contextPath}/materialsController/securi_materialsTreeGrid';
-    var _clickUrl = '${pageContext.request.contextPath}/materialsController/securi_materialsTreeGridChild';
-    var dataGrid;
-    $(function () {
-        dataGrid = $('#dataGrid')
-            .treegrid(
-                {
-                    url: _url,
-                    method: 'get',
-                    idField: 'id',
-                    treeField: 'mc',
-                    iconCls: 'icon-ok',
-                    pageSize: 300,
-                    pageList: [300, 600, 900],
-                    rownumbers: true,
-                    animate: true,
-                    striped: true,//隔行变色,
-                    collapsible: true,
-                    fitColumns: true,
-                    pagination: true,
-                    lines: false,
-                    dnd: true,
-                    onlyLeafCheck: true,
-                    cascadeCheck: false,
-                    columns: [[
-                        {
-                            title: '材料名称',
-                            field: 'mc',
-                            width: 100,
-                            formatter: function (value, row, index) {
-                                if (row.state == 'closed') {
-                                    return row.mc;
-                                } else {
-                                    return "<input type='checkbox' id=" + "gridtree_row_" + row.id + " />" + row.mc;
-                                }
-                            }
-                        },
-                        {
-                            title: '规格型号',
-                            field: 'specifications',
-                            width: 60
-                        },
-                        {
-                            title: '单位',
-                            field: 'dw',
-                            width: 20
-                        },
-                        {
-                            titile: 'ID',
-                            field: 'id',
-                            width: 10,
-                            hidden: true
-                        }
-                    ]],
-
-                    onBeforeLoad: function (row, param) {
-                        if (row) $(this).treegrid('options').url = _clickUrl;
-                    },
-                    toolbar: '#toolbar',
-                    onLoadSuccess: function (data) {
-                        delete $(this).treegrid('options').queryParams['id'];
-                        $('#searchForm table').show();
-                        $(this).treegrid('collapseAll');
-                        parent.$.messager.progress('close');
-                        $(this).treegrid('tooltip');
-                    },
-                    onClickRow: function (row) {
-                        if ($('#' + "gridtree_row_" + row.id).attr("checked")) {
-                            $('#' + "gridtree_row_" + row.id).attr("checked", "true");
-
-                            add(row);
-                        } else {
-                            $('#' + "gridtree_row_" + row.id).removeAttr("checked");
-
-                            del(row.id);
-                        }
-                    },
-                });
+    $(document).ready(function () {
+		overallPlan("${proId}");
     });
 
-    function searchFun() {
-        $.post('${pageContext.request.contextPath}/materialsController/securi_materialsTreeGrid',
-            {keyword: $('#keyword').val()},
-            function (data) {
-                dataGrid.treegrid('loadData', data);
-            },
-            'json');
+    function overallPlan(projectId) {
+        debugger;
+        var searchParam = {'projectId': projectId};
+        document.getElementById("overallPlanTabBody").innerHTML = '';
+        $.getJSON('${pageContext.request.contextPath}/overallPlanController/securi_overallPlanDetailsAll', searchParam, function (data) {
+            if (data.length > 0) {
+                for (var i in data) {
+                    var row = data[i];
+                    var trObj = document.createElement("tr");
+                    var _id = document.getElementById("overallPlanTable").rows.length;
+                    trObj.id = "tr_" + _id;
+                    trObj.innerHTML =
+                        "<td style='text-align:center;'>" + _id + "</td>" +
+                        "<td style='display: none;'>" + row.projectId + "</td>" +
+                        "<td style='display: none;'>" + row.id + "</td>" +
+                        "<td style='display: none;'>" + row.materialsId + "</td>" +
+                        "<td>" + row.mc + "</td>" +
+                        "<td>" + row.specifications + "</td>" +
+                        "<td style='text-align: right'>" + row.count + "</td>" +
+                        "<td style='text-align: right;color: #2ba1fc;'>" + row.remainCount + "</td>" +
+                        "<td>" + row.dw + "</td>" +
+                    	"<td style='text-align:center; '>" +
+                    		"<input type='checkbox' onclick='checkRow(" + _id + ")'  id='overallPlanTable_row_" + _id + "'/>" +
+						"</td>";
+                    document.getElementById("overallPlanTabBody").appendChild(trObj);
+                }
+            }
+        });
     }
 
-    function add(row) {
-        if (document.getElementById("norecord") != undefined) {
-            document.getElementById("mainbody").removeChild(document.getElementById("norecord"));
+    function checkRow(_id) {
+
+        if ($('#' + "overallPlanTable_row_" + _id).attr("checked")) {
+            $('#' + "overallPlanTable_row_" + _id).attr("checked", "true");
+            add(_id);
+        } else {
+            $('#' + "overallPlanTable_row_" + _id).removeAttr("checked");
+            del(_id);
         }
+    }
+    function add(checkedId) {
+        if (document.getElementById("norecord") != undefined) {
+            document.getElementById("monthPlanTabBody").removeChild(document.getElementById("norecord"));
+        }
+
+        var row = document.getElementById("overallPlanTable").rows[checkedId];
+        var projectId = row.cells[1].innerText;
+        var overallPlanId = row.cells[2].innerText;
+        var materialsId = row.cells[3].innerText;
+        var mc = row.cells[4].innerText;
+        var specifications = row.cells[5].innerText;
+        var count = row.cells[6].innerText;
+        var remainCount = row.cells[7].innerText;
+        var dw = row.cells[8].innerText;
+
         var trObj = document.createElement("tr");
-        trObj.id = "tr_" + row.id;
+        trObj.id = "tr_monthplan_" + checkedId;
         trObj.innerHTML =
-            "<td style='text-align:center;'>" + document.getElementById("overPlanTable").rows.length + "</td>" +
-            "<td>" + row.mc + "</td>" +
-            "<td>" + row.specifications + "</td>" +
-            "<td style='text-align:center;'><input type='text' class='layui-input' style='margin-bottom:0px;width: 50px'></td>" +
-            "<td>" + row.dw + "</td>" +
-            "<td>" + row.dw + "</td>" +
-            "<td style='display: none;'>" + row.id + "</td>" +
-            "<td style='text-align:center; '><button class='layui-btn  layui-btn-xs layui-btn-normal' onclick='del(" + row.id + ")'><i class='layui-icon'></i>删除</button></td>";
-        document.getElementById("mainbody").appendChild(trObj);
+            "<td style='text-align:center;'>" + document.getElementById("monthPlanTable").rows.length + "</td>" +
+            "<td style='display: none;'>" + projectId + "</td>" +
+            "<td style='display: none;'>" + overallPlanId + "</td>" +
+            "<td style='display: none;'>" + materialsId + "</td>" +
+            "<td>" + mc + "</td>" +
+            "<td>" + specifications + "</td>" +
+            "<td style='text-align:center;'><input type='text' class='layui-input' style='text-align: right;margin-bottom:0px;width: 50px; ' value=' " + count + " '></td>" +
+            "<td>" + dw + "</td>" +
+            "<td style='text-align:center; '><button class='layui-btn  layui-btn-xs layui-btn-normal' onclick='del(" + checkedId + ")'><i class='layui-icon'></i>删除</button></td>";
+        document.getElementById("monthPlanTabBody").appendChild(trObj);
     }
 
     function del(_id) {
-        document.getElementById("mainbody").removeChild(document.getElementById("tr_" + _id));
-        for (var i = 1; i < document.getElementById("overPlanTable").rows.length; i++) {
-            document.getElementById("overPlanTable").rows[i].cells[0].innerHTML = i;
+        debugger;
+        document.getElementById("monthPlanTabBody").removeChild(document.getElementById("tr_monthplan_" + _id));
+        for (var i = 1; i < document.getElementById("monthPlanTable").rows.length; i++) {
+            document.getElementById("overallPlanTable").rows[i].cells[0].innerHTML = i;
         }
-        $('#' + "gridtree_row_" + _id).removeAttr("checked");
+        $('#' + "overallPlanTable_row_" + _id).removeAttr("checked");
 
-        if (document.getElementById("overPlanTable").rows.length == 1) {
+        if (document.getElementById("monthPlanTable").rows.length == 1) {
             var trObj = document.createElement("tr");
             trObj.id = "norecord";
-            trObj.innerHTML = "<td colspan='100' style='text-align:center;'>温馨提示:勾选左侧材料库材料，添加材料计划!</td>";
-            document.getElementById("mainbody").appendChild(trObj);
+            trObj.innerHTML = "<td colspan='100' style='text-align:center;'>温馨提示:勾选左侧材料总体计划，添加材料采购计划!</td>";
+            document.getElementById("monthPlanTabBody").appendChild(trObj);
         }
     }
 
@@ -277,52 +245,65 @@
 
 <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
 <!--[if lt IE 9]>
-<script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
-<script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
-<![endif]-->
+<!--<script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>-->
+<!--<script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>-->
+<%--<![endif]-->--%>
 
 <div class="layui-container">
 	<div class="layui-row">
 		<div class="layui-col-xs6">
 			<blockquote class="layui-elem-quote" style="height: 25px">
-				<a style="font-size:16px;">材料库</a>
-				<input type="text" class="input-medium search-query" style="margin-left: 10px" id="keyword" name="keyword">
-				<button class="layui-btn layui-btn-sm layui-btn-normal layui-btn-radius" onclick="searchFun()">搜索</button>
+				<a style="font-size:16px;">材料总体计划</a>
 			</blockquote>
 
-			<div data-options="region:'center',border:false">
-				<table id="dataGrid"></table>
-			</div>
+			<table class="table_style table table-striped table-bordered table-hover table-condensed" id="overallPlanTable">
+				<thead>
+				<tr>
+					<th style="text-align:center; ">序号</th>
+					<th style="display: none; ">项目ID</th>
+					<th style="display: none;">计划ID</th>
+					<th style="display: none; ">材料ID</th>
+					<th style="text-align:center; ">材料名称</th>
+					<th style="text-align:center; ">规格型号</th>
+					<th style="text-align:center; ">计划数量</th>
+					<th style="text-align:center; ">剩余数量</th>
+					<th style="text-align:center; ">单位</th>
+					<th style="text-align:center; ">操作</th>
+				</tr>
+				</thead>
+				<tbody id="overallPlanTabBody">
+				</tbody>
+			</table>
 		</div>
 
 		<div class="layui-col-xs6">
 			<form class="form-horizontal" name="form" id="form" method="post" enctype="multipart/form-data" role="form">
 				<input type="hidden" id="projectId" name="projectId" value="${proId}"/>
 				<blockquote class="layui-elem-quote" style="text-align: center;height: 25px">
-					<a style="font-size:16px;">${proName}材料总计划</a>
+					<a style="font-size:16px;">${proName}采购计划</a>
 				</blockquote>
 				<table class="table_style table table-striped table-bordered table-hover table-condensed"
-					   id="overPlanTable">
+					   id="monthPlanTable">
 					<thead>
 					<tr>
 						<th style="text-align:center; ">序号</th>
+						<th style="display: none; ">项目ID</th>
+						<th style="display: none;">计划ID</th>
+						<th style="display: none; ">材料ID</th>
 						<th style="text-align:center; ">材料名称</th>
 						<th style="text-align:center; ">规格型号</th>
 						<th style="text-align:center; ">数量</th>
 						<th style="text-align:center; ">单位</th>
-						<th style="text-align:center; ">供应商</th>
-						<th style="display: none;"></th>
 						<th style="text-align:center; ">操作</th>
 					</tr>
 					</thead>
-					<tbody id="mainbody">
+					<tbody id="monthPlanTabBody">
 					<tr id="norecord">
-						<td colspan='100' style='text-align:center;'>温馨提示:勾选左侧材料库材料，添加材料计划!</td>
+						<td colspan='100' style='text-align:center;'>温馨提示:勾选左侧材料总体计划，添加材料采购计划!</td>
 					</tr>
 					</tbody>
 				</table>
 				<input type="hidden" id="overallPlanInfo" name="overallPlanInfo">
-				<%--<input type="hidden" id="currentApprovedUserRef" name="currentApprovedUserRef">--%>
 			</form>
 			<div style='text-align:right;'>
 				<button class='layui-btn layui-btn-normal layui-btn-radius' onclick="geneOverallPlan();">确 定

@@ -48,7 +48,7 @@ public class MonthPlanServiceImpl implements MonthPlanServiceI {
 
         String monthPlanHql = "from MonthPlan where isDelete = 0 ";
         if (!projectId.equals("")) {
-            monthPlanHql += "projectId = :projectId ";
+            monthPlanHql += " and projectId = :projectId ";
             params.put("projectId", projectId);
         }
         if (!startDate.equals("")) {

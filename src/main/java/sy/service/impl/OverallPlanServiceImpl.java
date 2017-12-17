@@ -147,4 +147,19 @@ public class OverallPlanServiceImpl implements OverallPlanServiceI {
     public void addOverallPlanDetails(OverallPlanDetails overallPlanDetails) {
         overallPlanDetailsDao.save(overallPlanDetails);
     }
+
+    @Override
+    public List<OverallPlanDetailsBean> overallPlanDetailsAll(String projectId) {
+        List<OverallPlanDetailsBean> overallPlanDetailsBeanAll = new ArrayList<OverallPlanDetailsBean>();
+        List<OverallPlanBean> overallPlanList = getOverallPlanList(projectId);
+        if (overallPlanList != null && overallPlanList.size()>0) {
+            for (OverallPlanBean overallPlanBean : overallPlanList) {
+                List<OverallPlanDetailsBean> overallPlanDetailsBeanList = getOverallPlanDetailsList(StringUtil.trimToEmpty(overallPlanBean.getId()));
+                if (overallPlanDetailsBeanList != null && overallPlanDetailsBeanList.size()>0) {
+                    overallPlanDetailsBeanAll.addAll(overallPlanDetailsBeanList);
+                }
+            }
+        }
+        return overallPlanDetailsBeanAll;
+    }
 }

@@ -115,4 +115,15 @@ public class OverallPlanController {
         }
         return j;
     }
+
+    @RequestMapping("/securi_overallPlanDetailsAll")
+    @ResponseBody
+    public List<OverallPlanDetailsBean> overallPlanDetailsAll(HttpServletRequest request) {
+        List<OverallPlanDetailsBean> overallPlanDetailsBeanList = new ArrayList<OverallPlanDetailsBean>();
+        String projectId = StringUtil.trimToEmpty(request.getParameter("projectId"));
+        overallPlanDetailsBeanList = overallPlanService.overallPlanDetailsAll(projectId);
+
+        return overallPlanDetailsBeanList;
+    }
+
 }
