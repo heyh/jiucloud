@@ -8,6 +8,16 @@ import java.util.Date;
 
 
 public class OverallPlanDetailsBean {
+    private int id;
+    private int overallPlanId;
+    private String materialsId;
+    private String count;
+    private String isDelete;
+    private Date createTime;
+    private String mc;
+    private String dw;
+    private String specifications;
+    private String remainCount;
 
     public int getId() {
         return id;
@@ -81,15 +91,11 @@ public class OverallPlanDetailsBean {
         this.specifications = specifications;
     }
 
-    private int id;
-    private int overallPlanId;
-    private String materialsId;
-    private String count;
-    private String isDelete;
-    private Date createTime;
-    private String mc;
-    private String dw;
-    private String specifications;
+    public String getRemainCount() {
+        return remainCount;
+    }
 
-
+    public void setRemainCount(String remainCount) {
+        this.remainCount = remainCount;
+    }
 }

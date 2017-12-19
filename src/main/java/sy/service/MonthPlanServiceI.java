@@ -11,6 +11,6 @@ import java.util.List;
 public interface MonthPlanServiceI {
     List<MonthPlanBean> getMonthPlanList(String projectId, String startDate, String endDate);
     List<MonthPlanDetailsBean> getMonthPlanDetailsBeanList(String monthPlanId);
-    List<MonthPlanDetailsBean> getMonthPlanDetailsAll(String projectId);
+    List<MonthPlanDetailsBean> getMonthPlanDetailsMerge(String projectId);
 
 }

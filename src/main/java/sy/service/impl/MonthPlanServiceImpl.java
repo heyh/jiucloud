@@ -144,15 +144,47 @@ public class MonthPlanServiceImpl implements MonthPlanServiceI {
     }
 
     @Override
-    public List<MonthPlanDetailsBean> getMonthPlanDetailsAll(String projectId) {
+    public List<MonthPlanDetailsBean> getMonthPlanDetailsMerge(String projectId) {
+        List<MonthPlanDetailsBean> monthPlanDetailsBeanList = new ArrayList<MonthPlanDetailsBean>();
+        MonthPlanDetailsBean monthPlanDetailsBean = new MonthPlanDetailsBean();
+
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("projectId", projectId);
         String monthPlanHql = "from MonthPlan where isDelete = 0 and projectId = :projectId ";
         List<MonthPlan> monthPlanList = monthPlanDao.find(monthPlanHql, params);
-        if (monthPlanList != null && monthPlanList.size()>0) {
-
+        if (monthPlanList != null && monthPlanList.size() > 0) {
+            for (MonthPlan monthPlan : monthPlanList) {
+                params = new HashMap<String, Object>();
+                params.put("monthPlanId", monthPlan.getId());
+                String monthDetailsHql = " from MonthPlanDetails where monthPlanId = :monthPlanId and isDelete = 0 ";
+                List<MonthPlanDetails> monthPlanDetailsList = monthPlanDetailsDao.find(monthDetailsHql, params);
+                if (monthPlanDetailsList != null && monthPlanDetailsList.size() > 0) {
+                    for (MonthPlanDetails monthPlanDetails : monthPlanDetailsList) {
+                        monthPlanDetailsBean = new MonthPlanDetailsBean();
+                        monthPlanDetailsBean.setMaterialsId(monthPlanDetails.getMaterialsId());
+                        monthPlanDetailsBean.setCount(monthPlanDetails.getCount());
+                        monthPlanDetailsBeanList.add(monthPlanDetailsBean);
+                    }
+                }
+            }
         }
-
-        return null;
+        return mergeList(monthPlanDetailsBeanList);
     }
+
+
+    private List<MonthPlanDetailsBean> mergeList(List<MonthPlanDetailsBean> list) {
+        HashMap<String, MonthPlanDetailsBean> map = new HashMap<String, MonthPlanDetailsBean>();
+        for (MonthPlanDetailsBean bean : list) {
+            if (map.containsKey(bean.getMaterialsId())) {
+                map.get(bean.getMaterialsId()).setCount(StringUtil.trimToEmpty(Integer.parseInt(map.get(bean.getMaterialsId()).getCount()) + Integer.parseInt(bean.getCount())));
+            } else {
+                map.put(bean.getMaterialsId(), bean);
+            }
+        }
+        list.clear();
+        list.addAll(map.values());
+
+        return list;
+    }
+
 }

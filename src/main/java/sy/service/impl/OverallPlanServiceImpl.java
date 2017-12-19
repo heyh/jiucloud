@@ -5,10 +5,7 @@ import org.springframework.stereotype.Service;
 import sy.dao.OverallPlanDaoI;
 import sy.dao.OverallPlanDetailsDaoI;
 import sy.model.po.*;
-import sy.service.MaterialsServiceI;
-import sy.service.OverallPlanServiceI;
-import sy.service.ProjectServiceI;
-import sy.service.UserServiceI;
+import sy.service.*;
 import sy.util.ObjectExcelRead;
 import sy.util.StringUtil;
 
@@ -38,6 +35,9 @@ public class OverallPlanServiceImpl implements OverallPlanServiceI {
 
     @Autowired
     private UserServiceI userService;
+
+    @Autowired
+    private MonthPlanServiceI monthPlanService;
 
 
     @Override
@@ -152,14 +152,45 @@ public class OverallPlanServiceImpl implements OverallPlanServiceI {
     public List<OverallPlanDetailsBean> overallPlanDetailsAll(String projectId) {
         List<OverallPlanDetailsBean> overallPlanDetailsBeanAll = new ArrayList<OverallPlanDetailsBean>();
         List<OverallPlanBean> overallPlanList = getOverallPlanList(projectId);
-        if (overallPlanList != null && overallPlanList.size()>0) {
+        if (overallPlanList != null && overallPlanList.size() > 0) {
             for (OverallPlanBean overallPlanBean : overallPlanList) {
                 List<OverallPlanDetailsBean> overallPlanDetailsBeanList = getOverallPlanDetailsList(StringUtil.trimToEmpty(overallPlanBean.getId()));
-                if (overallPlanDetailsBeanList != null && overallPlanDetailsBeanList.size()>0) {
+                if (overallPlanDetailsBeanList != null && overallPlanDetailsBeanList.size() > 0) {
                     overallPlanDetailsBeanAll.addAll(overallPlanDetailsBeanList);
                 }
             }
         }
+        overallPlanDetailsBeanAll = mergeList(overallPlanDetailsBeanAll);
+
+        List<MonthPlanDetailsBean> monthPlanDetailsBeanList = monthPlanService.getMonthPlanDetailsMerge(projectId);
+
+        if (overallPlanDetailsBeanAll != null && overallPlanDetailsBeanAll.size() > 0) {
+            if (monthPlanDetailsBeanList != null && monthPlanDetailsBeanList.size() > 0) {
+                for (OverallPlanDetailsBean overallPlanDetailsBean : overallPlanDetailsBeanAll) {
+                    for (MonthPlanDetailsBean monthPlanDetailsBean : monthPlanDetailsBeanList) {
+                        if (Integer.parseInt(overallPlanDetailsBean.getMaterialsId()) == Integer.parseInt(monthPlanDetailsBean.getMaterialsId())) {
+                            int remainCount = Integer.parseInt(overallPlanDetailsBean.getCount()) - Integer.parseInt(monthPlanDetailsBean.getCount());
+                            overallPlanDetailsBean.setRemainCount(StringUtil.trimToEmpty(remainCount));
+                        }
+                    }
+                }
+            }
+        }
         return overallPlanDetailsBeanAll;
+    }
+
+    private List<OverallPlanDetailsBean> mergeList(List<OverallPlanDetailsBean> list) {
+        HashMap<String, OverallPlanDetailsBean> map = new HashMap<String, OverallPlanDetailsBean>();
+        for (OverallPlanDetailsBean bean : list) {
+            if (map.containsKey(bean.getMaterialsId())) {
+                map.get(bean.getMaterialsId()).setCount(StringUtil.trimToEmpty(Integer.parseInt(map.get(bean.getMaterialsId()).getCount()) + Integer.parseInt(bean.getCount())));
+            } else {
+                map.put(bean.getMaterialsId(), bean);
+            }
+        }
+        list.clear();
+        list.addAll(map.values());
+
+        return list;
     }
 }
