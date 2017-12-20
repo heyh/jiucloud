@@ -24,7 +24,7 @@ public class MonthPlanDetails {
     private int id;
 
     @Column(name = "monthPlanId")
-    private int overallPlanId;
+    private int monthPlanId;
 
     @Column(name = "materialsId")
     private String materialsId;
@@ -49,12 +49,12 @@ public class MonthPlanDetails {
         this.id = id;
     }
 
-    public int getOverallPlanId() {
-        return overallPlanId;
+    public int getMonthPlanId() {
+        return monthPlanId;
     }
 
-    public void setOverallPlanId(int overallPlanId) {
-        this.overallPlanId = overallPlanId;
+    public void setMonthPlanId(int monthPlanId) {
+        this.monthPlanId = monthPlanId;
     }
 
     public String getMaterialsId() {

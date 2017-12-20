@@ -127,30 +127,20 @@
         }
     }
 
-    function geneOverallPlan() {
-        var tableObj = document.getElementById("overPlanTable");
+    function geneMonthPlan() {
+        var tableObj = document.getElementById("monthPlanTable");
         var tableInfo = [];
+
         for (var i = 1; i < tableObj.rows.length; i++) {
             var rowInfo = {};
-            var _id = tableObj.rows[i].cells[0].innerText;
-            var _mc = tableObj.rows[i].cells[1].innerText;
-            var _specifications = tableObj.rows[i].cells[2].innerText;
-            var _count = tableObj.rows[i].cells[3].firstElementChild.value;
-            var _dw = tableObj.rows[i].cells[4].innerText;
-            var _supplier = tableObj.rows[i].cells[5].innerText;
-            var _materialsId = tableObj.rows[i].cells[6].innerText;
-
-            rowInfo.id = _id;
-            rowInfo.mc = _mc;
-            rowInfo.specifications = _specifications;
-            rowInfo.count = _count;
-            rowInfo.dw = _dw;
-            rowInfo.supplier = _supplier;
+            var _materialsId = tableObj.rows[i].cells[3].innerText;
+            var _count = tableObj.rows[i].cells[6].firstElementChild.value;
             rowInfo.materialsId = _materialsId;
+            rowInfo.count = _count;
 
             tableInfo.push(rowInfo);
         }
-        $('#overallPlanInfo').val(JSON.stringify(tableInfo));
+        $('#monthPlanInfo').val(JSON.stringify(tableInfo));
 
         $.ajax({
             url: '${pageContext.request.contextPath}/fieldDataController/securi_chooseApprove',
@@ -181,9 +171,9 @@
             yes: function () {
                 parent.$.messager.progress({title: '提示', text: '数据处理中，请稍后....'});
                 $.ajax({
-                    url: '${pageContext.request.contextPath}/overallPlanController/securi_geneOverallPlan',
+                    url: '${pageContext.request.contextPath}/monthPlanController/securi_geneMonthPlan',
                     type: 'post',
-                    data: {overallPlanInfo: JSON.stringify(tableInfo), projectId: $('#projectId').val(), currentApprovedUser: $('#currentApprovedUserRef').val()},
+                    data: {monthPlanInfo: JSON.stringify(tableInfo), projectId: $('#projectId').val(), currentApprovedUser: $('#currentApprovedUserRef').val()},
                     dataType: 'json',
                     contentType: "application/x-www-form-urlencoded; charset=utf-8",
                     success: function (data) {
@@ -208,7 +198,7 @@
     $(function () {
         parent.$.messager.progress('close');
         $('#form').form({
-            url: '${pageContext.request.contextPath}/overallPlanController/securi_geneOverallPlan',
+            url: '${pageContext.request.contextPath}/monthPlanController/securi_geneMonthPlan',
             onSubmit: function () {
                 geneOverallPlan();
                 parent.$.messager.progress({
@@ -282,8 +272,7 @@
 				<blockquote class="layui-elem-quote" style="text-align: center;height: 25px">
 					<a style="font-size:16px;">${proName}</a>&nbsp;&nbsp;采购计划
 				</blockquote>
-				<table class="table_style table table-striped table-bordered table-hover table-condensed"
-					   id="monthPlanTable">
+				<table class="table_style table table-striped table-bordered table-hover table-condensed" id="monthPlanTable">
 					<thead>
 					<tr>
 						<th style="text-align:center; ">序号</th>
@@ -303,10 +292,10 @@
 					</tr>
 					</tbody>
 				</table>
-				<input type="hidden" id="overallPlanInfo" name="overallPlanInfo">
+				<input type="hidden" id="monthPlanInfo" name="monthPlanInfo">
 			</form>
 			<div style='text-align:right;'>
-				<button class='layui-btn layui-btn-normal layui-btn-radius' onclick="geneOverallPlan();">确 定
+				<button class='layui-btn layui-btn-normal layui-btn-radius' onclick="geneMonthPlan();">确 定
 				</button>
 			</div>
 		</div>

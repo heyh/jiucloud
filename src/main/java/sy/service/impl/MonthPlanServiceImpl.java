@@ -171,6 +171,31 @@ public class MonthPlanServiceImpl implements MonthPlanServiceI {
         return mergeList(monthPlanDetailsBeanList);
     }
 
+    @Override
+    public void addMonthPlan(MonthPlan monthPlan) {
+        monthPlanDao.save(monthPlan);
+    }
+
+    @Override
+    public int getId(MonthPlan monthPlan) {
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("cid", monthPlan.getCid());
+        params.put("uid", monthPlan.getUid());
+        params.put("projectId", monthPlan.getProjectId());
+        params.put("createTime", monthPlan.getCreateTime());
+        List<Object[]> monthPlans = monthPlanDao.findBySql("select * from t_monthplan where cid=:cid and uid=:uid and projectId=:projectId and createTime=:createTime and isDelete='0' order by id desc", params);
+        if (monthPlans != null && monthPlans.size()>0) {
+            return Integer.parseInt(StringUtil.trimToEmpty(monthPlans.get(0)[0]));
+        }
+
+        return 0;
+    }
+
+    @Override
+    public void addMonthPlanDetails(MonthPlanDetails monthPlanDetails) {
+        monthPlanDetailsDao.save(monthPlanDetails);
+    }
+
 
     private List<MonthPlanDetailsBean> mergeList(List<MonthPlanDetailsBean> list) {
         HashMap<String, MonthPlanDetailsBean> map = new HashMap<String, MonthPlanDetailsBean>();

@@ -1,6 +1,8 @@
 package sy.service;
 
+import sy.model.po.MonthPlan;
 import sy.model.po.MonthPlanBean;
+import sy.model.po.MonthPlanDetails;
 import sy.model.po.MonthPlanDetailsBean;
 
 import java.util.List;
@@ -13,4 +15,9 @@ public interface MonthPlanServiceI {
     List<MonthPlanDetailsBean> getMonthPlanDetailsBeanList(String monthPlanId);
     List<MonthPlanDetailsBean> getMonthPlanDetailsMerge(String projectId);
 
+    void addMonthPlan(MonthPlan monthPlan);
+
+    int getId(MonthPlan monthPlan);
+
+    void addMonthPlanDetails(MonthPlanDetails monthPlanDetails);
 }
