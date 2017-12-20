@@ -115,7 +115,7 @@
         debugger;
         document.getElementById("monthPlanTabBody").removeChild(document.getElementById("tr_monthplan_" + _id));
         for (var i = 1; i < document.getElementById("monthPlanTable").rows.length; i++) {
-            document.getElementById("overallPlanTable").rows[i].cells[0].innerHTML = i;
+            document.getElementById("monthPlanTable").rows[i].cells[0].innerHTML = i;
         }
         $('#' + "overallPlanTable_row_" + _id).removeAttr("checked");
 
@@ -266,9 +266,9 @@
 					<th style="text-align:center; ">材料名称</th>
 					<th style="text-align:center; ">规格型号</th>
 					<th style="text-align:center; ">计划数量</th>
-					<th style="text-align:center; ">剩余数量</th>
+					<th style="text-align:center; ">计划剩余数量</th>
 					<th style="text-align:center; ">单位</th>
-					<th style="text-align:center; ">操作</th>
+					<th style="text-align:center; ">选择</th>
 				</tr>
 				</thead>
 				<tbody id="overallPlanTabBody">
