@@ -174,6 +174,10 @@ public class OverallPlanServiceImpl implements OverallPlanServiceI {
                         }
                     }
                 }
+            } else {
+                for (OverallPlanDetailsBean overallPlanDetailsBean : overallPlanDetailsBeanAll) {
+                    overallPlanDetailsBean.setRemainCount(overallPlanDetailsBean.getCount());
+                }
             }
         }
         return overallPlanDetailsBeanAll;
