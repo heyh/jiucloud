@@ -73,6 +73,11 @@
 
         $(document).ready(function () {
 
+//            $("#projectId").select2({
+//                placeholder: "请选择项目",
+//                allowClear: true
+//            });
+
             $('.input-append').datepicker({
                 format: "yyyy-mm-dd",
                 language: "zh-CN",
@@ -80,6 +85,16 @@
                 todayHighlight: true,
                 maxViewMode: 1
             });
+
+            $.getJSON('${pageContext.request.contextPath}/projectController/securi_getProjects', function (data) {
+                var projectInfos = data.obj;
+                var optionString = '';
+                for (var i in projectInfos) {
+                    optionString += "<option value=\"" + projectInfos[i].id + "\" >" + projectInfos[i].text + "</option>";
+                }
+                $("#projectId").html('<option>请选择项目</option>' + optionString);
+            });
+
         });
 
         var dataGrid;
@@ -347,23 +362,21 @@
         <form id="searchForm">
             <table class="table table-hover table-condensed" style="display: none;">
                 <tr>
-                    <td>关键字搜索:
-                            <input style="margin-top: 10px;width: 180px" type="text"id="keyword" name="keyword">
+                    <td>关键字搜索:&nbsp;
+                        <input style="margin-top:10px;width:180px" type="text" id="keyword" name="keyword">
                     </td>
                     <td>工程名称:&nbsp;
-                        <select style="margin-top: 10px;width: 180px" name="projectName" id="projectName">
-                            <option ></option>
-
+                        <select style="margin-top:10px; width:180px" name="projectId" id="projectId">
                         </select>
                     </td>
-                    <td>起止日期:
-                        <div class="input-append date" style="margin-top: 10px">
-                            <input type="text" value="${first}" id="startDate" name="startDate" readonly style="width: 180px;">
+                    <td>起止日期:&nbsp;
+                        <div class="input-append date" style="margin-top:10px">
+                            <input type="text" value="${first}" id="startDate" name="startDate" readonly style="width:160px;">
                             <span class="add-on"><i class="icon-th"></i></span>
                         </div>
                         -
-                        <div class="input-append date" style="margin-top: 10px">
-                            <input type="text" value="${last}" id="endDate" name="endDate" readonly style="width: 180px;">
+                        <div class="input-append date" style="margin-top:10px">
+                            <input type="text" value="${last}" id="endDate" name="endDate" readonly style="width:160px;">
                             <span class="add-on"><i class="icon-th"></i></span>
                         </div>
                     </td>
@@ -377,10 +390,10 @@
     </div>
 </div>
 <div id="toolbar" style="display: none;">
-    <a onclick="addFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'add_new'">添加</a>
-    <a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'out_new',plain:true" onclick="exportFun();">导出</a>
-    <a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'search_new',plain:true" onclick="searchFun();">查询</a>
-    <a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'zhongzhiguolvtiaojian_new',plain:true" onclick="cleanFun();">清空</a>
+    <a onclick="addFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'add_new'">材料入库</a>
+    <a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'out_new',plain:true" onclick="exportFun();">表格导出</a>
+    <a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'search_new',plain:true" onclick="searchFun();">条件查询</a>
+    <a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'zhongzhiguolvtiaojian_new',plain:true" onclick="cleanFun();">清空条件</a>
 
 </div>
 
