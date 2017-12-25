@@ -11,6 +11,7 @@ import sy.pageModel.PageHelper;
 import sy.pageModel.SessionInfo;
 import sy.service.StockServiceI;
 import sy.util.ConfigUtil;
+import sy.util.StringUtil;
 import sy.util.UtilDate;
 
 import javax.servlet.http.HttpServletRequest;
@@ -48,6 +49,11 @@ public class StockController {
         dataGrid.setTotal((long) 0);
 
         return dataGrid;
+    }
 
+    @RequestMapping("/securi_toAddStock")
+    public String toAddPage(HttpServletRequest request) {
+
+        return "/app/materials/stock/addStock";
     }
 }

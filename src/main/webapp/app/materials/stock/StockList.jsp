@@ -194,6 +194,45 @@
                     });
         });
 
+        // 入库
+        function addFun() {
+            parent.$
+                .modalDialog({
+                    title: '材料入库',
+                    width: 1200,
+                    height: 600,
+                    href: '${pageContext.request.contextPath}/stockController/securi_toAddStock',
+                    buttons: [{
+                        text: '入库',
+                        handler: function () {
+                            parent.$.modalDialog.openner_dataGrid = dataGrid; //因为添加成功之后，需要刷新这个dataGrid，所以先预定义好
+                            var f = parent.$.modalDialog.handler.find('#form');
+                            f.submit();
+                        }
+                    }]
+                });
+        }
+
+        //编辑
+        function editFun(id) {
+            parent.$
+                .modalDialog({
+                    title : '编辑',
+                    width : 420,
+                    height : 460,
+                    href : '${pageContext.request.contextPath}/fieldDataController/upfieldData?id='
+                    + id,
+                    buttons : [ {
+                        text : '下一步',
+                        handler : function() {
+                            parent.$.modalDialog.openner_dataGrid = dataGrid;//因为添加成功之后，需要刷新这个dataGrid，所以先预定义好
+                            var f = parent.$.modalDialog.handler.find('#form');
+                            f.submit();
+                        }
+                    } ]
+                });
+        }
+
         function viewApproveDetailsFun(approvedOption) {
             var approvedOptions = approvedOption.split('|');
 
@@ -262,38 +301,7 @@
                     });
         }
 
-        //编辑
-        function editFun(id) {
-            parent.$
-                .modalDialog({
-                    title : '编辑',
-                    width : 420,
-                    height : 460,
-                    href : '${pageContext.request.contextPath}/fieldDataController/upfieldData?id='
-                    + id,
-                    buttons : [ {
-                        text : '下一步',
-                        handler : function() {
-                            parent.$.modalDialog.openner_dataGrid = dataGrid;//因为添加成功之后，需要刷新这个dataGrid，所以先预定义好
-                            var f = parent.$.modalDialog.handler.find('#form');
-                            f.submit();
-                        }
-                    } ]
-                });
-        }
 
-        // 添加
-        function addFun() {
-            var url = '${pageContext.request.contextPath}/fieldDataController/securi_addPage?source=bill';
-            var text = "添加清单项量";
-            var params = {
-                url : url,
-                title : text,
-                iconCls : 'wrench'
-            };
-            window.parent.ac(params);
-            //parent.$.modalDialog.handler.dialog('close');
-        }
 
 
 

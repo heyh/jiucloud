@@ -118,7 +118,7 @@
     });
 
     function searchFun() {
-        $.post('${pageContext.request.contextPath}/materialsController/securi_materialsTreeGrid',
+        $.post('${pageContext.request.contextPath}/materialManageController/securi_materialsTreeGrid',
             {keyword: $('#keyword').val()},
             function (data) {
                 dataGrid.treegrid('loadData', data);
