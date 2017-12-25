@@ -181,63 +181,63 @@
         }
         $('#addStockInfo').val(JSON.stringify(tableInfo));
 
-        $.ajax({
-            url: '${pageContext.request.contextPath}/fieldDataController/securi_chooseApprove',
-            type: 'post',
-            dataType: 'json',
-            contentType: "application/x-www-form-urlencoded; charset=utf-8",
-            success: function (data) {
+        <%--$.ajax({--%>
+            <%--url: '${pageContext.request.contextPath}/fieldDataController/securi_chooseApprove',--%>
+            <%--type: 'post',--%>
+            <%--dataType: 'json',--%>
+            <%--contentType: "application/x-www-form-urlencoded; charset=utf-8",--%>
+            <%--success: function (data) {--%>
 
-                if (data.success) {
-                    var optionstring = '';
-                    var users = data.obj;
-                    for (var i in users) {
-                        optionstring += "<option value=\"" + users[i].id + "\" >" + users[i].username + "</option>";
-                    }
-                    $("#currentApprovedUserRef").html(optionstring);
-                }
-            }
-        });
+                <%--if (data.success) {--%>
+                    <%--var optionstring = '';--%>
+                    <%--var users = data.obj;--%>
+                    <%--for (var i in users) {--%>
+                        <%--optionstring += "<option value=\"" + users[i].id + "\" >" + users[i].username + "</option>";--%>
+                    <%--}--%>
+                    <%--$("#currentApprovedUserRef").html(optionstring);--%>
+                <%--}--%>
+            <%--}--%>
+        <%--});--%>
 
-        layer.open({
-            type: 1,
-            title: '审批人选择',
-            content: '<div style="text-align: center; margin-top: 30px"><select id="currentApprovedUserRef" name="currentApprovedUserRef"></select></div>',
-            btn: '确定',
-            btnAlign: 'c',
-            shade: 0.3,
-            area: ['250px', '180px'],
-            yes: function () {
-                parent.$.messager.progress({title: '提示', text: '数据处理中，请稍后....'});
-                $.ajax({
-                    url: '${pageContext.request.contextPath}/stockController/securi_AddStock',
-                    type: 'post',
-                    data: {overallPlanInfo: JSON.stringify(tableInfo), projectId: $('#projectId').val(), currentApprovedUser: $('#currentApprovedUserRef').val()},
-                    dataType: 'json',
-                    contentType: "application/x-www-form-urlencoded; charset=utf-8",
-                    success: function (data) {
-                        parent.$.messager.progress('close');
-                        if (data.success) {
-                            layer.closeAll();
-                            jQuery.messager.show({
-                                title:'温馨提示:',
-                                msg:'添加成功!',
-                                timeout:3000,
-                                showType:'show'
-                            });
-                            parent.$.modalDialog.handler.dialog('close');
+        <%--layer.open({--%>
+            <%--type: 1,--%>
+            <%--title: '审批人选择',--%>
+            <%--content: '<div style="text-align: center; margin-top: 30px"><select id="currentApprovedUserRef" name="currentApprovedUserRef"></select></div>',--%>
+            <%--btn: '确定',--%>
+            <%--btnAlign: 'c',--%>
+            <%--shade: 0.3,--%>
+            <%--area: ['250px', '180px'],--%>
+            <%--yes: function () {--%>
+                <%--parent.$.messager.progress({title: '提示', text: '数据处理中，请稍后....'});--%>
+                <%--$.ajax({--%>
+                    <%--url: '${pageContext.request.contextPath}/stockController/securi_AddStock',--%>
+                    <%--type: 'post',--%>
+                    <%--data: {overallPlanInfo: JSON.stringify(tableInfo), projectId: $('#projectId').val(), currentApprovedUser: $('#currentApprovedUserRef').val()},--%>
+                    <%--dataType: 'json',--%>
+                    <%--contentType: "application/x-www-form-urlencoded; charset=utf-8",--%>
+                    <%--success: function (data) {--%>
+                        <%--parent.$.messager.progress('close');--%>
+                        <%--if (data.success) {--%>
+                            <%--layer.closeAll();--%>
+                            <%--jQuery.messager.show({--%>
+                                <%--title:'温馨提示:',--%>
+                                <%--msg:'添加成功!',--%>
+                                <%--timeout:3000,--%>
+                                <%--showType:'show'--%>
+                            <%--});--%>
+                            <%--parent.$.modalDialog.handler.dialog('close');--%>
 
-                        }
-                    }
-                });
-            }
-        });
+                        <%--}--%>
+                    <%--}--%>
+                <%--});--%>
+            <%--}--%>
+        <%--});--%>
     }
 
     $(function () {
         parent.$.messager.progress('close');
         $('#form').form({
-            url: '${pageContext.request.contextPath}/overallPlanController/securi_AddStock',
+            url: '${pageContext.request.contextPath}/stockController/securi_AddStock',
             onSubmit: function () {
                 geneAddStock();
                 parent.$.messager.progress({

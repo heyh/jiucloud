@@ -145,7 +145,7 @@
                                 width : 350
                             },
                             {
-                                field : 'unit',
+                                field : 'dw',
                                 title : '单位',
                                 width : 100
                             },
