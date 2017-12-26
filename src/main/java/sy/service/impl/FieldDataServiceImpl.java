@@ -1052,7 +1052,7 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
     }
 
     @Override
-    public List<FieldData> getBoq(String cid, String startDate, String endDate, List<Integer> ugroup, String type) {
+    public List<FieldData> getBoq(String cid, String startDate, String endDate, List<Integer> ugroup, String type, String itemCode) {
         Map<String, Object> params = new HashMap<String, Object>();
         String sql = "";
         if (type.equals("show")) {
@@ -1069,6 +1069,11 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
         if (!StringUtil.trimToEmpty(endDate).equals("")) {
             sql += " and t.creatTime <= :endTime ";
             params.put("endTime", DateKit.strToDateOrTime(endDate));
+        }
+
+        if (!StringUtil.trimToEmpty(itemCode).equals("")) {
+            sql += " and t.itemCode like :itemCode ";
+            params.put("itemCode", itemCode + "%%");
         }
 
         String uids = StringUtils.join(ugroup, ",");

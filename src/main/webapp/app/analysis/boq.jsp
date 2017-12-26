@@ -1,28 +1,31 @@
 <%@ page import="sy.pageModel.SessionInfo" %>
 <%@ page import="sy.util.ConfigUtil" %>
-<%@ page import="sy.model.S_department" %>
-<%@ page import="java.util.List" %>
 <%@ page import="java.util.ArrayList" %>
-<%@ page import="java.util.AbstractList" %>
+<%@ page import="java.util.List" %>
+<%@ page import="java.util.Map" %>
 <%@ page import="net.sf.json.JSONArray" %>
+<%@ page import="net.sf.json.JSONObject" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-         pageEncoding="UTF-8" %>
-<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-
+         pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions"%>
+<%@ taglib prefix="s" uri="http://java.sun.com/jsp/jstl/core" %>
 <%
-    String userId = null;
-//    JSONArray departments = new JSONArray();
+    List<Map<String, Object>> billCostInfos = new ArrayList<Map<String, Object>>();
+    JSONArray jsonArray = new JSONArray();
+    JSONArray billCostTree = new JSONArray();
 
     SessionInfo sessionInfo = (SessionInfo) session.getAttribute(ConfigUtil.getSessionInfoName());
     if (sessionInfo == null) {
         response.sendRedirect(request.getContextPath());
     } else {
-        userId = sessionInfo.getId();
-//        departments = JSONArray.fromObject(sessionInfo.getDepartmentIds());
+        billCostInfos = sessionInfo.getCostTypeInfos().get("billCostInfos");
+        for (Map<String, Object> nodeMap : billCostInfos) {
+            JSONObject nodeJson = JSONObject.fromObject(nodeMap);
+            jsonArray.add(nodeJson);
+        }
+        billCostTree = sessionInfo.getBillCostTree();
     }
-
 %>
 <!DOCTYPE html>
 <html>
@@ -82,6 +85,68 @@
             var url = "${pageContext.request.contextPath}/analysisController/securi_boqExecl?" + str;
             window.open(url);
         }
+
+        $(document).ready(function () {
+            $('#costTypeRef').combotree({
+                data: <%= billCostTree %>,
+                lines: true,
+                editable: true,
+                onLoadSuccess: function () {
+                    $('#costTypeRef').combotree('tree').tree("collapseAll");
+                },
+                //选择树节点触发事件
+                onSelect: function (node) {
+                    var _jsonArray = <%= jsonArray %>;
+                    for (var i = 0; i < _jsonArray.length; i++) {
+                        if (_jsonArray[i].nid == node.id) {
+                            $('#itemCode').val(_jsonArray[i].itemCode);
+                            $('#costType').val(_jsonArray[i].costType);
+                            break;
+                        }
+                    }
+                }
+            });
+        });
+
+        (function(){
+            $.fn.combotree.defaults.editable = true;
+            $.extend($.fn.combotree.defaults.keyHandler,{
+                up:function(){
+                    console.log('up');
+                },
+                down:function(){
+                    console.log('down');
+                },
+                enter:function(){
+                    console.log('enter');
+                },
+                query:function(q){
+                    var t = $(this).combotree('tree');
+                    var nodes = t.tree('getChildren');
+                    for(var i=0; i<nodes.length; i++){
+                        var node = nodes[i];
+                        if (node.text.indexOf(q) >= 0){
+                            $(node.target).show();
+                        } else {
+                            $(node.target).hide();
+                        }
+                    }
+                    var opts = $(this).combotree('options');
+                    if (!opts.hasSetEvents){
+                        opts.hasSetEvents = true;
+                        var onShowPanel = opts.onShowPanel;
+                        opts.onShowPanel = function(){
+                            var nodes = t.tree('getChildren');
+                            for(var i=0; i<nodes.length; i++){
+                                $(nodes[i].target).show();
+                            }
+                            onShowPanel.call(this);
+                        };
+                        $(this).combo('options').onShowPanel = opts.onShowPanel;
+                    }
+                }
+            });
+        })(jQuery);
     </script>
 
 
@@ -89,7 +154,7 @@
 <body>
 <div class="easyui-layout" data-options="fit : true,border : false">
     <!-- 条件查询 -->
-    <div data-options="region:'north',title:'查询条件',border:false" style="height: 110px; overflow: hidden;">
+    <div data-options="region:'north',title:'查询条件',border:false" style="height: 120px; overflow: hidden;">
         <form id="searchForm" autocomplete="off">
             <table class="table table-hover table-condensed" style="display: none;">
                 <tr>
@@ -97,18 +162,23 @@
                         <div class="form-group">
                             <input type="text" name="startDate" id='startDate' placeholder="开始时间"
                                    onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" readonly="readonly"
-                                   value='${first}'/> -
+                                   value='${first}' style="margin-top: 10px"/> -
                             <input type="text" name="endDate" id='endDate' placeholder="结束时间"
                                    onclick="WdatePicker({readOnly:true,dateFmt:'yyyy-MM-dd'})" readonly="readonly"
-                                   value='${last}'/>
+                                   value='${last}' style="margin-top: 10px"/>
                             &nbsp;&nbsp;&nbsp;&nbsp;
-                            <select id="selDepartmentId" name="selDepartmentId" >
+                            <select id="selDepartmentId" name="selDepartmentId" style="margin-top: 10px">
                             </select>
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            <input type="text" style="height: 30px" class="easyui-combotree" name="costTypeRef" id="costTypeRef" placeholder="请选择" value="${costType}">
+                            <input type="hidden" name="costType" id="costType" value="${costType}">
+                            <input type="hidden" name="itemCode" id="itemCode" value="${itemCode}">
+
                         </div>
                     </td>
                 </tr>
                 <tr>
-                    <td style="text-align: center" colspan=3>
+                    <td style="text-align: center;" colspan=3>
                         <a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'search_new',plain:true" onclick="searchFun();">查询</a>
                         &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'out_new',plain:true" onclick="exportFun();">execl导出</a>

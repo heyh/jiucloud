@@ -92,7 +92,7 @@ public interface FieldDataServiceI {
 
 	public List<Map<String, Object>> getMaterialDatas(String cid, String startDate, String endDate, List<Integer> ugroup, Integer selDepartmentId);
 
-	public List<FieldData> getBoq(String cid, String startDate, String endDate, List<Integer> ugroup, String type);
+	public List<FieldData> getBoq(String cid, String startDate, String endDate, List<Integer> ugroup, String type, String itemCode);
 
 	public void backFill(Integer id, String price, String feeType);
 

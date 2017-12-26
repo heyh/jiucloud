@@ -388,6 +388,8 @@ public class analysisController extends BaseController {
             endDate = endDate + " 23:59:59";
         }
 
+        String itemCode = StringUtil.trimToEmpty(request.getParameter("itemCode"));
+
 //		List<S_department> departments = sessionInfo.getDepartmentIds();
 		List<S_department> departments = departmentService.getFirstLevelUnderDepByUid(cid, uid);
 
@@ -404,7 +406,7 @@ public class analysisController extends BaseController {
 		}
 		ugroup = departmentService.getUsersByDepartmentId(cid, Integer.parseInt(uid), selDepartmentId);
 
-		List<FieldData> boq = fieldDataService.getBoq(cid, startDate, endDate, ugroup, "show");
+		List<FieldData> boq = fieldDataService.getBoq(cid, startDate, endDate, ugroup, "show", itemCode);
 
 		List<Map<String, Object>> projects = new ArrayList<Map<String, Object>>();
 		for (FieldData item : boq) {
@@ -426,9 +428,10 @@ public class analysisController extends BaseController {
 		request.setAttribute("first", startDate.substring(0, 10));
 		request.setAttribute("last", endDate.substring(0, 10));
 		request.setAttribute("selDepartmentId", selDepartmentId);
-//		if (departments.size()>1) {
-			request.setAttribute("departments", JSONArray.fromObject(departments));
-//		}
+		request.setAttribute("itemCode", itemCode);
+		Cost cost = costService.getCostByCode(itemCode, cid);
+		request.setAttribute("costType", cost.getCostType());
+		request.setAttribute("departments", JSONArray.fromObject(departments));
 		return "/app/analysis/boq";
 	}
 
@@ -453,6 +456,7 @@ public class analysisController extends BaseController {
             } else {
                 endDate = endDate + " 23:59:59";
             }
+			String itemCode = StringUtil.trimToEmpty(request.getParameter("itemCode"));
 
 //            List<S_department> departments = sessionInfo.getDepartmentIds();
 			List<S_department> departments = departmentService.getFirstLevelUnderDepByUid(cid, uid);
@@ -470,7 +474,7 @@ public class analysisController extends BaseController {
             }
             ugroup = departmentService.getUsersByDepartmentId(cid, Integer.parseInt(uid), selDepartmentId);
 
-            List<FieldData> datas = fieldDataService.getBoq(cid, startDate, endDate, ugroup, "execl");
+            List<FieldData> datas = fieldDataService.getBoq(cid, startDate, endDate, ugroup, "execl", itemCode);
 
             List<Map<String, Object>> projects = new ArrayList<Map<String, Object>>();
             for (FieldData item : datas) {
