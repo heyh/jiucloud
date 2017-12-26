@@ -50,6 +50,9 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
     @Autowired
     DepartmentServiceI departmentService;
 
+    @Autowired
+    private CacheServiceI cacheService;
+
     @Override
     public TFieldData add(TFieldData tFieldData) {
         tFieldData.setCreatTime(new Date());
@@ -1085,7 +1088,8 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
             FieldData f = new FieldData();
             f.setId(Integer.parseInt(StringUtil.trimToEmpty(tem[0])));
             f.setItemCode(StringUtil.trimToEmpty(tem[1]));
-            Cost cost = costDao.get("from Cost where isDelete=0 and itemCode='" + StringUtil.trimToEmpty(tem[1]) + "'");
+//            Cost cost = costDao.get("from Cost where isDelete=0 and itemCode='" + StringUtil.trimToEmpty(tem[1]) + "'");
+            Cost cost = (Cost) cacheService.getCache("cost", StringUtil.trimToEmpty(tem[1]));
             if (cost == null) {
                 f.setCostType("该费用类型可能已经被删除");
             } else {
@@ -1104,7 +1108,8 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
             f.setCount(StringUtil.trimToEmpty(tem[7]));
 
             f.setProject_id(Integer.parseInt(StringUtil.trimToEmpty(tem[6])));
-            Project project = projectDao.get("from Project where isdel=0 and id='" + Integer.parseInt(StringUtil.trimToEmpty(tem[6])) + "'");
+//            Project project = projectDao.get("from Project where isdel=0 and id='" + Integer.parseInt(StringUtil.trimToEmpty(tem[6])) + "'");
+            Project project = (Project) cacheService.getCache("project", StringUtil.trimToEmpty(tem[6]));
             if (project == null) {
                 continue; // 工程删除，记录不显示
             } else {

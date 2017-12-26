@@ -430,7 +430,7 @@ public class analysisController extends BaseController {
 		request.setAttribute("selDepartmentId", selDepartmentId);
 		request.setAttribute("itemCode", itemCode);
 		Cost cost = costService.getCostByCode(itemCode, cid);
-		request.setAttribute("costType", cost.getCostType());
+		request.setAttribute("costType", cost == null ? "" : cost.getCostType());
 		request.setAttribute("departments", JSONArray.fromObject(departments));
 		return "/app/analysis/boq";
 	}
