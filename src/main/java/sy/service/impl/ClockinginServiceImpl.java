@@ -89,14 +89,13 @@ public class ClockinginServiceImpl implements ClockinginServiceI {
         }
 
         if (!keyword.equals("")) {
-            hql += " and ( address like :address ";
-            params.put("address", "%%" + keyword + "%%");
+            hql += " and ( address like :keyword ";
 
-            hql += " or uname like :uname ";
-            params.put("uname", "%%" + keyword + "%%");
+            hql += " or uname like :keyword ";
 
-            hql += " or approveState like :approveState ) ";
-            params.put("approveState", "%%" + keyword + "%%");
+            hql += " or approveState like :keyword ) ";
+
+            params.put("keyword", "%%" + keyword + "%%");
         }
 
         hql += " order by id desc";
