@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import sy.model.po.Stock;
+import sy.model.po.StockBean;
 import sy.pageModel.*;
 import sy.service.StockServiceI;
 import sy.util.ConfigUtil;
@@ -56,7 +57,7 @@ public class StockController {
         }
 
         if (!StringUtil.trimToEmpty(request.getParameter("endDate")).equals("")) {
-            endDate = StringUtil.trimToEmpty(request.getParameter("endDate")) + " 00:00:00";
+            endDate = StringUtil.trimToEmpty(request.getParameter("endDate")) + " 23:59:59";
         } else {
             endDate = UtilDate.getshortLast() + " 23:59:59";
         }
@@ -67,8 +68,8 @@ public class StockController {
         return dataGrid;
     }
 
-    @RequestMapping("/securi_toAddStock")
-    public String toAddPage(HttpServletRequest request) {
+    @RequestMapping("/securi_toAddStockPage")
+    public String oAddStockPage(HttpServletRequest request) {
         return "/app/materials/stock/addStock";
     }
 
@@ -107,4 +108,45 @@ public class StockController {
         return j;
     }
 
+    @RequestMapping("/securi_toUpdateStockPage")
+    public String toUpdateStockPage(HttpServletRequest request) {
+        String stockId = request.getParameter("stockId");
+        StockBean stockBean = stockService.getStockBean(stockId);
+        request.setAttribute("stockBean", stockBean);
+        return "/app/materials/stock/updateStock";
+    }
+
+    @RequestMapping("/securi_updateStock")
+    @ResponseBody
+    public Json updateStock(Stock updstock, HttpSession session) {
+        Json j = new Json();
+        try {
+            Stock stock = stockService.detail(StringUtil.trimToEmpty(updstock.getId()));
+            stock.setCount(updstock.getCount());
+            stockService.update(stock);
+            j.setSuccess(true);
+            j.setMsg("操作成功！");
+        } catch (NumberFormatException ex) {
+            ex.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+            j.setMsg(e.getMessage());
+        }
+        return j;
+    }
+
+    @RequestMapping("/securi_delStock")
+    @ResponseBody
+    public Json delStock(String id) {
+        Json json = new Json();
+        try {
+            stockService.delete(id);
+            json.setSuccess(true);
+            json.setMsg("删除成功！");
+        } catch (Exception e) {
+            e.printStackTrace();
+            json.setMsg(e.getMessage());
+        }
+        return json;
+    }
 }

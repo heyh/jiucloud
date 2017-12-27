@@ -86,14 +86,14 @@
                 maxViewMode: 1
             });
 
-            $.getJSON('${pageContext.request.contextPath}/projectController/securi_getProjects', function (data) {
-                var projectInfos = data.obj;
-                var optionString = '';
-                for (var i in projectInfos) {
-                    optionString += "<option value=\"" + projectInfos[i].id + "\" >" + projectInfos[i].text + "</option>";
-                }
-                $("#projectId").html('<option>请选择项目</option>' + optionString);
-            });
+            <%--$.getJSON('${pageContext.request.contextPath}/projectController/securi_getProjects', function (data) {--%>
+                <%--var projectInfos = data.obj;--%>
+                <%--var optionString = '';--%>
+                <%--for (var i in projectInfos) {--%>
+                    <%--optionString += "<option value=\"" + projectInfos[i].id + "\" >" + projectInfos[i].text + "</option>";--%>
+                <%--}--%>
+                <%--$("#projectId").html('<option>请选择项目</option>' + optionString);--%>
+            <%--});--%>
 
         });
 
@@ -122,27 +122,27 @@
                                 width : 100,
                                 checkbox : true
                             },
-                            {
-                                field : 'projectName',
-                                title : '工程名称',
-                                width : 250
-
-                            },
+//                            {
+//                                field : 'projectName',
+//                                title : '工程名称',
+//                                width : 250
+//
+//                            },
                             {
                                 field : 'mc',
                                 title : '材料名称',
-                                width : 200
+                                width : 400
                             },
 
                             {
                                 field : 'specifications',
                                 title : '规格型号',
-                                width : 100
+                                width : 200
                             },
                             {
                                 field : 'count',
                                 title : '数量',
-                                width : 350
+                                width : 100
                             },
                             {
                                 field : 'dw',
@@ -201,7 +201,7 @@
                     title: '材料入库',
                     width: 1200,
                     height: 600,
-                    href: '${pageContext.request.contextPath}/stockController/securi_toAddStock',
+                    href: '${pageContext.request.contextPath}/stockController/securi_toAddStockPage',
                     buttons: [{
                         text: '入库',
                         handler: function () {
@@ -217,52 +217,19 @@
         function editFun(id) {
             parent.$
                 .modalDialog({
-                    title : '编辑',
-                    width : 420,
-                    height : 460,
-                    href : '${pageContext.request.contextPath}/fieldDataController/upfieldData?id='
-                    + id,
-                    buttons : [ {
-                        text : '下一步',
-                        handler : function() {
-                            parent.$.modalDialog.openner_dataGrid = dataGrid;//因为添加成功之后，需要刷新这个dataGrid，所以先预定义好
+                    title: '编辑',
+                    width: 510,
+                    height: 300,
+                    href: '${pageContext.request.contextPath}/stockController/securi_toUpdateStockPage?stockId=' + id,
+                    buttons: [{
+                        text: '确认',
+                        handler: function () {
+                            parent.$.modalDialog.openner_dataGrid = dataGrid; //因为添加成功之后，需要刷新这个dataGrid，所以先预定义好
                             var f = parent.$.modalDialog.handler.find('#form');
                             f.submit();
                         }
-                    } ]
+                    }]
                 });
-        }
-
-        function viewApproveDetailsFun(approvedOption) {
-            var approvedOptions = approvedOption.split('|');
-
-            var approvedOptionsHtml =
-                '<table class="table_style" style="font-size: 12px;" cellpadding="0" cellspacing="0">' +
-                '<tr>' +
-                '<td align="center">时间</td>' +
-                '<td align="center">审核人</td>' +
-                '<td align="center">审核意见</td>' +
-                '</tr>';
-
-            for (var i=0; i<approvedOptions.length; i++) {
-                approvedOptionsHtml += '<tr>';
-                var approvedOptionInfos = approvedOptions[i].split('::');
-                for (var j=0; j<approvedOptionInfos.length; j++) {
-                    approvedOptionsHtml += '<td>' + approvedOptionInfos[j] + '</td>';
-                }
-                approvedOptionsHtml += '</tr>'
-            }
-            approvedOptionsHtml += '</table>';
-
-            layer.open({
-                type: 1,
-                title: '审批详情',
-                closeBtn: 2,
-                shadeClose: true,
-                maxmin: true, //开启最大化最小化按钮
-                area: ['400px', '300px'],
-                content: approvedOptionsHtml
-            });
         }
 
         //删除
@@ -277,21 +244,21 @@
                 .confirm(
                     '询问',
                     '您是否要删除当前配置？',
-                    function(b) {
+                    function (b) {
                         if (b) {
                             parent.$.messager.progress({
-                                title : '提示',
-                                text : '数据处理中，请稍后....'
+                                title: '提示',
+                                text: '数据处理中，请稍后....'
                             });
                             $
                                 .ajax({
-                                    type : "post",
-                                    url : '${pageContext.request.contextPath}/fieldDataController/delfieldData',
-                                    data : {
-                                        id : id
+                                    type: "post",
+                                    url: '${pageContext.request.contextPath}/stockController/securi_delStock',
+                                    data: {
+                                        id: id
                                     },
-                                    dataType : "json",
-                                    success : function(data) {
+                                    dataType: "json",
+                                    success: function (data) {
                                         if (data.success == true) {
                                             searchFun();
                                         }
@@ -324,10 +291,6 @@
 
         //过滤条件查询
         function searchFun() {
-            if($('#startTime').val() != '' && $('#endTime').val() != '') {
-                $('#startTime').val($('#startTime').val().substring(0, 10) + ' 00:00:00');
-                $('#endTime').val($('#endTime').val().substring(0, 10) + ' 23:59:59');
-            }
             dataGrid.datagrid('load', $.serializeObject($('#searchForm')));
         }
 
@@ -367,16 +330,16 @@
 <body>
 <div class="easyui-layout" data-options="fit : true,border : false">
     <div data-options="region:'north',title:'查询条件',border:false" style="height: 75px; overflow: hidden;">
-        <form id="searchForm">
+        <form id="searchForm"  method="post" role="form" >
             <table class="table table-hover table-condensed" style="display: none;">
                 <tr>
                     <td>关键字搜索:&nbsp;
                         <input style="margin-top:10px;width:180px" type="text" id="keyword" name="keyword">
                     </td>
-                    <td>工程名称:&nbsp;
-                        <select style="margin-top:10px; width:180px" name="projectId" id="projectId">
-                        </select>
-                    </td>
+                    <%--<td>工程名称:&nbsp;--%>
+                        <%--<select style="margin-top:10px; width:180px" name="projectId" id="projectId">--%>
+                        <%--</select>--%>
+                    <%--</td>--%>
                     <td>起止日期:&nbsp;
                         <div class="input-append date" style="margin-top:10px">
                             <input type="text" value="${first}" id="startDate" name="startDate" readonly style="width:160px;">

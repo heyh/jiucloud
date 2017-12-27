@@ -1,6 +1,7 @@
 package sy.service;
 
 import sy.model.po.Stock;
+import sy.model.po.StockBean;
 import sy.pageModel.DataGrid;
 import sy.pageModel.PageHelper;
 
@@ -13,4 +14,14 @@ public interface StockServiceI {
     void addStock(Stock stock);
 
     DataGrid dataGrid(PageHelper pageHelper, String projectId, String startDate, String endDate, List<Integer> ugroup, String keyword);
+
+    Stock detail(String id);
+
+    StockBean getStockBean(String id);
+
+    Stock update(Stock info);
+
+    void delete(String id);
+
+
 }
