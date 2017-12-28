@@ -346,7 +346,7 @@
                         {
                             field : 'projectName',
                             title : '工程名称',
-                            width : 250
+                            width : 200
 
                         },
                         {
@@ -357,41 +357,41 @@
                         {
                             field : 'dataName',
                             title : '名称',
-                            width : 350
-                        },
-                        {
-                            field : 'creatTime',
-                            title : '录入时间',
-                            width : 200
-                        }
-                    ]],
-                    columns : [ [
-                        {
-                            field : 'id',
-                            title : '多选框',
-                            width : 100,
-                            checkbox : true
-                        },
-                        {
-                            field : 'projectName',
-                            title : '工程名称',
-                            width : 200
-                        },
-                        {
-                            field : 'dataName',
-                            title : '名称',
-                            width : 200
+                            width : 150
                         },
                         {
                             field : 'creatTime',
                             title : '录入时间',
                             width : 150
-                        },
-                        {
-                            field : 'sectionName',
-                            title : '标段',
-                            width : 100
-                        },
+                        }
+                    ]],
+                    columns : [ [
+//                        {
+//                            field : 'id',
+//                            title : '多选框',
+//                            width : 100,
+//                            checkbox : true
+//                        },
+//                        {
+//                            field : 'projectName',
+//                            title : '工程名称',
+//                            width : 200
+//                        },
+//                        {
+//                            field : 'dataName',
+//                            title : '名称',
+//                            width : 200
+//                        },
+//                        {
+//                            field : 'creatTime',
+//                            title : '录入时间',
+//                            width : 150
+//                        },
+//                        {
+//                            field : 'sectionName',
+//                            title : '标段',
+//                            width : 100
+//                        },
                         {
                             field : 'costType',
                             title : '类型',
