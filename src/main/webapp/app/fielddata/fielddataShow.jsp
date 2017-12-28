@@ -18,10 +18,7 @@
     List<Map<String, Object>> dataCostInfos = new ArrayList<Map<String, Object>>();
 	JSONArray jsonArray = new JSONArray();
 	JSONArray costTree = new JSONArray();
-	boolean hasOnlyReadRight = false;
-	boolean hasReadEditRight = false;
-	boolean hasOutRight = false;
-	boolean hasBackFillRight = false;
+	boolean hasReadEditDelRight = false;
 
     SessionInfo sessionInfo = (SessionInfo) session.getAttribute(ConfigUtil.getSessionInfoName());
     if (sessionInfo == null) {
@@ -36,10 +33,7 @@
 			jsonArray.add(nodeJson);
 		}
 		costTree = sessionInfo.getCostTree();
-		hasOnlyReadRight = sessionInfo.getRightList().contains("16") && 0 != sessionInfo.getParentId();
-		hasReadEditRight = sessionInfo.getRightList().contains("15") || 0 == sessionInfo.getParentId();
-		hasOutRight = sessionInfo.getRightList().contains("17");
-		hasBackFillRight = sessionInfo.getRightList().contains("18");
+		hasReadEditDelRight = (0 == sessionInfo.getParentId()) ;
 	}
 
 %>
@@ -228,7 +222,7 @@
 											var str = '';
                                             // modify by heyh 当数据填报之后，在当日内23:59分内均可以修改自己填报数据
                                             var userId = <%= userId%>;
-                                            if(((compareDate(getCurrentDate(), row.creatTime.substring(0, 10)) == 0 || '9' == row.needApproved) && userId == row.uid  && '0' == row.isLock && '2' != row.needApproved) || (row.itemCode.substring(0, 3) == '700' && <%= hasReadEditRight %> )) {
+                                            if(((compareDate(getCurrentDate(), row.creatTime.substring(0, 10)) == 0 || '9' == row.needApproved) && userId == row.uid  && '0' == row.isLock && '2' != row.needApproved) || <%= hasReadEditDelRight %> ) {
                                                     str += $
                                                             .formatString(
                                                             '<img onclick="editFun(\'{0}\');" src="{1}" title="编辑" />',

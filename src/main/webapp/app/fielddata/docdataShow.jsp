@@ -15,6 +15,7 @@
     String projectInfos = null;
 //    List<Map<String, Object>> docCostInfos = new ArrayList<Map<String, Object>>();
 	JSONArray docCostTree = new JSONArray();
+	boolean hasReadEditDelRight = false;
     SessionInfo sessionInfo = (SessionInfo) session.getAttribute(ConfigUtil.getSessionInfoName());
     if (sessionInfo == null) {
         response.sendRedirect(request.getContextPath());
@@ -24,7 +25,9 @@
         projectInfos = sessionInfo.getProjectInfos();
 //        docCostInfos = sessionInfo.getCostTypeInfos().get("docCostInfos");
 		docCostTree = sessionInfo.getDocCostTree();
-    }
+		hasReadEditDelRight =  (0 == sessionInfo.getParentId());
+
+	}
 
 %>
 
@@ -205,8 +208,7 @@
 											var str = '';
                                             // modify by heyh 当数据填报之后，在当日内23:59分内均可以修改自己填报数据
                                             var userId = <%= userId%>;
-                                            if(compareDate(getCurrentDate(), row.creatTime.substring(0, 10)) == 0
-                                                    && userId == row.uid && '0' == row.isLock && '2' != row.needApproved) {
+                                            if(((compareDate(getCurrentDate(), row.creatTime.substring(0, 10)) == 0 || '9' == row.needApproved) && userId == row.uid  && '0' == row.isLock && '2' != row.needApproved) || <%= hasReadEditDelRight %> ) {
 //                                                if ('0' == row.isLock && '2' != row.needApproved) {
                                                     str += $
                                                             .formatString(
