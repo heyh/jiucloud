@@ -109,7 +109,7 @@
             "<td style='text-align:right;'><input type='text' class='layui-input' style='text-align: right;margin-bottom:0px;width: 50px; ' value=' " + count + " '></td>" +
             "<td style='text-align:right;'><input type='text' class='layui-input' style='text-align: right;margin-bottom:0px;width: 50px; ' ></td>" +
             "<td style='text-align:right;'><input type='text' class='layui-input' style='text-align: right;margin-bottom:0px;width: 50px; ' ></td>" +
-            "<td style='text-align:right;'><input type='text' class='layui-input' style='text-align: right;margin-bottom:0px;width: 50px; ' ></td>" +
+            "<td style='text-align:center;'>" +  + "</td>" +
             "<td style='text-align:center; '><button class='layui-btn  layui-btn-xs layui-btn-normal' onclick='del(" + checkedId + ")'><i class='layui-icon'></i>删除</button></td>";
         document.getElementById("monthPlanTabBody").appendChild(trObj);
     }
@@ -140,7 +140,7 @@
             var _count = tableObj.rows[i].cells[7].firstElementChild.value;
             var _price = tableObj.rows[i].cells[8].firstElementChild.value;
             var _total = tableObj.rows[i].cells[9].firstElementChild.value;
-            var _supplier = tableObj.rows[i].cells[10].firstElementChild.value;
+            var _supplier = tableObj.rows[i].cells[10].innerText;
 
             rowInfo.materialsId = _materialsId;
             rowInfo.count = _count;
