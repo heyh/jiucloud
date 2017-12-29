@@ -69,7 +69,7 @@ public class StockController {
     }
 
     @RequestMapping("/securi_toAddStockPage")
-    public String oAddStockPage(HttpServletRequest request) {
+    public String toAddStockPage(HttpServletRequest request) {
         return "/app/materials/stock/addStock";
     }
 
