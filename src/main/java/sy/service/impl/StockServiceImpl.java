@@ -49,7 +49,7 @@ public class StockServiceImpl implements StockServiceI{
     public DataGrid dataGrid(PageHelper pageHelper, String projectId, String startDate, String endDate, List<Integer> ugroup, String keyword) {
         DataGrid dg = new DataGrid();
         Map<String, Object> params = new HashMap<String, Object>();
-        String hql = "from Stock where isDelete='0' ";
+        String hql = "from Stock s where isDelete='0' ";
 
         if (!projectId.equals("")) {
             hql += " and projectId=:projectId ";
@@ -80,6 +80,8 @@ public class StockServiceImpl implements StockServiceI{
             hql += " or ( select realname from Tuser where id = uid) like :realname ) ";
             params.put("realname", "%%" + keyword + "%%");
         }
+
+        hql += " order by s.id desc ";
         List<Stock> stockList = stockDao.find(hql, params, pageHelper.getPage(), pageHelper.getRows());
 
         List<StockBean> stockBeanList = new ArrayList<StockBean>();
