@@ -105,8 +105,11 @@ public class MonthPlanController {
                 JSONObject o = monthPlanInfo.getJSONObject(i);
                 MonthPlanDetails monthPlanDetails = new MonthPlanDetails();
                 monthPlanDetails.setMonthPlanId(monthPlanId);
-                monthPlanDetails.setCount(o.getString("count"));
                 monthPlanDetails.setMaterialsId(o.getString("materialsId"));
+                monthPlanDetails.setCount(o.getString("count"));
+                monthPlanDetails.setPrice(o.getString("price"));
+                monthPlanDetails.setTotal(o.getString("total"));
+                monthPlanDetails.setSupplier(o.getString("supplier"));
                 monthPlanDetails.setCreateTime(new Date());
                 monthPlanService.addMonthPlanDetails(monthPlanDetails);
             }

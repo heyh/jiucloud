@@ -105,8 +105,11 @@
             "<td style='display: none;'>" + materialsId + "</td>" +
             "<td>" + mc + "</td>" +
             "<td>" + specifications + "</td>" +
-            "<td style='text-align:center;'><input type='text' class='layui-input' style='text-align: right;margin-bottom:0px;width: 50px; ' value=' " + count + " '></td>" +
             "<td>" + dw + "</td>" +
+            "<td style='text-align:right;'><input type='text' class='layui-input' style='text-align: right;margin-bottom:0px;width: 50px; ' value=' " + count + " '></td>" +
+            "<td style='text-align:right;'><input type='text' class='layui-input' style='text-align: right;margin-bottom:0px;width: 50px; ' ></td>" +
+            "<td style='text-align:right;'><input type='text' class='layui-input' style='text-align: right;margin-bottom:0px;width: 50px; ' ></td>" +
+            "<td style='text-align:right;'><input type='text' class='layui-input' style='text-align: right;margin-bottom:0px;width: 50px; ' ></td>" +
             "<td style='text-align:center; '><button class='layui-btn  layui-btn-xs layui-btn-normal' onclick='del(" + checkedId + ")'><i class='layui-icon'></i>删除</button></td>";
         document.getElementById("monthPlanTabBody").appendChild(trObj);
     }
@@ -134,9 +137,16 @@
         for (var i = 1; i < tableObj.rows.length; i++) {
             var rowInfo = {};
             var _materialsId = tableObj.rows[i].cells[3].innerText;
-            var _count = tableObj.rows[i].cells[6].firstElementChild.value;
+            var _count = tableObj.rows[i].cells[7].firstElementChild.value;
+            var _price = tableObj.rows[i].cells[8].firstElementChild.value;
+            var _total = tableObj.rows[i].cells[9].firstElementChild.value;
+            var _supplier = tableObj.rows[i].cells[10].firstElementChild.value;
+
             rowInfo.materialsId = _materialsId;
             rowInfo.count = _count;
+            rowInfo.price = _price;
+            rowInfo.total = _total;
+            rowInfo.supplier = _supplier;
 
             tableInfo.push(rowInfo);
         }
@@ -283,6 +293,9 @@
 						<th style="text-align:center; ">规格型号</th>
 						<th style="text-align:center; ">数量</th>
 						<th style="text-align:center; ">单位</th>
+						<th style="text-align:center; ">单价</th>
+						<th style="text-align:center; ">总价</th>
+						<th style="text-align:center; ">供应商</th>
 						<th style="text-align:center; ">操作</th>
 					</tr>
 					</thead>
