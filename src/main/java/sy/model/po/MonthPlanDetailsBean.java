@@ -1,5 +1,6 @@
 package sy.model.po;
 
+import javax.persistence.Column;
 import java.util.Date;
 
 /**
@@ -13,6 +14,8 @@ public class MonthPlanDetailsBean {
     private String mc;
     private String specifications;
     private String count;
+    private String price;
+    private String total;
     private String dw;
     private String supplier;
     private String isDelete;
@@ -64,6 +67,22 @@ public class MonthPlanDetailsBean {
 
     public void setCount(String count) {
         this.count = count;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
+    }
+
+    public String getTotal() {
+        return total;
+    }
+
+    public void setTotal(String total) {
+        this.total = total;
     }
 
     public String getDw() {

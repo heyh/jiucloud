@@ -32,6 +32,12 @@ public class MonthPlanDetails {
     @Column(name = "count")
     private String count;
 
+    @Column(name = "price")
+    private String price;
+
+    @Column(name = "total")
+    private String total;
+
     @Column(name = "supplier")
     private String supplier;
 
@@ -71,6 +77,22 @@ public class MonthPlanDetails {
 
     public void setCount(String count) {
         this.count = count;
+    }
+
+    public String getPrice() {
+        return price;
+    }
+
+    public void setPrice(String price) {
+        this.price = price;
+    }
+
+    public String getTotal() {
+        return total;
+    }
+
+    public void setTotal(String total) {
+        this.total = total;
     }
 
     public String getSupplier() {
