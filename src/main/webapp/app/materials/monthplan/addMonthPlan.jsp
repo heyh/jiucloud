@@ -109,13 +109,12 @@
             "<td style='text-align:right;'><input type='text' class='layui-input' style='text-align: right;margin-bottom:0px;width: 50px; ' value=' " + count + " '></td>" +
             "<td style='text-align:right;'><input type='text' class='layui-input' style='text-align: right;margin-bottom:0px;width: 50px; ' ></td>" +
             "<td style='text-align:right;'><input type='text' class='layui-input' style='text-align: right;margin-bottom:0px;width: 50px; ' ></td>" +
- 			"<td style='text-align:center; '><button class='layui-btn  layui-btn-xs layui-btn-normal' onclick='chooseSupplier(" + checkedId + ")'><i class='layui-icon'></i>选择</button></td>" +
-            "<td style='text-align:center; '><button class='layui-btn  layui-btn-xs layui-btn-normal' onclick='del(" + checkedId + ")'><i class='layui-icon'></i>删除</button></td>";
+ 			"<td style='text-align:center; '><input type='button' class='layui-btn  layui-btn-xs layui-btn-normal' onclick='chooseSupplier(" + checkedId + ")' value='选择'></input></td>" +
+            "<td style='text-align:center; '><input type='button' class='layui-btn  layui-btn-xs layui-btn-normal' onclick='del(" + checkedId + ")' value='删除'></input></td>";
         document.getElementById("monthPlanTabBody").appendChild(trObj);
     }
 
     function del(_id) {
-        debugger;
         document.getElementById("monthPlanTabBody").removeChild(document.getElementById("tr_monthplan_" + _id));
         for (var i = 1; i < document.getElementById("monthPlanTable").rows.length; i++) {
             document.getElementById("monthPlanTable").rows[i].cells[0].innerHTML = i;
@@ -128,6 +127,11 @@
             trObj.innerHTML = "<td colspan='100' style='text-align:center;'>温馨提示:勾选左侧材料总体计划，添加材料采购计划!</td>";
             document.getElementById("monthPlanTabBody").appendChild(trObj);
         }
+    }
+
+    function chooseSupplier(_id) {
+        alert(1)
+		return false;
     }
 
     function geneMonthPlan() {
@@ -204,43 +208,6 @@
             }
         });
     }
-
-    $(function () {
-        parent.$.messager.progress('close');
-        $('#form').form({
-            url: '${pageContext.request.contextPath}/monthPlanController/securi_geneMonthPlan',
-            onSubmit: function () {
-                geneOverallPlan();
-                parent.$.messager.progress({
-                    title: '提示',
-                    text: '数据处理中，请稍后....'
-                });
-                var isValid = $(this).form('validate');
-                if (!isValid) {
-                    parent.$.messager.progress('close');
-                }
-
-                return isValid;
-            },
-            success: function (result) {
-                parent.$.messager.progress('close');
-                result = $.parseJSON(result);
-                if (result.success) {
-                    parent.$.messager.progress('close');
-                    jQuery.messager.show({
-                        title: '温馨提示:',
-                        msg: '添加成功!',
-                        timeout: 3000,
-                        showType: 'show'
-                    });
-//                    parent.$.modalDialog.handler.overallPlan($('#projectId').val());//之所以能在这里调用到parent.$.modalDialog.openner_dataGrid这个对象，是因为user.jsp页面预定义好了
-                    parent.$.modalDialog.handler.dialog('close');
-                } else {
-                    parent.$.messager.alert('错误', result.msg, 'error');
-                }
-            }
-        });
-    });
 </script>
 
 <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
@@ -309,8 +276,7 @@
 				<input type="hidden" id="monthPlanInfo" name="monthPlanInfo">
 			</form>
 			<div style='text-align:right;'>
-				<button class='layui-btn layui-btn-normal layui-btn-radius' onclick="geneMonthPlan();">确 定
-				</button>
+				<input type="button" class='layui-btn layui-btn-normal layui-btn-radius' onclick="geneMonthPlan(); " value="确 定"></input>
 			</div>
 		</div>
 	</div>
