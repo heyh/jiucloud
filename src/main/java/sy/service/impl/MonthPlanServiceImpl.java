@@ -201,7 +201,7 @@ public class MonthPlanServiceImpl implements MonthPlanServiceI {
         HashMap<String, MonthPlanDetailsBean> map = new HashMap<String, MonthPlanDetailsBean>();
         for (MonthPlanDetailsBean bean : list) {
             if (map.containsKey(bean.getMaterialsId())) {
-                map.get(bean.getMaterialsId()).setCount(StringUtil.trimToEmpty(Integer.parseInt(map.get(bean.getMaterialsId()).getCount()) + Integer.parseInt(bean.getCount())));
+                map.get(bean.getMaterialsId()).setCount(StringUtil.trimToEmpty(Integer.parseInt(StringUtil.trimToEmpty(map.get(bean.getMaterialsId()).getCount()))  + Integer.parseInt(StringUtil.trimToEmpty(bean.getCount()))));
             } else {
                 map.put(bean.getMaterialsId(), bean);
             }
