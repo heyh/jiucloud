@@ -109,7 +109,7 @@
             "<td style='text-align:right;'><input type='text' class='layui-input' style='text-align: right;margin-bottom:0px;width: 50px; ' value=' " + count + " '></td>" +
             "<td style='text-align:right;'><input type='text' class='layui-input' style='text-align: right;margin-bottom:0px;width: 50px; ' ></td>" +
             "<td style='text-align:right;'><input type='text' class='layui-input' style='text-align: right;margin-bottom:0px;width: 50px; ' ></td>" +
-            "<td style='text-align:center;'>" +  + "</td>" +
+ 			"<td style='text-align:center; '><button class='layui-btn  layui-btn-xs layui-btn-normal' onclick='chooseSupplier(" + checkedId + ")'><i class='layui-icon'></i>选择</button></td>" +
             "<td style='text-align:center; '><button class='layui-btn  layui-btn-xs layui-btn-normal' onclick='del(" + checkedId + ")'><i class='layui-icon'></i>删除</button></td>";
         document.getElementById("monthPlanTabBody").appendChild(trObj);
     }
@@ -249,26 +249,27 @@
 <!--<script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>-->
 <%--<![endif]-->--%>
 
-<div class="layui-container">
-	<div class="layui-row">
-		<div class="layui-col-xs6">
+<div class="container-fluid">
+	<div class="row-fluid">
+		<div class="span5">
 			<blockquote class="layui-elem-quote" style="height: 25px">
 				<a style="font-size:16px;">材料总体计划</a>
 			</blockquote>
 
-			<table class="table_style table table-striped table-bordered table-hover table-condensed" id="overallPlanTable">
+			<table class="table_style table table-striped table-bordered table-hover table-condensed"
+				   id="overallPlanTable">
 				<thead>
 				<tr>
-					<th style="text-align:center; ">序号</th>
+					<th style="text-align:center; width: 25px;">序号</th>
 					<th style="display: none; ">项目ID</th>
 					<th style="display: none;">计划ID</th>
 					<th style="display: none; ">材料ID</th>
 					<th style="text-align:center; ">材料名称</th>
-					<th style="text-align:center; ">规格型号</th>
-					<th style="text-align:center; ">计划数量</th>
-					<th style="text-align:center; ">计划剩余数量</th>
-					<th style="text-align:center; ">单位</th>
-					<th style="text-align:center; ">选择</th>
+					<th style="text-align:center; width: 30px;">规格型号</th>
+					<th style="text-align:center; width: 30px;">计划</th>
+					<th style="text-align:center; width: 30px;">剩余</th>
+					<th style="text-align:center; width: 25px;">单位</th>
+					<th style="text-align:center; width: 25px;">选择</th>
 				</tr>
 				</thead>
 				<tbody id="overallPlanTabBody">
@@ -276,7 +277,7 @@
 			</table>
 		</div>
 
-		<div class="layui-col-xs6">
+		<div class="span7">
 			<form class="form-horizontal" name="form" id="form" method="post" enctype="multipart/form-data" role="form">
 				<input type="hidden" id="projectId" name="projectId" value="${proId}"/>
 				<blockquote class="layui-elem-quote" style="text-align: center;height: 25px">
@@ -285,18 +286,18 @@
 				<table class="table_style table table-striped table-bordered table-hover table-condensed" id="monthPlanTable">
 					<thead>
 					<tr>
-						<th style="text-align:center; ">序号</th>
+						<th style="text-align:center; width: 25px;">序号</th>
 						<th style="display: none; ">项目ID</th>
 						<th style="display: none;">计划ID</th>
 						<th style="display: none; ">材料ID</th>
 						<th style="text-align:center; ">材料名称</th>
 						<th style="text-align:center; ">规格型号</th>
-						<th style="text-align:center; ">数量</th>
-						<th style="text-align:center; ">单位</th>
-						<th style="text-align:center; ">单价</th>
+						<th style="text-align:center; width: 25px;">单位</th>
+						<th style="text-align:center; width: 25px;">数量</th>
+						<th style="text-align:center;  width: 25px;">单价</th>
 						<th style="text-align:center; ">总价</th>
 						<th style="text-align:center; ">供应商</th>
-						<th style="text-align:center; ">操作</th>
+						<th style="text-align:center;  width: 25px;">操作</th>
 					</tr>
 					</thead>
 					<tbody id="monthPlanTabBody">
@@ -312,6 +313,5 @@
 				</button>
 			</div>
 		</div>
-
 	</div>
 </div>

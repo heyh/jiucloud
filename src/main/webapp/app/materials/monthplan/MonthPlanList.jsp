@@ -115,7 +115,7 @@
             parent.$
                 .modalDialog({
                     title: '新增采购计划',
-                    width: 1200,
+                    width: 1300,
                     height: 600,
                     href: '${pageContext.request.contextPath}/monthPlanController/securi_toAddMonthPlan?proId=' + selProId + '&proName=' + selProText,
 
