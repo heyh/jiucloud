@@ -144,11 +144,32 @@
             });
         }
 
+        function delOverallPlanFun(overallplanId) {
+            layer.confirm('确定删除当前材料计划?', {
+                    btn: ['确定', '取消']
+                }, function () {
+                    $.ajax({
+                        url: '${pageContext.request.contextPath}/overallPlanController/securi_delOverallPlan?overallPlanId=' + overallplanId,
+                        type: 'post',
+                        dataType: 'json',
+                        contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                        success: function (data) {
+                            if (data.success) {
+                                changeProjectId();
+                                layer.msg(data.msg);
+                            }
+                        }
+                    });
+                },
+                function () {
+                });
+        }
+
         function detailFun(overallplanId) {
             $('#overallPlanDetailsTable').show();
 
             document.getElementById("overallPlanDetailsTabBody").innerHTML = '';
-            $.getJSON('${pageContext.request.contextPath}/overallPlanController/securi_overallPlanDetailsList?overallPlanId=' + overallplanId , function (data) {
+            $.getJSON('${pageContext.request.contextPath}/overallPlanController/securi_overallPlanDetailsList?overallPlanId=' + overallplanId, function (data) {
                 if (data.length > 0) {
                     for (var i in data) {
                         var row = data[i];
@@ -160,33 +181,35 @@
                             "<td>" + row.mc + "</td>" +
                             "<td>" + row.specifications + "</td>" +
                             "<td>" + row.count + "</td>" +
-                            "<td>" + row.dw + "</td>";
+                            "<td>" + row.dw + "</td>" +
+                            "<td style='text-align:center; '>" +
+                                "<input type='button' class='layui-btn  layui-btn-xs layui-btn-normal' onclick='delOverallPlanDetailsFun(" + overallplanId + "," + row.id + ")' value='删除'/>" +
+                            "</td>";
                         document.getElementById("overallPlanDetailsTabBody").appendChild(trObj);
                     }
                 }
             });
         }
 
-        function delOverallPlanFun(overallplanId) {
-            layer.confirm('确定删除当前材料计划？', {
-                btn: ['确定','取消']
-            }, function(){
-                $.ajax({
-                    url: '${pageContext.request.contextPath}/overallPlanController/securi_delOverallPlan?overallPlanId=' + overallplanId,
-                    type: 'post',
-                    dataType: 'json',
-                    contentType: "application/x-www-form-urlencoded; charset=utf-8",
-                    success: function (data) {
-                        if (data.success) {
-                            changeProjectId();
-                            layer.msg(data.msg);
+        function delOverallPlanDetailsFun(overallplanId, overallPlanDetailsId) {
+            layer.confirm('确定删除当前材料计划明细?', {
+                    btn: ['确定', '取消']
+                }, function () {
+                    $.ajax({
+                        url: '${pageContext.request.contextPath}/overallPlanController/securi_delOverallPlanDetails?overallPlanDetailsId=' + overallPlanDetailsId,
+                        type: 'post',
+                        dataType: 'json',
+                        contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                        success: function (data) {
+                            if (data.success) {
+                                detailFun(overallplanId);
+                                layer.msg(data.msg);
+                            }
                         }
-                    }
+                    });
+                },
+                function () {
                 });
-            }, function(){
-            });
-
-
         }
     </script>
 
@@ -244,6 +267,7 @@
                     <th style="text-align:center; ">规格型号</th>
                     <th style="text-align:center; ">数量</th>
                     <th style="text-align:center; ">单位</th>
+                    <th style="text-align:center; ">操作</th>
                 </tr>
                 </thead>
                 <tbody id="overallPlanDetailsTabBody">

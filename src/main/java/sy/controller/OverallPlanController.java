@@ -153,4 +153,25 @@ public class OverallPlanController {
         return j;
     }
 
+    @RequestMapping("/securi_delOverallPlanDetails")
+    @ResponseBody
+    public Json delOverallPlanDetails(HttpServletRequest request) {
+        SessionInfo sessionInfo = (SessionInfo) request.getSession().getAttribute(sy.util.ConfigUtil.getSessionInfoName());
+        String uid = sessionInfo.getId();
+        String cid = sessionInfo.getCompid();
+        String overallPlanDetailsId = StringUtil.trimToEmpty(request.getParameter("overallPlanDetailsId"));
+
+        overallPlanService.delOverallPlanDetails(overallPlanDetailsId);
+
+        Json j = new Json();
+        try {
+            j.setMsg("删除成功！");
+            j.setSuccess(true);
+        } catch (Exception ex) {
+            j.setMsg("删除失败");
+            j.setSuccess(false);
+        }
+        return j;
+    }
+
 }

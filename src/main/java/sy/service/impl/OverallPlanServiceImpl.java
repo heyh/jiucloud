@@ -106,8 +106,8 @@ public class OverallPlanServiceImpl implements OverallPlanServiceI {
         if (overallPlanDetailsList != null && overallPlanDetailsList.size()>0) {
             for (OverallPlanDetails overallPlanDetails : overallPlanDetailsList) {
                 overallPlanDetailsBean = new OverallPlanDetailsBean();
+                overallPlanDetailsBean.setId(overallPlanDetails.getId());
                 overallPlanDetailsBean.setMaterialsId(overallPlanDetails.getMaterialsId());
-
                 Materials materials = materialsService.findById(Integer.parseInt(overallPlanDetails.getMaterialsId()));
                 if (materials != null) {
                     overallPlanDetailsBean.setMc(materials.getMc());
@@ -186,7 +186,7 @@ public class OverallPlanServiceImpl implements OverallPlanServiceI {
     }
 
     @Override
-    public void update(OverallPlan info) {
+    public void updateOverallPlan(OverallPlan info) {
         OverallPlan overallPlan = overallPlanDao.get(OverallPlan.class, info.getId());
         BeanUtils.copyProperties(info, overallPlan);
     }
@@ -198,13 +198,34 @@ public class OverallPlanServiceImpl implements OverallPlanServiceI {
                 OverallPlan overallPlan = overallPlanDao.get(" FROM OverallPlan where 1=1 and id = " + overallPlanId);
                 if (overallPlan != null) {
                     overallPlan.setIsDelete("1");
-                    update(overallPlan);
+                    updateOverallPlan(overallPlan);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
 
+    }
+
+    @Override
+    public void updateOverallPlanDetails(OverallPlanDetails info) {
+        OverallPlanDetails overallPlanDetails = overallPlanDetailsDao.get(OverallPlanDetails.class, info.getId());
+        BeanUtils.copyProperties(info, overallPlanDetails);
+    }
+
+    @Override
+    public void delOverallPlanDetails(String overallPlanDetailsId) {
+        if (overallPlanDetailsId != null) {
+            try {
+                OverallPlanDetails overallPlanDetails = overallPlanDetailsDao.get(" FROM OverallPlanDetails where 1=1 and id = " + overallPlanDetailsId);
+                if (overallPlanDetails != null) {
+                    overallPlanDetails.setIsDelete("1");
+                    updateOverallPlanDetails(overallPlanDetails);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     private List<OverallPlanDetailsBean> mergeList(List<OverallPlanDetailsBean> list) {
