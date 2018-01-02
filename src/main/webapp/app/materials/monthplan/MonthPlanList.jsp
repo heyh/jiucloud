@@ -147,10 +147,44 @@
                             "<td style='text-align:center;'>" + _id + "</td>" +
                             "<td>" + row.mc + "</td>" +
                             "<td>" + row.specifications + "</td>" +
-                            "<td>" + row.count + "</td>" +
                             "<td>" + row.dw + "</td>" +
-                            "<td>" + row.supplier + "</td>";
+                            "<td>" + row.count + "</td>" +
+                            "<td style='text-align:right; '>" + row.price + "</td>" +
+                            "<td style='text-align:right; '>" + row.total + "</td>" +
+                            "<td>" + row.supplierName + "</td>" +
+                            "<td style='text-align:center; '><input type='button' class='layui-btn  layui-btn-xs layui-btn-normal' onclick='supplierDetail(" + row.supplierId + ")' value='详情'></input></td>";
+
                         document.getElementById("monthPlanDetailsTabBody").appendChild(trObj);
+                    }
+                }
+            });
+        }
+
+        function supplierDetail(supplierId) {
+            layer.open({
+                type: 1,
+                title: '供应商信息',
+                closeBtn: 1,
+                shadeClose: true,
+                area: ['300px', '220px'],
+                content: $('#supplierDetailDiv')
+            });
+
+            $.ajax({
+                url: '${pageContext.request.contextPath}/supplierController/securi_detail?supplierId=' + supplierId,
+                type: 'post',
+                dataType: 'json',
+                contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                success: function (data) {
+
+                    if (data.success) {
+                        debugger;
+                        var supplier = data.obj;
+                        $('#supplierName').html(supplier.name);
+                        $('#supplierTel').html(supplier.tel);
+                        $('#supplierAddr').html(supplier.addr);
+                        $('#supplierLinkMan').html(supplier.linkman);
+                        $('#supplierLinkPhone').html(supplier.linkphone);
                     }
                 }
             });
@@ -224,9 +258,11 @@
                     <th style="text-align:center; ">序号</th>
                     <th style="text-align:center; ">材料名称</th>
                     <th style="text-align:center; ">规格型号</th>
-                    <th style="text-align:center; ">数量</th>
                     <th style="text-align:center; ">单位</th>
-                    <th style="text-align:center; ">供应商</th>
+                    <th style="text-align:center; ">数量</th>
+                    <th style="text-align:center; ">单价</th>
+                    <th style="text-align:center; ">总价</th>
+                    <th colspan="2" style="text-align:center; ">供应商</th>
                 </tr>
                 </thead>
                 <tbody id="monthPlanDetailsTabBody">
@@ -236,4 +272,28 @@
     </div>
 </div>
 </body>
+<div id="supplierDetailDiv" style="display: none;">
+    <table class="table_style table table-striped table-bordered table-hover table-condensed">
+        <tr>
+            <td style="font-weight: bold" width="40%">供应商名称</td>
+            <td><span id="supplierName"></span></td>
+        </tr>
+        <tr>
+            <td style="font-weight: bold" width="40%">供应商电话</td>
+            <td><span id="supplierTel"></span></td>
+        </tr>
+        <tr>
+            <td style="font-weight: bold" width="40%">供应商地址</td>
+            <td><span id="supplierAddr"></span></td>
+        </tr>
+        <tr>
+            <td style="font-weight: bold" width="40%">联系人</td>
+            <td><span id="supplierLinkMan"></span></td>
+        </tr>
+        <tr>
+            <td style="font-weight: bold" width="40%">联系电话</td>
+            <td><span id="supplierLinkPhone"></span></td>
+        </tr>
+    </table>
+</div>
 </html>

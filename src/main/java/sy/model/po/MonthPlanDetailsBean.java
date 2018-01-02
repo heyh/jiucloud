@@ -17,7 +17,8 @@ public class MonthPlanDetailsBean {
     private String price;
     private String total;
     private String dw;
-    private String supplier;
+    private String supplierId;
+    private String supplierName;
     private String isDelete;
     private Date createTime;
 
@@ -93,12 +94,20 @@ public class MonthPlanDetailsBean {
         this.dw = dw;
     }
 
-    public String getSupplier() {
-        return supplier;
+    public String getSupplierId() {
+        return supplierId;
     }
 
-    public void setSupplier(String supplier) {
-        this.supplier = supplier;
+    public void setSupplierId(String supplierId) {
+        this.supplierId = supplierId;
+    }
+
+    public String getSupplierName() {
+        return supplierName;
+    }
+
+    public void setSupplierName(String supplierName) {
+        this.supplierName = supplierName;
     }
 
     public String getIsDelete() {

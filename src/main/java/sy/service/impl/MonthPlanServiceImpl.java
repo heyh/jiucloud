@@ -5,10 +5,7 @@ import org.springframework.stereotype.Service;
 import sy.dao.MonthPlanDaoI;
 import sy.dao.MonthPlanDetailsDaoI;
 import sy.model.po.*;
-import sy.service.MaterialsServiceI;
-import sy.service.MonthPlanServiceI;
-import sy.service.ProjectServiceI;
-import sy.service.UserServiceI;
+import sy.service.*;
 import sy.util.DateKit;
 import sy.util.StringUtil;
 
@@ -38,6 +35,9 @@ public class MonthPlanServiceImpl implements MonthPlanServiceI {
 
     @Autowired
     private MaterialsServiceI materialsService;
+
+    @Autowired
+    private SupplierServiceI supplierService;
 
     @Override
     public List<MonthPlanBean> getMonthPlanList(String projectId, String startDate, String endDate) {
@@ -133,8 +133,19 @@ public class MonthPlanServiceImpl implements MonthPlanServiceI {
                 }
 
                 monthPlanDetailsBean.setCount(monthPlanDetails.getCount());
-                monthPlanDetailsBean.setSupplier("");
+                monthPlanDetailsBean.setPrice(monthPlanDetails.getPrice());
+                monthPlanDetailsBean.setTotal(monthPlanDetails.getTotal());
 
+                if (!StringUtil.trimToEmpty(monthPlanDetails.getSupplier()).equals("")) {
+                    monthPlanDetailsBean.setSupplierId(StringUtil.trimToEmpty(monthPlanDetails.getSupplier()));
+                    Supplier supplierInfo = supplierService.detail(StringUtil.trimToEmpty(monthPlanDetails.getSupplier()));
+                    if (supplierInfo != null) {
+                        monthPlanDetailsBean.setSupplierName(StringUtil.trimToEmpty(supplierInfo.getName()));
+                    }
+                } else {
+                    monthPlanDetailsBean.setSupplierId("");
+                    monthPlanDetailsBean.setSupplierName("");
+                }
                 monthPlanDetailsBeanList.add(monthPlanDetailsBean);
 
             }

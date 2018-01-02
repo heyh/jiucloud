@@ -134,4 +134,15 @@ public class SupplierController {
         }
         return json;
     }
+
+    @RequestMapping("/securi_detail")
+    @ResponseBody
+    public Json detail(String supplierId) {
+        Json json = new Json();
+        Supplier supplier = supplierService.detail(supplierId);
+        json.setObj(supplier);
+        json.setSuccess(true);
+        return json;
+    }
+
 }
