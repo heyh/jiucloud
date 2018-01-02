@@ -1,5 +1,6 @@
 package sy.service.impl;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sy.dao.OverallPlanDaoI;
@@ -182,6 +183,28 @@ public class OverallPlanServiceImpl implements OverallPlanServiceI {
             }
         }
         return overallPlanDetailsBeanAll;
+    }
+
+    @Override
+    public void update(OverallPlan info) {
+        OverallPlan overallPlan = overallPlanDao.get(OverallPlan.class, info.getId());
+        BeanUtils.copyProperties(info, overallPlan);
+    }
+
+    @Override
+    public void delOverallPlan(String overallPlanId) {
+        if (overallPlanId != null) {
+            try {
+                OverallPlan overallPlan = overallPlanDao.get(" FROM OverallPlan where 1=1 and id = " + overallPlanId);
+                if (overallPlan != null) {
+                    overallPlan.setIsDelete("1");
+                    update(overallPlan);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
     }
 
     private List<OverallPlanDetailsBean> mergeList(List<OverallPlanDetailsBean> list) {

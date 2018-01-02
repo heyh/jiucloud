@@ -23,6 +23,9 @@ public interface OverallPlanServiceI {
 
     public void addOverallPlanDetails(OverallPlanDetails overallPlanDetails);
 
-
     List<OverallPlanDetailsBean> overallPlanDetailsAll(String projectId);
+
+    void update(OverallPlan info);
+
+    void delOverallPlan(String overallPlanId);
 }

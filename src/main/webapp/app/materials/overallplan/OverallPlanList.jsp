@@ -78,35 +78,6 @@
             }
         });
 
-        function overallPlan(projectId) {
-            document.getElementById("overallPlanTabBody").innerHTML = '';
-            $.getJSON('${pageContext.request.contextPath}/overallPlanController/securi_overallPlanList?projectId=' + projectId, function (data) {
-                if (data.length > 0) {
-                    for (var i in data) {
-                        var row = data[i];
-                        var trObj = document.createElement("tr");
-                        var _id = document.getElementById("overallPlanTable").rows.length;
-                        trObj.id = "tr_" + _id;
-                        trObj.innerHTML =
-                            "<td style='text-align:center;'>" + _id + "</td>" +
-                            "<td>" + row.projectName + "</td>" +
-                            "<td style='display: none;'>" + row.projectId + "</td>" +
-                            "<td style='display: none;'>" + row.id + "</td>" +
-                            "<td>" + row.uname + "</td>" +
-                            "<td>" + row.createTime + "</td>" +
-                            "<td>" + row.needApproved + "</td>" +
-                            "<td>" + row.approvedOption + "</td>" +
-                            "<td>" + row.currentApprovedUser + "</td>" +
-                            "<td style='text-align:center; '><button class='layui-btn  layui-btn-xs layui-btn-normal' onclick='detailFun(" + row.id + ")'><i class='layui-icon'></i>查看详情</button></td>";
-                        document.getElementById("overallPlanTabBody").appendChild(trObj);
-                    }
-                }
-                var addObj = document.createElement("tr");
-                addObj.innerHTML = "<td colspan='100' style='text-align:right;'><button onclick='addFun();' class='layui-btn layui-btn-normal layui-btn-radius'>添加计划</button></td>";
-                document.getElementById("overallPlanTabBody").appendChild(addObj);
-            });
-        }
-
         function changeProjectId() {
             var projectId = $('#proId').val();
             overallPlan(projectId)
@@ -141,6 +112,38 @@
                 });
         }
 
+        function overallPlan(projectId) {
+            document.getElementById("overallPlanTabBody").innerHTML = '';
+            $.getJSON('${pageContext.request.contextPath}/overallPlanController/securi_overallPlanList?projectId=' + projectId, function (data) {
+                if (data.length > 0) {
+                    for (var i in data) {
+                        var row = data[i];
+                        var trObj = document.createElement("tr");
+                        var _id = document.getElementById("overallPlanTable").rows.length;
+                        trObj.id = "tr_" + _id;
+                        trObj.innerHTML =
+                            "<td style='text-align:center;'>" + _id + "</td>" +
+                            "<td>" + row.projectName + "</td>" +
+                            "<td style='display: none;'>" + row.projectId + "</td>" +
+                            "<td style='display: none;'>" + row.id + "</td>" +
+                            "<td>" + row.uname + "</td>" +
+                            "<td>" + row.createTime + "</td>" +
+                            "<td>" + row.needApproved + "</td>" +
+                            "<td>" + row.approvedOption + "</td>" +
+                            "<td>" + row.currentApprovedUser + "</td>" +
+                            "<td style='text-align:center; '>" +
+                                "<input type='button' class='layui-btn  layui-btn-xs layui-btn-normal' onclick='detailFun(" + row.id + ")' value='详情'/>" +
+                                "<input type='button' class='layui-btn  layui-btn-xs layui-btn-normal' onclick='delOverallPlanFun(" + row.id + ")' value='删除'/>" +
+                            "</td>";
+                        document.getElementById("overallPlanTabBody").appendChild(trObj);
+                    }
+                }
+                var addObj = document.createElement("tr");
+                addObj.innerHTML = "<td colspan='100' style='text-align:right;'><button onclick='addFun();' class='layui-btn layui-btn-normal layui-btn-radius'>添加计划</button></td>";
+                document.getElementById("overallPlanTabBody").appendChild(addObj);
+            });
+        }
+
         function detailFun(overallplanId) {
             $('#overallPlanDetailsTable').show();
 
@@ -164,6 +167,27 @@
             });
         }
 
+        function delOverallPlanFun(overallplanId) {
+            layer.confirm('确定删除当前材料计划？', {
+                btn: ['确定','取消']
+            }, function(){
+                $.ajax({
+                    url: '${pageContext.request.contextPath}/overallPlanController/securi_delOverallPlan?overallPlanId=' + overallplanId,
+                    type: 'post',
+                    dataType: 'json',
+                    contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                    success: function (data) {
+                        if (data.success) {
+                            changeProjectId();
+                            layer.msg(data.msg);
+                        }
+                    }
+                });
+            }, function(){
+            });
+
+
+        }
     </script>
 
 </head>
