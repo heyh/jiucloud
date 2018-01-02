@@ -95,7 +95,7 @@
         var count = row.cells[6].innerText;
         var remainCount = row.cells[7].innerText;
         var dw = row.cells[8].innerText;
-
+		var monthPlanTableLength = document.getElementById("monthPlanTable").rows.length;
         var trObj = document.createElement("tr");
         trObj.id = "tr_monthplan_" + checkedId;
         trObj.innerHTML =
@@ -109,9 +109,27 @@
             "<td style='text-align:right;'><input type='text' class='layui-input' style='text-align: right;margin-bottom:0px;width: 50px; ' value=' " + count + " '></td>" +
             "<td style='text-align:right;'><input type='text' class='layui-input' style='text-align: right;margin-bottom:0px;width: 50px; ' ></td>" +
             "<td style='text-align:right;'><input type='text' class='layui-input' style='text-align: right;margin-bottom:0px;width: 50px; ' ></td>" +
- 			"<td style='text-align:center; '><input type='button' class='layui-btn  layui-btn-xs layui-btn-normal' onclick='chooseSupplier(" + checkedId + ")' value='选择'></input></td>" +
+ 			"<td style='text-align:center; ' onmouseover='overShow(" + monthPlanTableLength + ")' onmouseout='outHide(" + monthPlanTableLength + ")' ><span id='span_" + monthPlanTableLength + "'></span><input id='btn_" + monthPlanTableLength + "' type='button' class='layui-btn  layui-btn-xs layui-btn-normal' onclick='supplierPage(" + monthPlanTableLength + ")' value='选择'></input></td>" +
+            "<td style='display: none;'></td>" +
             "<td style='text-align:center; '><input type='button' class='layui-btn  layui-btn-xs layui-btn-normal' onclick='del(" + checkedId + ")' value='删除'></input></td>";
         document.getElementById("monthPlanTabBody").appendChild(trObj);
+    }
+
+    function overShow(checkedId) {
+        var supplierName = document.getElementById("monthPlanTable").rows[checkedId].cells[10].firstElementChild.innerText;
+		$('#' + "span_" + checkedId).hide();
+		$('#' + "btn_" + checkedId).show();
+
+    }
+
+    function outHide(checkedId) {
+        var supplierName = document.getElementById("monthPlanTable").rows[checkedId].cells[10].firstElementChild.innerText;
+        if(supplierName == undefined || supplierName == 'undefined' || supplierName == '') {
+            $('#' + "btn_" + checkedId).show();
+        } else {
+            $('#' + "span_" + checkedId).show();
+            $('#' + "btn_" + checkedId).hide();
+        }
     }
 
     function del(_id) {
@@ -129,9 +147,72 @@
         }
     }
 
-    function chooseSupplier(_id) {
-        alert(1)
-		return false;
+    function supplierPage(_id) {
+
+        var supplierHtml = '';
+        supplierHtml += '<table class="table_style table table-striped table-bordered table-hover table-condensed" id="supplierTable">';
+        supplierHtml += '	<thead>';
+        supplierHtml += '   	<tr>';
+        supplierHtml += '   		<th style="text-align:center;">序号</th>';
+        supplierHtml += '   		<th style="text-align:center;">厂家名称</th>';
+        supplierHtml += '   		<th style="text-align:center;">企业电话</th>';
+        supplierHtml += '   		<th style="text-align:center;">企业地址</th>';
+        supplierHtml += '   		<th style="text-align:center;">联系人</th>';
+        supplierHtml += '   		<th style="text-align:center;">联系电话</th>';
+        supplierHtml += '   		<th style="text-align:center;">选择</th>';
+        supplierHtml += '   	</tr>';
+        supplierHtml += '	</thead>';
+        supplierHtml += '	<tbody id="supplierTabBody">';
+        $.ajax({
+            url: '${pageContext.request.contextPath}/supplierController/securi_supplierList',
+            type: 'post',
+            dataType: 'json',
+            contentType: "application/x-www-form-urlencoded; charset=utf-8",
+            success: function (data) {
+                debugger
+                if (data.success) {
+                    var supplierList = data.obj;
+                    for (var i in supplierList) {
+
+                        var trObj = document.createElement("tr");
+                        trObj.id = "tr_supplier_" + i;
+                        trObj.innerHTML =
+                            '<td style="text-align:center;">' + i + 1 + '</td>' +
+                            '<td style="display: none;">' + supplierList[i].id + '</td>' +
+                            '<td>' + supplierList[i].name + '</td>' +
+                            '<td>' + supplierList[i].tel + '</td>' +
+                            '<td>' + supplierList[i].addr + '</td>' +
+                            '<td>' + supplierList[i].linkman + '</td>' +
+                            '<td>' + supplierList[i].linkphone + '</td>' +
+                            "<td style='text-align:center; '>" +
+                            "<input type='radio' name='radio' onclick='chooseSupplier(" + JSON.stringify(supplierList[i]) + "," + _id + ")' />" +
+                            "</td>";
+                        document.getElementById("supplierTabBody").appendChild(trObj);
+                    }
+                }
+            }
+        });
+
+        layer.open({
+            type: 1,
+            title: '供应商',
+            content: supplierHtml,
+            btn: '确定',
+            btnAlign: 'c',
+            shade: 0.3,
+            area: ['800px', '700px'],
+            yes: function () {
+
+            }
+        });
+    }
+
+    function chooseSupplier(supplier, _id) {
+        var tableObj = document.getElementById("monthPlanTable");
+        document.getElementById("monthPlanTable").rows[_id].cells[10].firstElementChild.innerText = supplier.name;
+        $('#' + "span_" + _id).show();
+        $('#' + "btn_" + _id).hide();
+        tableObj.rows[_id].cells[11].innerText = supplier.id;
     }
 
     function geneMonthPlan() {
@@ -144,7 +225,7 @@
             var _count = tableObj.rows[i].cells[7].firstElementChild.value;
             var _price = tableObj.rows[i].cells[8].firstElementChild.value;
             var _total = tableObj.rows[i].cells[9].firstElementChild.value;
-            var _supplier = tableObj.rows[i].cells[10].innerText;
+            var _supplier = tableObj.rows[i].cells[11].innerText;
 
             rowInfo.materialsId = _materialsId;
             rowInfo.count = _count;
