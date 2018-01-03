@@ -26,4 +26,8 @@ public interface MonthPlanServiceI {
     void updateMonthPlan(MonthPlan info);
 
     void delMonthPlan(String monthplanId);
+
+    void updateMonthPlanDetails(MonthPlanDetails info);
+
+    void delMonthPlanDetails(String monthPlanDetailsId);
 }

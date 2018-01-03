@@ -175,8 +175,10 @@
                             "<td style='text-align:right; '>" + row.price + "</td>" +
                             "<td style='text-align:right; '>" + row.total + "</td>" +
                             "<td>" + row.supplierName + "</td>" +
-                            "<td style='text-align:center; '><input type='button' class='layui-btn  layui-btn-xs layui-btn-normal' onclick='supplierDetail(" + row.supplierId + ")' value='详情'></input></td>";
-
+                            "<td style='text-align:center; '><input type='button' class='layui-btn  layui-btn-xs layui-btn-normal' onclick='supplierDetail(" + row.supplierId + ")' value='详情'/></td>" +
+                            "<td style='text-align:center; '>" +
+                            "<input type='button' class='layui-btn  layui-btn-xs layui-btn-normal' onclick='delMonthPlanDetailsFun(" + monthplanId + "," + row.id + ")' value='删除'/>" +
+                            "</td>";
                         document.getElementById("monthPlanDetailsTabBody").appendChild(trObj);
                     }
                 }
@@ -211,6 +213,27 @@
                     }
                 }
             });
+        }
+
+        function delMonthPlanDetailsFun(monthplanId, monthPlanDetailsId) {
+            layer.confirm('确定删除当前采购明细?', {
+                    btn: ['确定', '取消']
+                }, function () {
+                    $.ajax({
+                        url: '${pageContext.request.contextPath}/monthPlanController/securi_delMonthPlanDetails?monthPlanDetailsId=' + monthPlanDetailsId,
+                        type: 'post',
+                        dataType: 'json',
+                        contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                        success: function (data) {
+                            if (data.success) {
+                                detailFun(monthplanId)
+                                layer.msg(data.msg);
+                            }
+                        }
+                    });
+                },
+                function () {
+                });
         }
 
     </script>
@@ -286,6 +309,7 @@
                     <th style="text-align:center; ">单价</th>
                     <th style="text-align:center; ">总价</th>
                     <th colspan="2" style="text-align:center; ">供应商</th>
+                    <th style="text-align:center; ">操作</th>
                 </tr>
                 </thead>
                 <tbody id="monthPlanDetailsTabBody">

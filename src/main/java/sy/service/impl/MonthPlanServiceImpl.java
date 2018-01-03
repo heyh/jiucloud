@@ -124,6 +124,7 @@ public class MonthPlanServiceImpl implements MonthPlanServiceI {
         if (monthPlanDetailsList != null && monthPlanDetailsList.size()>0) {
             for (MonthPlanDetails monthPlanDetails : monthPlanDetailsList) {
                 monthPlanDetailsBean = new MonthPlanDetailsBean();
+                monthPlanDetailsBean.setId(monthPlanDetails.getId());
                 monthPlanDetailsBean.setMaterialsId(monthPlanDetails.getMaterialsId());
 
                 Materials materials = materialsService.findById(Integer.parseInt(monthPlanDetails.getMaterialsId()));
@@ -173,6 +174,7 @@ public class MonthPlanServiceImpl implements MonthPlanServiceI {
                 if (monthPlanDetailsList != null && monthPlanDetailsList.size() > 0) {
                     for (MonthPlanDetails monthPlanDetails : monthPlanDetailsList) {
                         monthPlanDetailsBean = new MonthPlanDetailsBean();
+                        monthPlanDetailsBean.setId(monthPlanDetails.getId());
                         monthPlanDetailsBean.setMaterialsId(monthPlanDetails.getMaterialsId());
                         monthPlanDetailsBean.setCount(monthPlanDetails.getCount());
                         monthPlanDetailsBeanList.add(monthPlanDetailsBean);
@@ -222,6 +224,27 @@ public class MonthPlanServiceImpl implements MonthPlanServiceI {
                 if (monthPlan != null) {
                     monthPlan.setIsDelete("1");
                     updateMonthPlan(monthPlan);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public void updateMonthPlanDetails(MonthPlanDetails info) {
+        MonthPlanDetails monthPlanDetails = monthPlanDetailsDao.get(MonthPlanDetails.class, info.getId());
+        BeanUtils.copyProperties(info, monthPlanDetails);
+    }
+
+    @Override
+    public void delMonthPlanDetails(String monthPlanDetailsId) {
+        if (monthPlanDetailsId != null) {
+            try {
+                MonthPlanDetails monthPlanDetails = monthPlanDetailsDao.get(" FROM MonthPlanDetails where 1=1 and id = " + monthPlanDetailsId);
+                if (monthPlanDetails != null) {
+                    monthPlanDetails.setIsDelete("1");
+                    updateMonthPlanDetails(monthPlanDetails);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
