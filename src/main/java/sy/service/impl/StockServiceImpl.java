@@ -1,5 +1,6 @@
 package sy.service.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -50,6 +51,11 @@ public class StockServiceImpl implements StockServiceI{
         DataGrid dg = new DataGrid();
         Map<String, Object> params = new HashMap<String, Object>();
         String hql = "from Stock s where isDelete='0' ";
+
+        if (ugroup != null && ugroup.size() > 0) {
+            String uids = StringUtils.join(ugroup, ",");
+            hql += " and uid in (" + uids + ")";
+        }
 
         if (!projectId.equals("")) {
             hql += " and projectId=:projectId ";
