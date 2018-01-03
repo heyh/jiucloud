@@ -97,8 +97,11 @@
                             "<td>" + row.needApproved + "</td>" +
                             "<td>" + row.approvedOption + "</td>" +
                             "<td>" + row.currentApprovedUser + "</td>" +
-                            "<td style='text-align:center; '><button class='layui-btn  layui-btn-xs layui-btn-normal' onclick='detailFun(" + row.id + ")'><i class='layui-icon'></i>查看详情</button></td>";
-                        document.getElementById("monthPlanTabBody").appendChild(trObj);
+                            "<td style='text-align:center; '>" +
+                                "<input type='button' class='layui-btn  layui-btn-xs layui-btn-normal' onclick='detailFun(" + row.id + ")' value='明细'/>" +
+                                "<input type='button' class='layui-btn  layui-btn-xs layui-btn-normal' onclick='delMonthPlanFun(" + row.id + ")' value='删除'/>" +
+                            "</td>";
+                            document.getElementById("monthPlanTabBody").appendChild(trObj);
                     }
                 }
                 var addObj = document.createElement("tr");
@@ -132,6 +135,26 @@
                 });
         }
 
+        function delMonthPlanFun(monthplanId) {
+            layer.confirm('确定删除当前采购计划?', {
+                    btn: ['确定', '取消']
+                }, function () {
+                    $.ajax({
+                        url: '${pageContext.request.contextPath}/monthPlanController/securi_delMonthPlan?monthplanId=' + monthplanId,
+                        type: 'post',
+                        dataType: 'json',
+                        contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                        success: function (data) {
+                            if (data.success) {
+                                searchFun();
+                                layer.msg(data.msg);
+                            }
+                        }
+                    });
+                },
+                function () {
+                });
+        }
         function detailFun(monthplanId) {
             $('#monthPlanDetailsTable').show();
 

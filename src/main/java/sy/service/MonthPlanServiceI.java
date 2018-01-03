@@ -12,7 +12,9 @@ import java.util.List;
  */
 public interface MonthPlanServiceI {
     List<MonthPlanBean> getMonthPlanList(String projectId, String startDate, String endDate);
+
     List<MonthPlanDetailsBean> getMonthPlanDetailsBeanList(String monthPlanId);
+
     List<MonthPlanDetailsBean> getMonthPlanDetailsMerge(String projectId);
 
     void addMonthPlan(MonthPlan monthPlan);
@@ -20,4 +22,8 @@ public interface MonthPlanServiceI {
     int getId(MonthPlan monthPlan);
 
     void addMonthPlanDetails(MonthPlanDetails monthPlanDetails);
+
+    void updateMonthPlan(MonthPlan info);
+
+    void delMonthPlan(String monthplanId);
 }

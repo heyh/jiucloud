@@ -1,5 +1,6 @@
 package sy.service.impl;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sy.dao.MonthPlanDaoI;
@@ -205,6 +206,27 @@ public class MonthPlanServiceImpl implements MonthPlanServiceI {
     @Override
     public void addMonthPlanDetails(MonthPlanDetails monthPlanDetails) {
         monthPlanDetailsDao.save(monthPlanDetails);
+    }
+
+    @Override
+    public void updateMonthPlan(MonthPlan info) {
+        MonthPlan monthPlan = monthPlanDao.get(MonthPlan.class, info.getId());
+        BeanUtils.copyProperties(info, monthPlan);
+    }
+
+    @Override
+    public void delMonthPlan(String monthplanId) {
+        if (monthplanId != null) {
+            try {
+                MonthPlan monthPlan = monthPlanDao.get(" FROM MonthPlan where 1=1 and id = " + monthplanId);
+                if (monthPlan != null) {
+                    monthPlan.setIsDelete("1");
+                    updateMonthPlan(monthPlan);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
     }
 
 

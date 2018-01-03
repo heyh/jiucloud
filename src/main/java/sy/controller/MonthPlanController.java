@@ -124,4 +124,25 @@ public class MonthPlanController {
         }
         return j;
     }
+
+    @RequestMapping("/securi_delMonthPlan")
+    @ResponseBody
+    public Json delMonthPlan(HttpServletRequest request) {
+        SessionInfo sessionInfo = (SessionInfo) request.getSession().getAttribute(sy.util.ConfigUtil.getSessionInfoName());
+        String uid = sessionInfo.getId();
+        String cid = sessionInfo.getCompid();
+        String monthplanId = StringUtil.trimToEmpty(request.getParameter("monthplanId"));
+
+        monthPlanService.delMonthPlan(monthplanId);
+
+        Json j = new Json();
+        try {
+            j.setMsg("删除成功！");
+            j.setSuccess(true);
+        } catch (Exception ex) {
+            j.setMsg("删除失败");
+            j.setSuccess(false);
+        }
+        return j;
+    }
 }
