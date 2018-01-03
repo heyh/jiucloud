@@ -132,7 +132,7 @@
                             "<td>" + row.approvedOption + "</td>" +
                             "<td>" + row.currentApprovedUser + "</td>" +
                             "<td style='text-align:center; '>" +
-                                "<input type='button' class='layui-btn  layui-btn-xs layui-btn-normal' onclick='detailFun(" + row.id + ")' value='详情'/>" +
+                                "<input type='button' class='layui-btn  layui-btn-xs layui-btn-normal' onclick='detailFun(" + row.id + ")' value='明细'/>" +
                                 "<input type='button' class='layui-btn  layui-btn-xs layui-btn-normal' onclick='delOverallPlanFun(" + row.id + ")' value='删除'/>" +
                             "</td>";
                         document.getElementById("overallPlanTabBody").appendChild(trObj);
