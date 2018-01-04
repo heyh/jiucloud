@@ -748,7 +748,11 @@ public class Api extends BaseController {
                 userList.add(userMap);
             }
         }
-        return new WebResult().ok().set("approveUserList", userList);
+
+        List<String> shenpis = departmentService.getFirstLevelParentDepartmentsByUid(cid, uid);
+        String shenpi = shenpis.size() > 0 ? shenpis.get(0) : "";
+
+        return new WebResult().ok().set("approveUserList", userList).set("shenpi", shenpi);
     }
 
     @RequestMapping("/securi_getAd")
