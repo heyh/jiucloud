@@ -93,7 +93,7 @@
             parent.$
                 .modalDialog({
                     title: '新增计划',
-                    width: 1200,
+                    width: 1300,
                     height: 600,
                     href: encodeURI('${pageContext.request.contextPath}/overallPlanController/securi_toAddOverallPlan?proId=' + selProId + '&proName=' + selProText),
 

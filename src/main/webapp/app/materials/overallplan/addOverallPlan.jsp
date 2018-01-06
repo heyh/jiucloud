@@ -136,7 +136,7 @@
             "<td style='text-align:center;'>" + document.getElementById("overPlanTable").rows.length + "</td>" +
             "<td>" + row.mc + "</td>" +
             "<td>" + row.specifications + "</td>" +
-            "<td style='text-align:center;'><input type='text' class='layui-input' style='margin-bottom:0px;width: 50px'></td>" +
+            "<td style='text-align:center;'><input type='number' class='layui-input' style='margin-bottom:0px;width: 50px;text-align: right'></td>" +
             "<td>" + row.dw + "</td>" +
             "<td style='display: none;'>" + row.id + "</td>" +
             "<td style='text-align:center; '><button class='layui-btn  layui-btn-xs layui-btn-normal' onclick='del(" + row.id + ")'><i class='layui-icon'></i>删除</button></td>";
