@@ -1046,6 +1046,15 @@ public class FieldDataController extends BaseController {
                 userList.add(userMap);
             }
         }
+
+        List<String> shenpis = departmentService.getFirstLevelParentDepartmentsByUid(cid, uid);
+        String shenpi = shenpis.size() > 0 ? shenpis.get(0) : "";
+
+        for (Map<String, Object> user : userList) {
+            if (!shenpi.equals("") && Integer.parseInt(StringUtil.trimToEmpty(user.get("id"))) == Integer.parseInt(shenpi)) {
+                user.put("isSp", true);
+            }
+        }
         json.setObj(userList);
         json.setSuccess(true);
         return json;
@@ -1075,8 +1084,13 @@ public class FieldDataController extends BaseController {
                 userList.add(userMap);
             }
         }
+
+        List<String> shenpis = departmentService.getFirstLevelParentDepartmentsByUid(cid, uid);
+        String shenpi = shenpis.size() > 0 ? shenpis.get(0) : "";
+
         request.setAttribute("id", request.getParameter("id"));
         request.setAttribute("userList", userList);
+        request.setAttribute("shenpi", shenpi);
         return "/app/pro/chooseApprove";
     }
 
