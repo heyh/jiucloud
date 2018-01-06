@@ -32,4 +32,8 @@ public interface OverallPlanServiceI {
     void updateOverallPlanDetails(OverallPlanDetails info);
 
     void delOverallPlanDetails(String overallPlanDetailsId);
+
+    List<OverallPlanBean> getApproveOverallPlanList(String cid, String currentApprovedUser, String projectId, String startDate, String endDate);
+
+    void approveOverallPlan(Integer overallplanId, String approvedState, String approvedOption, String currentApprovedUser);
 }

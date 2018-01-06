@@ -166,4 +166,11 @@ public class MonthPlanController {
         }
         return j;
     }
+
+    @RequestMapping("/ApproveMonthPlan")
+    public String ApproveMonthPlanList(HttpServletRequest req) {
+        req.setAttribute("first", UtilDate.getshortFirst());
+        req.setAttribute("last", UtilDate.getshortLast());
+        return "/app/materials/approve/approveMonthPlan";
+    }
 }

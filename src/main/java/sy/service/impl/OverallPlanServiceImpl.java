@@ -6,9 +6,12 @@ import org.springframework.stereotype.Service;
 import sy.dao.OverallPlanDaoI;
 import sy.dao.OverallPlanDetailsDaoI;
 import sy.model.po.*;
+import sy.pageModel.User;
 import sy.service.*;
+import sy.util.DateKit;
 import sy.util.ObjectExcelRead;
 import sy.util.StringUtil;
+import sy.util.UtilDate;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -225,6 +228,108 @@ public class OverallPlanServiceImpl implements OverallPlanServiceI {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    @Override
+    public List<OverallPlanBean> getApproveOverallPlanList(String cid, String currentApprovedUser, String projectId, String startDate, String endDate) {
+        List<OverallPlanBean> overallPlanBeanList = new ArrayList<OverallPlanBean>();
+        OverallPlanBean overallPlanBean = new OverallPlanBean();
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("cid", cid);
+        String overallPlanHql = "from OverallPlan where isDelete = 0 and needApproved in ('1', '8') and cid = :cid ";
+        if (!projectId.equals("")) {
+            overallPlanHql += " and projectId = :projectId ";
+            params.put("projectId", projectId);
+        }
+        if (!currentApprovedUser.equals("")) {
+            overallPlanHql += " and currentApprovedUser = :currentApprovedUser ";
+            params.put("currentApprovedUser", currentApprovedUser);
+        }
+        if (!startDate.equals("")) {
+            overallPlanHql += " and createTime >= :startTime ";
+            params.put("startTime", DateKit.strToDateOrTime(startDate));
+        }
+        if (!endDate.equals("")) {
+            overallPlanHql += " and createTime <= :endTime";
+            params.put("endTime", DateKit.strToDateOrTime(endDate));
+        }
+
+        List<OverallPlan> overallPlanList = overallPlanDao.find(overallPlanHql, params);
+
+        if (overallPlanList != null && overallPlanList.size() > 0) {
+            for (OverallPlan overallPlan : overallPlanList) {
+
+                overallPlanBean = new OverallPlanBean();
+                overallPlanBean.setId(overallPlan.getId());
+                overallPlanBean.setCid(overallPlan.getCid());
+                overallPlanBean.setProjectId(overallPlan.getProjectId());
+                overallPlanBean.setProjectName(projectService.findOneView(Integer.parseInt(overallPlan.getProjectId())).getProName());
+                overallPlanBean.setUid(overallPlan.getUid());
+
+                User user = userService.getUser(StringUtil.trimToEmpty(overallPlan.getUid()));
+
+                overallPlanBean.setUname(user.getRealname().equals("") ? user.getUsername() : user.getRealname());
+                overallPlanBean.setCreateTime(overallPlan.getCreateTime());
+                String approvedState = "";
+                int needApproved = Integer.parseInt(overallPlan.getNeedApproved());
+                switch (needApproved) {
+                    case 0:
+                        approvedState = "无需审批";
+                        break;
+                    case 1:
+                        approvedState = "未审批";
+                        break;
+                    case 2:
+                        approvedState = "审批通过";
+                        break;
+                    case 8:
+                        approvedState = "审批中";
+                        break;
+                    case 9:
+                        approvedState = "审批未通过";
+                        break;
+                    default:
+                        approvedState = "未知";
+                }
+                overallPlanBean.setNeedApproved(approvedState);
+
+                overallPlanBean.setApprovedOption(overallPlan.getApprovedOption());
+                overallPlanBean.setCurrentApprovedUser(userService.getUser(StringUtil.trimToEmpty(overallPlan.getCurrentApprovedUser())).getUsername());
+
+                overallPlanBeanList.add(overallPlanBean);
+            }
+        }
+        return overallPlanBeanList;
+    }
+
+    @Override
+    public void approveOverallPlan(Integer overallplanId, String approvedState, String approvedOption, String currentApprovedUser) {
+        try {
+            OverallPlan overallPlan =  overallPlanDao.get("from OverallPlan  where id = " + overallplanId);
+            if (!overallPlan.getApprovedUser().equals("")) {
+                String[] approvedUsers = overallPlan.getApprovedUser().split(",");
+                if (approvedUsers != null && approvedUsers.length > 0) {
+                    String lastApprovedUser = approvedUsers[approvedUsers.length - 1];
+                    String userName = userService.get(lastApprovedUser).getUsername();
+                    approvedOption = UtilDate.getDateFormatter() + "::" + userName + "::" + approvedOption;
+                }
+
+                if (approvedState.equals("8")) { // 需要查看是不是最终审批人，不是改为审批中
+                    overallPlan.setApprovedUser(overallPlan.getApprovedUser() + "," + currentApprovedUser);
+                    overallPlan.setCurrentApprovedUser(currentApprovedUser);
+
+                    // 推送任务
+//                    taskPushService.addFieldTaskPush(t);
+                }
+            }
+            overallPlan.setNeedApproved(approvedState);
+
+
+            overallPlan.setApprovedOption(StringUtil.trimToEmpty(overallPlan.getApprovedOption()).equals("") ? approvedOption : StringUtil.trimToEmpty(overallPlan.getApprovedOption()) + "|" + approvedOption);
+            overallPlanDao.update(overallPlan);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

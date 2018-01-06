@@ -17,6 +17,7 @@ import sy.util.StringUtil;
 import sy.util.UtilDate;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
@@ -174,4 +175,43 @@ public class OverallPlanController {
         return j;
     }
 
+    @RequestMapping("/ApproveOverallPlan")
+    public String ApproveOverallPlanList(HttpServletRequest request) {
+        request.setAttribute("first", UtilDate.getshortFirst());
+        request.setAttribute("last", UtilDate.getshortLast());
+        return "/app/materials/approve/approveOverallPlan";
+    }
+
+    @RequestMapping("/securi_getApproveOverallPlanList")
+    @ResponseBody
+    public List<OverallPlanBean> getApproveOverallPlanList(HttpServletRequest request) {
+        List<OverallPlanBean> overallPlanBeanList = new ArrayList<OverallPlanBean>();
+        SessionInfo sessionInfo = (SessionInfo) request.getSession().getAttribute(sy.util.ConfigUtil.getSessionInfoName());
+        String cid = sessionInfo.getCompid();
+        String uid = sessionInfo.getId();
+
+        String projectId = StringUtil.trimToEmpty(request.getParameter("projectId"));
+
+        String startDate = StringUtil.trimToEmpty(request.getParameter("startDate"));
+        startDate = startDate.equals("") ? UtilDate.getshortFirst() + " 00:00:00" : startDate + " 00:00:00";
+
+        String endDate = StringUtil.trimToEmpty(request.getParameter("endDate"));
+        endDate = endDate.equals("") ? UtilDate.getshortLast() + " 23:59:59" : endDate + " 23:59:59";
+
+        overallPlanBeanList = overallPlanService.getApproveOverallPlanList(cid, uid, projectId, startDate, endDate);
+
+        return overallPlanBeanList;
+    }
+
+    @RequestMapping("/securi_approveOverallPlan")
+    @ResponseBody
+    public Json approveOverallPlan(Integer overallplanId, String approvedState, String approvedOption, String currentApprovedUser, HttpServletResponse response, HttpServletRequest request) {
+        Json j = new Json();
+        if (overallplanId != null) {
+            overallPlanService.approveOverallPlan(overallplanId, approvedState, approvedOption, currentApprovedUser);
+        }
+        j.setMsg("审批成功！");
+        j.setSuccess(true);
+        return j;
+    }
 }
