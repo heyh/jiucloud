@@ -48,6 +48,7 @@
     <script type="text/javascript">
 
         parent.$.messager.progress('close');
+
         $(document).ready(function () {
 
             $("#proId").select2({
@@ -61,6 +62,8 @@
                 todayHighlight: true,
                 maxViewMode: 1
             });
+
+            searchFun();
         });
 
 
@@ -79,7 +82,7 @@
 
             var searchParam = {'projectId': $('#proId').val(), 'startDate': $('#startDate').val(), 'endDate': $('#endDate').val()};
             document.getElementById("monthPlanTabBody").innerHTML = '';
-            $.getJSON('${pageContext.request.contextPath}/monthPlanController/securi_monthPlanList', searchParam, function (data) {
+            $.getJSON('${pageContext.request.contextPath}/monthPlanController/securi_getApproveMonthPlanList', searchParam, function (data) {
                 if (data.length > 0) {
                     for (var i in data) {
                         var row = data[i];
@@ -93,73 +96,24 @@
                             "<td style='display: none;'>" + row.overallPlanId + "</td>" +
                             "<td style='display: none;'>" + row.id + "</td>" +
                             "<td>" + row.uname + "</td>" +
-                            "<td>" + row.createTime + "</td>" +
-                            "<td>" + row.needApproved + "</td>" +
-                            "<td>" + row.approvedOption + "</td>" +
-                            "<td>" + row.currentApprovedUser + "</td>" +
+                            "<td style='text-align:center;'>" + row.createTime + "</td>" +
                             "<td style='text-align:center; '>" +
                                 "<input type='button' class='layui-btn  layui-btn-xs layui-btn-normal' onclick='detailFun(" + row.id + ")' value='明细'/>" +
-                                "<input type='button' class='layui-btn  layui-btn-xs layui-btn-normal' onclick='delMonthPlanFun(" + row.id + ")' value='删除'/>" +
+                                "<input type='button' class='layui-btn  layui-btn-xs layui-btn-normal' onclick='approveMonthPlanFun(" + row.id + "," + 2 + ")' value='结束审批'/>" +
+                                "<input type='button' class='layui-btn  layui-btn-xs layui-btn-normal' onclick='approveMonthPlanFun(" + row.id + "," + 8 + ")' value='继续审批'/>" +
+                                "<input type='button' class='layui-btn  layui-btn-xs layui-btn-normal' onclick='approveMonthPlanFun(" + row.id + "," + 9 + ")' value='审批驳回'/>" +
                             "</td>";
                             document.getElementById("monthPlanTabBody").appendChild(trObj);
                     }
                 }
-                var addObj = document.createElement("tr");
-                addObj.innerHTML = "<td colspan='100' style='text-align:right;'><button onclick='addFun();' class='layui-btn layui-btn-normal layui-btn-radius'>添加计划</button></td>";
-                document.getElementById("monthPlanTabBody").appendChild(addObj);
             });
         }
 
-        function addFun() {
-
-            var selProId = $("#proId").select2("val");
-            var selProText = $('#proId').find("option:selected").text();
-
-            parent.$
-                .modalDialog({
-                    title: '新增采购计划',
-                    width: 1300,
-                    height: 600,
-                    href: '${pageContext.request.contextPath}/monthPlanController/securi_toAddMonthPlan?proId=' + selProId + '&proName=' + selProText,
-
-                    buttons: [{
-                        text: '确定',
-                        handler: function () {
-                            var f = parent.$.modalDialog.handler.find('#form');
-                            f.submit();
-                        }
-                    }],
-                    onOpen: function () {
-                        parent.$('.dialog-button:eq(0) a:eq(0)').hide();
-                    }
-                });
-        }
-
-        function delMonthPlanFun(monthplanId) {
-            layer.confirm('确定删除当前采购计划?', {
-                    btn: ['确定', '取消']
-                }, function () {
-                    $.ajax({
-                        url: '${pageContext.request.contextPath}/monthPlanController/securi_delMonthPlan?monthplanId=' + monthplanId,
-                        type: 'post',
-                        dataType: 'json',
-                        contentType: "application/x-www-form-urlencoded; charset=utf-8",
-                        success: function (data) {
-                            if (data.success) {
-                                searchFun();
-                                layer.msg(data.msg);
-                            }
-                        }
-                    });
-                },
-                function () {
-                });
-        }
-        function detailFun(monthplanId) {
+        function detailFun(monthPlanId) {
             $('#monthPlanDetailsTable').show();
 
             document.getElementById("monthPlanDetailsTabBody").innerHTML = '';
-            $.getJSON('${pageContext.request.contextPath}/monthPlanController/securi_monthPlanDetailsList?monthPlanId=' + monthplanId , function (data) {
+            $.getJSON('${pageContext.request.contextPath}/monthPlanController/securi_monthPlanDetailsList?monthPlanId=' + monthPlanId , function (data) {
                 if (data.length > 0) {
                     for (var i in data) {
                         var row = data[i];
@@ -175,10 +129,7 @@
                             "<td style='text-align:right; '>" + row.price + "</td>" +
                             "<td style='text-align:right; '>" + row.total + "</td>" +
                             "<td>" + row.supplierName + "</td>" +
-                            "<td style='text-align:center; '><input type='button' class='layui-btn  layui-btn-xs layui-btn-normal' onclick='supplierDetail(" + row.supplierId + ")' value='详情'/></td>" +
-                            "<td style='text-align:center; '>" +
-                            "<input type='button' class='layui-btn  layui-btn-xs layui-btn-normal' onclick='delMonthPlanDetailsFun(" + monthplanId + "," + row.id + ")' value='删除'/>" +
-                            "</td>";
+                            "<td style='text-align:center; '><input type='button' class='layui-btn  layui-btn-xs layui-btn-normal' onclick='supplierDetail(" + row.supplierId + ")' value='详情'/></td>";
                         document.getElementById("monthPlanDetailsTabBody").appendChild(trObj);
                     }
                 }
@@ -215,27 +166,54 @@
             });
         }
 
-        function delMonthPlanDetailsFun(monthplanId, monthPlanDetailsId) {
-            layer.confirm('确定删除当前采购明细?', {
+        function approveMonthPlanFun(monthPlanId, approvedState) {
+            var approvedTip = '';
+            if (approvedState == '2') {
+                approvedTip = '确认审批通过,并结束后续审批?';
+            } else if (approvedState == '8') {
+                approvedTip = '确认审批通过,并继续后续审批?';
+            } else if (approvedState == '9') {
+                approvedTip = '确认驳回当前记录?';
+            }
+
+            layer.confirm(approvedTip, {
                     btn: ['确定', '取消']
                 }, function () {
-                    $.ajax({
-                        url: '${pageContext.request.contextPath}/monthPlanController/securi_delMonthPlanDetails?monthPlanDetailsId=' + monthPlanDetailsId,
-                        type: 'post',
-                        dataType: 'json',
-                        contentType: "application/x-www-form-urlencoded; charset=utf-8",
-                        success: function (data) {
-                            if (data.success) {
-                                detailFun(monthplanId)
-                                layer.msg(data.msg);
-                            }
+                    layer.open({
+                        type: 1,
+                        title: '审批',
+                        content: $('#approveMonthPlanDiv'),
+                        btn: ['确定', '取消'],
+                        btnAlign: 'right',
+                        shade: 0.3,
+                        area: ['500px', '260px'],
+                        yes: function () {
+                            layer.closeAll();
+                            $.ajax({
+                                url: '${pageContext.request.contextPath}/overallPlanController/securi_approveMonthPlan',
+                                type: 'post',
+                                dataType: 'json',
+                                data: {
+                                    'monthPlanId': monthPlanId,
+                                    'approvedState': approvedState,
+                                    'approvedOption': $('#approvedOption').val(),
+                                    'currentApprovedUser': $('#currentApprovedUser').val()
+                                },
+                                contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                                success: function (data) {
+                                    if (data.success) {
+                                        searchFun();
+                                        layer.msg(data.msg);
+                                    }
+                                }
+                            });
                         }
                     });
+
                 },
                 function () {
                 });
         }
-
     </script>
 
 </head>
@@ -283,9 +261,6 @@
                     <th style="display: none;">采购计划ID</th>
                     <th style="text-align:center; ">录入人</th>
                     <th style="text-align:center; ">录入时间</th>
-                    <th style="text-align:center; ">审批状态</th>
-                    <th style="text-align:center; ">审批意见</th>
-                    <th style="text-align:center; ">当前审批人</th>
                     <th style="text-align:center; ">操作</th>
                 </tr>
                 </thead>
@@ -309,7 +284,6 @@
                     <th style="text-align:center; ">单价</th>
                     <th style="text-align:center; ">总价</th>
                     <th colspan="2" style="text-align:center; ">供应商</th>
-                    <th style="text-align:center; ">操作</th>
                 </tr>
                 </thead>
                 <tbody id="monthPlanDetailsTabBody">
@@ -342,5 +316,25 @@
             <td><span id="supplierLinkPhone"></span></td>
         </tr>
     </table>
+</div>
+
+<div id="approveMonthPlanDiv" style="display: none;">
+    <form class="form-horizontal" style="margin-top: 20px">
+        <div class="control-group">
+            <label class="control-label" for="approvedOption">审批意见:</label>
+            <div class="controls">
+                <textarea rows="3" id="approvedOption" name="approvedOption" style="width: 218px"></textarea>
+                </input>
+            </div>
+        </div>
+
+        <div class="control-group">
+            <label class="control-label" for="currentApprovedUser">审批人:</label>
+            <div class="controls">
+                <select id="currentApprovedUser" name="currentApprovedUser">
+                </select>
+            </div>
+        </div>
+    </form>
 </div>
 </html>

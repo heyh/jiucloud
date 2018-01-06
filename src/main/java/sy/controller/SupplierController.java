@@ -145,4 +145,17 @@ public class SupplierController {
         return json;
     }
 
+    @RequestMapping("/securi_supplierList")
+    @ResponseBody
+    public Json supplierList(PageHelper pageHelper, HttpServletRequest request) {
+        Json json = new Json();
+        SessionInfo sessionInfo = (SessionInfo) request.getSession().getAttribute(ConfigUtil.getSessionInfoName());
+        String cid = sessionInfo.getCompid();
+        String keyword = StringUtil.trimToEmpty(request.getParameter("keyword"));
+        String supplierId = StringUtil.trimToEmpty(request.getParameter("supplierId"));
+        List<Supplier> supplierList = supplierService.supplierList(cid);
+        json.setObj(supplierList);
+        json.setSuccess(true);
+        return json;
+    }
 }

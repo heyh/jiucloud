@@ -16,6 +16,7 @@ import sy.util.StringUtil;
 import sy.util.UtilDate;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -172,5 +173,38 @@ public class MonthPlanController {
         req.setAttribute("first", UtilDate.getshortFirst());
         req.setAttribute("last", UtilDate.getshortLast());
         return "/app/materials/approve/approveMonthPlan";
+    }
+
+    @RequestMapping("/securi_getApproveMonthPlanList")
+    @ResponseBody
+    public List<MonthPlanBean> getApproveMonthPlanList(HttpServletRequest request) {
+        List<MonthPlanBean> monthPlanBeanList = new ArrayList<MonthPlanBean>();
+        SessionInfo sessionInfo = (SessionInfo) request.getSession().getAttribute(sy.util.ConfigUtil.getSessionInfoName());
+        String cid = sessionInfo.getCompid();
+        String uid = sessionInfo.getId();
+
+        String projectId = StringUtil.trimToEmpty(request.getParameter("projectId"));
+
+        String startDate = StringUtil.trimToEmpty(request.getParameter("startDate"));
+        startDate = startDate.equals("") ? UtilDate.getshortFirst() + " 00:00:00" : startDate + " 00:00:00";
+
+        String endDate = StringUtil.trimToEmpty(request.getParameter("endDate"));
+        endDate = endDate.equals("") ? UtilDate.getshortLast() + " 23:59:59" : endDate + " 23:59:59";
+
+        monthPlanBeanList = monthPlanService.getApproveMonthPlanList(cid, uid, projectId, startDate, endDate);
+
+        return monthPlanBeanList;
+    }
+
+    @RequestMapping("/securi_approveOverallPlan")
+    @ResponseBody
+    public Json approveMonthPlan(Integer monthPlanId, String approvedState, String approvedOption, String currentApprovedUser, HttpServletResponse response, HttpServletRequest request) {
+        Json j = new Json();
+        if (monthPlanId != null) {
+            monthPlanService.approveMonthPlan(monthPlanId, approvedState, approvedOption, currentApprovedUser);
+        }
+        j.setMsg("审批成功！");
+        j.setSuccess(true);
+        return j;
     }
 }

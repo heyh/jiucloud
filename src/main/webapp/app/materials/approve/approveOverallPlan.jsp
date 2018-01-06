@@ -278,22 +278,21 @@
 </body>
 <div id="approveOverallPlanDiv" style="display: none;">
     <form class="form-horizontal" style="margin-top: 20px">
-    <div class="control-group">
-        <label class="control-label" for="approvedOption">审批意见:</label>
-        <div class="controls">
-            <textarea rows="3" id="approvedOption" name="approvedOption" style="width: 218px"></textarea>
-            </input>
+        <div class="control-group">
+            <label class="control-label" for="approvedOption">审批意见:</label>
+            <div class="controls">
+                <textarea rows="3" id="approvedOption" name="approvedOption" style="width: 218px"></textarea>
+                </input>
+            </div>
         </div>
-    </div>
 
-    <div class="control-group">
-        <label class="control-label" for="currentApprovedUser">审批人:</label>
-        <div class="controls">
-            <select id="currentApprovedUser" name="currentApprovedUser">
-            </select>
+        <div class="control-group">
+            <label class="control-label" for="currentApprovedUser">审批人:</label>
+            <div class="controls">
+                <select id="currentApprovedUser" name="currentApprovedUser">
+                </select>
+            </div>
         </div>
-    </div>
     </form>
-
 </div>
 </html>

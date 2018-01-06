@@ -202,7 +202,7 @@
             shade: 0.3,
             area: ['800px', '700px'],
             yes: function () {
-
+				layer.closeAll();
             }
         });
     }
@@ -274,6 +274,7 @@
                     success: function (data) {
                         parent.$.messager.progress('close');
                         if (data.success) {
+                            overallPlan($('#projectId').val())
                             layer.closeAll();
                             jQuery.messager.show({
                                 title:'温馨提示:',

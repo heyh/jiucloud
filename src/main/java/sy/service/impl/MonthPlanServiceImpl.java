@@ -9,6 +9,7 @@ import sy.model.po.*;
 import sy.service.*;
 import sy.util.DateKit;
 import sy.util.StringUtil;
+import sy.util.UtilDate;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -249,6 +250,110 @@ public class MonthPlanServiceImpl implements MonthPlanServiceI {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    @Override
+    public List<MonthPlanBean> getApproveMonthPlanList(String cid, String currentApprovedUser, String projectId, String startDate, String endDate) {
+        List<MonthPlanBean> monthPlanBeanList = new ArrayList<MonthPlanBean>();
+        MonthPlanBean monthPlanBean = new MonthPlanBean();
+
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("cid", cid);
+        String monthPlanHql = "from MonthPlan where isDelete = 0 and needApproved in ('1', '8') and cid = :cid ";
+        if (!projectId.equals("")) {
+            monthPlanHql += " and projectId = :projectId ";
+            params.put("projectId", projectId);
+        }
+        if (!currentApprovedUser.equals("")) {
+            monthPlanHql += " and currentApprovedUser = :currentApprovedUser ";
+            params.put("currentApprovedUser", currentApprovedUser);
+        }
+        if (!startDate.equals("")) {
+            monthPlanHql += " and createTime >= :startTime ";
+            params.put("startTime", DateKit.strToDateOrTime(startDate));
+        }
+        if (!endDate.equals("")) {
+            monthPlanHql += " and createTime <= :endTime";
+            params.put("endTime", DateKit.strToDateOrTime(endDate));
+        }
+        List<MonthPlan> monthPlanList = monthPlanDao.find(monthPlanHql, params);
+
+        if (monthPlanList != null && monthPlanList.size()>0) {
+            for (MonthPlan monthPlan : monthPlanList) {
+                monthPlanBean = new MonthPlanBean();
+                monthPlanBean.setId(monthPlan.getId());
+                monthPlanBean.setCid(monthPlan.getCid());
+                monthPlanBean.setOverallPlanId(monthPlan.getOverallPlanId());
+                monthPlanBean.setProjectId(monthPlan.getProjectId());
+                if (!StringUtil.trimToEmpty(monthPlan.getProjectId()).equals("")) {
+                    monthPlanBean.setProjectName(projectService.findOneView(Integer.parseInt(monthPlan.getProjectId())).getProName());
+                } else {
+                    monthPlanBean.setProjectName("无项目采购申请");
+
+                }
+                monthPlanBean.setUid(monthPlan.getUid());
+                monthPlanBean.setUname(userService.getUser(StringUtil.trimToEmpty(monthPlan.getUid())).getUsername());
+                monthPlanBean.setCreateTime(monthPlan.getCreateTime());
+                String approvedState = "";
+                int needApproved = Integer.parseInt(monthPlan.getNeedApproved());
+                switch (needApproved) {
+                    case 0:
+                        approvedState = "无需审批";
+                        break;
+                    case 1:
+                        approvedState = "未审批";
+                        break;
+                    case 2:
+                        approvedState = "审批通过";
+                        break;
+                    case 8:
+                        approvedState = "审批中";
+                        break;
+                    case 9:
+                        approvedState = "审批未通过";
+                        break;
+                    default:
+                        approvedState = "未知";
+                }
+                monthPlanBean.setNeedApproved(approvedState);
+
+                monthPlanBean.setApprovedOption(monthPlan.getApprovedOption());
+                monthPlanBean.setCurrentApprovedUser(userService.getUser(StringUtil.trimToEmpty(monthPlan.getCurrentApprovedUser())).getUsername());
+
+                monthPlanBeanList.add(monthPlanBean);
+            }
+        }
+        return monthPlanBeanList;
+    }
+
+    @Override
+    public void approveMonthPlan(Integer monthPlanId, String approvedState, String approvedOption, String currentApprovedUser) {
+        try {
+            MonthPlan monthPlan =  monthPlanDao.get("from MonthPlan  where id = " + monthPlanId);
+            if (!monthPlan.getApprovedUser().equals("")) {
+                String[] approvedUsers = monthPlan.getApprovedUser().split(",");
+                if (approvedUsers != null && approvedUsers.length > 0) {
+                    String lastApprovedUser = approvedUsers[approvedUsers.length - 1];
+                    String userName = userService.get(lastApprovedUser).getUsername();
+                    approvedOption = UtilDate.getDateFormatter() + "::" + userName + "::" + approvedOption;
+                }
+
+                if (approvedState.equals("8")) { // 需要查看是不是最终审批人，不是改为审批中
+                    monthPlan.setApprovedUser(monthPlan.getApprovedUser() + "," + currentApprovedUser);
+                    monthPlan.setCurrentApprovedUser(currentApprovedUser);
+
+                    // 推送任务
+//                    taskPushService.addFieldTaskPush(t);
+                }
+            }
+            monthPlan.setNeedApproved(approvedState);
+
+
+            monthPlan.setApprovedOption(StringUtil.trimToEmpty(monthPlan.getApprovedOption()).equals("") ? approvedOption : StringUtil.trimToEmpty(monthPlan.getApprovedOption()) + "|" + approvedOption);
+            monthPlanDao.update(monthPlan);
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 

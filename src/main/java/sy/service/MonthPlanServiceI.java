@@ -30,4 +30,8 @@ public interface MonthPlanServiceI {
     void updateMonthPlanDetails(MonthPlanDetails info);
 
     void delMonthPlanDetails(String monthPlanDetailsId);
+
+    List<MonthPlanBean> getApproveMonthPlanList(String cid, String currentApprovedUser, String projectId, String startDate, String endDate);
+
+    void approveMonthPlan(Integer monthPlanId, String approvedState, String approvedOption, String currentApprovedUser);
 }
