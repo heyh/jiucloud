@@ -136,10 +136,10 @@
             "<td style='text-align:center;'>" + document.getElementById("overPlanTable").rows.length + "</td>" +
             "<td>" + row.mc + "</td>" +
             "<td>" + row.specifications + "</td>" +
-            "<td style='text-align:center;'><input type='number' class='layui-input' style='margin-bottom:0px;width: 50px;text-align: right'></td>" +
+            "<td style='text-align:center;'><input required type='number' class='layui-input' style='margin-bottom:0px;width: 50px;text-align: right'></td>" +
             "<td>" + row.dw + "</td>" +
             "<td style='display: none;'>" + row.id + "</td>" +
-            "<td style='text-align:center; '><button class='layui-btn  layui-btn-xs layui-btn-normal' onclick='del(" + row.id + ")'><i class='layui-icon'></i>删除</button></td>";
+            "<td style='text-align:center; '><input type='button' class='layui-btn  layui-btn-xs layui-btn-normal' onclick='del(" + row.id + ")' value='删除'/></td>";
         document.getElementById("mainbody").appendChild(trObj);
     }
 
@@ -321,8 +321,7 @@
                 <%--<input type="hidden" id="currentApprovedUserRef" name="currentApprovedUserRef">--%>
             </form>
             <div style='text-align:right;'>
-                <button class='layui-btn layui-btn-normal layui-btn-radius' onclick="geneOverallPlan();">确 定
-                </button>
+                <input type="button" class='layui-btn layui-btn-normal layui-btn-radius' onclick="geneOverallPlan();" value="确定"/>
             </div>
         </div>
 
