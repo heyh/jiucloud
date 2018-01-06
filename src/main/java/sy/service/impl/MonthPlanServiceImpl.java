@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import sy.dao.MonthPlanDaoI;
 import sy.dao.MonthPlanDetailsDaoI;
 import sy.model.po.*;
+import sy.pageModel.User;
 import sy.service.*;
 import sy.util.DateKit;
 import sy.util.StringUtil;
@@ -293,7 +294,8 @@ public class MonthPlanServiceImpl implements MonthPlanServiceI {
 
                 }
                 monthPlanBean.setUid(monthPlan.getUid());
-                monthPlanBean.setUname(userService.getUser(StringUtil.trimToEmpty(monthPlan.getUid())).getUsername());
+                User user = userService.getUser(StringUtil.trimToEmpty(monthPlan.getUid()));
+                monthPlanBean.setUname(user.getRealname().equals("") ? user.getUsername() : user.getRealname());
                 monthPlanBean.setCreateTime(monthPlan.getCreateTime());
                 String approvedState = "";
                 int needApproved = Integer.parseInt(monthPlan.getNeedApproved());

@@ -66,6 +66,14 @@
             searchFun();
         });
 
+        $.getJSON('${pageContext.request.contextPath}/fieldDataController/securi_chooseApprove', function (data) {
+            var userList = data.obj;
+            var optionString = '';
+            for (var i in userList) {
+                optionString += "<option value=\"" + userList[i].id + "\" selected=" + userList[i].isSp + ">" + userList[i].username + "</option>";
+            }
+            $("#currentApprovedUser").html(optionString);
+        });
 
         $.getJSON('${pageContext.request.contextPath}/projectController/securi_getProjects', function (data) {
             var projectInfos = data.obj;
@@ -190,7 +198,7 @@
                         yes: function () {
                             layer.closeAll();
                             $.ajax({
-                                url: '${pageContext.request.contextPath}/overallPlanController/securi_approveMonthPlan',
+                                url: '${pageContext.request.contextPath}/monthPlanController/securi_approveMonthPlan',
                                 type: 'post',
                                 dataType: 'json',
                                 data: {

@@ -196,7 +196,7 @@ public class MonthPlanController {
         return monthPlanBeanList;
     }
 
-    @RequestMapping("/securi_approveOverallPlan")
+    @RequestMapping("/securi_approveMonthPlan")
     @ResponseBody
     public Json approveMonthPlan(Integer monthPlanId, String approvedState, String approvedOption, String currentApprovedUser, HttpServletResponse response, HttpServletRequest request) {
         Json j = new Json();

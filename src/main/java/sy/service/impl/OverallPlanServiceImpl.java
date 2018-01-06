@@ -268,7 +268,6 @@ public class OverallPlanServiceImpl implements OverallPlanServiceI {
                 overallPlanBean.setUid(overallPlan.getUid());
 
                 User user = userService.getUser(StringUtil.trimToEmpty(overallPlan.getUid()));
-
                 overallPlanBean.setUname(user.getRealname().equals("") ? user.getUsername() : user.getRealname());
                 overallPlanBean.setCreateTime(overallPlan.getCreateTime());
                 String approvedState = "";
