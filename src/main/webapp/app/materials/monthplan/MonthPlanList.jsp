@@ -95,7 +95,9 @@
                             "<td>" + row.uname + "</td>" +
                             "<td>" + row.createTime + "</td>" +
                             "<td>" + row.needApproved + "</td>" +
-                            "<td>" + row.approvedOption + "</td>" +
+                            "<td style='text-align:center; '>" +
+                                "<input type='button' class='layui-btn  layui-btn-xs layui-btn-normal' onclick='viewApproveDetailsFun(" +  JSON.stringify(row) + ")' value='查看详情'/>" +
+                            "</td>" +
                             "<td>" + row.currentApprovedUser + "</td>" +
                             "<td style='text-align:center; '>" +
                                 "<input type='button' class='layui-btn  layui-btn-xs layui-btn-normal' onclick='detailFun(" + row.id + ")' value='明细'/>" +
@@ -108,6 +110,34 @@
                 addObj.innerHTML = "<td colspan='100' style='text-align:right;'><button onclick='addFun();' class='layui-btn layui-btn-normal layui-btn-radius'>添加计划</button></td>";
                 document.getElementById("monthPlanTabBody").appendChild(addObj);
             });
+        }
+
+        function viewApproveDetailsFun(monthPlan) {
+            var approvedOptions = monthPlan.approvedOption.split('|');
+
+            layer.open({
+                type: 1,
+                title: '审批详情',
+                closeBtn: 2,
+                shadeClose: true,
+                maxmin: true, //开启最大化最小化按钮
+                area: ['400px', '300px'],
+                content: $('#approvedOptionDiv')
+            });
+
+            document.getElementById("approvedOptionTabBody").innerHTML = '';
+            for (var i = 0; i < approvedOptions.length; i++) {
+                var approvedOptionInfos = approvedOptions[i].split('::');
+                var trObj = document.createElement("tr");
+                var _id = document.getElementById("approvedOptionTable").rows.length;
+                trObj.id = "tr_" + _id;
+                trObj.innerHTML =
+                    "<td style='text-align:center;'>" + _id + "</td>" +
+                    "<td style='text-align:center;'>" + approvedOptionInfos[0] + "</td>" +
+                    "<td>" + approvedOptionInfos[1] + "</td>" +
+                    "<td>" + approvedOptionInfos[2] + "</td>";
+                document.getElementById("approvedOptionTabBody").appendChild(trObj);
+            }
         }
 
         function addFun() {
@@ -341,6 +371,20 @@
             <td style="font-weight: bold" width="40%">联系电话</td>
             <td><span id="supplierLinkPhone"></span></td>
         </tr>
+    </table>
+</div>
+
+<div id="approvedOptionDiv" style="display: none;">
+    <table class="table_style table table-striped table-bordered table-hover table-condensed" id="approvedOptionTable">
+        <tr>
+            <th style="text-align:center; ">序号</th>
+            <th style="text-align:center; ">审批时间</th>
+            <th style="text-align:center; ">审批人</th>
+            <th style="text-align:center; ">审批意见</th>
+        </tr>
+        </thead>
+        <tbody id="approvedOptionTabBody">
+        </tbody>
     </table>
 </div>
 </html>
