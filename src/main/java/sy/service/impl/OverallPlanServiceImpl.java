@@ -61,7 +61,8 @@ public class OverallPlanServiceImpl implements OverallPlanServiceI {
                 overallPlanBean.setProjectId(overallPlan.getProjectId());
                 overallPlanBean.setProjectName(projectService.findOneView(Integer.parseInt(overallPlan.getProjectId())).getProName());
                 overallPlanBean.setUid(overallPlan.getUid());
-                overallPlanBean.setUname(userService.getUser(StringUtil.trimToEmpty(overallPlan.getUid())).getUsername());
+                User user = userService.getUser(StringUtil.trimToEmpty(overallPlan.getUid()));
+                overallPlanBean.setUname(user.getRealname().equals("") ? user.getUsername() : user.getRealname());
                 overallPlanBean.setCreateTime(overallPlan.getCreateTime());
                 String approvedState = "";
                 int needApproved = Integer.parseInt(overallPlan.getNeedApproved());
@@ -87,7 +88,9 @@ public class OverallPlanServiceImpl implements OverallPlanServiceI {
                 overallPlanBean.setNeedApproved(approvedState);
 
                 overallPlanBean.setApprovedOption(overallPlan.getApprovedOption());
-                overallPlanBean.setCurrentApprovedUser(userService.getUser(StringUtil.trimToEmpty(overallPlan.getCurrentApprovedUser())).getUsername());
+
+                User currentApprovedUser = userService.getUser(StringUtil.trimToEmpty(overallPlan.getCurrentApprovedUser()));
+                overallPlanBean.setCurrentApprovedUser(currentApprovedUser.getRealname().equals("") ? currentApprovedUser.getUsername() : currentApprovedUser.getRealname());
 
                 overallPlanBeanList.add(overallPlanBean);
             }

@@ -78,7 +78,8 @@ public class MonthPlanServiceImpl implements MonthPlanServiceI {
 
                 }
                 monthPlanBean.setUid(monthPlan.getUid());
-                monthPlanBean.setUname(userService.getUser(StringUtil.trimToEmpty(monthPlan.getUid())).getUsername());
+                User user = userService.getUser(StringUtil.trimToEmpty(monthPlan.getUid()));
+                monthPlanBean.setUname(user.getRealname().equals("") ? user.getUsername() : user.getRealname());
                 monthPlanBean.setCreateTime(monthPlan.getCreateTime());
                 String approvedState = "";
                 int needApproved = Integer.parseInt(monthPlan.getNeedApproved());
@@ -102,9 +103,10 @@ public class MonthPlanServiceImpl implements MonthPlanServiceI {
                         approvedState = "未知";
                 }
                 monthPlanBean.setNeedApproved(approvedState);
-
                 monthPlanBean.setApprovedOption(monthPlan.getApprovedOption());
-                monthPlanBean.setCurrentApprovedUser(userService.getUser(StringUtil.trimToEmpty(monthPlan.getCurrentApprovedUser())).getUsername());
+
+                User currentApprovedUser = userService.getUser(StringUtil.trimToEmpty(monthPlan.getCurrentApprovedUser()));
+                monthPlanBean.setCurrentApprovedUser(currentApprovedUser.getRealname().equals("") ? currentApprovedUser.getUsername() : currentApprovedUser.getRealname());
 
                 monthPlanBeanList.add(monthPlanBean);
             }
