@@ -61,6 +61,8 @@
                 todayHighlight: true,
                 maxViewMode: 1
             });
+
+            searchFun();
         });
 
 

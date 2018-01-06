@@ -79,42 +79,13 @@
         });
 
         function changeProjectId() {
-            var projectId = $('#proId').val();
-            overallPlan(projectId)
-
+            searchFun()
             $('#overallPlanDetailsTable').hide();
         }
 
-        function addFun() {
-
-            var selProId = $("#proId").select2("val");
-            var selProText = $('#proId').find("option:selected").text();
-
-            parent.$
-                .modalDialog({
-                    title: '新增计划',
-                    width: 1300,
-                    height: 600,
-                    href: encodeURI('${pageContext.request.contextPath}/overallPlanController/securi_toAddOverallPlan?proId=' + selProId + '&proName=' + selProText),
-
-                    buttons: [{
-                        text: '确定',
-                        handler: function () {
-                            var f = parent.$.modalDialog.handler.find('#form');
-                            f.submit();
-                        }
-                    }],
-                    onOpen: function () {
-                        parent.$('.dialog-button:eq(0) a:eq(0)').hide();
-                    }
-
-
-                });
-        }
-
-        function overallPlan(projectId) {
+        function searchFun() {
             document.getElementById("overallPlanTabBody").innerHTML = '';
-            $.getJSON('${pageContext.request.contextPath}/overallPlanController/securi_overallPlanList?projectId=' + projectId, function (data) {
+            $.getJSON('${pageContext.request.contextPath}/overallPlanController/securi_overallPlanList?projectId=' + $('#proId').val(), function (data) {
                 if (data.length > 0) {
 
                     for (var i in data) {
@@ -240,6 +211,31 @@
                     });
                 },
                 function () {
+                });
+        }
+
+        function addFun() {
+
+            var selProId = $("#proId").select2("val");
+            var selProText = $('#proId').find("option:selected").text();
+
+            parent.$
+                .modalDialog({
+                    title: '新增计划',
+                    width: 1300,
+                    height: 600,
+                    href: encodeURI('${pageContext.request.contextPath}/overallPlanController/securi_toAddOverallPlan?proId=' + selProId + '&proName=' + selProText),
+
+                    buttons: [{
+                        text: '确定',
+                        handler: function () {
+                            var f = parent.$.modalDialog.handler.find('#form');
+                            f.submit();
+                        }
+                    }],
+                    onOpen: function () {
+                        parent.$('.dialog-button:eq(0) a:eq(0)').hide();
+                    }
                 });
         }
     </script>
