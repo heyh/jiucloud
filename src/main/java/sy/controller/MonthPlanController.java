@@ -47,13 +47,15 @@ public class MonthPlanController {
     public List<MonthPlanBean> overallPlanList(HttpServletRequest request) {
         List<MonthPlanBean> monthPlanBeanList = new ArrayList<MonthPlanBean>();
         SessionInfo sessionInfo = (SessionInfo) request.getSession().getAttribute(ConfigUtil.getSessionInfoName());
+        String cid = sessionInfo.getCompid();
+        List<Integer> ugroup = sessionInfo.getUgroup();
         String projectId = StringUtil.trimToEmpty(request.getParameter("projectId"));
         String startDate = StringUtil.trimToEmpty(request.getParameter("startDate"));
         startDate = startDate.equals("") ? UtilDate.getshortFirst() + " 00:00:00" : startDate + " 00:00:00";
         String endDate = StringUtil.trimToEmpty(request.getParameter("endDate"));
         endDate = endDate.equals("") ? UtilDate.getshortLast() + " 23:59:59" : endDate + " 23:59:59";
 
-        monthPlanBeanList = monthPlanService.getMonthPlanList(projectId, startDate, endDate);
+        monthPlanBeanList = monthPlanService.getMonthPlanList(projectId, startDate, endDate, cid, ugroup);
 
         return monthPlanBeanList;
     }

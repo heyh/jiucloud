@@ -1,5 +1,6 @@
 package sy.service.impl;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,13 +44,19 @@ public class MonthPlanServiceImpl implements MonthPlanServiceI {
     private SupplierServiceI supplierService;
 
     @Override
-    public List<MonthPlanBean> getMonthPlanList(String projectId, String startDate, String endDate) {
+    public List<MonthPlanBean> getMonthPlanList(String projectId, String startDate, String endDate, String cid, List<Integer> ugroup) {
         List<MonthPlanBean> monthPlanBeanList = new ArrayList<MonthPlanBean>();
         MonthPlanBean monthPlanBean = new MonthPlanBean();
 
         Map<String, Object> params = new HashMap<String, Object>();
+        params.put("cid", cid);
 
-        String monthPlanHql = "from MonthPlan where isDelete = 0 ";
+        String monthPlanHql = "from MonthPlan where isDelete = 0 and cid=:cid ";
+
+        String uids = StringUtils.join(ugroup, ",");
+        monthPlanHql += " and uid in (" + uids + ") " ;
+
+
         if (!projectId.equals("")) {
             monthPlanHql += " and projectId = :projectId ";
             params.put("projectId", projectId);
