@@ -319,10 +319,10 @@
                 </table>
                 <input type="hidden" id="addStockInfo" name="addStockInfo">
             </form>
-            <div style='text-align:right;'>
-                <button class='layui-btn layui-btn-normal layui-btn-radius' onclick="geneAddStock();">确 定
-                </button>
-            </div>
+            <%--<div style='text-align:right;'>--%>
+                <%--<button class='layui-btn layui-btn-normal layui-btn-radius' onclick="geneAddStock();">确 定--%>
+                <%--</button>--%>
+            <%--</div>--%>
         </div>
     </div>
 </div>

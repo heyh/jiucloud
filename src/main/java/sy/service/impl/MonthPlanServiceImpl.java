@@ -112,9 +112,12 @@ public class MonthPlanServiceImpl implements MonthPlanServiceI {
                 monthPlanBean.setNeedApproved(approvedState);
                 monthPlanBean.setApprovedOption(monthPlan.getApprovedOption());
 
-                User currentApprovedUser = userService.getUser(StringUtil.trimToEmpty(monthPlan.getCurrentApprovedUser()));
-                monthPlanBean.setCurrentApprovedUser(currentApprovedUser.getRealname().equals("") ? currentApprovedUser.getUsername() : currentApprovedUser.getRealname());
-
+                if (!StringUtil.trimToEmpty(monthPlan.getCurrentApprovedUser()).equals("")) {
+                    User currentApprovedUser = userService.getUser(StringUtil.trimToEmpty(monthPlan.getCurrentApprovedUser()));
+                    monthPlanBean.setCurrentApprovedUser(currentApprovedUser.getRealname().equals("") ? currentApprovedUser.getUsername() : currentApprovedUser.getRealname());
+                } else {
+                    monthPlanBean.setCurrentApprovedUser("");
+                }
                 monthPlanBeanList.add(monthPlanBean);
             }
         }
