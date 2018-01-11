@@ -274,7 +274,8 @@
                     success: function (data) {
                         parent.$.messager.progress('close');
                         if (data.success) {
-                            overallPlan($('#projectId').val())
+//                            overallPlan($('#projectId').val());
+//                            searchFun();
                             layer.closeAll();
                             jQuery.messager.show({
                                 title:'温馨提示:',
