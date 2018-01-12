@@ -233,7 +233,7 @@
 
                     </blockquote>
                     <a style="font-size:20px;">
-                        <span>采购计划</span>
+                        <span>材料用量计划审批</span>
                     </a>
                 </caption>
                 <thead>
