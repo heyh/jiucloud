@@ -89,9 +89,12 @@ public class OverallPlanServiceImpl implements OverallPlanServiceI {
 
                 overallPlanBean.setApprovedOption(overallPlan.getApprovedOption());
 
-                User currentApprovedUser = userService.getUser(StringUtil.trimToEmpty(overallPlan.getCurrentApprovedUser()));
-                overallPlanBean.setCurrentApprovedUser(currentApprovedUser.getRealname().equals("") ? currentApprovedUser.getUsername() : currentApprovedUser.getRealname());
-
+                if (!StringUtil.trimToEmpty(overallPlan.getCurrentApprovedUser()).equals("")) {
+                    User currentApprovedUser = userService.getUser(StringUtil.trimToEmpty(overallPlan.getCurrentApprovedUser()));
+                    overallPlanBean.setCurrentApprovedUser(currentApprovedUser.getRealname().equals("") ? currentApprovedUser.getUsername() : currentApprovedUser.getRealname());
+                } else {
+                    overallPlanBean.setCurrentApprovedUser("");
+                }
                 overallPlanBeanList.add(overallPlanBean);
             }
         }
