@@ -131,7 +131,7 @@
                             {
                                 field : 'mc',
                                 title : '材料名称',
-                                width : 400
+                                width : 300
                             },
 
                             {
@@ -155,9 +155,9 @@
                                 width : 100
                             },
                             {
-                                field : 'creatTime',
+                                field : 'createTime',
                                 title : '录入时间',
-                                width : 100
+                                width : 200
                             },
                             {
                                 field : 'uid',
