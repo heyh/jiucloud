@@ -218,6 +218,11 @@
         }
 
         function supplierDetail(supplierId) {
+            debugger;
+            if (supplierId == '' ||  supplierId == undefined || supplierId == 'undefined') {
+                layer.msg("无供应商信息，请核实!");
+                return;
+            }
             layer.open({
                 type: 1,
                 title: '供应商信息',
