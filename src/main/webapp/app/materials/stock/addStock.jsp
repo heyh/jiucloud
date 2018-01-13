@@ -54,8 +54,8 @@
                     rownumbers: true,
                     animate: true,
                     striped: true,//隔行变色,
-                    collapsible: true,
-                    fitColumns: true,
+//                    collapsible: true,
+//                    fitColumns: true,
                     pagination: true,
                     lines: false,
                     dnd: true,
@@ -65,7 +65,7 @@
                         {
                             title: '材料名称',
                             field: 'mc',
-                            width: 30,
+                            width: 300,
                             formatter: function (value, row, index) {
                                 if (row.state == 'closed') {
                                     return row.mc;
@@ -77,12 +77,12 @@
                         {
                             title: '规格型号',
                             field: 'specifications',
-                            width: 20
+                            width: 150
                         },
                         {
                             title: '单位',
                             field: 'dw',
-                            width: 10
+                            width: 90
                         },
                         {
                             titile: 'ID',
