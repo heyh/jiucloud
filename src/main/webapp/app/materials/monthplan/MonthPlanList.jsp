@@ -73,7 +73,7 @@
                 optionString += "<option value=\"" + projectInfos[i].id + "\" >" + projectInfos[i].text + "</option>";
             }
             $("#projectId").html(optionString);
-            $("#proId").html('<option/>' + optionString);
+            $("#proId").html('<option>无项目采购</option>' + optionString);
         });
 
         function searchFun() {

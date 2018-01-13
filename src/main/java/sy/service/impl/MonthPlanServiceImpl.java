@@ -56,11 +56,9 @@ public class MonthPlanServiceImpl implements MonthPlanServiceI {
         String uids = StringUtils.join(ugroup, ",");
         monthPlanHql += " and uid in (" + uids + ") " ;
 
+        monthPlanHql += " and projectId = :projectId ";
+        params.put("projectId", projectId);
 
-        if (!projectId.equals("")) {
-            monthPlanHql += " and projectId = :projectId ";
-            params.put("projectId", projectId);
-        }
         if (!startDate.equals("")) {
             monthPlanHql += " and createTime >= :startTime ";
             params.put("startTime", DateKit.strToDateOrTime(startDate));
