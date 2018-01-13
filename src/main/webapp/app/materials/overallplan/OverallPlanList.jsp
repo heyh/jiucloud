@@ -81,6 +81,7 @@
         function changeProjectId() {
             searchFun()
             $('#overallPlanDetailsTable').hide();
+            $('#allOverallPlanDetailsTable').hide();
         }
 
         function searchFun() {
@@ -113,7 +114,11 @@
                     }
                 }
                 var addObj = document.createElement("tr");
-                addObj.innerHTML = "<td colspan='100' style='text-align:right;'><button onclick='addFun();' class='layui-btn layui-btn-normal layui-btn-radius'>添加计划</button></td>";
+                addObj.innerHTML =
+                    "<td colspan='100' style='text-align:right;'>" +
+                        "<input type='button' onclick='allDetailFun();' class='layui-btn layui-btn-normal layui-btn-radius' value='整体计划明细'/>" +
+                        "<input type='button' onclick='addFun();' class='layui-btn layui-btn-normal layui-btn-radius' value='添加计划'/>" +
+                    "</td>";
                 document.getElementById("overallPlanTabBody").appendChild(addObj);
             });
         }
@@ -169,6 +174,7 @@
 
         function detailFun(overallplanId) {
             $('#overallPlanDetailsTable').show();
+            $('#allOverallPlanDetailsTable').hide();
 
             document.getElementById("overallPlanDetailsTabBody").innerHTML = '';
             $.getJSON('${pageContext.request.contextPath}/overallPlanController/securi_overallPlanDetailsList?overallPlanId=' + overallplanId, function (data) {
@@ -182,7 +188,7 @@
                             "<td style='text-align:center;'>" + _id + "</td>" +
                             "<td>" + row.mc + "</td>" +
                             "<td>" + row.specifications + "</td>" +
-                            "<td>" + row.count + "</td>" +
+                            "<td style='text-align: right;'>" + row.count + "</td>" +
                             "<td>" + row.dw + "</td>" +
                             "<td style='text-align:center; '>" +
                                 "<input type='button' class='layui-btn  layui-btn-xs layui-btn-normal' onclick='delOverallPlanDetailsFun(" + overallplanId + "," + row.id + ")' value='删除'/>" +
@@ -212,6 +218,35 @@
                 },
                 function () {
                 });
+        }
+        
+        function allDetailFun() {
+            $('#overallPlanDetailsTable').hide();
+            $('#allOverallPlanDetailsTable').show();
+
+            var searchParam = {'projectId': $("#proId").select2("val")};
+            document.getElementById("allOverallPlanDetailsTabBody").innerHTML = '';
+            $.getJSON('${pageContext.request.contextPath}/overallPlanController/securi_overallPlanDetailsAll', searchParam, function (data) {
+                debugger;
+                if (data.length > 0) {
+                    for (var i in data) {
+                        var row = data[i];
+                        var trObj = document.createElement("tr");
+                        var _id = document.getElementById("allOverallPlanDetailsTable").rows.length;
+                        trObj.id = "tr_" + _id;
+                        trObj.innerHTML =
+                            "<td style='text-align:center;'>" + _id + "</td>" +
+                            "<td>" + row.mc + "</td>" +
+                            "<td>" + row.specifications + "</td>" +
+                            "<td style='text-align: right;'>" + row.count + "</td>" +
+                            "<td>" + row.dw + "</td>" ;
+//                            "<td style='text-align:center; '>" +
+//                            "<input type='button' class='layui-btn  layui-btn-xs layui-btn-normal' onclick='delOverallPlanDetailsFun(" + overallplanId + "," + row.id + ")' value='删除'/>" +
+//                            "</td>";
+                        document.getElementById("allOverallPlanDetailsTabBody").appendChild(trObj);
+                    }
+                }
+            });
         }
 
         function addFun() {
@@ -285,7 +320,7 @@
         <div class="layui-col-xs12">
             <table class="table_style table table-striped table-bordered table-hover table-condensed" id="overallPlanDetailsTable" style="display: none;">
                 <caption>
-                   计划明细
+                   批次计划明细
                 </caption>
                 <thead>
                 <tr>
@@ -298,6 +333,25 @@
                 </tr>
                 </thead>
                 <tbody id="overallPlanDetailsTabBody">
+                </tbody>
+            </table>
+        </div>
+
+        <div class="layui-col-xs12">
+            <table class="table_style table table-striped table-bordered table-hover table-condensed" id="allOverallPlanDetailsTable" style="display: none;">
+                <caption>
+                    总体计划明细
+                </caption>
+                <thead>
+                <tr>
+                    <th style="text-align:center; ">序号</th>
+                    <th style="text-align:center; ">材料名称</th>
+                    <th style="text-align:center; ">规格型号</th>
+                    <th style="text-align:center; ">数量</th>
+                    <th style="text-align:center; ">单位</th>
+                </tr>
+                </thead>
+                <tbody id="allOverallPlanDetailsTabBody">
                 </tbody>
             </table>
         </div>
