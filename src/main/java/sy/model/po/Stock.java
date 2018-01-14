@@ -50,6 +50,9 @@ public class Stock {
     @Column(name = "type")
     private String type;
 
+    @Column(name = "relId")
+    private String relId;
+
     public int getId() {
         return id;
     }
@@ -128,5 +131,13 @@ public class Stock {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getRelId() {
+        return relId;
+    }
+
+    public void setRelId(String relId) {
+        this.relId = relId;
     }
 }

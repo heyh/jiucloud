@@ -16,6 +16,7 @@ import sy.service.ProjectServiceI;
 import sy.service.StockServiceI;
 import sy.service.UserServiceI;
 import sy.util.DateKit;
+import sy.util.StringUtil;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -94,6 +95,8 @@ public class StockServiceImpl implements StockServiceI{
         StockBean stockBean = new StockBean();
         if (stockList != null && stockList.size()>0) {
             for (Stock stock : stockList) {
+                if (!StringUtil.trimToEmpty(stock.getRelId()).equals("")) continue;
+
                 stockBean = new StockBean();
                 stockBean.setId(stock.getId());
                 stockBean.setCid(stock.getCid());
@@ -115,7 +118,15 @@ public class StockServiceImpl implements StockServiceI{
                     stockBean.setSpecifications(materials.getSpecifications());
                     stockBean.setDw(materials.getDw());
                 }
-                stockBean.setCount(stock.getCount());
+
+                double outStockCount = 0.00;
+                List<Stock> outStockList = stockDao.find("from Stock s where isDelete='0' and relId = " + StringUtil.trimToEmpty(stock.getId()));
+                if (outStockList != null && outStockList.size()>0) {
+                    for (Stock outStock : outStockList) {
+                        outStockCount += Double.parseDouble(outStock.getCount());
+                    }
+                }
+                stockBean.setCount(StringUtil.trimToEmpty(Double.parseDouble(stock.getCount()) + outStockCount));
                 stockBean.setCreateTime(stock.getCreateTime());
 
                 stockBeanList.add(stockBean);
