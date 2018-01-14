@@ -81,6 +81,7 @@
             del(_id);
         }
     }
+
     function add(checkedId) {
         if (document.getElementById("norecord") != undefined) {
             document.getElementById("monthPlanTabBody").removeChild(document.getElementById("norecord"));
@@ -106,13 +107,25 @@
             "<td>" + mc + "</td>" +
             "<td>" + specifications + "</td>" +
             "<td>" + dw + "</td>" +
-            "<td style='text-align:right;'><input type='text' class='layui-input' style='text-align: right;margin-bottom:0px;width: 50px; ' value=' " + count + " '></td>" +
-            "<td style='text-align:right;'><input type='text' class='layui-input' style='text-align: right;margin-bottom:0px;width: 50px; ' ></td>" +
-            "<td style='text-align:right;'><input type='text' class='layui-input' style='text-align: right;margin-bottom:0px;width: 50px; ' ></td>" +
+            "<td style='text-align:center;'><input onblur='cal(" + document.getElementById("monthPlanTable").rows.length + ")' type='text' class='layui-input' style='text-align: right;margin-bottom:0px;width: 50px; ' value=' " + count + " '></td>" +
+            "<td style='text-align:center;'><input onblur='cal(" + document.getElementById("monthPlanTable").rows.length + ")' type='text' class='layui-input' style='text-align: right;margin-bottom:0px;width: 50px; ' ></td>" +
+            "<td style='text-align:center;'><input type='text' class='layui-input' style='text-align: right;margin-bottom:0px;width: 50px; ' ></td>" +
  			"<td style='text-align:center; ' onmouseover='overShow(" + monthPlanTableLength + ")' onmouseout='outHide(" + monthPlanTableLength + ")' ><span id='span_" + monthPlanTableLength + "'></span><input id='btn_" + monthPlanTableLength + "' type='button' class='layui-btn  layui-btn-xs layui-btn-normal' onclick='supplierPage(" + monthPlanTableLength + ")' value='选择'></input></td>" +
             "<td style='display: none;'></td>" +
             "<td style='text-align:center; '><input type='button' class='layui-btn  layui-btn-xs layui-btn-normal' onclick='del(" + checkedId + ")' value='删除'></input></td>";
         document.getElementById("monthPlanTabBody").appendChild(trObj);
+    }
+    
+    function cal(_id) {
+
+        var tableObj = document.getElementById("monthPlanTable");
+		var _count = tableObj.rows[_id].cells[7].firstElementChild.value;
+        var _price = tableObj.rows[_id].cells[8].firstElementChild.value;
+        debugger;
+        if (_count != '' && _price != '') {
+            var _total = (_count * _price).toFixed(2);
+            tableObj.rows[_id].cells[9].firstElementChild.value = _total;
+		}
     }
 
     function overShow(checkedId) {
