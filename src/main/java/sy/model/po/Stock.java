@@ -53,6 +53,9 @@ public class Stock {
     @Column(name = "relId")
     private String relId;
 
+    @Column(name = "stockCount")
+    String stockCount;
+
     public int getId() {
         return id;
     }
@@ -139,5 +142,13 @@ public class Stock {
 
     public void setRelId(String relId) {
         this.relId = relId;
+    }
+
+    public String getStockCount() {
+        return stockCount;
+    }
+
+    public void setStockCount(String stockCount) {
+        this.stockCount = stockCount;
     }
 }

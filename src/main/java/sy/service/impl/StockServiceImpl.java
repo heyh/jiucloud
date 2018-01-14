@@ -44,6 +44,7 @@ public class StockServiceImpl implements StockServiceI{
 
     @Override
     public void addStock(Stock stock) {
+        stock.setStockCount(stock.getCount());
         stockDao.save(stock);
     }
 
@@ -118,15 +119,8 @@ public class StockServiceImpl implements StockServiceI{
                     stockBean.setSpecifications(materials.getSpecifications());
                     stockBean.setDw(materials.getDw());
                 }
-
-                double outStockCount = 0.00;
-                List<Stock> outStockList = stockDao.find("from Stock s where isDelete='0' and relId = " + StringUtil.trimToEmpty(stock.getId()));
-                if (outStockList != null && outStockList.size()>0) {
-                    for (Stock outStock : outStockList) {
-                        outStockCount += Double.parseDouble(outStock.getCount());
-                    }
-                }
-                stockBean.setCount(StringUtil.trimToEmpty(Double.parseDouble(stock.getCount()) + outStockCount));
+                stockBean.setCount(stock.getCount());
+                stockBean.setStockCount(stock.getStockCount());
                 stockBean.setCreateTime(stock.getCreateTime());
 
                 stockBeanList.add(stockBean);
@@ -179,6 +173,7 @@ public class StockServiceImpl implements StockServiceI{
                 stockBean.setDw(materials.getDw());
             }
             stockBean.setCount(stock.getCount());
+            stockBean.setStockCount(stock.getStockCount());
             stockBean.setCreateTime(stock.getCreateTime());
         }
 

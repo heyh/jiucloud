@@ -122,12 +122,6 @@
                                 width : 100,
                                 checkbox : true
                             },
-//                            {
-//                                field : 'projectName',
-//                                title : '工程名称',
-//                                width : 250
-//
-//                            },
                             {
                                 field : 'mc',
                                 title : '材料名称',
@@ -140,8 +134,8 @@
                                 width : 200
                             },
                             {
-                                field : 'count',
-                                title : '数量',
+                                field : 'stockCount',
+                                title : '库存数量',
                                 width : 100
                             },
                             {
@@ -187,12 +181,8 @@
                                         str += '&nbsp;';
                                         str += $
                                             .formatString(
-                                                '<img onclick="outStorageFun(\'{0}\',\'{1}\',\'{2}\',\'{3}\',\'{4}\');" src="{5}" title="出库"/>',
+                                                '<img onclick="outStockFun(\'{0}\');" src="{1}" title="出库"/>',
                                                 row.id,
-                                                row.mc,
-                                                row.specifications,
-                                                row.count,
-                                                row.dw,
                                                 '${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/out.png');
                                     }
                                     return str;
@@ -226,35 +216,25 @@
                 });
         }
 
-        function outStorageFun(id, mc, specifications, count,dw) {
-            layer.open({
-                type: 1,
-                title: '材料出库',
-                content: $('#outStorageDiv'),
-                btn: '确定',
-                btnAlign: 'c',
-                shade: 0.3,
-                area: ['250px', '180px'],
-                yes: function () {
-                    parent.$.messager.progress({title: '提示', text: '数据处理中，请稍后....'});
-                    $.ajax({
-                        url: '${pageContext.request.contextPath}/stockController/securi_outStorage',
-                        type: 'post',
-                        data: {"id": id, outCount: $('#outCount').val()},
-                        dataType: 'json',
-                        contentType: "application/x-www-form-urlencoded; charset=utf-8",
-                        success: function (data) {
-                            parent.$.messager.progress('close');
-                            if (data.success) {
-                                layer.closeAll();
-                                layer.msg('出库成功!');
-                                searchFun();
-                            }
+        // 出库
+        function outStockFun(id) {
+            parent.$
+                .modalDialog({
+                    title : '材料出库',
+                    width : 900,
+                    height : 520,
+                    href : '${pageContext.request.contextPath}/stockController/securi_outStock?id=' + id,
+                    buttons : [ {
+                        text : '确定',
+                        handler : function() {
+                            parent.$.modalDialog.openner_dataGrid = dataGrid;//因为添加成功之后，需要刷新这个dataGrid，所以先预定义好
+                            var f = parent.$.modalDialog.handler.find('#form');
+                            f.submit();
                         }
-                    });
-                }
-            });
+                    } ]
+                });
         }
+
         //编辑
         function editFun(id) {
             parent.$
@@ -411,14 +391,4 @@
 </div>
 
 </body>
-<div id="outStorageDiv">
-    <div>
-        <div class="control-group" style="padding-top: 20px; ">
-            <label class="control-label" for="_mc">材料名称:</label>
-            <div class="controls">
-                <span id="_mc"></span>
-            </div>
-        </div>
-    </div>
-</div>
 </html>

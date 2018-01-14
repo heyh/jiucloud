@@ -6,8 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import sy.model.po.Stock;
-import sy.model.po.StockBean;
+import sy.model.Item;
+import sy.model.po.*;
 import sy.pageModel.*;
 import sy.service.StockServiceI;
 import sy.util.ConfigUtil;
@@ -15,10 +15,13 @@ import sy.util.StringUtil;
 import sy.util.UtilDate;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by heyh on 2017/12/23.
@@ -148,5 +151,52 @@ public class StockController {
             json.setMsg(e.getMessage());
         }
         return json;
+    }
+
+    @RequestMapping("/securi_outStock")
+    public String outStock(HttpServletRequest request){
+        String id = request.getParameter("id");
+        StockBean stockBean = stockService.getStockBean(id);
+        request.setAttribute("stockBean", stockBean);
+        return "/app/materials/stock/outStock";
+
+    }
+
+    @RequestMapping("/securi_saveOutStock")
+    @ResponseBody
+    public Json saveOutStock(HttpServletRequest request) {
+        SessionInfo sessionInfo = (SessionInfo) request.getSession().getAttribute(sy.util.ConfigUtil.getSessionInfoName());
+        String uid = sessionInfo.getId();
+        String cid = sessionInfo.getCompid();
+
+        String projectId = request.getParameter("outProId");
+        int id = Integer.parseInt(request.getParameter("id"));
+        String outCount = request.getParameter("outCount");
+        Stock stock = stockService.detail(StringUtil.trimToEmpty(id));
+        stock.setStockCount(StringUtil.trimToEmpty(Double.parseDouble(stock.getStockCount()) - Double.parseDouble(outCount)));
+        stockService.update(stock);
+
+        Stock outStock = new Stock();
+        outStock.setProjectId(projectId);
+        outStock.setCid(cid);
+        outStock.setUid(uid);
+        outStock.setCount(outCount);
+        outStock.setStockCount(outCount);
+        outStock.setMaterialsId(stock.getMaterialsId());
+        outStock.setCreateTime(new Date());
+        outStock.setType("0"); // 普通材料
+        outStock.setRelId(StringUtil.trimToEmpty(stock.getId()));
+        stockService.addStock(outStock);
+
+        Json j = new Json();
+        try {
+            j.setMsg("出库成功！");
+            j.setSuccess(true);
+        } catch (Exception ex) {
+            j.setMsg("出库失败");
+            j.setSuccess(false);
+        }
+
+        return j;
     }
 }

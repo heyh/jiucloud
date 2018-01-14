@@ -46,6 +46,10 @@ public class StockBean {
 
     private String type;
 
+    private String relId;
+
+    private String stockCount;
+
     public int getId() {
         return id;
     }
@@ -164,5 +168,21 @@ public class StockBean {
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getRelId() {
+        return relId;
+    }
+
+    public void setRelId(String relId) {
+        this.relId = relId;
+    }
+
+    public String getStockCount() {
+        return stockCount;
+    }
+
+    public void setStockCount(String stockCount) {
+        this.stockCount = stockCount;
     }
 }
