@@ -37,6 +37,7 @@
 
     parent.$.messager.progress('close');
 
+    var dataGrid;
     $(document).ready(function () {
         if ("${proId}" == '' || "${proId}" == undefined || "${proId}" == 'undefined') {
             $('#overallPlanTableId').hide();
@@ -44,7 +45,6 @@
 
             var _url = '${pageContext.request.contextPath}/materialManageController/securi_materialsTreeGrid';
             var _clickUrl = '${pageContext.request.contextPath}/materialManageController/securi_materialsTreeGridChild';
-            var dataGrid;
             $(function () {
                 dataGrid = $('#dataGrid')
                     .treegrid(
@@ -128,6 +128,15 @@
         }
 
     });
+
+    function searchMaterialsFun() {
+        $.post('${pageContext.request.contextPath}/materialManageController/securi_materialsTreeGrid',
+            {keyword: $('#keyword').val()},
+            function (data) {
+                dataGrid.treegrid('loadData', data);
+            },
+            'json');
+    }
 
     function overallPlan(projectId) {
         debugger;
@@ -463,7 +472,7 @@
 				<blockquote class="layui-elem-quote" style="height: 25px">
 					<a style="font-size:16px;">材料库</a>
 					<input type="text" class="input-medium search-query" style="margin-left: 10px" id="keyword" name="keyword">
-					<button class="layui-btn layui-btn-sm layui-btn-normal layui-btn-radius" onclick="searchFun()">搜索</button>
+					<button class="layui-btn layui-btn-sm layui-btn-normal layui-btn-radius" onclick="searchMaterialsFun()">搜索</button>
 				</blockquote>
 
 				<div data-options="region:'center',border:false">
