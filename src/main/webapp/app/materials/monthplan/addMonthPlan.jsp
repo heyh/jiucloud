@@ -38,7 +38,95 @@
     parent.$.messager.progress('close');
 
     $(document).ready(function () {
-		overallPlan("${proId}");
+        if ("${proId}" == '' || "${proId}" == undefined || "${proId}" == 'undefined') {
+            $('#overallPlanTableId').hide();
+            $('#materialsDataGridId').show();
+
+            var _url = '${pageContext.request.contextPath}/materialManageController/securi_materialsTreeGrid';
+            var _clickUrl = '${pageContext.request.contextPath}/materialManageController/securi_materialsTreeGridChild';
+            var dataGrid;
+            $(function () {
+                dataGrid = $('#dataGrid')
+                    .treegrid(
+                        {
+                            url: _url,
+                            method: 'get',
+                            idField: 'id',
+                            treeField: 'mc',
+                            iconCls: 'icon-ok',
+                            pageSize: 300,
+                            pageList: [300, 600, 900],
+                            rownumbers: true,
+                            animate: true,
+                            striped: true,//隔行变色,
+                            pagination: true,
+                            lines: false,
+                            dnd: true,
+                            onlyLeafCheck: true,
+                            cascadeCheck: false,
+                            columns: [[
+                                {
+                                    title: '材料名称',
+                                    field: 'mc',
+                                    width: 300,
+                                    formatter: function (value, row, index) {
+                                        if (row.state == 'closed') {
+                                            return row.mc;
+                                        } else {
+                                            return "<input type='checkbox' id=" + "gridtree_row_" + row.id + " />" + row.mc;
+                                        }
+                                    }
+                                },
+                                {
+                                    title: '规格型号',
+                                    field: 'specifications',
+                                    width: 150
+                                },
+                                {
+                                    title: '单位',
+                                    field: 'dw',
+                                    width: 90
+                                },
+                                {
+                                    titile: 'ID',
+                                    field: 'id',
+                                    width: 10,
+                                    hidden: true
+                                }
+                            ]],
+
+                            onBeforeLoad: function (row, param) {
+                                if (row) $(this).treegrid('options').url = _clickUrl;
+                            },
+                            toolbar: '#toolbar',
+                            onLoadSuccess: function (data) {
+                                delete $(this).treegrid('options').queryParams['id'];
+                                $('#searchForm table').show();
+                                $(this).treegrid('collapseAll');
+                                parent.$.messager.progress('close');
+                                $(this).treegrid('tooltip');
+                            },
+                            onClickRow: function (row) {
+                                if ($('#' + "gridtree_row_" + row.id).attr("checked")) {
+                                    $('#' + "gridtree_row_" + row.id).attr("checked", "true");
+
+                                    addNoProject(row);
+                                } else {
+                                    $('#' + "gridtree_row_" + row.id).removeAttr("checked");
+
+                                    del(row.id);
+                                }
+                            },
+                        });
+            });
+
+        } else {
+			$('#overallPlanTableId').show();
+            $('#materialsDataGridId').hide();
+
+            overallPlan("${proId}");
+        }
+
     });
 
     function overallPlan(projectId) {
@@ -80,6 +168,32 @@
             $('#' + "overallPlanTable_row_" + _id).removeAttr("checked");
             del(_id);
         }
+    }
+
+    function addNoProject(row) {
+
+        if (document.getElementById("norecord") != undefined) {
+            document.getElementById("monthPlanTabBody").removeChild(document.getElementById("norecord"));
+        }
+
+        var monthPlanTableLength = document.getElementById("monthPlanTable").rows.length;
+        var trObj = document.createElement("tr");
+        trObj.id = "tr_monthplan_" + row.id;
+        trObj.innerHTML =
+            "<td style='text-align:center;'>" + document.getElementById("monthPlanTable").rows.length + "</td>" +
+            "<td style='display: none;'>" + '' + "</td>" +
+            "<td style='display: none;'>" + '' + "</td>" +
+            "<td style='display: none;'>" + row.id + "</td>" +
+            "<td>" + row.mc + "</td>" +
+            "<td>" + row.specifications + "</td>" +
+            "<td>" + row.dw + "</td>" +
+            "<td style='text-align:center;'><input onblur='cal(" + document.getElementById("monthPlanTable").rows.length + ")' type='text' class='layui-input' style='text-align: right;margin-bottom:0px;width: 50px; ' ></td>" +
+            "<td style='text-align:center;'><input onblur='cal(" + document.getElementById("monthPlanTable").rows.length + ")' type='text' class='layui-input' style='text-align: right;margin-bottom:0px;width: 50px; ' ></td>" +
+            "<td style='text-align:center;'><input type='text' class='layui-input' style='text-align: right;margin-bottom:0px;width: 50px; ' ></td>" +
+            "<td style='text-align:center; ' onmouseover='overShow(" + monthPlanTableLength + ")' onmouseout='outHide(" + monthPlanTableLength + ")' ><span id='span_" + monthPlanTableLength + "'></span><input id='btn_" + monthPlanTableLength + "' type='button' class='layui-btn  layui-btn-xs layui-btn-normal' onclick='supplierPage(" + monthPlanTableLength + ")' value='选择'></input></td>" +
+            "<td style='display: none;'></td>" +
+            "<td style='text-align:center; '><input type='button' class='layui-btn  layui-btn-xs layui-btn-normal' onclick='del(" + row.id + ")' value='删除'></input></td>";
+        document.getElementById("monthPlanTabBody").appendChild(trObj);
     }
 
     function add(checkedId) {
@@ -150,7 +264,12 @@
         for (var i = 1; i < document.getElementById("monthPlanTable").rows.length; i++) {
             document.getElementById("monthPlanTable").rows[i].cells[0].innerHTML = i;
         }
-        $('#' + "overallPlanTable_row_" + _id).removeAttr("checked");
+        if ("${proId}" == '' || "${proId}" == undefined || "${proId}" == 'undefined') {
+            $('#' + "gridtree_row_" + _id).removeAttr("checked");
+		} else {
+            $('#' + "overallPlanTable_row_" + _id).removeAttr("checked");
+		}
+
 
         if (document.getElementById("monthPlanTable").rows.length == 1) {
             var trObj = document.createElement("tr");
@@ -315,29 +434,42 @@
 <div class="container-fluid">
 	<div class="row-fluid">
 		<div class="span5">
-			<blockquote class="layui-elem-quote" style="height: 25px">
-				<a style="font-size:16px;">材料总体计划</a>
-			</blockquote>
+			<div id="overallPlanTableId" style="display: none;">
+				<blockquote class="layui-elem-quote" style="height: 25px">
+					<a style="font-size:16px;">材料总体计划</a>
+				</blockquote>
 
-			<table class="table_style table table-striped table-bordered table-hover table-condensed"
-				   id="overallPlanTable">
-				<thead>
-				<tr>
-					<th style="text-align:center; width: 25px;">序号</th>
-					<th style="display: none; ">项目ID</th>
-					<th style="display: none;">计划ID</th>
-					<th style="display: none; ">材料ID</th>
-					<th style="text-align:center; ">材料名称</th>
-					<th style="text-align:center; width: 30px;">规格型号</th>
-					<th style="text-align:center; width: 30px;">计划</th>
-					<th style="text-align:center; width: 30px;">剩余</th>
-					<th style="text-align:center; width: 25px;">单位</th>
-					<th style="text-align:center; width: 25px;">选择</th>
-				</tr>
-				</thead>
-				<tbody id="overallPlanTabBody">
-				</tbody>
-			</table>
+				<table class="table_style table table-striped table-bordered table-hover table-condensed"
+					   id="overallPlanTable">
+					<thead>
+					<tr>
+						<th style="text-align:center; width: 25px;">序号</th>
+						<th style="display: none; ">项目ID</th>
+						<th style="display: none;">计划ID</th>
+						<th style="display: none; ">材料ID</th>
+						<th style="text-align:center; ">材料名称</th>
+						<th style="text-align:center; width: 30px;">规格型号</th>
+						<th style="text-align:center; width: 30px;">计划</th>
+						<th style="text-align:center; width: 30px;">剩余</th>
+						<th style="text-align:center; width: 25px;">单位</th>
+						<th style="text-align:center; width: 25px;">选择</th>
+					</tr>
+					</thead>
+					<tbody id="overallPlanTabBody">
+					</tbody>
+				</table>
+			</div>
+			<div id="materialsDataGridId" style="display: none;">
+				<blockquote class="layui-elem-quote" style="height: 25px">
+					<a style="font-size:16px;">材料库</a>
+					<input type="text" class="input-medium search-query" style="margin-left: 10px" id="keyword" name="keyword">
+					<button class="layui-btn layui-btn-sm layui-btn-normal layui-btn-radius" onclick="searchFun()">搜索</button>
+				</blockquote>
+
+				<div data-options="region:'center',border:false">
+					<table id="dataGrid"></table>
+				</div>
+			</div>
 		</div>
 
 		<div class="span7">
