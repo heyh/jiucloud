@@ -68,7 +68,7 @@
                                 {
                                     title: '材料名称',
                                     field: 'mc',
-                                    width: 300,
+                                    width: 250,
                                     formatter: function (value, row, index) {
                                         if (row.state == 'closed') {
                                             return row.mc;
