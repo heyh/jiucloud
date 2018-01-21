@@ -613,21 +613,28 @@
 
 
     function exportMaintenanceDetailsFun() {
-        layer.open({
-            type: 1,
-            title: '时间选择',
-            closeBtn: 2,
-            btn:['导出'],
-            yes: function(index, layero){
-                var params = 'exportMaintenanceDetailsStartDate=' +$('#exportMaintenanceDetailsStartDate').val();
-                params += '&exportMaintenanceDetailsEndDate=' + $('#exportMaintenanceDetailsEndDate').val();
-                var url = "${pageContext.request.contextPath}/analysisController/securi_maintenanceDetails?" + params;
-                window.open(url);
-                layer.close(index); //如果设定了yes回调，需进行手工关闭
-            },
-            shadeClose: false,
-            content: $('#exportMaintenanceDetailsDiv') //这里content是一个DOM，注意：最好该元素要存放在body最外层，否则可能被其它的相对元素所影响
-        });
+
+        var params = 'exportMaintenanceDetailsStartDate=' +$('#startTime').val();
+        params += '&exportMaintenanceDetailsEndDate=' + $('#endTime').val();
+        params += '&exportMaintenanceDetailsItemCode=' + $('#itemCode').val();
+        var url = "${pageContext.request.contextPath}/analysisController/securi_maintenanceDetails?" + params;
+        window.open(url);
+
+        <%--layer.open({--%>
+            <%--type: 1,--%>
+            <%--title: '时间选择',--%>
+            <%--closeBtn: 2,--%>
+            <%--btn:['导出'],--%>
+            <%--yes: function(index, layero){--%>
+                <%--var params = 'exportMaintenanceDetailsStartDate=' +$('#exportMaintenanceDetailsStartDate').val();--%>
+                <%--params += '&exportMaintenanceDetailsEndDate=' + $('#exportMaintenanceDetailsEndDate').val();--%>
+                <%--var url = "${pageContext.request.contextPath}/analysisController/securi_maintenanceDetails?" + params;--%>
+                <%--window.open(url);--%>
+                <%--layer.close(index); //如果设定了yes回调，需进行手工关闭--%>
+            <%--},--%>
+            <%--shadeClose: false,--%>
+            <%--content: $('#exportMaintenanceDetailsDiv') //这里content是一个DOM，注意：最好该元素要存放在body最外层，否则可能被其它的相对元素所影响--%>
+        <%--});--%>
     }
 	//过滤条件查询
 	function searchFun() {
@@ -920,11 +927,12 @@
 	</div>
 </body>
 
-	<div id="exportMaintenanceDetailsDiv" style="display:none; width: 350px;height:60px;text-align:center; vertical-align:middle;">
+	<div id="exportMaintenanceDetailsDiv" style="display:none; width: 350px;height:100px;text-align:center; vertical-align:middle;">
 		<div style="margin-top: 10%;">
-		<input style="" class="Wdate span2" name="exportMaintenanceDetailsStartDate" id='exportMaintenanceDetailsStartDate' placeholder="开始时间" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',readOnly:true})" />
-		-
-		<input style="" class="Wdate span2" name="exportMaintenanceDetailsEndDate" id='exportMaintenanceDetailsEndDate' placeholder="截止时间" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',readOnly:true})" />
+			<input style="" class="Wdate span2" name="exportMaintenanceDetailsStartDate" id='exportMaintenanceDetailsStartDate' placeholder="开始时间" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',readOnly:true})" />
+			-
+			<input style="" class="Wdate span2" name="exportMaintenanceDetailsEndDate" id='exportMaintenanceDetailsEndDate' placeholder="截止时间" onclick="WdatePicker({dateFmt:'yyyy-MM-dd',readOnly:true})" />
+			<select></select>
 		</div>
 	</div>
 </html>

@@ -563,6 +563,7 @@ public class analysisController extends BaseController {
 	@RequestMapping("/securi_maintenanceDetails")
 	public ModelAndView maintenanceDetails(@RequestParam(value = "exportMaintenanceDetailsStartDate", required = false) String exportMaintenanceDetailsStartDate,
 										   @RequestParam(value = "exportMaintenanceDetailsEndDate", required = false) String exportMaintenanceDetailsEndDate,
+										   @RequestParam(value = "exportMaintenanceDetailsItemCode", required = false) String exportMaintenanceDetailsItemCode,
 										   HttpServletResponse response, HttpServletRequest request) {
 		ModelAndView mv = new ModelAndView();
 		Map<String, Object> dataMap = new HashMap<String, Object>();
@@ -571,10 +572,11 @@ public class analysisController extends BaseController {
 			SessionInfo sessionInfo = (SessionInfo) request.getSession().getAttribute(ConfigUtil.getSessionInfoName());
 			String cid = sessionInfo.getCompid();
 
-			String startDate = exportMaintenanceDetailsStartDate + " 00:00:00";
-			String endDate= exportMaintenanceDetailsEndDate + " 23:59:59";
+			String startDate = exportMaintenanceDetailsStartDate.length()  > 10 ? exportMaintenanceDetailsStartDate : exportMaintenanceDetailsStartDate + " 00:00:00";
+			String endDate= exportMaintenanceDetailsEndDate.length() > 10 ? exportMaintenanceDetailsEndDate : exportMaintenanceDetailsEndDate + " 23:59:59";
+			String itemCode = exportMaintenanceDetailsItemCode;
 
-			List<Object[]> tempMaintenanceDetailsList = fieldDataService.getMaintenanceDetails(cid, startDate, endDate);
+			List<Object[]> tempMaintenanceDetailsList = fieldDataService.getMaintenanceDetails(cid, startDate, endDate, itemCode);
 
 			List<Map<String, Object>> datas = new ArrayList<Map<String, Object>>();
 			Map<String, Object> maintenanceDetails = new HashMap<String, Object>();

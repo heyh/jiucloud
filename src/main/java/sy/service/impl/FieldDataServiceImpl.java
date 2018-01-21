@@ -1153,22 +1153,25 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
     }
 
     @Override
-    public List<Object[]> getMaintenanceDetails(String cid, String startDate, String endDate) {
+    public List<Object[]> getMaintenanceDetails(String cid, String startDate, String endDate, String itemCode) {
 
         Map<String, Object> params = new HashMap<String, Object>();
+        String sql = " SELECT date_format(a.creatTime, '%Y-%m-%d') createDate, a.specifications, a.itemCode,sum(count) _count FROM TFieldData a WHERE a.isDelete = '0' AND a.itemCode LIKE '700%' AND a.cid = :cid  ";
         params.put("cid", cid);
-        params.put("startTime", DateKit.strToDateOrTime(startDate));
-        params.put("endTime", DateKit.strToDateOrTime(endDate));
+        if (!StringUtil.trimToEmpty(startDate).equals("")) {
+            sql += " AND a.creatTime >= :startTime ";
+            params.put("startTime", DateKit.strToDateOrTime(startDate));
+        }
+        if (!StringUtil.trimToEmpty(endDate).equals("")) {
+            sql += " AND a.creatTime <= :endTime ";
+            params.put("endTime", DateKit.strToDateOrTime(endDate));
+        }
+        if (!StringUtil.trimToEmpty(itemCode).equals("")) {
+            sql += " and itemCode like :itemCode ";
+            params.put("itemCode", itemCode + "%%");
+        }
 
-        String sql = "SELECT\n" +
-                "        date_format(a.creatTime, '%Y-%m-%d') createDate,\n" +
-                "        a.specifications,\n" +
-                "        a.itemCode,\n" +
-                "        sum(count) _count\n" +
-                "      FROM TFieldData a\n" +
-                "      WHERE\n" +
-                "        a.isDelete = '0' AND a.itemCode LIKE '700%' AND a.cid = :cid AND a.creatTime >= :startTime AND a.creatTime <= :endTime\n" +
-                "      GROUP BY a.specifications, date_format(a.creatTime, '%Y-%m-%d'), a.itemCode";
+        sql += " GROUP BY a.specifications, date_format(a.creatTime, '%Y-%m-%d'), a.itemCode ";
 
         return fieldDataDaoI.findBySql(sql, params);
     }
