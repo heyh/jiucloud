@@ -592,8 +592,10 @@ public class analysisController extends BaseController {
 			vpd.put("var2", "");
 			vpd.put("var3", "");
 			for (Map<String, Object> billCostInfo : billCostInfos) {
-				if (Integer.parseInt(StringUtil.trimToEmpty(billCostInfo.get("isSend"))) == 1) {
-					vpd.put("var" + i++, "");
+				if(StringUtil.trimToEmpty(billCostInfo.get("itemCode")).contains(exportMaintenanceDetailsItemCode) || exportMaintenanceDetailsItemCode.contains(StringUtil.trimToEmpty(billCostInfo.get("itemCode")))) {
+					if (Integer.parseInt(StringUtil.trimToEmpty(billCostInfo.get("isSend"))) == 1) {
+						vpd.put("var" + i++, "");
+					}
 				}
 			}
 			varList.add(vpd);
@@ -607,18 +609,26 @@ public class analysisController extends BaseController {
 				if (Integer.parseInt(StringUtil.trimToEmpty(billCostInfo.get("level"))) == 3) {
 					int count = 0;
 					for (Map<String, Object> bill : billCostInfos) {
-						if (Long.parseLong(StringUtil.trimToEmpty(bill.get("pid"))) == Long.parseLong(StringUtil.trimToEmpty(billCostInfo.get("nid")))) {
-							count++;
+						if(StringUtil.trimToEmpty(billCostInfo.get("itemCode")).contains(exportMaintenanceDetailsItemCode) || exportMaintenanceDetailsItemCode.contains(StringUtil.trimToEmpty(billCostInfo.get("itemCode")))) {
+							if (Long.parseLong(StringUtil.trimToEmpty(bill.get("pid"))) == Long.parseLong(StringUtil.trimToEmpty(billCostInfo.get("nid")))) {
+								count++;
+							}
 						}
 					}
-					vpd.put("var" + i++, StringUtil.trimToEmpty(billCostInfo.get("costType")) + "|" +count);
+					if(StringUtil.trimToEmpty(billCostInfo.get("itemCode")).contains(exportMaintenanceDetailsItemCode) || exportMaintenanceDetailsItemCode.contains(StringUtil.trimToEmpty(billCostInfo.get("itemCode")))) {
+						vpd.put("var" + i++, StringUtil.trimToEmpty(billCostInfo.get("costType")) + "|" + count);
+					}
 
 					for (Map<String, Object> bill : billCostInfos) {
-						if (Long.parseLong(StringUtil.trimToEmpty(bill.get("pid"))) == Long.parseLong(StringUtil.trimToEmpty(billCostInfo.get("nid")))) {
-							vpd.put("var" + i++, "");
+						if(StringUtil.trimToEmpty(billCostInfo.get("itemCode")).contains(exportMaintenanceDetailsItemCode) || exportMaintenanceDetailsItemCode.contains(StringUtil.trimToEmpty(billCostInfo.get("itemCode")))) {
+							if (Long.parseLong(StringUtil.trimToEmpty(bill.get("pid"))) == Long.parseLong(StringUtil.trimToEmpty(billCostInfo.get("nid")))) {
+								vpd.put("var" + i++, "");
+							}
 						}
 					}
-					i--;
+					if(StringUtil.trimToEmpty(billCostInfo.get("itemCode")).contains(exportMaintenanceDetailsItemCode) || exportMaintenanceDetailsItemCode.contains(StringUtil.trimToEmpty(billCostInfo.get("itemCode")))) {
+						i--;
+					}
 				}
 			}
 			varList.add(vpd);
@@ -629,8 +639,10 @@ public class analysisController extends BaseController {
 			vpd.put("var2", "维护日期");
 			vpd.put("var3", "设施名称");
 			for (Map<String, Object> billCostInfo : billCostInfos) {
-				if (Integer.parseInt(StringUtil.trimToEmpty(billCostInfo.get("isSend"))) == 1) {
-					vpd.put("var" + i++, StringUtil.trimToEmpty(billCostInfo.get("costType")));
+				if(StringUtil.trimToEmpty(billCostInfo.get("itemCode")).contains(exportMaintenanceDetailsItemCode) || exportMaintenanceDetailsItemCode.contains(StringUtil.trimToEmpty(billCostInfo.get("itemCode")))) {
+					if (Integer.parseInt(StringUtil.trimToEmpty(billCostInfo.get("isSend"))) == 1) {
+						vpd.put("var" + i++, StringUtil.trimToEmpty(billCostInfo.get("costType")));
+					}
 				}
 			}
 			varList.add(vpd);
@@ -660,8 +672,10 @@ public class analysisController extends BaseController {
 				vpd.put("var3", datas.get(j).get("specifications"));
 				int _j=4;
 				for (Map<String, Object> billCostInfo : billCostInfos) {
-					if (Integer.parseInt(StringUtil.trimToEmpty(billCostInfo.get("isSend"))) == 1) {
-						vpd.put("var" + _j++ , datas.get(j).get(StringUtil.trimToEmpty(billCostInfo.get("itemCode"))));
+					if(StringUtil.trimToEmpty(billCostInfo.get("itemCode")).contains(exportMaintenanceDetailsItemCode) || exportMaintenanceDetailsItemCode.contains(StringUtil.trimToEmpty(billCostInfo.get("itemCode")))) {
+						if (Integer.parseInt(StringUtil.trimToEmpty(billCostInfo.get("isSend"))) == 1) {
+							vpd.put("var" + _j++, datas.get(j).get(StringUtil.trimToEmpty(billCostInfo.get("itemCode"))));
+						}
 					}
 				}
 				varList.add(vpd);
