@@ -10,4 +10,10 @@ import sy.pageModel.PageHelper;
 public interface MaterialsServiceI {
     DataGrid dataGrid(PageHelper pageHelper, String keyword, String pid);
     Materials findById(int id);
+
+    Materials addNode(String cid, String pid, String mc, String specifications, String dw);
+
+    void delNode(String id);
+
+    void updateNode(Materials info);
 }

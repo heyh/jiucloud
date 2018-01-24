@@ -1,5 +1,6 @@
 package sy.service.impl;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sy.dao.MaterialsDaoI;
@@ -72,6 +73,32 @@ public class MaterialsServiceImpl implements MaterialsServiceI {
     public Materials findById(int id) {
         Materials materials = materialsDao.get("from Materials m where m.id = " + id);
         return materials;
+    }
+
+    @Override
+    public Materials addNode(String cid, String pid, String mc, String specifications, String dw) {
+        Materials materials = new Materials();
+        materials.setCid(cid);
+        materials.setPid(pid);
+        materials.setMc(mc);
+        materials.setSpecifications(specifications);
+        materials.setDw(dw);
+        materialsDao.save(materials);
+        return materials;
+    }
+
+    @Override
+    public void delNode(String id) {
+        Map params = new HashMap<String, Object>();
+        params.put("id", Integer.parseInt(id));
+        Materials materials = materialsDao.get(" from Materials where id = :id ", params);
+        materialsDao.delete(materials);
+    }
+
+    @Override
+    public void updateNode(Materials info) {
+        Materials materials = materialsDao.get(Materials.class, info.getId());
+        BeanUtils.copyProperties(info, materials);
     }
 
     private boolean hasChild(int id) {
