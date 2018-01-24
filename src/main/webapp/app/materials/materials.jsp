@@ -168,6 +168,45 @@
         });
     });
 
+    // 增加根结点
+	function addFun() {
+        layer.open({
+            type: 1,
+            title: '材料库维护-增加材料类型',
+            content: $('#rootDiv'),
+            btn: '确定',
+            btnAlign: 'r',
+            shade: 0.3,
+            area: ['300px', '200px'],
+            yes: function () {
+                if ($('#mc_add_root').val() == '') {
+                    layer.alert('材料类型名称必填！', {icon: 2});
+                    return;
+                }
+                $.ajax({
+                    url: '${pageContext.request.contextPath}/materialManageController/securi_addNode',
+                    type: 'post',
+                    data: {
+                        pid: '0',
+                        mc: $('#mc_add_root').val(),
+                        specifications: '',
+                        dw: ''
+                    },
+                    dataType: 'json',
+                    contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                    success: function (data) {
+                        if (data.rspCode == '0') {
+                            layer.closeAll();
+                            layer.msg('增加成功!');
+                            searchFunForNoKeyword();
+                            $('#mc_add_root').val('');
+                        }
+                    }
+                });
+            }
+        });
+    }
+
     // 增加结点
     function addNodeFun(pid) {
         layer.open({
@@ -323,6 +362,12 @@
 		<a onclick="addFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'add_new'">添加</a>
 	</div>
 </body>
+
+<div style="text-align: center; margin-top: 30px" id="rootDiv">
+	<div class="controls">
+		<input type="text" id="mc_add_root" placeholder="材料类型名称">
+	</div>
+</div>
 
 <div style="text-align: center; margin-top: 10px" id="addChildDiv">
 	<div class="controls">
