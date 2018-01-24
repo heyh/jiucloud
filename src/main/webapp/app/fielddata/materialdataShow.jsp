@@ -64,7 +64,7 @@
 		.table_style tbody tr.hover td{background:#e4fbfb}
 		.td_title{font-weight:bold;color:#333}
 
-		.subtotal { font-weight: bold; }/*合计单元格样式*/
+		.subtotal { font-weight: bold; } /*合计单元格样式*/
 	</style>
 <script type="text/javascript">
 	var dataGrid;
