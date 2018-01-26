@@ -179,7 +179,15 @@ public class OverallPlanServiceImpl implements OverallPlanServiceI {
                 for (OverallPlanDetailsBean overallPlanDetailsBean : overallPlanDetailsBeanAll) {
                     for (MonthPlanDetailsBean monthPlanDetailsBean : monthPlanDetailsBeanList) {
                         if (Integer.parseInt(overallPlanDetailsBean.getMaterialsId()) == Integer.parseInt(monthPlanDetailsBean.getMaterialsId())) {
-                            int remainCount = Integer.parseInt(overallPlanDetailsBean.getCount()) - Integer.parseInt(StringUtil.trimToEmpty(monthPlanDetailsBean.getCount()));
+                            Double overallPlanDetailsBeanCount = 0.00;
+                            if (!StringUtil.trimToEmpty(overallPlanDetailsBean.getCount()).equals("")) {
+                                overallPlanDetailsBeanCount = Double.parseDouble(StringUtil.trimToEmpty(overallPlanDetailsBean.getCount()));
+                            }
+                            Double monthPlanDetailsBeanCount = 0.00;
+                            if (!StringUtil.trimToEmpty(monthPlanDetailsBean.getCount()).equals("")) {
+                                monthPlanDetailsBeanCount = Double.parseDouble(StringUtil.trimToEmpty(monthPlanDetailsBean.getCount()));
+                            }
+                            double remainCount = overallPlanDetailsBeanCount - monthPlanDetailsBeanCount;
                             overallPlanDetailsBean.setRemainCount(StringUtil.trimToEmpty(remainCount));
                         }
                     }
