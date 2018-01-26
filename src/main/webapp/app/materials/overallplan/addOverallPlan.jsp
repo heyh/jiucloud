@@ -65,7 +65,7 @@
                         {
                             title: '材料名称',
                             field: 'mc',
-                            width: 300,
+                            width: 250,
                             formatter: function (value, row, index) {
                                 if (row.state == 'closed') {
                                     return row.mc;
@@ -77,7 +77,7 @@
                         {
                             title: '规格型号',
                             field: 'specifications',
-                            width: 150
+                            width: 100
                         },
                         {
                             title: '单位',
@@ -89,6 +89,36 @@
                             field: 'id',
                             width: 10,
                             hidden: true
+                        },
+                        {
+                            field : 'action',
+                            title : '操作',
+                            width : 100,
+                            formatter : function(value, row, index) {
+                                var str = '';
+
+                                str += $
+                                    .formatString(
+                                        ' <img style="cursor:pointer" onclick="addNodeFun(\'{0}\');" src="{1}" title="添加"/>',
+                                        row.id,
+                                        '${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/addchild-blue.png');
+
+                                str += '&nbsp;';
+                                str += $
+                                    .formatString(
+                                        ' <img style="cursor:pointer" onclick="editNodeFun(\'{0}\');" src="{1}" title="修改"/>',
+                                        row.id,
+                                        '${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/modify-blue.png');
+
+                                str += '&nbsp;';
+                                str += $
+                                    .formatString(
+                                        ' <img style="cursor:pointer" onclick="delNodeFun(\'{0}\');" src="{1}" title="删除"/>',
+                                        row.id,
+                                        '${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/delete-blue.png');
+
+                                return str;
+                            }
                         }
                     ]],
 
@@ -124,6 +154,135 @@
                 dataGrid.treegrid('loadData', data);
             },
             'json');
+    }
+
+    // 增加结点
+    function addNodeFun(pid) {
+
+        layer.open({
+            type: 1,
+            title: '材料库维护-增加材料',
+            content: '<div style="text-align: center; margin-top: 10px;margin-left: 40px" id="addChildDiv">' +
+                        '<div class="controls">' +
+                            '<input type="text" id="mc_add" placeholder="材料名称">' +
+                        '</div>' +
+                        '<div class="controls">' +
+                            '<input type="text" id="specifications_add" placeholder="规格型号">' +
+                        '</div>' +
+                        '<div class="controls">' +
+                            '<input type="text" id="dw_add" placeholder="单位">' +
+                        '</div>' +
+                     '</div>',
+            btn: '确定',
+            btnAlign: 'r',
+            shade: 0.3,
+            area: ['300px', '260px'],
+            yes: function () {
+                debugger;
+                if ($('#mc_add').val() == '') {
+                    layer.alert('材料名称必填！', {icon: 2});
+                    return;
+                }
+                $.ajax({
+                    url: '${pageContext.request.contextPath}/materialManageController/securi_addNode',
+                    type: 'post',
+                    data: {
+                        pid: pid,
+                        mc: $('#mc_add').val(),
+                        specifications: $('#specifications_add').val(),
+                        dw: $('#dw_add').val()
+                    },
+                    dataType: 'json',
+                    contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                    success: function (data) {
+                        if (data.rspCode == '0') {
+                            layer.closeAll();
+                            layer.msg('增加成功!');
+                            searchFun();
+                            $('#mc_add').val('');
+                            $('#specifications_add').val('');
+                            $('#dw_add').val('');
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    //删除
+    function delNodeFun(id) {
+        layer.confirm('确认删除此材料?', {
+                btn: ['确定', '取消']
+            }, function () {
+                $.ajax({
+                    url: '${pageContext.request.contextPath}/materialManageController/securi_delNode',
+                    type: 'post',
+                    dataType: 'json',
+                    data: {
+                        'id': id
+                    },
+                    contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                    success: function (data) {
+                        if (data.rspCode == '0') {
+                            layer.closeAll();
+                            layer.msg('删除成功!');
+                            searchFun();
+                        }
+                    }
+                });
+            },
+            function () {
+            });
+    }
+
+    //编辑
+    function editNodeFun(id) {
+        $.getJSON('${pageContext.request.contextPath}/materialManageController/securi_getMaterialsById?id=' + id, function (data) {
+            var materials = data.materials;
+            $('#mc_edit').val(materials.mc.trim());
+            $('#specifications_edit').val(materials.specifications.trim());
+            $('#dw_edit').val(materials.dw.trim());
+
+            layer.open({
+                type: 1,
+                title: '材料库维护-修改材料',
+                content: '<div style="text-align: center; margin-top: 10px;margin-left: 40px" id="editChildDiv">' +
+                            '<div class="controls">' +
+                                '<input type="text" id="mc_edit" placeholder="材料名称" value=' + materials.mc.trim() + '>' +
+                            '</div>' +
+                            '<div class="controls">' +
+                                '<input type="text" id="specifications_edit" placeholder="规格型号" value=' + materials.specifications.trim() +  '>' +
+                            '</div>' +
+                            '<div class="controls">' +
+                                '<input type="text" id="dw_edit" placeholder="单位" value=' + materials.dw.trim() +  '>' +
+                            '</div>' +
+                        '</div>',
+                btn: '确定',
+                btnAlign: 'r',
+                shade: 0.3,
+                area: ['300px', '260px'],
+                yes: function () {
+                    if ($('#_mc').val() == '') {
+                        layer.alert('材料名称必填！', {icon: 2});
+                        return;
+                    }
+                    $.ajax({
+                        url: '${pageContext.request.contextPath}/materialManageController/securi_editNode',
+                        type: 'post',
+                        data: {id: id, mc: $('#mc_edit').val(), specifications: $('#specifications_edit').val(), dw: $('#dw_edit').val()},
+                        dataType: 'json',
+                        contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                        success: function (data) {
+                            if (data.rspCode == '0') {
+                                layer.closeAll();
+                                layer.msg('修改成功!');
+                                searchFun();
+                            }
+                        }
+                    });
+                }
+            });
+        });
     }
 
     function add(row) {

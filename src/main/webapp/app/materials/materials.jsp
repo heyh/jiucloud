@@ -304,7 +304,7 @@
                         success: function (data) {
                             if (data.rspCode == '0') {
                                 layer.closeAll();
-                                layer.msg('增加成功!');
+                                layer.msg('修改成功!');
                                 searchFunForNoKeyword();
                             }
                         }

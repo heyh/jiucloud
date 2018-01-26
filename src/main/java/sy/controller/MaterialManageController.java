@@ -71,8 +71,8 @@ public class MaterialManageController {
     @ResponseBody
     public JSONObject addNode(@RequestParam(value = "pid", required = true) String pid,
                                @RequestParam(value = "mc", required = true) String mc,
-                               @RequestParam(value = "specifications", required = true) String specifications,
-                               @RequestParam(value = "dw", required = true) String dw,
+                               @RequestParam(value = "specifications", required = false) String specifications,
+                               @RequestParam(value = "dw", required = false) String dw,
                                HttpServletRequest request) throws Exception {
         SessionInfo sessionInfo = (SessionInfo) request.getSession().getAttribute(ConfigUtil.getSessionInfoName());
         String cid = sessionInfo.getCompid();
@@ -103,8 +103,8 @@ public class MaterialManageController {
     @ResponseBody
     public JSONObject editNode(@RequestParam(value = "id", required = true) String id,
                               @RequestParam(value = "mc", required = true) String mc,
-                              @RequestParam(value = "specifications", required = true) String specifications,
-                              @RequestParam(value = "dw", required = true) String dw,
+                              @RequestParam(value = "specifications", required = false) String specifications,
+                              @RequestParam(value = "dw", required = false) String dw,
                               HttpServletRequest request) throws Exception {
         SessionInfo sessionInfo = (SessionInfo) request.getSession().getAttribute(ConfigUtil.getSessionInfoName());
         String cid = sessionInfo.getCompid();
