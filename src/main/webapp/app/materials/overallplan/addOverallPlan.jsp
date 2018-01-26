@@ -170,6 +170,10 @@
             var _dw = tableObj.rows[i].cells[4].innerText;
             var _materialsId = tableObj.rows[i].cells[5].innerText;
 
+            if (_count == '') {
+               layer.msg(_mc + '(' + _specifications + ')' + " 数量不能为空！");
+               return;
+            }
             rowInfo.id = _id;
             rowInfo.mc = _mc;
             rowInfo.specifications = _specifications;
