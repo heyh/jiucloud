@@ -270,15 +270,15 @@ public class FieldDataServiceImpl implements FieldDataServiceI {
         if (null == cmodel.getNeedApproved() ) {
             if (rightList.contains("15") || rightList.contains(16) || rightList.contains("18")) {
                 String uids = StringUtils.join(ugroup, ",");
-                hql += " and (uid in (" + uids + ") or (substring(itemcode , 1 , 3) = '700' and cid = :cid) ) ";
+                hql += " and (uid in (" + uids + ") or (substring(itemcode , 1 , 3) = '700' and cid = :cid) or (itemcode='00600')) ";
                 params.put("cid", String.valueOf(cmodel.getCid()));
             } else if (rightList.contains("17")) {
                 String uids = StringUtils.join(ugroup, ",");
-                hql += " and (uid in (" + uids + ") or (substring(itemcode , 1 , 3) = '800' and cid = :cid) ) ";
+                hql += " and (uid in (" + uids + ") or (substring(itemcode , 1 , 3) = '800' and cid = :cid) or (itemcode='00600')) ";
                 params.put("cid", String.valueOf(cmodel.getCid()));
             } else {
                 String uids = StringUtils.join(ugroup, ",");
-                hql += " and uid in (" + uids + ")";
+                hql += " and (uid in (" + uids + ") or (itemcode='00600'))";
             }
 //            if ( !StringUtil.trimToEmpty(cmodel.getCid()).equals("")) {
 //                String uids = StringUtils.join(ugroup, ",");
