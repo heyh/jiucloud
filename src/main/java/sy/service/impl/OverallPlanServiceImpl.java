@@ -350,7 +350,13 @@ public class OverallPlanServiceImpl implements OverallPlanServiceI {
         HashMap<String, OverallPlanDetailsBean> map = new HashMap<String, OverallPlanDetailsBean>();
         for (OverallPlanDetailsBean bean : list) {
             if (map.containsKey(bean.getMaterialsId())) {
-                map.get(bean.getMaterialsId()).setCount(StringUtil.trimToEmpty(Integer.parseInt(map.get(bean.getMaterialsId()).getCount()) + Integer.parseInt(bean.getCount())));
+                String strOldCount = StringUtil.trimToEmpty(map.get(bean.getMaterialsId()).getCount());
+                Double dOldCount = strOldCount.equals("") ? 0.00 : Double.parseDouble(strOldCount);
+
+                String strNewCount = bean.getCount();
+                Double dNewCount = strNewCount.equals("") ? 0.00 : Double.parseDouble(strNewCount);
+
+                map.get(bean.getMaterialsId()).setCount(StringUtil.trimToEmpty(dOldCount + dNewCount));
             } else {
                 map.put(bean.getMaterialsId(), bean);
             }
