@@ -689,7 +689,7 @@
                         </div>
                     </div>
                     <div class="control-group">
-                        <label class="control-label" for="specifications">设施名称:</label>
+                        <label class="control-label" for="specifications">设施名称(分部分项名称):</label>
 
                         <div class="controls">
                             <select style="width:250px" name="specifications" id="specifications">
@@ -757,7 +757,7 @@
                         </div>
                     </div>
                     <div class="control-group">
-                        <label class="control-label" for="dataName">名称:</label>
+                        <label class="control-label" for="dataName">名称(工序名称):</label>
 
                         <div class="controls">
                             <input type="text" name="dataName" id="dataName" class="easyui-textbox" style="width:236px">

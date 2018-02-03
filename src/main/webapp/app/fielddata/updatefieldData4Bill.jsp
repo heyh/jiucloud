@@ -129,16 +129,16 @@
 						readonly='readonly'></td>
 				</tr>
 				<tr>
-					<td style="width: 80px;">设施名称</td>
+					<td style="width: 80px;">设施名称(分部分项名称)</td>
 					<td><input style="width: 250px;" name="specifications"
-							   type="text" placeholder="设施名称" class="easyui-validatebox span2"
+							   type="text" placeholder="设施名称(分部分项名称)" class="easyui-validatebox span2"
 							   value="${tfielddata.specifications}">
 				</tr>
 
 				<tr>
-					<td style="width: 80px;">名称</td>
+					<td style="width: 80px;">名称(工序名称)</td>
 					<td><input name="dataName" id="dataName" type="text"
-							   style="width: 250px;" placeholder="名称"
+							   style="width: 250px;" placeholder="名称(工序名称)"
 							   class="easyui-validatebox span2" data-options="required:true"
 							   value="${tfielddata.dataName}"></td>
 				</tr>

@@ -710,7 +710,7 @@
                         },
                         {
                             field : 'dataName',
-                            title : '名称',
+                            title : '名称(工序名称)',
                             width : 250
                         },
                         {
@@ -744,7 +744,7 @@
 //                        },
                         {
                             field : 'specifications',
-                            title : '设施名称',
+                            title : '设施名称(分部分项名称)',
                             width : 200
                         },
                         {
