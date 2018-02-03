@@ -158,6 +158,7 @@
                         "<td>" + row.specifications + "</td>" +
                         "<td style='text-align: right'>" + row.count + "</td>" +
                         "<td style='text-align: right;color: #2ba1fc;'>" + row.remainCount + "</td>" +
+                        "<td style='text-align: right;color: #2ba1fc;'>" + row.stockCount + "</td>" +
                         "<td>" + row.dw + "</td>" +
                     	"<td style='text-align:center; '>" +
                     		"<input type='checkbox' onclick='checkRow(" + _id + ")'  id='overallPlanTable_row_" + _id + "'/>" +
@@ -460,6 +461,7 @@
 						<th style="text-align:center; width: 30px;">规格型号</th>
 						<th style="text-align:center; width: 30px;">计划</th>
 						<th style="text-align:center; width: 30px;">剩余</th>
+						<th style="text-align:center; width: 30px;">库存量</th>
 						<th style="text-align:center; width: 25px;">单位</th>
 						<th style="text-align:center; width: 25px;">选择</th>
 					</tr>
