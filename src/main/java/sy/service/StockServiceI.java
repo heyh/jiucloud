@@ -23,5 +23,5 @@ public interface StockServiceI {
 
     void delete(String id);
 
-
+    List<Stock> getStocks(String cid);
 }

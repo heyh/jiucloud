@@ -18,6 +18,7 @@ public class OverallPlanDetailsBean {
     private String dw;
     private String specifications;
     private String remainCount;
+    private String stockCount;
 
     public int getId() {
         return id;
@@ -97,5 +98,13 @@ public class OverallPlanDetailsBean {
 
     public void setRemainCount(String remainCount) {
         this.remainCount = remainCount;
+    }
+
+    public String getStockCount() {
+        return stockCount;
+    }
+
+    public void setStockCount(String stockCount) {
+        this.stockCount = stockCount;
     }
 }

@@ -126,9 +126,11 @@ public class OverallPlanController {
     @RequestMapping("/securi_overallPlanDetailsAll")
     @ResponseBody
     public List<OverallPlanDetailsBean> overallPlanDetailsAll(HttpServletRequest request) {
+        SessionInfo sessionInfo = (SessionInfo) request.getSession().getAttribute(sy.util.ConfigUtil.getSessionInfoName());
+        String cid = sessionInfo.getCompid();
         List<OverallPlanDetailsBean> overallPlanDetailsBeanList = new ArrayList<OverallPlanDetailsBean>();
         String projectId = StringUtil.trimToEmpty(request.getParameter("projectId"));
-        overallPlanDetailsBeanList = overallPlanService.overallPlanDetailsAll(projectId);
+        overallPlanDetailsBeanList = overallPlanService.overallPlanDetailsAll(cid, projectId);
 
         return overallPlanDetailsBeanList;
     }

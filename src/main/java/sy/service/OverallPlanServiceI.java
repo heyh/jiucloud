@@ -23,7 +23,7 @@ public interface OverallPlanServiceI {
 
     public void addOverallPlanDetails(OverallPlanDetails overallPlanDetails);
 
-    List<OverallPlanDetailsBean> overallPlanDetailsAll(String projectId);
+    List<OverallPlanDetailsBean> overallPlanDetailsAll(String cid, String projectId);
 
     void updateOverallPlan(OverallPlan info);
 

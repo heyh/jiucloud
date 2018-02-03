@@ -443,7 +443,7 @@
 
 <div class="container-fluid">
 	<div class="row-fluid">
-		<div class="span5">
+		<div class="span6">
 			<div id="overallPlanTableId" style="display: none;">
 				<blockquote class="layui-elem-quote" style="height: 25px">
 					<a style="font-size:16px;">材料总体计划</a>
@@ -458,10 +458,10 @@
 						<th style="display: none;">计划ID</th>
 						<th style="display: none; ">材料ID</th>
 						<th style="text-align:center; ">材料名称</th>
-						<th style="text-align:center; width: 30px;">规格型号</th>
-						<th style="text-align:center; width: 30px;">计划</th>
-						<th style="text-align:center; width: 30px;">剩余</th>
-						<th style="text-align:center; width: 30px;">库存量</th>
+						<th style="text-align:center; width: 40px;">规格型号</th>
+						<th style="text-align:center; width: 40px;">计划</th>
+						<th style="text-align:center; width: 40px;">剩余</th>
+						<th style="text-align:center; width: 40px;">库存量</th>
 						<th style="text-align:center; width: 25px;">单位</th>
 						<th style="text-align:center; width: 25px;">选择</th>
 					</tr>
@@ -483,7 +483,7 @@
 			</div>
 		</div>
 
-		<div class="span7">
+		<div class="span6">
 			<form class="form-horizontal" name="form" id="form" method="post" enctype="multipart/form-data" role="form">
 				<input type="hidden" id="projectId" name="projectId" value="${proId}"/>
 				<blockquote class="layui-elem-quote" style="text-align: center;height: 25px">

@@ -43,6 +43,9 @@ public class OverallPlanServiceImpl implements OverallPlanServiceI {
     @Autowired
     private MonthPlanServiceI monthPlanService;
 
+    @Autowired
+    private StockServiceI stockService;
+
 
     @Override
     public List<OverallPlanBean> getOverallPlanList(String projectId) {
@@ -159,7 +162,7 @@ public class OverallPlanServiceImpl implements OverallPlanServiceI {
     }
 
     @Override
-    public List<OverallPlanDetailsBean> overallPlanDetailsAll(String projectId) {
+    public List<OverallPlanDetailsBean> overallPlanDetailsAll(String cid, String projectId) {
         List<OverallPlanDetailsBean> overallPlanDetailsBeanAll = new ArrayList<OverallPlanDetailsBean>();
         List<OverallPlanBean> overallPlanList = getOverallPlanList(projectId);
         if (overallPlanList != null && overallPlanList.size() > 0) {
@@ -193,12 +196,25 @@ public class OverallPlanServiceImpl implements OverallPlanServiceI {
                     }
                 }
             }
-        }
-        for (OverallPlanDetailsBean overallPlanDetailsBean : overallPlanDetailsBeanAll) {
-            if (overallPlanDetailsBean.getRemainCount() == null || overallPlanDetailsBean.getRemainCount().equals("")) {
-                overallPlanDetailsBean.setRemainCount(overallPlanDetailsBean.getCount());
+
+            for (OverallPlanDetailsBean overallPlanDetailsBean : overallPlanDetailsBeanAll) {
+                if (overallPlanDetailsBean.getRemainCount() == null || overallPlanDetailsBean.getRemainCount().equals("")) {
+                    overallPlanDetailsBean.setRemainCount(overallPlanDetailsBean.getCount());
+                }
+            }
+
+            List<Stock> stockList = stockService.getStocks(cid);
+            for (OverallPlanDetailsBean overallPlanDetailsBean : overallPlanDetailsBeanAll) {
+                Double stockCount = 0.00;
+                overallPlanDetailsBean.setStockCount(StringUtil.trimToEmpty(stockCount));
+                for (Stock stock : stockList) {
+                    if (Integer.parseInt(stock.getMaterialsId()) == Integer.parseInt(overallPlanDetailsBean.getMaterialsId())) {
+                        overallPlanDetailsBean.setStockCount(stock.getStockCount());
+                    }
+                }
             }
         }
+
         return overallPlanDetailsBeanAll;
     }
 

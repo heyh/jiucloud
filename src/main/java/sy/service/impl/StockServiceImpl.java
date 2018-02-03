@@ -202,4 +202,14 @@ public class StockServiceImpl implements StockServiceI{
             }
         }
     }
+
+    @Override
+    public List<Stock> getStocks(String cid) {
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("cid", cid);
+        String hql = " FROM Stock t  where 1=1 and isDelete=0 and cid=:cid and projectId = '-1' ";
+        List<Stock> stockList = stockDao.find(hql, params);
+
+        return stockList;
+    }
 }
