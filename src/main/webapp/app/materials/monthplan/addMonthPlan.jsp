@@ -219,7 +219,7 @@
         var specifications = row.cells[5].innerText;
         var count = row.cells[6].innerText;
         var remainCount = row.cells[7].innerText;
-        var dw = row.cells[8].innerText;
+        var dw = row.cells[9].innerText;
 		var monthPlanTableLength = document.getElementById("monthPlanTable").rows.length;
         var trObj = document.createElement("tr");
         trObj.id = "tr_monthplan_" + checkedId;
@@ -500,8 +500,8 @@
 						<th style="text-align:center; ">规格型号</th>
 						<th style="text-align:center; width: 25px;">单位</th>
 						<th style="text-align:center; width: 25px;">数量</th>
-						<th style="text-align:center;  width: 25px;">单价</th>
-						<th style="text-align:center; ">总价</th>
+						<th style="text-align:center; width: 25px;">单价</th>
+						<th style="text-align:center; width: 25px;">总价</th>
 						<th style="text-align:center; ">供应商</th>
 						<th style="text-align:center;  width: 25px;">操作</th>
 					</tr>
