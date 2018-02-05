@@ -35,10 +35,17 @@ public class StockController {
     private StockServiceI stockService;
 
     @RequestMapping("/StockList")
-    public String fieldDataShow(HttpServletRequest req) {
+    public String StockList(HttpServletRequest req) {
         req.setAttribute("first", UtilDate.getshortFirst());
         req.setAttribute("last", UtilDate.getshortLast());
         return "/app/materials/stock/StockList";
+    }
+
+    @RequestMapping("/OutStockList")
+    public String OutStockList(HttpServletRequest req) {
+        req.setAttribute("first", UtilDate.getshortFirst());
+        req.setAttribute("last", UtilDate.getshortLast());
+        return "/app/materials/stock/OutStockList";
     }
 
     @RequestMapping("/securi_dataGrid")
@@ -49,6 +56,7 @@ public class StockController {
         String cid = sessionInfo.getCompid();
         String uid = sessionInfo.getId();
         String projectId = StringUtil.trimToEmpty(request.getParameter("projectId"));
+        String type = StringUtil.trimToEmpty(request.getParameter("type"));
         List<Integer> ugroup = sessionInfo.getUgroup();
 
         String startDate = "";
@@ -66,7 +74,7 @@ public class StockController {
         }
         String keyword = StringUtil.trimToEmpty(request.getParameter("keyword"));
 
-        DataGrid dataGrid = stockService.dataGrid(pageHelper, projectId, startDate, endDate, ugroup, keyword);
+        DataGrid dataGrid = stockService.dataGrid(pageHelper, projectId, startDate, endDate, ugroup, keyword, type);
 
         return dataGrid;
     }

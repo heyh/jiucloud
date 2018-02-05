@@ -49,7 +49,7 @@ public class StockServiceImpl implements StockServiceI{
     }
 
     @Override
-    public DataGrid dataGrid(PageHelper pageHelper, String projectId, String startDate, String endDate, List<Integer> ugroup, String keyword) {
+    public DataGrid dataGrid(PageHelper pageHelper, String projectId, String startDate, String endDate, List<Integer> ugroup, String keyword, String type) {
         DataGrid dg = new DataGrid();
         Map<String, Object> params = new HashMap<String, Object>();
         String hql = "from Stock s where isDelete='0' ";
@@ -59,10 +59,12 @@ public class StockServiceImpl implements StockServiceI{
             hql += " and uid in (" + uids + ")";
         }
 
-        if (!projectId.equals("")) {
-            hql += " and projectId=:projectId ";
-            params.put("projectId", projectId);
+        if (type.equals("in")) {
+            hql += " and projectId='-1' ";
+        } else if (type.equals("out")) {
+            hql += " and projectId != '-1' ";
         }
+
         if (startDate != null && startDate.length() > 0) {
             hql += " and createTime >= :startDate";
             params.put("startDate", DateKit.strToDateOrTime(startDate));
@@ -96,7 +98,7 @@ public class StockServiceImpl implements StockServiceI{
         StockBean stockBean = new StockBean();
         if (stockList != null && stockList.size()>0) {
             for (Stock stock : stockList) {
-                if (!StringUtil.trimToEmpty(stock.getRelId()).equals("")) continue;
+//                if (!StringUtil.trimToEmpty(stock.getRelId()).equals("")) continue;
 
                 stockBean = new StockBean();
                 stockBean.setId(stock.getId());

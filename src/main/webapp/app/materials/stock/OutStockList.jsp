@@ -47,7 +47,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>库存列表</title>
+    <title></title>
     <jsp:include page="../../../inc.jsp"></jsp:include>
     <link rel="stylesheet" type="text/css"
           href="${pageContext.request.contextPath }/jslib/select2/dist/css/select2.min.css"/>
@@ -103,7 +103,7 @@
             dataGrid = $('#dataGrid')
                 .datagrid(
                     {
-                        url : '${pageContext.request.contextPath}/stockController/securi_dataGrid?type=in',
+                        url : '${pageContext.request.contextPath}/stockController/securi_dataGrid?type=out',
                         fit : true,
                         fitColumns : false,
                         border : false,
@@ -123,6 +123,11 @@
                                 checkbox : true
                             },
                             {
+                                field : 'projectName',
+                                title : '项目名称',
+                                width : 300
+                            },
+                            {
                                 field : 'mc',
                                 title : '材料名称',
                                 width : 300
@@ -134,8 +139,8 @@
                                 width : 200
                             },
                             {
-                                field : 'stockCount',
-                                title : '库存数量',
+                                field : 'count',
+                                title : '出库数量',
                                 width : 100
                             },
                             {
@@ -158,35 +163,6 @@
                                 title : '用户ID',
                                 width : 100,
                                 hidden: true
-                            },
-                            {
-                                field : 'action',
-                                title : '操作',
-                                width : 100,
-                                formatter: function (value, row, index) {
-                                    var str = '';
-                                    str += $
-                                        .formatString(
-                                            '<img onclick="editFun(\'{0}\');" src="{1}" title="编辑" />',
-                                            row.id,
-                                            '${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/modify-blue.png');
-                                    str += '&nbsp;';
-                                    str += $
-                                        .formatString(
-                                            '<img onclick="deleteFun(\'{0}\');" src="{1}" title="删除"/>',
-                                            row.id,
-                                            '${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/delete-blue.png');
-
-                                    if (row.count > 0) {
-                                        str += '&nbsp;';
-                                        str += $
-                                            .formatString(
-                                                '<img onclick="outStockFun(\'{0}\');" src="{1}" title="出库"/>',
-                                                row.id,
-                                                '${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/out.png');
-                                    }
-                                    return str;
-                                }
                             } ] ],
                         toolbar : '#toolbar',
                         onLoadSuccess : function() {
@@ -196,120 +172,6 @@
                         }
                     });
         });
-
-        // 入库
-        function addFun() {
-            parent.$
-                .modalDialog({
-                    title: '材料入库',
-                    width: 1200,
-                    height: 600,
-                    href: '${pageContext.request.contextPath}/stockController/securi_toAddStockPage',
-                    buttons: [{
-                        text: '入库',
-                        handler: function () {
-                            parent.$.modalDialog.openner_dataGrid = dataGrid; //因为添加成功之后，需要刷新这个dataGrid，所以先预定义好
-                            var f = parent.$.modalDialog.handler.find('#form');
-                            f.submit();
-                        }
-                    }]
-                });
-        }
-
-        // 出库
-        function outStockFun(id) {
-            parent.$
-                .modalDialog({
-                    title : '材料出库',
-                    width : 900,
-                    height : 520,
-                    href : '${pageContext.request.contextPath}/stockController/securi_outStock?id=' + id,
-                    buttons : [ {
-                        text : '确定',
-                        handler : function() {
-                            parent.$.modalDialog.openner_dataGrid = dataGrid;//因为添加成功之后，需要刷新这个dataGrid，所以先预定义好
-                            var f = parent.$.modalDialog.handler.find('#form');
-                            f.submit();
-                        }
-                    } ]
-                });
-        }
-
-        //编辑
-        function editFun(id) {
-            parent.$
-                .modalDialog({
-                    title: '编辑',
-                    width: 510,
-                    height: 300,
-                    href: '${pageContext.request.contextPath}/stockController/securi_toUpdateStockPage?stockId=' + id,
-                    buttons: [{
-                        text: '确认',
-                        handler: function () {
-                            parent.$.modalDialog.openner_dataGrid = dataGrid; //因为添加成功之后，需要刷新这个dataGrid，所以先预定义好
-                            var f = parent.$.modalDialog.handler.find('#form');
-                            f.submit();
-                        }
-                    }]
-                });
-        }
-
-        //删除
-        function deleteFun(id) {
-            if (id == undefined) {//点击右键菜单才会触发这个
-                var rows = dataGrid.datagrid('getSelections');
-                id = rows[0].id;
-            } else {//点击操作里面的删除图标会触发这个
-                dataGrid.datagrid('unselectAll').datagrid('uncheckAll');
-            }
-            parent.$.messager
-                .confirm(
-                    '询问',
-                    '您是否要删除当前配置？',
-                    function (b) {
-                        if (b) {
-                            parent.$.messager.progress({
-                                title: '提示',
-                                text: '数据处理中，请稍后....'
-                            });
-                            $
-                                .ajax({
-                                    type: "post",
-                                    url: '${pageContext.request.contextPath}/stockController/securi_delStock',
-                                    data: {
-                                        id: id
-                                    },
-                                    dataType: "json",
-                                    success: function (data) {
-                                        if (data.success == true) {
-                                            searchFun();
-                                        }
-                                    }
-                                });
-                        }
-                    });
-        }
-
-
-
-
-
-        function exportFun(objTab) {
-            var str = '';
-//		str += '&uname=' + $('#uname').val();
-            str += '&keyword=' + $('#keyword').val();
-            str += '&projectName=' + $('#projectName').val();
-            str += '&itemCode=' + $('#itemCode').val();
-            str += '&startTime=' + $('#startTime').val();
-            str += '&endTime=' + $('#endTime').val();
-            var url = "${pageContext.request.contextPath}/fieldDataController/securi_execl?a=1&source=bill"
-                + str;
-            window.open(url);
-        }
-
-
-
-
 
         //过滤条件查询
         function searchFun() {
@@ -321,31 +183,6 @@
             $('#searchForm input').val('');
             dataGrid.datagrid('load', {});
         }
-
-        function execlImportFun(id) {
-            parent.$
-                .modalDialog({
-                    title : 'execl导入',
-                    width : 450,
-                    height : 400,
-                    href : '${pageContext.request.contextPath}/fieldDataController/securi_execlProjects',
-                    buttons : [{
-                        text : '关闭',
-                        handler : function() {
-                            parent.$.modalDialog.handler.dialog('destroy');
-                            parent.$.modalDialog.handler = undefined;
-                        }
-                    }, {
-                        text : '导入',
-                        handler : function() {
-                            parent.$.modalDialog.openner_dataGrid = dataGrid;//因为添加成功之后，需要刷新这个dataGrid，所以先预定义好
-                            var f = parent.$.modalDialog.handler.find('#form');
-                            f.submit();
-                        }
-                    }
-                    ]
-                });
-        };
 
     </script>
 </head>
@@ -383,8 +220,6 @@
     </div>
 </div>
 <div id="toolbar" style="display: none;">
-    <a onclick="addFun();" href="javascript:void(0);" class="easyui-linkbutton" data-options="plain:true,iconCls:'add_new'">材料入库</a>
-    <a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'out_new',plain:true" onclick="exportFun();">表格导出</a>
     <a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'search_new',plain:true" onclick="searchFun();">条件查询</a>
     <a href="javascript:void(0);" class="easyui-linkbutton" data-options="iconCls:'zhongzhiguolvtiaojian_new',plain:true" onclick="cleanFun();">清空条件</a>
 

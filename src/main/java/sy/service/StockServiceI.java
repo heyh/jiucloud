@@ -13,7 +13,7 @@ import java.util.List;
 public interface StockServiceI {
     void addStock(Stock stock);
 
-    DataGrid dataGrid(PageHelper pageHelper, String projectId, String startDate, String endDate, List<Integer> ugroup, String keyword);
+    DataGrid dataGrid(PageHelper pageHelper, String projectId, String startDate, String endDate, List<Integer> ugroup, String keyword, String type);
 
     Stock detail(String id);
 
