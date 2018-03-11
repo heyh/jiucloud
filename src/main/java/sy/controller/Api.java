@@ -392,6 +392,10 @@ public class Api extends BaseController {
                 remark, cid, uname, unit, needApproved, approvedUser, currentApprovedUser, itemCode, "", section, supplier, relId, "", "", payAmount);
         try {
             fieldDataService.add(fieldData);
+            String fieldId = StringUtil.trimToEmpty(fieldDataService.getId(fieldData));
+            if (fieldId.equals("")) {
+                return new WebResult().fail();
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
