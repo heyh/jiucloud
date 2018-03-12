@@ -4,6 +4,8 @@ import sy.model.po.OverallPlan;
 import sy.model.po.OverallPlanBean;
 import sy.model.po.OverallPlanDetails;
 import sy.model.po.OverallPlanDetailsBean;
+import sy.pageModel.FieldData;
+import sy.pageModel.PageHelper;
 
 import java.util.List;
 import java.util.Map;
@@ -36,4 +38,7 @@ public interface OverallPlanServiceI {
     List<OverallPlanBean> getApproveOverallPlanList(String cid, String currentApprovedUser, String projectId, String startDate, String endDate);
 
     void approveOverallPlan(Integer overallplanId, String approvedState, String approvedOption, String currentApprovedUser);
+
+
+    public List<OverallPlanBean> getApproveOverallPlanListForApp(PageHelper ph, String currentApprovedUser);
 }

@@ -4,6 +4,7 @@ import sy.model.po.MonthPlan;
 import sy.model.po.MonthPlanBean;
 import sy.model.po.MonthPlanDetails;
 import sy.model.po.MonthPlanDetailsBean;
+import sy.pageModel.PageHelper;
 
 import java.util.List;
 
@@ -34,4 +35,6 @@ public interface MonthPlanServiceI {
     List<MonthPlanBean> getApproveMonthPlanList(String cid, String currentApprovedUser, String projectId, String startDate, String endDate);
 
     void approveMonthPlan(Integer monthPlanId, String approvedState, String approvedOption, String currentApprovedUser);
+
+    List<MonthPlanBean> getApproveMonthPlanListForApp(PageHelper pageHelper, String uid);
 }

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import sy.dao.OverallPlanDaoI;
 import sy.dao.OverallPlanDetailsDaoI;
 import sy.model.po.*;
+import sy.pageModel.PageHelper;
 import sy.pageModel.User;
 import sy.service.*;
 import sy.util.DateKit;
@@ -360,6 +361,60 @@ public class OverallPlanServiceImpl implements OverallPlanServiceI {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public List<OverallPlanBean> getApproveOverallPlanListForApp(PageHelper ph, String currentApprovedUser) {
+        List<OverallPlanBean> overallPlanBeanList = new ArrayList<OverallPlanBean>();
+        OverallPlanBean overallPlanBean = new OverallPlanBean();
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("currentApprovedUser", currentApprovedUser);
+        String overallPlanHql = "from OverallPlan where isDelete = 0 and needApproved in ('1', '8') and and currentApprovedUser = :currentApprovedUser ";
+        List<OverallPlan> overallPlanList = overallPlanDao.find(overallPlanHql, params, ph.getPage(), ph.getRows());
+
+        if (overallPlanList != null && overallPlanList.size() > 0) {
+            for (OverallPlan overallPlan : overallPlanList) {
+
+                overallPlanBean = new OverallPlanBean();
+                overallPlanBean.setId(overallPlan.getId());
+                overallPlanBean.setCid(overallPlan.getCid());
+                overallPlanBean.setProjectId(overallPlan.getProjectId());
+                overallPlanBean.setProjectName(projectService.findOneView(Integer.parseInt(overallPlan.getProjectId())).getProName());
+                overallPlanBean.setUid(overallPlan.getUid());
+
+                User user = userService.getUser(StringUtil.trimToEmpty(overallPlan.getUid()));
+                overallPlanBean.setUname(user.getRealname().equals("") ? user.getUsername() : user.getRealname());
+                overallPlanBean.setCreateTime(overallPlan.getCreateTime());
+                String approvedState = "";
+                int needApproved = Integer.parseInt(overallPlan.getNeedApproved());
+                switch (needApproved) {
+                    case 0:
+                        approvedState = "无需审批";
+                        break;
+                    case 1:
+                        approvedState = "未审批";
+                        break;
+                    case 2:
+                        approvedState = "审批通过";
+                        break;
+                    case 8:
+                        approvedState = "审批中";
+                        break;
+                    case 9:
+                        approvedState = "审批未通过";
+                        break;
+                    default:
+                        approvedState = "未知";
+                }
+                overallPlanBean.setNeedApproved(approvedState);
+
+                overallPlanBean.setApprovedOption(overallPlan.getApprovedOption());
+                overallPlanBean.setCurrentApprovedUser(userService.getUser(StringUtil.trimToEmpty(overallPlan.getCurrentApprovedUser())).getUsername());
+
+                overallPlanBeanList.add(overallPlanBean);
+            }
+        }
+        return overallPlanBeanList;
     }
 
     private List<OverallPlanDetailsBean> mergeList(List<OverallPlanDetailsBean> list) {

@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import sy.dao.MonthPlanDaoI;
 import sy.dao.MonthPlanDetailsDaoI;
 import sy.model.po.*;
+import sy.pageModel.PageHelper;
 import sy.pageModel.User;
 import sy.service.*;
 import sy.util.DateKit;
@@ -367,6 +368,66 @@ public class MonthPlanServiceImpl implements MonthPlanServiceI {
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public List<MonthPlanBean> getApproveMonthPlanListForApp(PageHelper pageHelper, String uid) {
+        List<MonthPlanBean> monthPlanBeanList = new ArrayList<MonthPlanBean>();
+        MonthPlanBean monthPlanBean = new MonthPlanBean();
+
+        Map<String, Object> params = new HashMap<String, Object>();
+        String monthPlanHql = "from MonthPlan where isDelete = 0 and needApproved in ('1', '8') and currentApprovedUser = :currentApprovedUser ";
+        params.put("currentApprovedUser", uid);
+
+        List<MonthPlan> monthPlanList = monthPlanDao.find(monthPlanHql, params, pageHelper.getPage(), pageHelper.getRows());
+
+        if (monthPlanList != null && monthPlanList.size()>0) {
+            for (MonthPlan monthPlan : monthPlanList) {
+                monthPlanBean = new MonthPlanBean();
+                monthPlanBean.setId(monthPlan.getId());
+                monthPlanBean.setCid(monthPlan.getCid());
+                monthPlanBean.setOverallPlanId(monthPlan.getOverallPlanId());
+                monthPlanBean.setProjectId(monthPlan.getProjectId());
+                if (!StringUtil.trimToEmpty(monthPlan.getProjectId()).equals("")) {
+                    monthPlanBean.setProjectName(projectService.findOneView(Integer.parseInt(monthPlan.getProjectId())).getProName());
+                } else {
+                    monthPlanBean.setProjectName("无项目采购申请");
+
+                }
+                monthPlanBean.setUid(monthPlan.getUid());
+                User user = userService.getUser(StringUtil.trimToEmpty(monthPlan.getUid()));
+                monthPlanBean.setUname(user.getRealname().equals("") ? user.getUsername() : user.getRealname());
+                monthPlanBean.setCreateTime(monthPlan.getCreateTime());
+                String approvedState = "";
+                int needApproved = Integer.parseInt(monthPlan.getNeedApproved());
+                switch (needApproved) {
+                    case 0:
+                        approvedState = "无需审批";
+                        break;
+                    case 1:
+                        approvedState = "未审批";
+                        break;
+                    case 2:
+                        approvedState = "审批通过";
+                        break;
+                    case 8:
+                        approvedState = "审批中";
+                        break;
+                    case 9:
+                        approvedState = "审批未通过";
+                        break;
+                    default:
+                        approvedState = "未知";
+                }
+                monthPlanBean.setNeedApproved(approvedState);
+
+                monthPlanBean.setApprovedOption(monthPlan.getApprovedOption());
+                monthPlanBean.setCurrentApprovedUser(userService.getUser(StringUtil.trimToEmpty(monthPlan.getCurrentApprovedUser())).getUsername());
+
+                monthPlanBeanList.add(monthPlanBean);
+            }
+        }
+        return monthPlanBeanList;
     }
 
 

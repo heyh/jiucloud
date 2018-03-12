@@ -82,6 +82,12 @@ public class Api extends BaseController {
     @Autowired
     private ClockinginTimeServiceI clockinginTimeService;
 
+    @Autowired
+    private OverallPlanServiceI overallPlanService;
+
+    @Autowired
+    private MonthPlanServiceI monthPlanService;
+
     @RequestMapping("/securi_login")
     @ResponseBody
     public JSONObject login(@RequestParam(value = "name", required = true) String name,
@@ -1655,5 +1661,65 @@ public class Api extends BaseController {
         clockinginService.Clockingin(clockingin);
 
         return new WebResult().ok();
+    }
+
+    /**
+     * 材料总体计划审批数据列表
+     *
+     * @param uid
+     * @param cid
+     * @param currentPage
+     * @param limitSize
+     * @param request
+     * @param response
+     * @return
+     */
+    @RequestMapping("/securi_approveOverallPlan")
+    @ResponseBody
+    public JSONObject approveOverallPlan(@RequestParam(value = "uid", required = true) String uid,
+                                            @RequestParam(value = "cid", required = true) String cid,
+                                            @RequestParam(value = "currentPage", required = true) int currentPage,
+                                            @RequestParam(value = "limitSize", required = true) int limitSize,
+                                            HttpServletRequest request, HttpServletResponse response) {
+        List<OverallPlanBean> approveOverallPlanList = new ArrayList<OverallPlanBean>();
+        PageHelper pageHelper = new PageHelper();
+        pageHelper.setPage(currentPage);
+        pageHelper.setRows(limitSize);
+        try {
+            approveOverallPlanList = overallPlanService.getApproveOverallPlanListForApp(pageHelper, uid);
+        } catch (Exception e) {
+            return new WebResult().fail().setMessage("网络异常,请稍后再试");
+        }
+        return new WebResult().ok().set("approveOverallPlanList", approveOverallPlanList);
+    }
+
+    /**
+     * 材料采购审批数据列表
+     *
+     * @param uid
+     * @param cid
+     * @param currentPage
+     * @param limitSize
+     * @param request
+     * @param response
+     * @return
+     */
+    @RequestMapping("/securi_approveMonthPlan")
+    @ResponseBody
+    public JSONObject approveMonthPlan(@RequestParam(value = "uid", required = true) String uid,
+                                         @RequestParam(value = "cid", required = true) String cid,
+                                         @RequestParam(value = "currentPage", required = true) int currentPage,
+                                         @RequestParam(value = "limitSize", required = true) int limitSize,
+                                         HttpServletRequest request, HttpServletResponse response) {
+        List<MonthPlanBean> approveMonthPlanList = new ArrayList<MonthPlanBean>();
+        PageHelper pageHelper = new PageHelper();
+        pageHelper.setPage(currentPage);
+        pageHelper.setRows(limitSize);
+        try {
+            approveMonthPlanList = monthPlanService.getApproveMonthPlanListForApp(pageHelper, uid);
+        } catch (Exception e) {
+            return new WebResult().fail().setMessage("网络异常,请稍后再试");
+        }
+        return new WebResult().ok().set("approveMonthPlanList", approveMonthPlanList);
     }
 }
