@@ -300,16 +300,16 @@
         return date.getFullYear() + '-' + month + '-' + day;
     };
 
-    window.onload = function () {
-        $('#startTime4Data').datebox('setValue', formatterFirstDate(new Date()));
-        $('#endTime4Data').datebox('setValue', formatterCurrentDate(new Date()));
-        $('#startTime4Doc').datebox('setValue', formatterFirstDate(new Date()));
-        $('#endTime4Doc').datebox('setValue', formatterCurrentDate(new Date()));
-        $('#startTime4Bill').datebox('setValue', formatterFirstDate(new Date()));
-        $('#endTime4Bill').datebox('setValue', formatterCurrentDate(new Date()));
-        $('#startTime4Material').datebox('setValue', formatterFirstDate(new Date()));
-        $('#endTime4Material').datebox('setValue', formatterCurrentDate(new Date()));
-    }
+//    window.onload = function () {
+//        $('#startTime4Data').datebox('setValue', formatterFirstDate(new Date()));
+//        $('#endTime4Data').datebox('setValue', formatterCurrentDate(new Date()));
+//        $('#startTime4Doc').datebox('setValue', formatterFirstDate(new Date()));
+//        $('#endTime4Doc').datebox('setValue', formatterCurrentDate(new Date()));
+//        $('#startTime4Bill').datebox('setValue', formatterFirstDate(new Date()));
+//        $('#endTime4Bill').datebox('setValue', formatterCurrentDate(new Date()));
+//        $('#startTime4Material').datebox('setValue', formatterFirstDate(new Date()));
+//        $('#endTime4Material').datebox('setValue', formatterCurrentDate(new Date()));
+//    }
     var dataGrid4Data;
     var dataGrid4Doc;
     var dataGrid4Bill;
@@ -1190,8 +1190,16 @@
 
     //过滤条件查询
     function searchFun4Data() {
-        var startTime = $('#startTime4Data').datebox('getValue').substring(0, 10) + ' 00:00:00';
-        var endTime = $('#endTime4Data').datebox('getValue').substring(0, 10) + ' 23:59:59';
+        var startTime = '';
+        if ($('#startTime4Data').datebox('getValue') != '') {
+            startTime = $('#startTime4Data').datebox('getValue').substring(0, 10) + ' 00:00:00';
+        }
+
+        var endTime = '';
+        if ($('#endTime4Data').datebox('getValue') != '') {
+            endTime = $('#endTime4Data').datebox('getValue').substring(0, 10) + ' 23:59:59';
+        }
+
         $('#dataGrid4Data').datagrid('reload',{keyword:$('#keyword4Data').val(),itemCode:$('#itemCode4Data').val(),
             startTime:startTime,endTime:endTime});
     }
@@ -1203,8 +1211,17 @@
 
     //过滤条件查询
     function searchFun4Doc() {
-        var startTime = $('#startTime4Doc').datebox('getValue').substring(0, 10) + ' 00:00:00';
-        var endTime = $('#endTime4Doc').datebox('getValue').substring(0, 10) + ' 23:59:59';
+
+        var startTime = '';
+        if ($('#startTime4Doc').datebox('getValue') != '') {
+            startTime = $('#startTime4Doc').datebox('getValue').substring(0, 10) + ' 00:00:00';
+        }
+
+        var endTime = '';
+        if ($('#endTime4Doc').datebox('getValue') != '') {
+            endTime = $('#endTime4Doc').datebox('getValue').substring(0, 10) + ' 23:59:59';
+        }
+
         $('#dataGrid4Doc').datagrid('reload',{keyword:$('#keyword4Doc').val(),itemCode:$('#itemCode4Doc').val(),
             startTime:startTime,endTime:endTime});
     }
@@ -1216,8 +1233,17 @@
 
     //过滤条件查询
     function searchFun4Bill() {
-        var startTime = $('#startTime4Bill').datebox('getValue').substring(0, 10) + ' 00:00:00';
-        var endTime = $('#endTime4Bill').datebox('getValue').substring(0, 10) + ' 23:59:59';
+
+        var startTime = '';
+        if ($('#startTime4Bill').datebox('getValue') != '') {
+            startTime = $('#startTime4Bill').datebox('getValue').substring(0, 10) + ' 00:00:00';
+        }
+
+        var endTime = '';
+        if ($('#endTime4Bill').datebox('getValue') != '') {
+            endTime = $('#endTime4Bill').datebox('getValue').substring(0, 10) + ' 23:59:59';
+        }
+
         $('#dataGrid4Bill').datagrid('reload',{keyword:$('#keyword4Bill').val(),itemCode:$('#itemCode4Bill').val(),
             startTime:startTime,endTime:endTime});
     }
@@ -1229,8 +1255,17 @@
 
     //过滤条件查询
     function searchFun4Material() {
-        var startTime = $('#startTime4Material').datebox('getValue').substring(0, 10) + ' 00:00:00';
-        var endTime = $('#endTime4Material').datebox('getValue').substring(0, 10) + ' 23:59:59';
+
+        var startTime = '';
+        if ($('#startTime4Material').datebox('getValue') != '') {
+            startTime = $('#startTime4Material').datebox('getValue').substring(0, 10) + ' 00:00:00';
+        }
+
+        var endTime = '';
+        if ($('#endTime4Material').datebox('getValue') != '') {
+            endTime = $('#endTime4Material').datebox('getValue').substring(0, 10) + ' 23:59:59';
+        }
+
         $('#dataGrid4Material').datagrid('reload',{keyword:$('#keyword4Material').val(),itemCode:$('#itemCode4Material').val(),
             startTime:startTime,endTime:endTime});
     }
