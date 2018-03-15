@@ -54,7 +54,7 @@ public class ClockinginServiceImpl implements ClockinginServiceI {
         DataGrid dg = new DataGrid();
         Map<String, Object> params = new HashMap<String, Object>();
         String hql = "";
-        hql = "from Clockingin where cid=:cid and isDelete = '0' ";
+        hql = "from Clockingin c where cid=:cid and isDelete = '0' ";
         params.put("cid", cid);
 
         if (!hasApproveRight) {
@@ -91,7 +91,7 @@ public class ClockinginServiceImpl implements ClockinginServiceI {
         if (!keyword.equals("")) {
             hql += " and ( address like :keyword ";
 
-            hql += " or uname like :keyword ";
+            hql += " or (select realname from Tuser where id=c.uid) like :keyword ";
 
             hql += " or approveState like :keyword ) ";
 
