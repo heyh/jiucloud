@@ -148,8 +148,6 @@ public class Api extends BaseController {
         }
         if (advancedSearchStartTime != null && !advancedSearchStartTime.equals("")) {
             fieldData.setStartTime(advancedSearchStartTime + " 00:00:00");
-        } else {
-            fieldData.setStartTime(UtilDate.getSameLaterDay(3) + " 00:00:00");
         }
         if (advancedSearchEndTime != null && !advancedSearchEndTime.equals("")) {
             fieldData.setEndTime(advancedSearchEndTime + " 23:59:59");
@@ -1659,8 +1657,14 @@ public class Api extends BaseController {
             clockinginService.delete(sameClockingin.get(0).getId());
         }
         clockinginService.Clockingin(clockingin);
+        List<Clockingin> clockinginSuccess = clockinginService.hasSameClockingin(tmp);
+        if (clockinginSuccess != null && clockinginSuccess.size() > 0) {
+            return new WebResult().ok();
+        } else {
+            return new WebResult().fail();
+        }
 
-        return new WebResult().ok();
+//        return new WebResult().ok();
     }
 
     /**

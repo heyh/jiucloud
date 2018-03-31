@@ -77,8 +77,8 @@ public class FieldDataController extends BaseController {
      */
     @RequestMapping("/fieldDataShow")
     public String fieldDataShow(HttpServletRequest req) {
-        req.setAttribute("first", UtilDate.getshortFirst());
-        req.setAttribute("last", UtilDate.getshortLast());
+//        req.setAttribute("first", UtilDate.getshortFirst());
+//        req.setAttribute("last", UtilDate.getshortLast());
         return "/app/fielddata/fielddataShow";
     }
 
@@ -89,24 +89,24 @@ public class FieldDataController extends BaseController {
      */
     @RequestMapping("/docDataShow")
     public String docDataShow(HttpServletRequest req) {
-        req.setAttribute("first", UtilDate.getshortFirst());
-        req.setAttribute("last", UtilDate.getshortLast());
+//        req.setAttribute("first", UtilDate.getshortFirst());
+//        req.setAttribute("last", UtilDate.getshortLast());
         return "/app/fielddata/docdataShow";
     }
 
     @RequestMapping("/billDataShow")
     public String billDataShow(HttpServletRequest req) {
 //        req.setAttribute("first", UtilDate.getshortFirst());
-        req.setAttribute("first", UtilDate.getSameLaterDay(3));
-        req.setAttribute("last", UtilDate.getshortLast());
+//        req.setAttribute("first", UtilDate.getSameLaterDay(3));
+//        req.setAttribute("last", UtilDate.getshortLast());
         req.setAttribute("month", UtilDate.getCurrentMonth());
         return "/app/fielddata/billdataShow";
     }
 
     @RequestMapping("/materialDataShow")
     public String materialDataShow(HttpServletRequest req) {
-        req.setAttribute("first", UtilDate.getshortFirst());
-        req.setAttribute("last", UtilDate.getshortLast());
+//        req.setAttribute("first", UtilDate.getshortFirst());
+//        req.setAttribute("last", UtilDate.getshortLast());
         return "/app/fielddata/materialdataShow";
     }
 
@@ -129,10 +129,10 @@ public class FieldDataController extends BaseController {
             Integer id = Integer.parseInt(request.getParameter("id"));
             fieldData.setId(id);
         }
-        if (null == fieldData.getStartTime() && null == fieldData.getEndTime()) {
-            fieldData.setStartTime(UtilDate.getSameLaterDay(3) + " 00:00:00");
-            fieldData.setEndTime(UtilDate.getshortLast() + " 23:59:59");
-        }
+//        if (null == fieldData.getStartTime() && null == fieldData.getEndTime()) {
+//            fieldData.setStartTime(UtilDate.getSameLaterDay(3) + " 00:00:00");
+//            fieldData.setEndTime(UtilDate.getshortLast() + " 23:59:59");
+//        }
         if (null != request.getParameter("needApproved")) {
             fieldData.setNeedApproved(request.getParameter("needApproved"));
         }
