@@ -120,17 +120,13 @@
 										width : 100,
 										formatter: function (value, row, index) {
 										    var str = '';
-										    var strHasOutRight = <%=hasOutRight%>;
 										    var hasReadEditRight = <%= hasOnlyReadRight %> || <%= hasReadEditRight %>;
-											if (!strHasOutRight && row.itemCode.substring(0, 3) == '800') {
+											if (!hasReadEditRight && row.itemCode.substring(0, 3) == '800') {
                                                 str = '***';
-											} else if(row.itemCode.substring(0, 3) == '700' && !hasReadEditRight) {
-                                                str = '***';
-											} else {
+											}  else {
                                                 str = row.price;
                                             }
                                             return str;
-											<%--return row.itemCode.substring(0, 3) != '700' || <%= hasOnlyReadRight %> || <%= hasReadEditRight %> ? row.price : '***';--%>
                                         }
 									},
 									{
@@ -144,17 +140,13 @@
 										width : 100,
 										formatter : function(value, row, index) {
                                             var str = '';
-                                            var strHasOutRight = <%=hasOutRight%>;
                                             var hasReadEditRight = <%= hasOnlyReadRight %> || <%= hasReadEditRight %>;
-                                            if (!strHasOutRight && row.itemCode.substring(0, 3) == '800') {
+                                            if (!hasReadEditRight && row.itemCode.substring(0, 3) == '800') {
                                                 str = '***';
-                                            } else if(row.itemCode.substring(0, 3) == '700' && !hasReadEditRight) {
-                                                str = '***';
-                                            } else {
+                                            }  else {
                                                 str = (row.count * ((row.price==null || row.price=='') ? 0 : row.price)).toFixed(2);
                                             }
                                             return str;
-											<%--return row.itemCode.substring(0, 3) != '700' || <%= hasOnlyReadRight %> || <%= hasReadEditRight %> ? (row.count * ((row.price==null || row.price=='') ? 0 : row.price)).toFixed(2) : '***';--%>
 										}
 									},
 									{
@@ -166,20 +158,11 @@
 
                                             var strHasOutRight = <%=hasOutRight%>;
                                             var hasReadEditRight = <%= hasOnlyReadRight %> || <%= hasReadEditRight %>;
-                                            if (!strHasOutRight && row.itemCode.substring(0, 3) == '800') {
+                                            if (!hasReadEditRight && row.itemCode.substring(0, 3) == '800') {
                                                 str = '***';
-                                            } else if(row.itemCode.substring(0, 3) == '700' && !hasReadEditRight) {
-                                                str = '***';
-                                            } else {
+                                            }  else {
                                                 str = row.payAmount;
-											}
-
-                                            <%--var hasReadEditRight = <%= hasOnlyReadRight %> || <%= hasReadEditRight %>;--%>
-                                            <%--if (hasReadEditRight) {--%>
-                                                <%--str = row.payAmount;--%>
-											<%--} else {--%>
-                                                <%--str = '***';--%>
-											<%--}--%>
+                                            }
 
 											return str;
                                         }
