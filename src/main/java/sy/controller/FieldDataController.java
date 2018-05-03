@@ -495,6 +495,8 @@ public class FieldDataController extends BaseController {
         fieldData.setUname((sessionInfo.getName() != null && !sessionInfo.getName().equals("")) ? sessionInfo.getName() : sessionInfo.getUsername());
         fieldData.setCompany(sessionInfo.getCompName());
 
+
+
         if (fieldDataServiceI.hasSameFieldData(fieldData)) {
             j.setMsg("系统已有相同数据，不能重复填加!");
             return j;
@@ -514,6 +516,13 @@ public class FieldDataController extends BaseController {
         try {
 //            Cost tem = costServiceI.findById(fieldData.getCostType());
 //            String fj = tem.getItemCode().substring(0, 3);
+
+            if (fieldData.getItemCode().substring(0, 3).equals("700")) {
+                String tempSpecifications = StringUtil.trimToEmpty(fieldData.getSpecifications()).trim();
+                if (!tempSpecifications.equals("")) {
+                    fieldData.setSpecifications(tempSpecifications.substring(1));
+                }
+            }
 
             fieldDataServiceI.add(fieldData);
             int fieldId = Integer.parseInt(StringUtil.trimToEmpty(fieldDataServiceI.getId(fieldData)));
