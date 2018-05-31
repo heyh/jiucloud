@@ -689,7 +689,7 @@
                         </div>
                     </div>
                     <div class="control-group">
-                        <label class="control-label" for="specifications">设施名称(分部分项名称):</label>
+                        <label class="control-label" for="specifications">设施(分部分项)名称:</label>
 
                         <div class="controls">
                             <select style="width:250px" name="specifications" id="specifications">
