@@ -614,6 +614,11 @@
 
     function exportMaintenanceDetailsFun() {
 
+        if ($('#startTime').val() == '') {
+            alert("请选择开始时间");
+            return;
+		}
+
         var params = 'exportMaintenanceDetailsStartDate=' +$('#startTime').val();
         params += '&exportMaintenanceDetailsEndDate=' + $('#endTime').val();
         params += '&exportMaintenanceDetailsItemCode=' + $('#itemCode').val();
