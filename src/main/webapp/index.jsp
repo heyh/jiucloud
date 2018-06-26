@@ -189,6 +189,18 @@
             });
         }
 
+        //在刷新或关闭时调用的事件
+        $(window).bind('beforeunload', function () {
+                $.ajax({
+                    url: "${pageContext.request.contextPath}/userController/logout",
+                    type: "post",
+                    success: function () {
+
+                    }
+                });
+            }
+        );
+
         <!-- 单点登录 -->
         $(function () {
             var websocket;

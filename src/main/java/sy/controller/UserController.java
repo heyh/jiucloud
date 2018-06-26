@@ -16,6 +16,7 @@ import sy.pageModel.*;
 import sy.service.*;
 import sy.util.*;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.io.BufferedReader;
@@ -124,6 +125,28 @@ public class UserController extends BaseController {
 				j.setSuccess(true);
 				j.setMsg("登陆成功！");
 				//查询公司名称和id
+
+				// 防止多次登录 begin
+				ServletContext application = session.getServletContext();
+				Map<String, String> loginMap = (Map<String, String>) application.getAttribute("loginMap");
+				if (loginMap == null) {
+					loginMap = new HashMap<String, String>();
+
+				}
+
+				for (String key : loginMap.keySet()) {
+					if (("PC-" + u.getId()).equals(key) && !loginMap.get(key).equals(session.getId())) {
+						j.setSuccess(false);
+						j.setMsg("您好，该用户已登录!");
+						return j;
+					}
+				}
+
+				loginMap.put(("PC-" + u.getId()), session.getId());
+				application.setAttribute("loginMap", loginMap);
+				session.setAttribute("PC-userId", u.getId());
+				// end
+
 				Company c = companyService.findOneView(u.getId(),cid);
 				System.out.println("Company:" + c);
 				if (c == null) {

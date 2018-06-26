@@ -42,14 +42,14 @@
     <url-pattern>/*</url-pattern>
   </filter-mapping>
     <!-- add by heyh begin tomcat等 启动之前执行 -->
-    <filter>
-        <filter-name>myFilter</filter-name>
-        <filter-class>sy.filter.MyFilter</filter-class>
-    </filter>
-  <filter-mapping>
-    <filter-name>myFilter</filter-name>
-    <url-pattern>/*</url-pattern>
-  </filter-mapping>
+    <!--<filter>-->
+        <!--<filter-name>myFilter</filter-name>-->
+        <!--<filter-class>sy.filter.MyFilter</filter-class>-->
+    <!--</filter>-->
+  <!--<filter-mapping>-->
+    <!--<filter-name>myFilter</filter-name>-->
+    <!--<url-pattern>/*</url-pattern>-->
+  <!--</filter-mapping>-->
     <!-- add by heyh end-->
   <listener>
     <listener-class>org.springframework.web.context.ContextLoaderListener
@@ -59,6 +59,11 @@
     <listener-class>org.springframework.web.util.IntrospectorCleanupListener
 		</listener-class>
   </listener>
+
+  <listener>
+    <listener-class>sy.interceptors.SessionListener</listener-class>
+  </listener>
+
   <servlet>
     <description></description>
     <display-name>UploadServlet</display-name>
