@@ -1,7 +1,7 @@
 package sy.service;
 
-import org.springframework.stereotype.Service;
 import sy.model.po.Location;
+import sy.pageModel.DataGrid;
 
 import java.util.List;
 
@@ -20,4 +20,10 @@ public interface LocationServiceI {
     Location addLocation(String cid, String uid, String mc);
 
     void delLocation(String id);
+
+    DataGrid dataGrid(String cid, List<Integer> ugroup);
+
+    Location detail(String id);
+
+    void update(Location info);
 }

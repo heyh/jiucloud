@@ -1,10 +1,14 @@
 package sy.service.impl;
 
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import sy.dao.LocationDaoI;
+import sy.model.Item;
 import sy.model.po.Location;
+import sy.model.po.Project;
+import sy.pageModel.DataGrid;
 import sy.service.LocationServiceI;
 import sy.util.StringUtil;
 
@@ -81,5 +85,37 @@ public class LocationServiceImpl implements LocationServiceI {
         params.put("id", Integer.parseInt(id));
         Location location = locationDao.get("from Location where id = :id ", params);
         locationDao.delete(location);
+    }
+
+    @Override
+    public DataGrid dataGrid(String cid, List<Integer> ugroup) {
+        DataGrid dg = new DataGrid();
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("cid", cid);
+        String hql = "from Location where cid = :cid ";
+        String uids = StringUtils.join(ugroup, ",");
+        hql += " and uid in (" + uids + ")";
+
+        List<Location> locations = locationDao.find(hql, params);
+        dg.setTotal(locationDao.count("select count(*) " + hql, params));
+        dg.setRows(locations);
+        return dg;
+    }
+
+    @Override
+    public Location detail(String id) {
+        Location location = new Location();
+        try {
+            location = locationDao.get(" FROM Location t  where 1=1 and id=" + id);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return location;
+    }
+
+    @Override
+    public void update(Location info) {
+        Location location = locationDao.get(Location.class, info.getId());
+        BeanUtils.copyProperties(info, location);
     }
 }
