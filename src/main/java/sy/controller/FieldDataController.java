@@ -991,6 +991,22 @@ public class FieldDataController extends BaseController {
         return j;
     }
 
+    @RequestMapping("/securi_batchApprovedField")
+    @ResponseBody
+    public Json batchApprovedField(String ids, String approvedState, String approvedOption, String currentApprovedUser, HttpServletResponse response, HttpServletRequest request) {
+        Json j = new Json();
+        String[] tmpIds = ids.split(",");
+        if (tmpIds != null && tmpIds.length>0) {
+            for (String id : tmpIds) {
+                fieldDataServiceI.approvedField(Integer.parseInt(id), approvedState, approvedOption, currentApprovedUser);
+            }
+        }
+        j.setMsg("审批成功！");
+        j.setSuccess(true);
+        return j;
+    }
+
+
     /**
      * 页面顶端提醒
      * @param currentApprovedUser
@@ -1097,7 +1113,8 @@ public class FieldDataController extends BaseController {
         List<String> shenpis = departmentService.getFirstLevelParentDepartmentsByUid(cid, uid);
         String shenpi = shenpis.size() > 0 ? shenpis.get(0) : "";
 
-        request.setAttribute("id", request.getParameter("id"));
+        request.setAttribute("id", StringUtil.trimToEmpty(request.getParameter("id")));
+        request.setAttribute("ids", StringUtil.trimToEmpty(request.getParameter("ids")));
         request.setAttribute("userList", userList);
         request.setAttribute("shenpi", shenpi);
         return "/app/pro/chooseApprove";

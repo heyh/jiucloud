@@ -5,10 +5,16 @@
 <script type="text/javascript">
 	$(function() {
 		parent.$.messager.progress('close');
+		var url = '';
+		if ($('ids').val() == '') {
+            url = '${pageContext.request.contextPath}/fieldDataController/securi_approvedField'
+		} else {
+            url = '${pageContext.request.contextPath}/fieldDataController/securi_batchApprovedField'
+        }
 		$('#form')
 				.form(
 						{
-							url : '${pageContext.request.contextPath}/fieldDataController/securi_approvedField',
+							url : url,
 
 							onSubmit : function() {
                                 approvedOption = prompt("审批意见","");
@@ -50,6 +56,7 @@
 					<input type="hidden" id="id" name="id" value="${id}">
 					<input type="hidden" id="approvedState" name="approvedState" value="8">
 					<input type="hidden" id="approvedOption" name="approvedOption" value="">
+					<input type="hidden" id="ids" name="ids" value="${ids}">
 				</div>
 			</div>
 

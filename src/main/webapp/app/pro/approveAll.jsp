@@ -188,10 +188,12 @@
 </ul>
 
 <div id="container">
-
     <div class="section" id="data">
         <img src="${pageContext.request.contextPath}/images/verticalLine.png" style="padding-top:20px; padding-bottom:20px; vertical-align:middle"/>
         <span style="vertical-align:middle; font-family:SimSun; margin-left: 4px"><b>项目数据</b></span>
+        <%--<span><img style="cursor:pointer" onclick="batchApprovedFun('2', dataGrid4Data, 'data');" title="结束审批" src="${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/approved-true.png"/></span>--%>
+        <%--<span><img style="cursor:pointer" onclick="batchApprovedFun('8', dataGrid4Data, 'data');" title="继续审批" src="${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/approved-true.png"/></span>--%>
+
         <table id="dataGrid4Data" class="easyui-datagrid" width="100%">
         </table>
         <div id="toolbar4Data" class="fee_detail" style="display: none;">
@@ -215,6 +217,9 @@
     <div class="section" id="doc">
         <img src="${pageContext.request.contextPath}/images/verticalLine.png" style="padding-top:20px; padding-bottom:20px; vertical-align:middle" />
         <span style="vertical-align:middle; font-family:SimSun; margin-left: 4px"><b>项目资料</b></span>
+        <%--<span><img style="cursor:pointer" onclick="batchApprovedFun('2', dataGrid4Doc, 'doc');" title="结束审批" src="${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/approved-true.png"/></span>--%>
+        <%--<span><img style="cursor:pointer" onclick="batchApprovedFun('8', dataGrid4Doc, 'doc');" title="继续审批" src="${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/approved-true.png"/></span>--%>
+
         <table id="dataGrid4Doc" class="easyui-datagrid" width="100%">
         </table>
         <div id="toolbar4Doc" class="fee_detail" style="display: none;">
@@ -238,6 +243,9 @@
     <div class="section" id="bill" style="padding-bottom:20px;">
         <img src="${pageContext.request.contextPath}/images/verticalLine.png" style="padding-top:20px; padding-bottom:20px; vertical-align:middle" />
         <span style="vertical-align:middle; font-family:SimSun; margin-left: 4px"><b>清单项量</b></span>
+        <%--<span><img style="cursor:pointer" onclick="batchApprovedFun('2', dataGrid4Bill, 'bill');" title="结束审批" src="${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/approved-true.png"/></span>--%>
+        <%--<span><img style="cursor:pointer" onclick="batchApprovedFun('8', dataGrid4Bill, 'bill');" title="继续审批" src="${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/approved-true.png"/></span>--%>
+
         <table id="dataGrid4Bill" class="easyui-datagrid" width="100%">
         </table>
         <div id="toolbar4Bill" class="fee_detail" style="display: none;">
@@ -261,6 +269,9 @@
     <div class="section" id="material" style="padding-bottom:20px;">
         <img src="${pageContext.request.contextPath}/images/verticalLine.png" style="padding-top:20px; padding-bottom:20px; vertical-align:middle" />
         <span style="vertical-align:middle; font-family:SimSun; margin-left: 4px"><b>项目材料</b></span>
+        <%--<span><img style="cursor:pointer" onclick="batchApprovedFun('2', dataGrid4Material, 'material');" title="结束审批" src="${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/approved-true.png"/></span>--%>
+        <%--<span><img style="cursor:pointer" onclick="batchApprovedFun('8', dataGrid4Material, 'material');" title="继续审批" src="${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/approved-true.png"/></span>--%>
+
         <table id="dataGrid4Material" class="easyui-datagrid" width="100%">
         </table>
         <div id="toolbar4Material" class="fee_detail" style="display: none;">
@@ -1321,6 +1332,7 @@
     };
 
     function batchApprovedFun(approvedState, dg, flag) {
+        debugger;
         var rows = dg.datagrid('getChecked');
         var ids = [];
         if (rows.length > 0) {
@@ -1350,7 +1362,7 @@
                                 });
                                 $.ajax({
                                     type : "post",
-                                    url : '${pageContext.request.contextPath}/fieldDataController/securi_approvedField',
+                                    url : '${pageContext.request.contextPath}/fieldDataController/securi_batchApprovedField',
                                     data : {
                                         ids : ids.join(','),
                                         approvedState: approvedState,
