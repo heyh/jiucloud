@@ -340,13 +340,13 @@
                         {
                             field : 'id',
                             title : '多选框',
-                            width : 100,
+                            width : 50,
                             checkbox : true
                         },
                         {
                             field : 'projectName',
                             title : '工程名称',
-                            width : 200
+                            width : 150
 
                         },
                         {
@@ -363,90 +363,6 @@
                             field : 'creatTime',
                             title : '录入时间',
                             width : 150
-                        }
-                    ]],
-                    columns : [ [
-//                        {
-//                            field : 'id',
-//                            title : '多选框',
-//                            width : 100,
-//                            checkbox : true
-//                        },
-//                        {
-//                            field : 'projectName',
-//                            title : '工程名称',
-//                            width : 200
-//                        },
-//                        {
-//                            field : 'dataName',
-//                            title : '名称',
-//                            width : 200
-//                        },
-//                        {
-//                            field : 'creatTime',
-//                            title : '录入时间',
-//                            width : 150
-//                        },
-//                        {
-//                            field : 'sectionName',
-//                            title : '标段',
-//                            width : 100
-//                        },
-                        {
-                            field : 'costType',
-                            title : '类型',
-                            width : 100
-                        },
-                        {
-                            field : 'unit',
-                            title : '单位',
-                            width : 100
-                        },
-                        {
-                            field : 'price',
-                            title : '单价',
-                            width : 100
-                        },
-                        {
-                            field : 'count',
-                            title : '数量',
-                            width : 100
-                        },
-                        {
-                            field : 'moeny',
-                            title : '金额',
-                            width : 100,
-                            formatter : function(value, row, index) {
-                                return (row.count * row.price).toFixed(2);
-                            }
-
-                        },
-                        {
-                            field : 'specifications',
-                            title : '规格型号',
-                            width : 200
-                        },
-                        {
-                            field : 'remark',
-                            title : '备注',
-                            width : 150
-                        },
-                        {
-                            field : 'uname',
-                            title : '操作人',
-                            width : 200
-                        },
-                        {
-                            field : 'uid',
-                            title : '用户ID',
-                            width : 100,
-                            hidden: true
-                        },
-                        {
-                            field : 'isLock',
-                            title : '工程锁定标志',
-                            width : 100,
-                            hidden: true
                         },
                         {
                             field : 'needApproved',
@@ -504,6 +420,120 @@
                                 return str;
                             }
                         }
+                    ]],
+                    columns : [ [
+                        {
+                            field : 'costType',
+                            title : '类型',
+                            width : 100
+                        },
+                        {
+                            field : 'unit',
+                            title : '单位',
+                            width : 100
+                        },
+                        {
+                            field : 'price',
+                            title : '单价',
+                            width : 100
+                        },
+                        {
+                            field : 'count',
+                            title : '数量',
+                            width : 100
+                        },
+                        {
+                            field : 'moeny',
+                            title : '金额',
+                            width : 100,
+                            formatter : function(value, row, index) {
+                                return (row.count * row.price).toFixed(2);
+                            }
+
+                        },
+                        {
+                            field : 'specifications',
+                            title : '规格型号',
+                            width : 200
+                        },
+                        {
+                            field : 'remark',
+                            title : '备注',
+                            width : 150
+                        },
+                        {
+                            field : 'uname',
+                            title : '操作人',
+                            width : 200
+                        },
+                        {
+                            field : 'uid',
+                            title : '用户ID',
+                            width : 100,
+                            hidden: true
+                        },
+                        {
+                            field : 'isLock',
+                            title : '工程锁定标志',
+                            width : 100,
+                            hidden: true
+                        },
+                        <%--{--%>
+                            <%--field : 'needApproved',--%>
+                            <%--title : '审批状态',--%>
+                            <%--width : 100,--%>
+                            <%--formatter : function(value, row, index) {--%>
+                                <%--var str = '';--%>
+                                <%--if ('0' == value) {--%>
+                                    <%--str = '不需审批'--%>
+                                <%--} else if ('1' == value) {--%>
+                                    <%--str = '<span style="color: #ff0000">' + '未审批' + '</span>';--%>
+                                <%--} else if ('2' == value) {--%>
+                                    <%--str = '审批通过';--%>
+                                <%--} else if ('8' == value) {--%>
+                                    <%--str = '<span style="color: #ff0000">' + '审批中' + '</span>';--%>
+                                <%--} else if ('9' == value) {--%>
+                                    <%--str = '<span style="color: #ff0000">' + '审批未通过' + '</span>';--%>
+                                <%--}--%>
+                                <%--return str;--%>
+                            <%--}--%>
+                        <%--},--%>
+                        <%--{--%>
+                            <%--field : 'action',--%>
+                            <%--title : '操作',--%>
+                            <%--width : 100,--%>
+                            <%--formatter : function(value, row, index) {--%>
+                                <%--var str = '';--%>
+                                <%--str += $--%>
+                                    <%--.formatString(--%>
+                                        <%--' <img style="cursor:pointer" onclick="FileFun(\'{0}\');" src="{1}" title="附件管理"/>',--%>
+                                        <%--row.id,--%>
+                                        <%--'${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/fujianguanli-blue.png');--%>
+                                <%--if ('1' == row.needApproved || '8' == row.needApproved) {--%>
+                                    <%--str += '&nbsp;';--%>
+                                    <%--str += $--%>
+                                        <%--.formatString(--%>
+                                            <%--'<img style="cursor:pointer" onclick="approvedFun(\'{0}\', 2, dataGrid4Data, \'data\');" src="{1}" title="结束审批"/>',--%>
+                                            <%--row.id,--%>
+                                            <%--'${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/approved-true.png');--%>
+
+                                    <%--str += '&nbsp;';--%>
+                                    <%--str += $--%>
+                                        <%--.formatString(--%>
+                                            <%--'<img style="cursor:pointer" onclick="approvedFun(\'{0}\', 8, dataGrid4Data, \'data\');" src="{1}" title="继续审批"/>',--%>
+                                            <%--row.id,--%>
+                                            <%--'${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/approved-jixu.png');--%>
+
+                                    <%--str += '&nbsp;';--%>
+                                    <%--str += $--%>
+                                        <%--.formatString(--%>
+                                            <%--'<img style="cursor:pointer" onclick="approvedFun(\'{0}\', 9, dataGrid4Data, \'data\');" src="{1}" title="审批不通过"/>',--%>
+                                            <%--row.id,--%>
+                                            <%--'${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/approved-false.png');--%>
+                                <%--}--%>
+                                <%--return str;--%>
+                            <%--}--%>
+                        <%--}--%>
                     ] ],
                     toolbar : '#toolbar4Data',
                     onLoadSuccess : function() {
@@ -539,75 +569,24 @@
                         {
                             field : 'id',
                             title : '多选框',
-                            width : 100,
+                            width : 50,
                             checkbox : true
                         },
                         {
                             field : 'projectName',
                             title : '工程名称',
-                            width : 200
+                            width : 150
 
                         },
                         {
                             field : 'dataName',
                             title : '名称',
-                            width : 200
+                            width : 150
                         },
                         {
                             field : 'creatTime',
-                            title : '入库时间',
+                            title : '录入时间',
                             width : 150
-                        }
-                    ]],
-                    columns : [ [
-//                        {
-//                            field : 'id',
-//                            title : '多选框',
-//                            width : 100,
-//                            checkbox : true
-//                        },
-//                        {
-//                            field : 'projectName',
-//                            title : '工程名称',
-//                            width : 200
-//
-//                        },
-//                        {
-//                            field : 'dataName',
-//                            title : '名称',
-//                            width : 200
-//                        },
-//                        {
-//                            field : 'creatTime',
-//                            title : '入库时间',
-//                            width : 150
-//                        },
-                        {
-                            field : 'sectionName',
-                            title : '标段',
-                            width : 100
-                        },
-                        {
-                            field : 'costType',
-                            title : '资料类型',
-                            width : 100
-                        },
-                        {
-                            field : 'uname',
-                            title : '操作人',
-                            width : 200
-                        },
-                        {
-                            field : 'uid',
-                            title : '用户ID',
-                            width : 100,
-                            hidden: true
-                        },
-                        {
-                            field : 'isLock',
-                            title : '工程锁定标志',
-                            width : 100,
-                            hidden: true
                         },
                         {
                             field : 'needApproved',
@@ -665,6 +644,91 @@
                                 return str;
                             }
                         }
+                    ]],
+                    columns : [ [
+                        {
+                            field : 'sectionName',
+                            title : '标段',
+                            width : 100
+                        },
+                        {
+                            field : 'costType',
+                            title : '资料类型',
+                            width : 100
+                        },
+                        {
+                            field : 'uname',
+                            title : '操作人',
+                            width : 200
+                        },
+                        {
+                            field : 'uid',
+                            title : '用户ID',
+                            width : 100,
+                            hidden: true
+                        },
+                        {
+                            field : 'isLock',
+                            title : '工程锁定标志',
+                            width : 100,
+                            hidden: true
+                        },
+                        <%--{--%>
+                            <%--field : 'needApproved',--%>
+                            <%--title : '审批状态',--%>
+                            <%--width : 100,--%>
+                            <%--formatter : function(value, row, index) {--%>
+                                <%--var str = '';--%>
+                                <%--if ('0' == value) {--%>
+                                    <%--str = '不需审批'--%>
+                                <%--} else if ('1' == value) {--%>
+                                    <%--str = '<span style="color: #ff0000">' + '未审批' + '</span>';--%>
+                                <%--} else if ('2' == value) {--%>
+                                    <%--str = '审批通过';--%>
+                                <%--} else if ('8' == value) {--%>
+                                    <%--str = '<span style="color: #ff0000">' + '审批中' + '</span>';--%>
+                                <%--} else if ('9' == value) {--%>
+                                    <%--str = '<span style="color: #ff0000">' + '审批未通过' + '</span>';--%>
+                                <%--}--%>
+                                <%--return str;--%>
+                            <%--}--%>
+                        <%--},--%>
+                        <%--{--%>
+                            <%--field : 'action',--%>
+                            <%--title : '操作',--%>
+                            <%--width : 100,--%>
+                            <%--formatter : function(value, row, index) {--%>
+                                <%--var str = '';--%>
+                                <%--str += $--%>
+                                    <%--.formatString(--%>
+                                        <%--' <img style="cursor:pointer" onclick="FileFun(\'{0}\');" src="{1}" title="附件管理"/>',--%>
+                                        <%--row.id,--%>
+                                        <%--'${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/fujianguanli-blue.png');--%>
+                                <%--if ('1' == row.needApproved || '8' == row.needApproved) {--%>
+                                    <%--str += '&nbsp;';--%>
+                                    <%--str += $--%>
+                                        <%--.formatString(--%>
+                                            <%--'<img style="cursor:pointer" onclick="approvedFun(\'{0}\', 2, dataGrid4Doc, \'doc\');" src="{1}" title="结束审批"/>',--%>
+                                            <%--row.id,--%>
+                                            <%--'${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/approved-true.png');--%>
+
+                                    <%--str += '&nbsp;';--%>
+                                    <%--str += $--%>
+                                        <%--.formatString(--%>
+                                            <%--'<img style="cursor:pointer" onclick="approvedFun(\'{0}\', 8, dataGrid4Doc, \'doc\');" src="{1}" title="继续审批"/>',--%>
+                                            <%--row.id,--%>
+                                            <%--'${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/approved-jixu.png');--%>
+
+                                    <%--str += '&nbsp;';--%>
+                                    <%--str += $--%>
+                                        <%--.formatString(--%>
+                                            <%--'<img style="cursor:pointer" onclick="approvedFun(\'{0}\', 9, dataGrid4Doc, \'doc\');" src="{1}" title="审批不通过"/>',--%>
+                                            <%--row.id,--%>
+                                            <%--'${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/approved-false.png');--%>
+                                <%--}--%>
+                                <%--return str;--%>
+                            <%--}--%>
+                        <%--}--%>
                     ] ],
                     toolbar : '#toolbar4Doc',
                     onLoadSuccess : function() {
@@ -699,7 +763,7 @@
                         {
                             field : 'id',
                             title : '多选框',
-                            width : 100,
+                            width : 50,
                             checkbox : true
                         },
                         {
@@ -711,37 +775,71 @@
                         {
                             field : 'dataName',
                             title : '名称(工序名称)',
-                            width : 250
+                            width : 150
                         },
                         {
                             field : 'creatTime',
                             title : '录入时间',
                             width : 150
+                        },
+                        {
+                            field : 'needApproved',
+                            title : '审批状态',
+                            width : 100,
+                            formatter : function(value, row, index) {
+                                var str = '';
+                                if ('0' == value) {
+                                    str = '不需审批'
+                                } else if ('1' == value) {
+                                    str = '<span style="color: #ff0000">' + '未审批' + '</span>';
+                                } else if ('2' == value) {
+                                    str = '审批通过';
+                                } else if ('8' == value) {
+                                    str = '<span style="color: #ff0000">' + '审批中' + '</span>';
+                                } else if ('9' == value) {
+                                    str = '<span style="color: #ff0000">' + '审批未通过' + '</span>';
+                                }
+                                return str;
+                            }
+                        },
+                        {
+                            field : 'action',
+                            title : '操作',
+                            width : 100,
+                            formatter : function(value, row, index) {
+                                var str = '';
+                                str += $
+                                    .formatString(
+                                        ' <img style="cursor:pointer" onclick="FileFun(\'{0}\');" src="{1}" title="附件管理"/>',
+                                        row.id,
+                                        '${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/fujianguanli-blue.png');
+                                if ('1' == row.needApproved || '8' == row.needApproved) {
+                                    str += '&nbsp;';
+                                    str += $
+                                        .formatString(
+                                            '<img style="cursor:pointer" onclick="approvedFun(\'{0}\', 2, dataGrid4Bill, \'bill\');" src="{1}" title="结束审批"/>',
+                                            row.id,
+                                            '${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/approved-true.png');
+
+                                    str += '&nbsp;';
+                                    str += $
+                                        .formatString(
+                                            '<img style="cursor:pointer" onclick="approvedFun(\'{0}\', 8, dataGrid4Bill, \'bill\');" src="{1}" title="继续审批"/>',
+                                            row.id,
+                                            '${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/approved-jixu.png');
+
+                                    str += '&nbsp;';
+                                    str += $
+                                        .formatString(
+                                            '<img style="cursor:pointer" onclick="approvedFun(\'{0}\', 9, dataGrid4Bill, \'bill\');" src="{1}" title="审批不通过"/>',
+                                            row.id,
+                                            '${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/approved-false.png');
+                                }
+                                return str;
+                            }
                         }
                     ]],
                     columns : [ [
-//                        {
-//                            field : 'id',
-//                            title : '多选框',
-//                            width : 100,
-//                            checkbox : true
-//                        },
-//                        {
-//                            field : 'projectName',
-//                            title : '工程名称',
-//                            width : 250
-//
-//                        },
-//                        {
-//                            field : 'dataName',
-//                            title : '名称',
-//                            width : 350
-//                        },
-//                        {
-//                            field : 'creatTime',
-//                            title : '录入时间',
-//                            width : 200
-//                        },
                         {
                             field : 'specifications',
                             title : '设施名称(分部分项名称)',
@@ -817,62 +915,62 @@
                             width : 100,
                             hidden: true
                         },
-                        {
-                            field : 'needApproved',
-                            title : '审批状态',
-                            width : 100,
-                            formatter : function(value, row, index) {
-                                var str = '';
-                                if ('0' == value) {
-                                    str = '不需审批'
-                                } else if ('1' == value) {
-                                    str = '<span style="color: #ff0000">' + '未审批' + '</span>';
-                                } else if ('2' == value) {
-                                    str = '审批通过';
-                                } else if ('8' == value) {
-                                    str = '<span style="color: #ff0000">' + '审批中' + '</span>';
-                                } else if ('9' == value) {
-                                    str = '<span style="color: #ff0000">' + '审批未通过' + '</span>';
-                                }
-                                return str;
-                            }
-                        },
-                        {
-                            field : 'action',
-                            title : '操作',
-                            width : 100,
-                            formatter : function(value, row, index) {
-                                var str = '';
-                                str += $
-                                    .formatString(
-                                        ' <img style="cursor:pointer" onclick="FileFun(\'{0}\');" src="{1}" title="附件管理"/>',
-                                        row.id,
-                                        '${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/fujianguanli-blue.png');
-                                if ('1' == row.needApproved || '8' == row.needApproved) {
-                                    str += '&nbsp;';
-                                    str += $
-                                        .formatString(
-                                            '<img style="cursor:pointer" onclick="approvedFun(\'{0}\', 2, dataGrid4Bill, \'bill\');" src="{1}" title="结束审批"/>',
-                                            row.id,
-                                            '${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/approved-true.png');
+                        <%--{--%>
+                            <%--field : 'needApproved',--%>
+                            <%--title : '审批状态',--%>
+                            <%--width : 100,--%>
+                            <%--formatter : function(value, row, index) {--%>
+                                <%--var str = '';--%>
+                                <%--if ('0' == value) {--%>
+                                    <%--str = '不需审批'--%>
+                                <%--} else if ('1' == value) {--%>
+                                    <%--str = '<span style="color: #ff0000">' + '未审批' + '</span>';--%>
+                                <%--} else if ('2' == value) {--%>
+                                    <%--str = '审批通过';--%>
+                                <%--} else if ('8' == value) {--%>
+                                    <%--str = '<span style="color: #ff0000">' + '审批中' + '</span>';--%>
+                                <%--} else if ('9' == value) {--%>
+                                    <%--str = '<span style="color: #ff0000">' + '审批未通过' + '</span>';--%>
+                                <%--}--%>
+                                <%--return str;--%>
+                            <%--}--%>
+                        <%--},--%>
+                        <%--{--%>
+                            <%--field : 'action',--%>
+                            <%--title : '操作',--%>
+                            <%--width : 100,--%>
+                            <%--formatter : function(value, row, index) {--%>
+                                <%--var str = '';--%>
+                                <%--str += $--%>
+                                    <%--.formatString(--%>
+                                        <%--' <img style="cursor:pointer" onclick="FileFun(\'{0}\');" src="{1}" title="附件管理"/>',--%>
+                                        <%--row.id,--%>
+                                        <%--'${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/fujianguanli-blue.png');--%>
+                                <%--if ('1' == row.needApproved || '8' == row.needApproved) {--%>
+                                    <%--str += '&nbsp;';--%>
+                                    <%--str += $--%>
+                                        <%--.formatString(--%>
+                                            <%--'<img style="cursor:pointer" onclick="approvedFun(\'{0}\', 2, dataGrid4Bill, \'bill\');" src="{1}" title="结束审批"/>',--%>
+                                            <%--row.id,--%>
+                                            <%--'${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/approved-true.png');--%>
 
-                                    str += '&nbsp;';
-                                    str += $
-                                        .formatString(
-                                            '<img style="cursor:pointer" onclick="approvedFun(\'{0}\', 8, dataGrid4Bill, \'bill\');" src="{1}" title="继续审批"/>',
-                                            row.id,
-                                            '${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/approved-jixu.png');
+                                    <%--str += '&nbsp;';--%>
+                                    <%--str += $--%>
+                                        <%--.formatString(--%>
+                                            <%--'<img style="cursor:pointer" onclick="approvedFun(\'{0}\', 8, dataGrid4Bill, \'bill\');" src="{1}" title="继续审批"/>',--%>
+                                            <%--row.id,--%>
+                                            <%--'${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/approved-jixu.png');--%>
 
-                                    str += '&nbsp;';
-                                    str += $
-                                        .formatString(
-                                            '<img style="cursor:pointer" onclick="approvedFun(\'{0}\', 9, dataGrid4Bill, \'bill\');" src="{1}" title="审批不通过"/>',
-                                            row.id,
-                                            '${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/approved-false.png');
-                                }
-                                return str;
-                            }
-                        }
+                                    <%--str += '&nbsp;';--%>
+                                    <%--str += $--%>
+                                        <%--.formatString(--%>
+                                            <%--'<img style="cursor:pointer" onclick="approvedFun(\'{0}\', 9, dataGrid4Bill, \'bill\');" src="{1}" title="审批不通过"/>',--%>
+                                            <%--row.id,--%>
+                                            <%--'${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/approved-false.png');--%>
+                                <%--}--%>
+                                <%--return str;--%>
+                            <%--}--%>
+                        <%--}--%>
                     ] ],
                     toolbar : '#toolbar4Bill',
                     onLoadSuccess : function() {
@@ -908,109 +1006,24 @@
                         {
                             field : 'id',
                             title : '多选框',
-                            width : 100,
+                            width : 50,
                             checkbox : true
                         },
                         {
                             field : 'projectName',
                             title : '工程名称',
-                            width : 200
+                            width : 150
 
                         },
                         {
                             field : 'dataName',
                             title : '材料名称',
-                            width : 200
+                            width : 150
                         },
                         {
                             field : 'creatTime',
-                            title : '入库时间',
+                            title : '录入时间',
                             width : 150
-                        }
-                    ]],
-                    columns : [ [
-//                        {
-//                            field : 'id',
-//                            title : '多选框',
-//                            width : 100,
-//                            checkbox : true
-//                        },
-//                        {
-//                            field : 'projectName',
-//                            title : '工程名称',
-//                            width : 200
-//
-//                        },
-//                        {
-//                            field : 'dataName',
-//                            title : '材料名称',
-//                            width : 200
-//                        },
-//                        {
-//                            field : 'creatTime',
-//                            title : '入库时间',
-//                            width : 150
-//                        },
-                        {
-                            field : 'costType',
-                            title : '材料类型',
-                            width : 100
-                        },
-                        {
-                            field : 'unit',
-                            title : '单位',
-                            width : 100
-                        },
-                        {
-                            field : 'price',
-                            title : '单价',
-                            width : 100
-                        },
-                        {
-                            field : 'count',
-                            title : '数量',
-                            width : 100
-                        },
-                        {
-                            field : 'moeny',
-                            title : '金额',
-                            width : 100,
-                            formatter : function(value, row, index) {
-                                return (row.count * row.price).toFixed(2);
-                            }
-
-                        },
-                        {
-                            field : 'specifications',
-                            title : '规格型号',
-                            width : 200
-                        },
-                        {
-                            field : 'supplier',
-                            title : '供应商',
-                            width: 100
-                        },
-                        {
-                            field : 'remark',
-                            title : '备注',
-                            width : 150
-                        },
-                        {
-                            field : 'uname',
-                            title : '操作人',
-                            width : 200
-                        },
-                        {
-                            field : 'uid',
-                            title : '用户ID',
-                            width : 100,
-                            hidden: true
-                        },
-                        {
-                            field : 'isLock',
-                            title : '工程锁定标志',
-                            width : 100,
-                            hidden: true
                         },
                         {
                             field : 'needApproved',
@@ -1068,6 +1081,124 @@
                                 return str;
                             }
                         }
+                    ]],
+                    columns : [ [
+                        {
+                            field : 'costType',
+                            title : '材料类型',
+                            width : 100
+                        },
+                        {
+                            field : 'unit',
+                            title : '单位',
+                            width : 100
+                        },
+                        {
+                            field : 'price',
+                            title : '单价',
+                            width : 100
+                        },
+                        {
+                            field : 'count',
+                            title : '数量',
+                            width : 100
+                        },
+                        {
+                            field : 'moeny',
+                            title : '金额',
+                            width : 100,
+                            formatter : function(value, row, index) {
+                                return (row.count * row.price).toFixed(2);
+                            }
+                        },
+                        {
+                            field : 'specifications',
+                            title : '规格型号',
+                            width : 200
+                        },
+                        {
+                            field : 'supplier',
+                            title : '供应商',
+                            width: 100
+                        },
+                        {
+                            field : 'remark',
+                            title : '备注',
+                            width : 150
+                        },
+                        {
+                            field : 'uname',
+                            title : '操作人',
+                            width : 200
+                        },
+                        {
+                            field : 'uid',
+                            title : '用户ID',
+                            width : 100,
+                            hidden: true
+                        },
+                        {
+                            field : 'isLock',
+                            title : '工程锁定标志',
+                            width : 100,
+                            hidden: true
+                        },
+                        <%--{--%>
+                            <%--field : 'needApproved',--%>
+                            <%--title : '审批状态',--%>
+                            <%--width : 100,--%>
+                            <%--formatter : function(value, row, index) {--%>
+                                <%--var str = '';--%>
+                                <%--if ('0' == value) {--%>
+                                    <%--str = '不需审批'--%>
+                                <%--} else if ('1' == value) {--%>
+                                    <%--str = '<span style="color: #ff0000">' + '未审批' + '</span>';--%>
+                                <%--} else if ('2' == value) {--%>
+                                    <%--str = '审批通过';--%>
+                                <%--} else if ('8' == value) {--%>
+                                    <%--str = '<span style="color: #ff0000">' + '审批中' + '</span>';--%>
+                                <%--} else if ('9' == value) {--%>
+                                    <%--str = '<span style="color: #ff0000">' + '审批未通过' + '</span>';--%>
+                                <%--}--%>
+                                <%--return str;--%>
+                            <%--}--%>
+                        <%--},--%>
+                        <%--{--%>
+                            <%--field : 'action',--%>
+                            <%--title : '操作',--%>
+                            <%--width : 100,--%>
+                            <%--formatter : function(value, row, index) {--%>
+                                <%--var str = '';--%>
+                                <%--str += $--%>
+                                    <%--.formatString(--%>
+                                        <%--' <img style="cursor:pointer" onclick="FileFun(\'{0}\');" src="{1}" title="附件管理"/>',--%>
+                                        <%--row.id,--%>
+                                        <%--'${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/fujianguanli-blue.png');--%>
+                                <%--if ('1' == row.needApproved || '8' == row.needApproved) {--%>
+                                    <%--str += '&nbsp;';--%>
+                                    <%--str += $--%>
+                                        <%--.formatString(--%>
+                                            <%--'<img style="cursor:pointer" onclick="approvedFun(\'{0}\', 2, dataGrid4Material, \'material\');" src="{1}" title="结束审批"/>',--%>
+                                            <%--row.id,--%>
+                                            <%--'${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/approved-true.png');--%>
+
+                                    <%--str += '&nbsp;';--%>
+                                    <%--str += $--%>
+                                        <%--.formatString(--%>
+                                            <%--'<img style="cursor:pointer" onclick="approvedFun(\'{0}\', 8, dataGrid4Material, \'material\');" src="{1}" title="继续审批"/>',--%>
+                                            <%--row.id,--%>
+                                            <%--'${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/approved-jixu.png');--%>
+
+                                    <%--str += '&nbsp;';--%>
+                                    <%--str += $--%>
+                                        <%--.formatString(--%>
+                                            <%--'<img style="cursor:pointer" onclick="approvedFun(\'{0}\', 9, dataGrid4Material, \'material\');" src="{1}" title="审批不通过"/>',--%>
+                                            <%--row.id,--%>
+                                            <%--'${pageContext.request.contextPath}/style/images/extjs_icons/icon-new/approved-false.png');--%>
+                                <%--}--%>
+                                <%--return str;--%>
+                            <%--}--%>
+                        <%--}--%>
                     ] ],
                     toolbar : '#toolbar4Material',
                     onLoadSuccess : function() {
@@ -1124,9 +1255,11 @@
                     function(b) {
                         if (b) {
 
-                            approvedOption = prompt("审批意见","");
-                            if (approvedOption === null) {
-                                return;
+                            if (approvedState == '9') {
+                                approvedOption = prompt("审批意见","");
+                                if (approvedOption === null) {
+                                    return;
+                                }
                             }
 
                             parent.$.messager.progress({
