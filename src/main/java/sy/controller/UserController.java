@@ -146,14 +146,21 @@ public class UserController extends BaseController {
 //				application.setAttribute("loginMap", loginMap);
 //				session.setAttribute("PC-userId", u.getId());
 
-				if (!StringUtil.trimToEmpty(u.getIsLogin()).equals("")) {
+				ServletContext application = session.getServletContext();
+				Map<String, String> loginMap = (Map<String, String>) application.getAttribute("loginMap");
+				if (loginMap == null) {
+					loginMap = new HashMap<String, String>();
+
+				}
+				if (!StringUtil.trimToEmpty(u.getIsLogin()).equals("") && !loginMap.get("login-" + u.getId()).equals(session.getId())) {
 					j.setSuccess(false);
 					j.setMsg("您好，该用户已登录!");
 					return j;
 				}
-				if (!StringUtil.trimToEmpty(request.getParameter("id")).equals("")) {
-					userService.updateLoginStatus(u.getId(), u.getId());
-				}
+				loginMap.put(("login-" + u.getId()), session.getId());
+				application.setAttribute("loginMap", loginMap);
+				userService.updateLoginStatus(u.getId(), u.getId());
+
 				// end
 
 				Company c = companyService.findOneView(u.getId(),cid);
