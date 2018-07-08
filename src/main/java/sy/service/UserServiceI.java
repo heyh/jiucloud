@@ -46,4 +46,6 @@ public interface UserServiceI {
 
     public String findUnderlingUsers(List<Integer> uids);
 
+    public void updateLoginStatus(String id, String isLogin);
+
 }

@@ -17,6 +17,8 @@ public class User implements java.io.Serializable {
     private String mobile_phone;
     private String email;
 
+    private String isLogin;
+
     public String getEmail() {
         return email;
     }
@@ -92,6 +94,14 @@ public class User implements java.io.Serializable {
 
 	public void setUariva(String uariva) {
 		this.uariva = uariva;
+	}
+
+	public String getIsLogin() {
+		return isLogin;
+	}
+
+	public void setIsLogin(String isLogin) {
+		this.isLogin = isLogin;
 	}
 
 	@Override

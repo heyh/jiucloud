@@ -32,8 +32,17 @@ public class Tuser implements java.io.Serializable {
     private String mobile_phone;
     private String email;
     private String qq;
+	private String isLogin;
 
-    public String getQq() {
+	public String getIsLogin() {
+		return isLogin;
+	}
+
+	public void setIsLogin(String isLogin) {
+		this.isLogin = isLogin;
+	}
+
+	public String getQq() {
         return qq;
     }
 

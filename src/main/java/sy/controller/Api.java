@@ -19,8 +19,10 @@ import sy.pageModel.*;
 import sy.service.*;
 import sy.util.*;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.text.DecimalFormat;
 import java.util.*;
@@ -88,6 +90,15 @@ public class Api extends BaseController {
     @Autowired
     private MonthPlanServiceI monthPlanService;
 
+    @RequestMapping("/securi_logout")
+    @ResponseBody
+    public JSONObject logout(@RequestParam(value = "cid", required = false) String cid,
+                             @RequestParam(value = "uid", required = false) String uid,
+                            HttpServletRequest request) {
+        userService.updateLoginStatus(uid, "");
+        return new WebResult().ok();
+    }
+
     @RequestMapping("/securi_login")
     @ResponseBody
     public JSONObject login(@RequestParam(value = "name", required = true) String name,
@@ -97,6 +108,33 @@ public class Api extends BaseController {
 
         User user = userService.login(name, pwd);
         if (user != null) {
+
+            // 防止多次登录 begin
+//            HttpSession session = request.getSession();
+//            ServletContext application = request.getSession().getServletContext();
+//            Map<String, String> loginMap = (Map<String, String>) application.getAttribute("loginMap");
+//            if (loginMap == null) {
+//                loginMap = new HashMap<String, String>();
+//
+//            }
+//
+//            for (String key : loginMap.keySet()) {
+//                if (("PC-" + user.getId()).equals(key)) {
+//                    return new WebResult().fail().setMessage("您好，该用户已登录!");
+//                }
+//            }
+//
+//            loginMap.put(("PC-" + user.getId()), session.getId());
+//            application.setAttribute("loginMap", loginMap);
+//            session.setAttribute("PC-userId", user.getId());
+
+            if (!StringUtil.trimToEmpty(user.getIsLogin()).equals("")) {
+                return new WebResult().fail().setMessage("您好，该用户已登录!");
+            }
+            userService.updateLoginStatus(user.getId(), user.getId());
+
+            // end
+
             List<Company> companyList = companyService.getCompanyInfos(user.getId(), null);
             List<String> rightList = new ArrayList<String>();
             int parentId = -1;

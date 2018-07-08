@@ -1,5 +1,9 @@
 package sy.interceptors;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import sy.pageModel.SessionInfo;
+import sy.service.UserServiceI;
+import sy.util.ConfigUtil;
 import sy.util.StringUtil;
 
 import javax.servlet.http.HttpSession;
@@ -11,6 +15,10 @@ import java.util.Map;
  * Created by heyh on 2018/6/14.
  */
 public class SessionListener implements HttpSessionListener {
+
+    @Autowired
+    private UserServiceI userService;
+
     @Override
     public void sessionCreated(HttpSessionEvent httpSessionEvent) {
 
@@ -19,12 +27,10 @@ public class SessionListener implements HttpSessionListener {
     @Override
     public void sessionDestroyed(HttpSessionEvent httpSessionEvent) {
         //在session销毁的时候 把loginMap中保存的键值对清除
-        String userId = StringUtil.trimToEmpty(httpSessionEvent.getSession().getAttribute("PC-userId"));
+        SessionInfo sessionInfo = (SessionInfo) httpSessionEvent.getSession().getAttribute(ConfigUtil.getSessionInfoName());
+        String userId = sessionInfo.getId();
         if (!userId.equals("")) {
-            Map<String, String> loginMap = (Map<String, String>) httpSessionEvent.getSession().getServletContext().getAttribute("loginMap");
-            loginMap.remove("PC-" + userId);
-            httpSessionEvent.getSession().getServletContext().setAttribute("loginMap", loginMap);
-            System.out.println(userId + " 用户注销！");
+            userService.updateLoginStatus(userId, "");
         }
     }
 }

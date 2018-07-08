@@ -158,4 +158,11 @@ public class UserServiceImpl implements UserServiceI {
         }
         return JSON.toJSONString(tmpList);
     }
+
+	@Override
+	public void updateLoginStatus(String id, String isLogin) {
+		Tuser u = userDao.get("from Tuser where id=" + Integer.parseInt(id));
+		u.setIsLogin(isLogin);
+		userDao.update(u);
+	}
 }

@@ -127,24 +127,33 @@ public class UserController extends BaseController {
 				//查询公司名称和id
 
 				// 防止多次登录 begin
-				ServletContext application = session.getServletContext();
-				Map<String, String> loginMap = (Map<String, String>) application.getAttribute("loginMap");
-				if (loginMap == null) {
-					loginMap = new HashMap<String, String>();
+//				ServletContext application = session.getServletContext();
+//				Map<String, String> loginMap = (Map<String, String>) application.getAttribute("loginMap");
+//				if (loginMap == null) {
+//					loginMap = new HashMap<String, String>();
+//
+//				}
+//
+//				for (String key : loginMap.keySet()) {
+//					if (("PC-" + u.getId()).equals(key) && !loginMap.get(key).equals(session.getId())) {
+//						j.setSuccess(false);
+//						j.setMsg("您好，该用户已登录!");
+//						return j;
+//					}
+//				}
+//
+//				loginMap.put(("PC-" + u.getId()), session.getId());
+//				application.setAttribute("loginMap", loginMap);
+//				session.setAttribute("PC-userId", u.getId());
 
+				if (!StringUtil.trimToEmpty(u.getIsLogin()).equals("")) {
+					j.setSuccess(false);
+					j.setMsg("您好，该用户已登录!");
+					return j;
 				}
-
-				for (String key : loginMap.keySet()) {
-					if (("PC-" + u.getId()).equals(key) && !loginMap.get(key).equals(session.getId())) {
-						j.setSuccess(false);
-						j.setMsg("您好，该用户已登录!");
-						return j;
-					}
+				if (!StringUtil.trimToEmpty(request.getParameter("id")).equals("")) {
+					userService.updateLoginStatus(u.getId(), u.getId());
 				}
-
-				loginMap.put(("PC-" + u.getId()), session.getId());
-				application.setAttribute("loginMap", loginMap);
-				session.setAttribute("PC-userId", u.getId());
 				// end
 
 				Company c = companyService.findOneView(u.getId(),cid);
@@ -381,10 +390,18 @@ public class UserController extends BaseController {
 	@ResponseBody
 	@RequestMapping("/logout")
 	public Json logout(HttpSession session) {
+
+		SessionInfo sessionInfo = (SessionInfo) session.getAttribute(ConfigUtil.getSessionInfoName());
+		String userId = sessionInfo.getId();
+		if (!userId.equals("")) {
+			userService.updateLoginStatus(userId, "");
+		}
+
 		Json j = new Json();
 		if (session != null) {
 			session.invalidate();
 		}
+
 		j.setSuccess(true);
 		j.setMsg("注销成功！");
 		return j;
