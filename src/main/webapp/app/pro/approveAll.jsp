@@ -1320,6 +1320,87 @@
 
     };
 
+    function batchApprovedFun(approvedState, dg, flag) {
+        var rows = dg.datagrid('getChecked');
+        var ids = [];
+        if (rows.length > 0) {
+            for (var i = 0; i < rows.length; i++) {
+                ids.push(rows[i].id);
+            }
+
+            var approvedTip = '';
+            var approvedOption = '';
+            if(approvedState == '2') {
+                approvedTip = '确认审批通过,并结束后续审批?';
+            } else if(approvedState == '8') {
+                approvedTip = '确认审批通过,并继续后续审批?';
+            }
+
+            if (approvedState == '2') {
+                parent.$.messager
+                    .confirm(
+                        '询问',
+                        approvedTip,
+                        function(b) {
+                            if (b) {
+
+                                parent.$.messager.progress({
+                                    title : '提示',
+                                    text : '数据处理中，请稍后....'
+                                });
+                                $.ajax({
+                                    type : "post",
+                                    url : '${pageContext.request.contextPath}/fieldDataController/securi_approvedField',
+                                    data : {
+                                        ids : ids.join(','),
+                                        approvedState: approvedState,
+                                        approvedOption: approvedOption
+                                    },
+                                    dataType : "json",
+                                    success : function(data) {
+                                        if (data.success == true) {
+                                            if (flag == 'data') {
+                                                searchFun4Data();
+                                            } else if (flag == 'doc') {
+                                                searchFun4Doc();
+                                            } else if (flag == 'bill') {
+                                                searchFun4Bill();
+                                            } else if (flag == 'material') {
+                                                searchFun4Material();
+                                            }
+                                        }
+                                    }
+                                });
+                            }
+                        });
+            } else if (approvedState == '8') {
+                parent.$.messager
+                    .confirm(
+                        '询问',
+                        approvedTip,
+                        function(b) {
+                            if (b) {
+                                parent.$
+                                    .modalDialog({
+                                        title: '选择审批人',
+                                        width: 250,
+                                        height: 150,
+                                        href: '${pageContext.request.contextPath}/fieldDataController/securi_chooseApprovePage?ids=' + ids,
+                                        buttons: [{
+                                            text: '确定',
+                                            handler: function () {
+                                                parent.$.modalDialog.openner_dataGrid = dg;//因为添加成功之后，需要刷新这个dataGrid，所以先预定义好
+                                                var f = parent.$.modalDialog.handler.find('#form');
+                                                f.submit();
+                                            }
+                                        }]
+                                    });
+                            }
+                        });
+            }
+        }
+    }
+
 
     //过滤条件查询
     function searchFun4Data() {
