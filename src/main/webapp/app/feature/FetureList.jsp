@@ -38,7 +38,7 @@
 		dataGrid = $('#dataGrid')
 				.datagrid(
 						{
-							url : '${pageContext.request.contextPath}/itemController/securi_dataGrid?projectId=' + $('#projectId').val(),
+							url : '${pageContext.request.contextPath}/fetureController/securi_dataGrid',
 							fit : true,
 							fitColumns : true,
 							border : false,
@@ -59,21 +59,16 @@
 										checkbox : true
 									},
 									{
-										field : 'projectName',
-										title : '工程名称',
+										field : 'costType',
+										title : '费用类型',
 										width : 250
 
 									},
 									{
-										field : 'name',
-										title : '标段名称',
-										width : 250
+										field : 'fetures',
+										title : '项目特征',
+										width : 500
 
-									},
-									{
-										field : 'supInfo',
-										title : '标段附加信息',
-										width : 250
 									},
 									{
 										field : 'action',
@@ -81,8 +76,6 @@
 										width : 150,
 										formatter : function(value, row, index) {
 											var str = '';
-                                            var userId = <%= userId%>;
-
 											str += $
 													.formatString(
 													'<img onclick="editFun(\'{0}\');" src="{1}" title="编辑" />',
@@ -124,7 +117,7 @@
                         $
                             .ajax({
                                 type : "post",
-                                url : '${pageContext.request.contextPath}/itemController/securi_delSection?',
+                                url : '${pageContext.request.contextPath}/fetureController/securi_del?',
                                 data : {
                                     id : id
                                 },
@@ -203,7 +196,7 @@
                 title: '编辑',
                 width: 450,
                 height: 350,
-                href: '${pageContext.request.contextPath}/itemController/securi_updateSectionPage?id=' + id,
+                href: '${pageContext.request.contextPath}/fetureController/securi_updatePage?id=' + id,
                 buttons: [{
                     text: '修改',
                     handler: function () {
@@ -222,7 +215,7 @@
                 title: '编辑',
                 width: 450,
                 height: 350,
-                href: '${pageContext.request.contextPath}/itemController/securi_addSectionPage',
+                href: '${pageContext.request.contextPath}/fetureController/securi_addnPage',
                 buttons: [{
                     text: '新增',
                     handler: function () {
@@ -234,14 +227,6 @@
             });
 	}
 
-    <%--$.getJSON('${pageContext.request.contextPath}/projectController/securi_getProjects', function (data) {--%>
-        <%--$('#projectId').select2({--%>
-            <%--placeholder: "可以模糊查询",--%>
-            <%--data: [{id: '', text: ''}].concat(data.obj),--%>
-            <%--allowClear: true--%>
-        <%--});--%>
-    <%--});--%>
-
     function searchFun() {
         dataGrid.datagrid('load', $.serializeObject($('#searchForm')));
     }
@@ -252,20 +237,6 @@
 	<div class="easyui-layout" data-options="fit : true,border : false">
 		<div data-options="region:'north',title:'',border:false" style="height: 5px; overflow: hidden;">
 			<form id="searchForm">
-				<input type="hidden" id="projectId" name="projectId" value="${projectId}"/>
-				<%--<table class="table table-hover table-condensed" style="display: none;">--%>
-					<tr>
-						<%--<td>工程名称:&nbsp;--%>
-							<%--<select name="projectId" id="projectId">--%>
-							<%--</select>--%>
-
-							<%--<a href="javascript:void(0);"--%>
-							   <%--class="easyui-linkbutton"--%>
-							   <%--data-options="iconCls:'search_new',plain:true" onclick="searchFun();">过滤条件</a>--%>
-						<%--</td>--%>
-
-					<%--</tr>--%>
-				<%--</table>--%>
 			</form>
 		</div>
 
@@ -277,8 +248,8 @@
 		<a onclick="addFun();" href="javascript:void(0);"
 			class="easyui-linkbutton"
 			data-options="plain:true,iconCls:'add_new'">添加</a>
-		<a onclick="batchDeleteFun();" href="javascript:void(0);"
-		class="easyui-linkbutton" data-options="plain:true,iconCls:'batdelete_new'">批量删除</a>
+		<%--<a onclick="batchDeleteFun();" href="javascript:void(0);"--%>
+		<%--class="easyui-linkbutton" data-options="plain:true,iconCls:'batdelete_new'">批量删除</a>--%>
 
 
 	</div>
