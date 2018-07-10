@@ -8,7 +8,7 @@
 		$('#form')
 				.form(
 						{
-							url : '${pageContext.request.contextPath}/itemController/securi_updateSection',
+							url : '${pageContext.request.contextPath}/featureController/securi_update',
 
 							onSubmit : function() {
 								return true;
@@ -35,27 +35,12 @@
 	<div data-options="region:'center',border:false" title="" style="overflow: hidden;">
 		<form class="form-horizontal" name="form" id="form" method="post" role="form">
 
-			<input type="hidden" id="id" name="id" value="${item.id}" />
+			<input type="hidden" id="id" name="id" value="${feature.id}" />
 
-			<div class="control-group" style="padding-top: 20px; ">
-				<label class="control-label" for="projectName">工程名称:</label>
-
+			<div class="control-group" style="padding-top: 20px; padding-right: 50px">
+				<label class="control-label" for="features">项目特征</label>
 				<div class="controls">
-					<input type="text" id="projectName" name="projectName" value="${item.projectName}" disabled='true'>
-				</div>
-			</div>
-			<div class="control-group">
-				<label class="control-label" for="name">标段名称:</label>
-
-				<div class="controls">
-					<input type="text" id="name" name="name" value="${item.name}">
-				</div>
-			</div>
-			<div class="control-group">
-				<label class="control-label" for="supInfo">标段附加信息</label>
-
-				<div class="controls">
-					<textarea name="supInfo" id="supInfo" style="width: 218px;" cols=50 rows=6>${item.supInfo}</textarea>
+					<input type="text" name="features" id="features" value="${feature.features}">
 				</div>
 			</div>
 		</form>

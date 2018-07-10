@@ -38,7 +38,7 @@
 		dataGrid = $('#dataGrid')
 				.datagrid(
 						{
-							url : '${pageContext.request.contextPath}/fetureController/securi_dataGrid',
+							url : '${pageContext.request.contextPath}/featureController/securi_dataGrid',
 							fit : true,
 							fitColumns : true,
 							border : false,
@@ -65,7 +65,7 @@
 
 									},
 									{
-										field : 'fetures',
+										field : 'features',
 										title : '项目特征',
 										width : 500
 
@@ -117,7 +117,7 @@
                         $
                             .ajax({
                                 type : "post",
-                                url : '${pageContext.request.contextPath}/fetureController/securi_del?',
+                                url : '${pageContext.request.contextPath}/featureController/securi_del?',
                                 data : {
                                     id : id
                                 },
@@ -196,7 +196,7 @@
                 title: '编辑',
                 width: 450,
                 height: 350,
-                href: '${pageContext.request.contextPath}/fetureController/securi_updatePage?id=' + id,
+                href: '${pageContext.request.contextPath}/featureController/securi_updatePage?id=' + id,
                 buttons: [{
                     text: '修改',
                     handler: function () {
@@ -215,7 +215,7 @@
                 title: '编辑',
                 width: 450,
                 height: 350,
-                href: '${pageContext.request.contextPath}/fetureController/securi_addnPage',
+                href: '${pageContext.request.contextPath}/featureController/securi_addnPage',
                 buttons: [{
                     text: '新增',
                     handler: function () {
