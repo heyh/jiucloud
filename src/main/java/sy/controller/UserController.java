@@ -152,11 +152,15 @@ public class UserController extends BaseController {
 					loginMap = new HashMap<String, String>();
 
 				}
-				if (!StringUtil.trimToEmpty(u.getIsLogin()).equals("") && !loginMap.get("login-" + u.getId()).equals(session.getId())) {
-					j.setSuccess(false);
-					j.setMsg("您好，该用户已登录!");
-					return j;
+
+				if (loginMap.containsKey("login-" + u.getId())) {
+					if (!StringUtil.trimToEmpty(u.getIsLogin()).equals("") && !loginMap.get("login-" + u.getId()).equals(session.getId())) {
+						j.setSuccess(false);
+						j.setMsg("您好，该用户已登录!");
+						return j;
+					}
 				}
+
 				loginMap.put(("login-" + u.getId()), session.getId());
 				application.setAttribute("loginMap", loginMap);
 				userService.updateLoginStatus(u.getId(), u.getId());
