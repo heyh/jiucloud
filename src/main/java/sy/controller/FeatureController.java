@@ -34,9 +34,14 @@ public class FeatureController extends BaseController {
     @Autowired
     private DepartmentServiceI departmentService;
 
-    @RequestMapping("/securi_getFeaturesDataGrid")
+    @RequestMapping("/FeatureList")
+    public String FeatureList(HttpServletRequest request) {
+        return "/app/feature/FeatureList";
+    }
+
+    @RequestMapping("/securi_dataGrid")
     @ResponseBody
-    public DataGrid getFeaturesDataGrid(PageHelper ph, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
+    public DataGrid dataGrid(PageHelper ph, HttpServletRequest request, HttpServletResponse response, HttpSession session) {
         SessionInfo sessionInfo = (SessionInfo) session.getAttribute(ConfigUtil.getSessionInfoName());
         String cid = sessionInfo.getCompid();
         String keyword = StringUtil.trimToEmpty(request.getParameter("keyword"));
