@@ -128,10 +128,10 @@ public class Api extends BaseController {
 //            application.setAttribute("loginMap", loginMap);
 //            session.setAttribute("PC-userId", user.getId());
 
-            if (!StringUtil.trimToEmpty(user.getIsLogin()).equals("")) {
-                return new WebResult().fail().setMessage("您好，该用户已登录!");
-            }
-            userService.updateLoginStatus(user.getId(), user.getId());
+//            if (!StringUtil.trimToEmpty(user.getIsLogin()).equals("")) {
+//                return new WebResult().fail().setMessage("您好，该用户已登录!");
+//            }
+//            userService.updateLoginStatus(user.getId(), user.getId());
 
             // end
 

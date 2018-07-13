@@ -19,7 +19,7 @@ public interface FeatureServiceI {
 
     void delFeature(String id);
 
-    DataGrid getFeaturesDataGrid(PageHelper ph, String cid, String keyword);
+    DataGrid dataGrid(PageHelper ph, String cid, String keyword, String itemCode);
 
     List<Feature> getFeatureList(String cid, String mc, String dw);
 }

@@ -38,9 +38,6 @@ public class FeatureServiceImpl implements FeatureServiceI {
             params.put("dw", "%%" + keyword + "%%");
         }
 
-        String uids = StringUtils.join(ugroup, ",");
-        hql += " and uid in (" + uids + ")";
-
         hql += " ORDER BY ID ASC";
         List<Feature> features = featureDao.find(hql, params);
         return features;
@@ -65,10 +62,10 @@ public class FeatureServiceImpl implements FeatureServiceI {
     }
 
     @Override
-    public Feature addFeature(String cid, String uid, String mc, String dw) {
+    public Feature addFeature(String cid, String itemCode, String mc, String dw) {
         Feature feature = new Feature();
         feature.setCid(cid);
-        feature.setUid(uid);
+        feature.setItemCode(itemCode);
         feature.setMc(mc);
         feature.setDw(dw);
         featureDao.save(feature);
@@ -85,7 +82,7 @@ public class FeatureServiceImpl implements FeatureServiceI {
     }
 
     @Override
-    public DataGrid getFeaturesDataGrid(PageHelper ph, String cid, String keyword) {
+    public DataGrid dataGrid(PageHelper ph, String cid, String keyword, String itemCode) {
         DataGrid dg = new DataGrid();
         Map<String, Object> params = new HashMap<String, Object>();
         params.put("cid", cid);
@@ -97,6 +94,10 @@ public class FeatureServiceImpl implements FeatureServiceI {
 
             hql += " and dw like :dw) ";
             params.put("dw", "%%" + keyword + "%%");
+        }
+        if (!itemCode.equals("")) {
+            hql += "and itemCode = :itemCode ";
+            params.put("itemCode", itemCode);
         }
         hql += " order by id desc";
 

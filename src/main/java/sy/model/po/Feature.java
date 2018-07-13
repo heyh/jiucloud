@@ -24,19 +24,14 @@ public class Feature {
     @Column(name = "cid")
     private String cid;
 
-    @Column(name = "uid")
-    private String uid;
-
-    public String getUid() {
-        return uid;
-    }
-
-    public void setUid(String uid) {
-        this.uid = uid;
-    }
+    @Column(name = "itemCode")
+    private String itemCode;
 
     @Column(name = "mc")
     private String mc;
+
+    @Column(name = "count")
+    private String count;
 
     @Column(name = "dw")
     private String dw;
@@ -57,12 +52,28 @@ public class Feature {
         this.cid = cid;
     }
 
+    public String getItemCode() {
+        return itemCode;
+    }
+
+    public void setItemCode(String itemCode) {
+        this.itemCode = itemCode;
+    }
+
     public String getMc() {
         return mc;
     }
 
     public void setMc(String mc) {
         this.mc = mc;
+    }
+
+    public String getCount() {
+        return count;
+    }
+
+    public void setCount(String count) {
+        this.count = count;
     }
 
     public String getDw() {

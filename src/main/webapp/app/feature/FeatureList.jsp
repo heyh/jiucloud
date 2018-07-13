@@ -65,9 +65,21 @@
 
 									},
 									{
-										field : 'features',
-										title : '项目特征',
-										width : 500
+										field : 'mc',
+										title : '名称',
+										width : 200
+
+									},
+									{
+										field : 'count',
+										title : '数量',
+										width : 100
+
+									},
+									{
+										field : 'dw',
+										title : '单位',
+										width : 200
 
 									},
 									{

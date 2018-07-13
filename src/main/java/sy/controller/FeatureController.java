@@ -45,7 +45,8 @@ public class FeatureController extends BaseController {
         SessionInfo sessionInfo = (SessionInfo) session.getAttribute(ConfigUtil.getSessionInfoName());
         String cid = sessionInfo.getCompid();
         String keyword = StringUtil.trimToEmpty(request.getParameter("keyword"));
-        DataGrid dataGrid = featureService.getFeaturesDataGrid(ph, cid, keyword);
+        String itemCode = StringUtil.trimToEmpty(request.getParameter("itemCode"));
+        DataGrid dataGrid = featureService.dataGrid(ph, cid, keyword, itemCode);
 
         return dataGrid;
     }

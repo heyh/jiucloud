@@ -41,16 +41,16 @@
     <filter-name>druidWebStatFilter</filter-name>
     <url-pattern>/*</url-pattern>
   </filter-mapping>
-    <!-- add by heyh begin tomcat等 启动之前执行 -->
-    <!--<filter>-->
-        <!--<filter-name>myFilter</filter-name>-->
-        <!--<filter-class>sy.filter.MyFilter</filter-class>-->
-    <!--</filter>-->
-  <!--<filter-mapping>-->
-    <!--<filter-name>myFilter</filter-name>-->
-    <!--<url-pattern>/*</url-pattern>-->
-  <!--</filter-mapping>-->
-    <!-- add by heyh end-->
+     <!--add by heyh begin tomcat等 启动之前执行-->
+    <filter>
+        <filter-name>myFilter</filter-name>
+        <filter-class>sy.filter.MyFilter</filter-class>
+    </filter>
+  <filter-mapping>
+    <filter-name>myFilter</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+     <!--add by heyh end-->
   <listener>
     <listener-class>org.springframework.web.context.ContextLoaderListener
 		</listener-class>
