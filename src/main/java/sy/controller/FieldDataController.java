@@ -540,13 +540,13 @@ public class FieldDataController extends BaseController {
             }
 
             // 增加名称
-            if (fieldData.getItemCode().substring(0, 3).equals("800")) {
-                String mc = StringUtil.trimToEmpty(fieldData.getDataName()) + (StringUtil.trimToEmpty(fieldData.getSpecifications()).equals("") ? "" : "(" + StringUtil.trimToEmpty(fieldData.getSpecifications()) + ")");
-                List<Feature> featureList = featureService.getFeatureList(fieldData.getCid(), mc, StringUtil.trimToEmpty(fieldData.getUnit()));
-                if (featureList == null || featureList.size() <= 0) {
-                    featureService.addFeature(fieldData.getCid(), fieldData.getUid(), mc, StringUtil.trimToEmpty(fieldData.getUnit()));
-                }
-            }
+//            if (fieldData.getItemCode().substring(0, 3).equals("800")) {
+//                String mc = StringUtil.trimToEmpty(fieldData.getDataName()) + (StringUtil.trimToEmpty(fieldData.getSpecifications()).equals("") ? "" : "(" + StringUtil.trimToEmpty(fieldData.getSpecifications()) + ")");
+//                List<Feature> featureList = featureService.getFeatureList(fieldData.getCid(), mc, StringUtil.trimToEmpty(fieldData.getUnit()));
+//                if (featureList == null || featureList.size() <= 0) {
+//                    featureService.addFeature(fieldData.getCid(), fieldData.getUid(), mc, StringUtil.trimToEmpty(fieldData.getUnit()));
+//                }
+//            }
 
             j.setObj(fieldId);
             sessionInfo.setLast_cost_id(fieldData.getCostType());

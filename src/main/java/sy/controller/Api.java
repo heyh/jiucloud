@@ -457,13 +457,13 @@ public class Api extends BaseController {
         }
 
         // 增加名称
-        if (fieldData.getItemCode().substring(0, 3).equals("800")) {
-            String mc = StringUtil.trimToEmpty(fieldData.getDataName()) + (StringUtil.trimToEmpty(fieldData.getSpecifications()).equals("") ? "" : "(" + StringUtil.trimToEmpty(fieldData.getSpecifications()) + ")");
-            List<Feature> featureList = featureService.getFeatureList(fieldData.getCid(), mc, StringUtil.trimToEmpty(fieldData.getUnit()));
-            if (featureList == null || featureList.size() <= 0) {
-                featureService.addFeature(fieldData.getCid(), uid, mc, StringUtil.trimToEmpty(fieldData.getUnit()));
-            }
-        }
+//        if (fieldData.getItemCode().substring(0, 3).equals("800")) {
+//            String mc = StringUtil.trimToEmpty(fieldData.getDataName()) + (StringUtil.trimToEmpty(fieldData.getSpecifications()).equals("") ? "" : "(" + StringUtil.trimToEmpty(fieldData.getSpecifications()) + ")");
+//            List<Feature> featureList = featureService.getFeatureList(fieldData.getCid(), mc, StringUtil.trimToEmpty(fieldData.getUnit()));
+//            if (featureList == null || featureList.size() <= 0) {
+//                featureService.addFeature(fieldData.getCid(), uid, mc, StringUtil.trimToEmpty(fieldData.getUnit()));
+//            }
+//        }
 
         return new WebResult().ok().set("mid", fieldId);
     }

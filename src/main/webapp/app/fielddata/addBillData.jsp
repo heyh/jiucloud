@@ -380,6 +380,34 @@
                                 } else {
                                     $("#supplierDiv").hide();
                                 }
+
+                                $.ajax({
+                                    url: '${pageContext.request.contextPath}/featureController/securi_getFeatures',
+                                    data: {keyword: $('#keyword').val(), cid: <%= cid %>, uid: <%= uid %>, itemCode: data.obj.itemCode},
+                                    type: 'post',
+                                    dataType: 'json',
+                                    contentType: "application/x-www-form-urlencoded; charset=utf-8",
+                                    success: function (data) {
+                                        if (data.rspCode == '0') {
+                                            var htmlStr = '';
+                                            var features = data.features;
+                                            $.each(data.features,function(index,item){
+                                                htmlStr +=
+                                                    '<tr class="featureRow">'+
+                                                    '<td >' + (index + 1) + '</td>'+
+                                                    '<td class="featureCol">' + item.mc + '</td>'+
+                                                    '<td class="featureCol">'+
+                                                    '<input type="text" align="right" placeholder="数量" style="margin-bottom:0px;width: 80px" value="'+ item.count + '">'+
+                                                    '</td>'+
+                                                    '<td class="featureCol">' + item.dw + '</td>'+
+                                                    '<td class="featureCol" style="display: none">9</td>'+
+                                                    '<td><button class="btn btn-xs btn-link" onclick="delFeature(' + item.id + ')">删除</button>  </td>'+
+                                                    '</tr>'
+                                            });
+                                            $('.featuresBody').html(htmlStr);
+                                        }
+                                    }
+                                });
                             }
                         }
                     });

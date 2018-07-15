@@ -159,4 +159,27 @@ public class FeatureServiceImpl implements FeatureServiceI {
         Feature feature = featureDao.get(Feature.class, info.getId());
         BeanUtils.copyProperties(info, feature);
     }
+
+    @Override
+    public List<Feature> getFeaturesByItemCode(String cid, String itemCode, String keyword) {
+        Map<String, Object> params = new HashMap<String, Object>();
+        params.put("cid", cid);
+        String hql = "from Feature where cid = :cid ";
+        if (!StringUtil.trimToEmpty(itemCode).equals("")) {
+            hql += " and itemCode = :itemCode";
+            params.put("itemCode", itemCode);
+        }
+
+        if (!StringUtil.trimToEmpty(keyword).equals("")) {
+            hql += " and (mc like :mc ";
+            params.put("mc", "%%" + keyword + "%%");
+
+            hql += " or dw like :dw )";
+            params.put("dw", "%%" + keyword + "%%");
+        }
+        hql += " ORDER BY ID ASC";
+
+        List<Feature> features = featureDao.find(hql, params);
+        return features;
+    }
 }

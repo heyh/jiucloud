@@ -26,4 +26,6 @@ public interface FeatureServiceI {
     Feature detail(String id);
 
     void update(Feature info);
+
+    List<Feature> getFeaturesByItemCode(String cid, String itemCode, String keyword);
 }
