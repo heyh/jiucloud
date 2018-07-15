@@ -36,6 +36,16 @@ public class Feature {
     @Column(name = "dw")
     private String dw;
 
+    public String getCostType() {
+        return costType;
+    }
+
+    public void setCostType(String costType) {
+        this.costType = costType;
+    }
+
+    private String costType;
+
     public int getId() {
         return id;
     }

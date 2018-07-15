@@ -15,11 +15,15 @@ public interface FeatureServiceI {
 
     List<Feature> getFeatures(String cid, String keyword);
 
-    Feature addFeature(String cid, String uid, String mc, String dw);
+    Feature addFeature(String cid, String uid, String mc, String count, String dw);
 
     void delFeature(String id);
 
     DataGrid dataGrid(PageHelper ph, String cid, String keyword, String itemCode);
 
     List<Feature> getFeatureList(String cid, String mc, String dw);
+
+    Feature detail(String id);
+
+    void update(Feature info);
 }

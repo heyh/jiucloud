@@ -1,13 +1,18 @@
 package sy.service.impl;
 
 import org.apache.commons.lang.StringUtils;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import sy.dao.CostDaoI;
 import sy.dao.FeatureDaoI;
+import sy.model.po.Cost;
 import sy.model.po.Feature;
+import sy.model.po.Location;
 import sy.model.po.TFieldData;
 import sy.pageModel.DataGrid;
 import sy.pageModel.PageHelper;
+import sy.service.CostServiceI;
 import sy.service.FeatureServiceI;
 import sy.util.StringUtil;
 
@@ -24,6 +29,12 @@ public class FeatureServiceImpl implements FeatureServiceI {
 
     @Autowired
     private FeatureDaoI featureDao;
+
+    @Autowired
+    private CostDaoI costDao;
+
+    @Autowired
+    private CostServiceI costService;
 
     @Override
     public List<Feature> getFeatures(String cid, List<Integer> ugroup, String keyword) {
@@ -62,11 +73,12 @@ public class FeatureServiceImpl implements FeatureServiceI {
     }
 
     @Override
-    public Feature addFeature(String cid, String itemCode, String mc, String dw) {
+    public Feature addFeature(String cid, String itemCode, String mc, String count, String dw) {
         Feature feature = new Feature();
         feature.setCid(cid);
         feature.setItemCode(itemCode);
         feature.setMc(mc);
+        feature.setCount(count);
         feature.setDw(dw);
         featureDao.save(feature);
 
@@ -101,8 +113,20 @@ public class FeatureServiceImpl implements FeatureServiceI {
         }
         hql += " order by id desc";
 
-        List<Feature> l = featureDao.find(hql, params, ph.getPage(), ph.getRows());
-        dg.setRows(l);
+        List<Feature> featureList = featureDao.find(hql, params, ph.getPage(), ph.getRows());
+
+        for (Feature feature : featureList) {
+            if (!StringUtil.trimToEmpty(feature.getItemCode()).equals("")) {
+                Cost cost = costService.getCostByCode(feature.getItemCode(), cid);
+//                Cost cost = costDao.get("from Cost where cid = " + cid + " and isDelete=0 and itemCode='" + feature.getItemCode() + "'");
+                if (cost == null) {
+                    feature.setCostType("该费用类型可能已经被删除");
+                } else {
+                    feature.setCostType(cost.getCostType());
+                }
+            }
+        }
+        dg.setRows(featureList);
         dg.setTotal(featureDao.count("select count(*) " + hql, params));
 
         return dg;
@@ -117,5 +141,22 @@ public class FeatureServiceImpl implements FeatureServiceI {
         String hql = "from Feature where cid = :cid and mc = :mc and dw = :dw ";
         List<Feature> featureList = featureDao.find(hql, params);
         return featureList;
+    }
+
+    @Override
+    public Feature detail(String id) {
+        Feature feature = new Feature();
+        try {
+            feature = featureDao.get(" FROM Feature t  where 1=1 and id=" + id);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return feature;
+    }
+
+    @Override
+    public void update(Feature info) {
+        Feature feature = featureDao.get(Feature.class, info.getId());
+        BeanUtils.copyProperties(info, feature);
     }
 }

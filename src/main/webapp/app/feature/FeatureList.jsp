@@ -225,9 +225,9 @@
         parent.$
             .modalDialog({
                 title: '编辑',
-                width: 450,
+                width: 500,
                 height: 350,
-                href: '${pageContext.request.contextPath}/featureController/securi_addnPage',
+                href: '${pageContext.request.contextPath}/featureController/securi_addPage',
                 buttons: [{
                     text: '新增',
                     handler: function () {
