@@ -169,18 +169,23 @@ public class FeatureController extends BaseController {
     @ResponseBody
     public JSONObject delFeature(@RequestParam(value = "cid", required = true) String cid,
                                  @RequestParam(value = "uid", required = false) String uid,
+                                 @RequestParam(value = "itemCode", required = false) String itemCode,
                                  @RequestParam(value = "id", required = true) String id,
                                  HttpServletRequest request) throws Exception {
 
         featureService.delFeature(id);
 
         List<Feature> features = new ArrayList<Feature>();
-        if (!StringUtil.trimToEmpty(uid).equals("")) {
-            List<Integer> ugroup = departmentService.getAllParents(cid, Integer.parseInt(uid));
-            ugroup.add(Integer.parseInt(uid));
-            features = featureService.getFeatures(cid, ugroup, "");
+        if (StringUtil.trimToEmpty(itemCode).equals("")) {
+            if (!StringUtil.trimToEmpty(uid).equals("")) {
+                List<Integer> ugroup = departmentService.getAllParents(cid, Integer.parseInt(uid));
+                ugroup.add(Integer.parseInt(uid));
+                features = featureService.getFeatures(cid, ugroup, "");
+            } else {
+                features = featureService.getFeatures(cid, "");
+            }
         } else {
-            features = featureService.getFeatures(cid, "");
+            features = featureService.getFeaturesByItemCode(cid, itemCode, "");
         }
 
         return new WebResult().ok().set("features", features);

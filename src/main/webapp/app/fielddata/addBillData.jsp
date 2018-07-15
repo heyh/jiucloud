@@ -141,7 +141,7 @@
                 }
             }
             var projectName = document.getElementById("projectName").value;
-            var costType = $("#costType").combotree("getValue")
+            var costType = $("#costType").combotree("getValue");
             var dataName = document.getElementById("dataName").value;
 //            var price = $('#price').numberbox('getValue');
             var count = $('#count').numberbox('getValue');
@@ -381,6 +381,8 @@
                                     $("#supplierDiv").hide();
                                 }
 
+                                $('#hideItemCode').val(data.obj.itemCode);
+
                                 $.ajax({
                                     url: '${pageContext.request.contextPath}/featureController/securi_getFeatures',
                                     data: {keyword: $('#keyword').val(), cid: <%= cid %>, uid: <%= uid %>, itemCode: data.obj.itemCode},
@@ -559,7 +561,7 @@
                 if (mc != '' && count != '' && dw != '') {
                     feature += mc + ":" + count + ' ' + dw + ";  ";
                     if (modifyTag == '0') {
-                        addFeature(mc, dw);
+                        addFeature(mc, count, dw);
                     }
                 }
 
@@ -567,10 +569,10 @@
             });
         }
 
-        function addFeature(mc, dw) {
+        function addFeature(mc, count, dw) {
             $.ajax({
                 url: '${pageContext.request.contextPath}/featureController/securi_addFeature',
-                data: {mc: mc, dw: dw, cid: <%= cid %>, uid: <%= uid %>},
+                data: {mc: mc, count: count, dw: dw, cid: <%= cid %>, uid: <%= uid %>, itemCode: $('#hideItemCode').val()},
                 type: 'post',
                 dataType: 'json',
                 contentType: "application/x-www-form-urlencoded; charset=utf-8",
@@ -585,7 +587,7 @@
         function delFeature(id) {
             $.ajax({
                 url: '${pageContext.request.contextPath}/featureController/securi_delFeature',
-                data: {id: id, cid: <%= cid %>, uid: <%= uid %>},
+                data: {id: id, cid: <%= cid %>, uid: <%= uid %>, itemCode: $('#hideItemCode').val()},
                 type: 'post',
                 dataType: 'json',
                 contentType: "application/x-www-form-urlencoded; charset=utf-8",
@@ -615,7 +617,7 @@
         function searchFeatures() {
             $.ajax({
                 url: '${pageContext.request.contextPath}/featureController/securi_getFeatures',
-                data: {keyword: $('#keyword').val(), cid: <%= cid %>, uid: <%= uid %>},
+                data: {keyword: $('#keyword').val(), cid: <%= cid %>, uid: <%= uid %>, itemCode: $('#hideItemCode').val()},
                 type: 'post',
                 dataType: 'json',
                 contentType: "application/x-www-form-urlencoded; charset=utf-8",
@@ -783,6 +785,8 @@
                         <div class="controls">
                             <input class="easyui-combotree" name="costType" id="costType" style="width:250px;">
                         </div>
+
+                        <input type="hidden" id="hideItemCode" name="hideItemCode">
                     </div>
                     <div class="control-group">
                         <label class="control-label" for="dataName">名称(工序名称):</label>
