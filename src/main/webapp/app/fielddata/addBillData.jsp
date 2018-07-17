@@ -556,7 +556,7 @@
                     mc = features[0].innerHTML;
                     dw = features[2].innerHTML;
                 }
-                var count = features[1].firstElementChild.value;
+                var count = eval(features[1].firstElementChild.value);
 
                 if (mc != '' && count != '' && dw != '') {
                     feature += mc + ":" + count + ' ' + dw + ";  ";
